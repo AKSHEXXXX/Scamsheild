@@ -24,6 +24,7 @@ struct ProjectValidator {
       "iOS_TestConnection/iOS_TestConnection/TestConnectionApp.swift",
       "iOS_TestConnection/iOS_TestConnection/ContentView.swift",
       "iOS_TestConnection/iOS_TestConnection/SupabaseConfig.swift",
+      "iOS_TestConnection/iOS_TestConnection/AuthService.swift",
       "iOS_TestConnection/iOS_TestConnection/Info.plist",
       "iOS_TestConnection/iOS_TestConnection/Assets.xcassets/Contents.json",
       "iOS_TestConnection/iOS_TestConnection.xcodeproj/project.pbxproj",
@@ -48,6 +49,10 @@ struct ProjectValidator {
     check("Has status state", condition: contentView.contains("@State"))
     check("Uses URLSession", condition: contentView.contains("URLSession"))
     check("Dispatches to main queue", condition: contentView.contains("DispatchQueue.main"))
+    check("Has Sign in with Google button", condition: contentView.contains("Sign in with Google"))
+    check("Has Sign in with Apple button", condition: contentView.contains("Sign in with Apple"))
+    check("Has auth state tracking", condition: contentView.contains("isAuthenticated"))
+    check("Uses AuthService", condition: contentView.contains("AuthService"))
 
     // TestConnectionApp.swift checks
     print("\n📄 TestConnectionApp.swift:")
@@ -68,6 +73,15 @@ struct ProjectValidator {
     check("Has SupabaseClient", condition: supabaseFile.contains("SupabaseClient"))
     check("Has smart-processor", condition: supabaseFile.contains("smart-processor"))
 
+    // AuthService.swift checks
+    print("\n📄 AuthService.swift:")
+    let authPath = root.appendingPathComponent("iOS_TestConnection/iOS_TestConnection/AuthService.swift").path
+    let authFile = try String(contentsOfFile: authPath, encoding: .utf8)
+    check("Has Supabase import", condition: authFile.contains("import Supabase"))
+    check("Has signInWithGoogle", condition: authFile.contains("signInWithGoogle"))
+    check("Has signInWithApple", condition: authFile.contains("signInWithApple"))
+    check("Has signOut", condition: authFile.contains("signOut"))
+
     // Info.plist checks
     print("\n📄 Info.plist:")
     let plistPath = root.appendingPathComponent("iOS_TestConnection/iOS_TestConnection/Info.plist").path
@@ -82,6 +96,7 @@ struct ProjectValidator {
     check("References TestConnectionApp.swift", condition: pbxFile.contains("TestConnectionApp.swift"))
     check("References ContentView.swift", condition: pbxFile.contains("ContentView.swift"))
     check("References SupabaseConfig.swift", condition: pbxFile.contains("SupabaseConfig.swift"))
+    check("References AuthService.swift", condition: pbxFile.contains("AuthService.swift"))
     check("Has Supabase package dependency", condition: pbxFile.contains("supabase-swift"))
     check("Has Supabase product dependency", condition: pbxFile.contains("\"Supabase\""))
     check("Has NSAllowsLocalNetworking in build settings", condition: pbxFile.contains("GENERATE_INFOPLIST_FILE"))

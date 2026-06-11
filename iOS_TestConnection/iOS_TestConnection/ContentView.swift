@@ -5,6 +5,7 @@ struct ContentView: View {
   private let port = 8000
 
   @State private var status = "Idle"
+  @State private var isAuthenticated = false
 
   private var endpoint: URL {
     URL(string: "http://\(serverIP):\(port)/test")!
@@ -12,15 +13,40 @@ struct ContentView: View {
 
   var body: some View {
     VStack(spacing: 24) {
-      Button("Test Connection") {
-        sendMessage()
-      }
-      .buttonStyle(.borderedProminent)
+      if isAuthenticated {
+        VStack(spacing: 12) {
+          Button("Test Connection") {
+            sendMessage()
+          }
+          .buttonStyle(.borderedProminent)
 
-      Text(status)
-        .foregroundStyle(.secondary)
+          Text(status)
+            .foregroundStyle(.secondary)
+
+          Button("Sign Out", role: .destructive) {
+            Task { try? await AuthService.signOut(); isAuthenticated = false }
+          }
+        }
+      } else {
+        VStack(spacing: 16) {
+          Button("Sign in with Google") {
+            Task { try? await AuthService.signInWithGoogle(); checkAuth() }
+          }
+          .buttonStyle(.bordered)
+
+          Button("Sign in with Apple") {
+            Task { try? await AuthService.signInWithApple(); checkAuth() }
+          }
+          .buttonStyle(.bordered)
+        }
+      }
     }
     .padding()
+    .task { checkAuth() }
+  }
+
+  private func checkAuth() {
+    isAuthenticated = SupabaseConfig.client.auth.session != nil
   }
 
   private func sendMessage() {
