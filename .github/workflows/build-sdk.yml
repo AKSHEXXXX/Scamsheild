@@ -1,0 +1,22 @@
+name: Build Darwin SDK for Linux
+on: workflow_dispatch
+
+jobs:
+  build-sdk:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xtool via Homebrew
+        run: brew install xtool-org/tap/xtool
+
+      - name: Build Darwin SDK
+        run: |
+          mkdir -p /tmp/sdk-output
+          xtool sdk build /Applications/Xcode.app /tmp/sdk-output
+
+      - name: Upload SDK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: darwin-sdk
+          path: /tmp/sdk-output/darwin.xtoolsdk
