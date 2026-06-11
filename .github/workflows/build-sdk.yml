@@ -14,9 +14,10 @@ jobs:
         run: |
           mkdir -p /tmp/sdk-output
           xtool sdk build /Applications/Xcode.app /tmp/sdk-output
+          echo "Contents:" && ls -la /tmp/sdk-output/
 
       - name: Upload SDK artifact
         uses: actions/upload-artifact@v4
         with:
           name: darwin-sdk
-          path: /tmp/sdk-output/darwin.xtoolsdk
+          path: /tmp/sdk-output/darwin.artifactbundle
