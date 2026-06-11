@@ -16,8 +16,11 @@ jobs:
           xtool sdk build /Applications/Xcode.app /tmp/sdk-output
           echo "Contents:" && ls -la /tmp/sdk-output/
 
+      - name: Archive SDK bundle (avoids colon-in-filename issue with upload-artifact)
+        run: tar czf darwin-sdk.tar.gz -C /tmp/sdk-output darwin.artifactbundle
+
       - name: Upload SDK artifact
         uses: actions/upload-artifact@v4
         with:
           name: darwin-sdk
-          path: /tmp/sdk-output/darwin.artifactbundle
+          path: darwin-sdk.tar.gz
