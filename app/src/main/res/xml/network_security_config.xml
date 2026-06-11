@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Network Security Configuration — MANDATORY for Android 9+ (API 28+).
+
+    By default Android 9+ blocks ALL cleartext (http://) traffic.
+    Since minSdk=24 but TARGET_IP uses http://, every modern device would crash
+    with "IOException: Cleartext HTTP traffic not permitted" when tapping Test Connection.
+
+    This config allows cleartext ONLY to local subnet IPs — Supabase traffic
+    remains fully encrypted (https) and is unaffected.
+
+    ── BEFORE FIRST RUN ──────────────────────────────────────────────────────────
+    Replace "192.168.1" with your actual local network subnet prefix.
+    E.g. if your server is at 192.168.0.105, use "192.168.0".
+    ─────────────────────────────────────────────────────────────────────────────
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Allow cleartext to 192.168.1.x — adjust subnet to match your network -->
+        <domain includeSubdomains="true">192.168.1.1</domain>
+        <!-- Add additional local subnets if needed, e.g. 192.168.0.x -->
+        <!-- <domain includeSubdomains="true">192.168.0.1</domain> -->
+    </domain-config>
+</network-security-config>

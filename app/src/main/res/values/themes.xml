@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme — references the Compose theme; Material3 handles colors -->
+    <style name="Theme.ScamShield" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
