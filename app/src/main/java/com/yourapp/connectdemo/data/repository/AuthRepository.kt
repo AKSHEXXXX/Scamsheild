@@ -1,3 +1,4 @@
+@file:OptIn(io.github.jan.supabase.annotations.SupabaseInternal::class)
 package com.yourapp.connectdemo.data.repository
 
 import com.yourapp.connectdemo.data.remote.supabaseClient
