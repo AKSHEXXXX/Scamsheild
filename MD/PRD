@@ -1,0 +1,502 @@
+# PRD.md — Product Requirements Document
+## TrustScan: iOS Scam Detection Application
+
+**Version:** 1.0  
+**Status:** Active  
+**Last Updated:** June 2026  
+**Owner:** iOS Engineering
+
+---
+
+## Table of Contents
+
+1. [Product Overview](#1-product-overview)
+2. [Problem Statement](#2-problem-statement)
+3. [Goals and Objectives](#3-goals-and-objectives)
+4. [User Personas](#4-user-personas)
+5. [User Stories](#5-user-stories)
+6. [Features](#6-features)
+7. [Functional Requirements](#7-functional-requirements)
+8. [Non-Functional Requirements](#8-non-functional-requirements)
+9. [Assumptions](#9-assumptions)
+10. [Constraints](#10-constraints)
+11. [Success Metrics](#11-success-metrics)
+12. [Future Roadmap](#12-future-roadmap)
+
+---
+
+## 1. Product Overview
+
+TrustScan is a native iOS application that empowers users to detect and understand digital scams by submitting screenshots of suspicious content for intelligent analysis. The application serves as a first-line defense tool, providing threat assessments, risk scores, contextual warnings, and actionable recommendations in response to content the user encounters in their daily digital life.
+
+The application is the client-facing layer of a broader scam detection platform. All heavy analysis — including OCR processing, text extraction, URL sandboxing, threat scoring, and intelligence database lookups — is performed by a separate backend system. TrustScan's responsibility is to provide a trustworthy, intuitive, and reliable user experience that surfaces these insights clearly and empowers users to act with confidence.
+
+The application targets iOS 16 and later, built with SwiftUI, and designed for iPhone as the primary form factor with iPad support.
+
+---
+
+## 2. Problem Statement
+
+### The Core Problem
+
+Digital scams have become the dominant fraud vector in consumer life. Phishing messages, impersonation attacks, fake invoices, fraudulent prize notifications, social engineering attempts, and deceptive URLs arrive daily through SMS, email, messaging apps, and social media. These attacks are increasingly sophisticated, mimic legitimate communication convincingly, and exploit cognitive biases under time pressure.
+
+### Why Current Solutions Fail
+
+- **Security suites** are desktop-first, enterprise-focused, and require technical knowledge to interpret.
+- **Built-in platform filters** (spam detection on iOS Mail, iMessage filtering) catch obvious patterns but miss contextual, nuanced, or novel scams.
+- **Manual verification** requires users to independently search for information, which most users do not do under urgency.
+- **Awareness campaigns** change behavior slowly and do not help in the moment of decision.
+
+### The Consequence
+
+Users act on scam content — clicking links, providing personal information, initiating transfers — because they have no trusted, immediate, accessible tool to verify content in real time. The consequences range from financial loss to identity theft.
+
+### The Opportunity
+
+iOS users already take screenshots of suspicious content to share with friends or family for a second opinion. TrustScan formalizes and automates this behavior pattern: take a screenshot, submit it for analysis, receive a trusted verdict. The behavior is natural, the technology is available, and the need is unmet at the consumer level.
+
+---
+
+## 3. Goals and Objectives
+
+### Primary Goals
+
+| Goal | Description |
+|------|-------------|
+| **G1: Accessibility** | Enable any iOS user, regardless of technical background, to submit suspicious content for analysis in under 30 seconds. |
+| **G2: Trust** | Present analysis results in a way that is clear, accurate, and actionable without requiring security expertise to interpret. |
+| **G3: Speed** | Provide analysis results fast enough that they are useful in the moment of decision. |
+| **G4: Reliability** | Ensure the application handles network failures, backend errors, and edge cases gracefully so users always receive a useful response. |
+
+### Secondary Goals
+
+| Goal | Description |
+|------|-------------|
+| **G5: Education** | Help users build long-term awareness of scam patterns through contextual explanations alongside results. |
+| **G6: History** | Allow users to review past analyses, reinforcing learning and providing a reference. |
+| **G7: Privacy** | Handle all submitted content with transparency about what is sent, stored, and retained. |
+| **G8: Growth** | Provide an onboarding experience that converts new users to regular users through demonstrated value. |
+
+### Non-Goals
+
+- The application does not provide legal advice.
+- The application does not guarantee a scam is confirmed — it provides probabilistic assessments.
+- The application does not modify, intercept, or block content on the user's device.
+- The application does not manage backend infrastructure or intelligence databases.
+
+---
+
+## 4. User Personas
+
+### Persona 1: The Cautious Consumer
+
+**Name:** Margaret, 54  
+**Occupation:** Office administrator  
+**Tech literacy:** Moderate  
+**Device:** iPhone 14, uses iOS Mail, iMessage, WhatsApp
+
+**Context:** Margaret regularly receives suspicious messages — prize notifications, bank warnings, delivery notices. She instinctively feels something is wrong but cannot articulate why. She often forwards messages to her adult children for a second opinion, which creates delays and relies on their availability.
+
+**Pain points:**
+- Cannot verify suspicious content independently in the moment
+- Feels embarrassed asking family for help repeatedly
+- Has previously clicked a scam link and wants to avoid repeating the mistake
+
+**Needs:**
+- Immediate, simple verdict: is this a scam or not?
+- Plain language explanation, no technical jargon
+- Confidence to act without seeking external validation
+
+**Behavior pattern:** Takes screenshots of suspicious messages on her own device and wants to submit them for analysis before responding or clicking anything.
+
+---
+
+### Persona 2: The Security-Aware Professional
+
+**Name:** David, 32  
+**Occupation:** Freelance consultant  
+**Tech literacy:** High  
+**Device:** iPhone 15 Pro, heavy email and messaging user
+
+**Context:** David receives business communications from clients, vendors, and unknown parties. He is aware of scam tactics and has good instincts but wants confirmation before responding to urgent payment requests or credential prompts. He also wants to document and record analyses for professional accountability.
+
+**Pain points:**
+- Cannot always rely on gut instinct for business-critical decisions
+- Needs a second opinion that is faster than manual research
+- Wants history and exportability for documentation purposes
+
+**Needs:**
+- Detailed breakdown of threat indicators
+- URL and domain analysis results
+- History of past analyses for reference
+- Fast, frictionless submission
+
+**Behavior pattern:** Regularly uses the app proactively. Submits everything borderline. Checks history. Wants the most detail available.
+
+---
+
+### Persona 3: The Elderly User
+
+**Name:** Robert, 71  
+**Occupation:** Retired  
+**Tech literacy:** Low  
+**Device:** iPhone SE (3rd gen), primary communication via SMS and phone calls
+
+**Context:** Robert is a primary target for scam attempts. He receives calls impersonating banks, government agencies, and utility companies, and SMS messages with urgent warnings. He is not always able to distinguish authentic from fraudulent communications and has been previously victimized.
+
+**Pain points:**
+- Difficulty understanding technical security concepts
+- High anxiety when receiving urgent-seeming messages
+- No trusted, accessible tool available at the moment of need
+
+**Needs:**
+- Extremely simple interface — one primary action
+- Emotional clarity: is this dangerous or safe? (color, language)
+- Accessibility support: larger text, high contrast, simple navigation
+
+**Behavior pattern:** Will use the app only if it is dead simple. The entire flow must be achievable without reading instructions. Onboarding must be minimal and value must be obvious immediately.
+
+---
+
+### Persona 4: The Parent
+
+**Name:** Aisha, 41  
+**Occupation:** Nurse  
+**Tech literacy:** Moderate-High  
+**Device:** iPhone 13, manages her own and monitors her teenage children's digital activities
+
+**Context:** Aisha is concerned about scams targeting both herself and her children. Her teenager has previously engaged with phishing attempts on social media. She wants a tool she can trust herself and also recommend to or use on behalf of family members.
+
+**Pain points:**
+- Cannot always be present to advise children in the moment
+- Wants to understand scam patterns affecting her demographic
+- Needs the app to feel trustworthy enough to share with non-technical family
+
+**Needs:**
+- Clean, trustworthy design that feels credible
+- Educational explanations that help her and her family learn
+- History they can review together
+
+**Behavior pattern:** Uses the app reactively when something looks suspicious. Occasionally reviews history. Shares app with family.
+
+---
+
+## 5. User Stories
+
+### Epic 1: Content Submission
+
+| ID | Story | Priority |
+|----|-------|----------|
+| US-01 | As a user, I want to submit a screenshot from my photo library so that I can get it analyzed for scam indicators. | P0 |
+| US-02 | As a user, I want to take a photo directly within the app so that I can analyze physical documents or screens without navigating away. | P0 |
+| US-03 | As a user, I want to receive confirmation that my submission was received so that I know the analysis is in progress. | P0 |
+| US-04 | As a user, I want to cancel a submission in progress so that I can correct mistakes before analysis begins. | P1 |
+| US-05 | As a user, I want to submit multiple images representing the same conversation so that I can get a holistic analysis. | P2 |
+
+### Epic 2: Analysis Results
+
+| ID | Story | Priority |
+|----|-------|----------|
+| US-06 | As a user, I want to see a clear threat verdict (safe, suspicious, dangerous) so that I can make an immediate decision without reading details. | P0 |
+| US-07 | As a user, I want to understand why a piece of content was flagged so that I can learn what made it suspicious. | P0 |
+| US-08 | As a user, I want to see which specific elements (URLs, phone numbers, text patterns) were flagged so that I know what to avoid. | P1 |
+| US-09 | As a user, I want to receive a recommended action (do not click, block sender, report to bank) so that I know what to do next. | P0 |
+| US-10 | As a user, I want to share an analysis result so that I can warn family members or document the threat. | P2 |
+
+### Epic 3: History
+
+| ID | Story | Priority |
+|----|-------|----------|
+| US-11 | As a user, I want to see a list of my past analyses so that I can review previous results. | P1 |
+| US-12 | As a user, I want to search or filter my history by date or verdict so that I can find a specific past analysis. | P2 |
+| US-13 | As a user, I want to delete a past analysis from my history so that I can manage my data. | P1 |
+| US-14 | As a user, I want to re-open a past analysis to view its full results so that I can refer back to details. | P1 |
+
+### Epic 4: Onboarding
+
+| ID | Story | Priority |
+|----|-------|----------|
+| US-15 | As a new user, I want to understand what the app does in under 30 seconds so that I can decide to use it. | P0 |
+| US-16 | As a new user, I want to grant photo library access when I need it rather than upfront so that I can try the app before committing to permissions. | P1 |
+| US-17 | As a new user, I want to complete onboarding without creating an account so that I can experience immediate value. | P0 |
+
+### Epic 5: Settings and Privacy
+
+| ID | Story | Priority |
+|----|-------|----------|
+| US-18 | As a user, I want to see what data is collected and retained so that I can make an informed choice about using the app. | P1 |
+| US-19 | As a user, I want to delete all my data so that I can remove my history from the service. | P1 |
+| US-20 | As a user, I want to configure notification preferences so that I can control how the app contacts me. | P2 |
+| US-21 | As a user, I want to manage photo library permissions so that I can change my access grant at any time. | P1 |
+
+### Epic 6: Error and Failure Handling
+
+| ID | Story | Priority |
+|----|-------|----------|
+| US-22 | As a user, when analysis fails I want a clear explanation and retry option so that I don't lose my submission unnecessarily. | P0 |
+| US-23 | As a user, when I am offline I want to be told clearly and guided on next steps rather than receiving a confusing error. | P0 |
+| US-24 | As a user, when analysis takes longer than expected I want to know it is still in progress so that I don't abandon a valid submission. | P1 |
+
+---
+
+## 6. Features
+
+### Feature Set 1: Core Analysis
+
+**F1.1 — Screenshot Submission**  
+Users can submit content for analysis by selecting images from their photo library or capturing directly with the camera. The submission flow is the primary action of the application and must be accessible from every major screen.
+
+**F1.2 — Analysis Pipeline Status**  
+The application communicates the analysis pipeline state clearly: submitted, processing, complete, or failed. Each state is visually distinct and actionable.
+
+**F1.3 — Threat Results Display**  
+Analysis results are presented with a primary verdict (safe, suspicious, dangerous), a threat score, a list of flagged indicators, contextual explanations, and a recommended action.
+
+---
+
+### Feature Set 2: History and Reference
+
+**F2.1 — Analysis History**  
+A chronological list of the user's past submissions and their results. Each entry shows the submitted thumbnail, the verdict, and the date. Tapping opens the full result.
+
+**F2.2 — History Management**  
+Users can delete individual entries or clear all history. History is stored locally with reference identifiers that can be used to re-fetch results if needed.
+
+---
+
+### Feature Set 3: Onboarding
+
+**F3.1 — First Launch Onboarding**  
+A short, illustrated onboarding experience (3 screens maximum) that communicates the core value proposition and primary usage pattern. Skippable for returning users.
+
+**F3.2 — Contextual Permission Prompts**  
+Photo library and camera permissions are requested contextually — at the moment the user initiates a relevant action — with a clear explanation of why the permission is needed.
+
+---
+
+### Feature Set 4: Settings and Privacy
+
+**F4.1 — Privacy Transparency Screen**  
+A dedicated screen explaining what data is submitted to the backend, how long it is retained, and how it is used. No technical jargon; plain language only.
+
+**F4.2 — Data Management**  
+Users can delete all locally stored history and, via a confirmed action, request deletion of their submitted data from the backend.
+
+**F4.3 — Notification Management**  
+Users can enable or disable notifications related to analysis completion and security tips. This is optional and off by default.
+
+**F4.4 — Accessibility Settings**  
+The app respects system accessibility settings and provides no additional application-level overrides. All system-level settings (Dynamic Type, Bold Text, High Contrast, Reduce Motion) are fully supported.
+
+---
+
+### Feature Set 5: Informational
+
+**F5.1 — Scam Education Content**  
+Contextual educational content appears on the results screen, explaining the type of scam detected and general patterns to watch for. This is presented as supplementary information, never blocking the primary result.
+
+**F5.2 — Recommended Actions**  
+Each result includes a curated set of recommended next steps appropriate to the threat level. Examples: "Do not click any links," "Contact your bank directly," "Report this message to [relevant authority]."
+
+---
+
+## 7. Functional Requirements
+
+### Submission
+
+| ID | Requirement |
+|----|-------------|
+| FR-01 | The application must support image submission from the iOS photo library (PHPickerViewController). |
+| FR-02 | The application must support image capture from the device camera. |
+| FR-03 | Submitted images must be compressed to a maximum file size defined by the backend contract before transmission. |
+| FR-04 | The application must display a loading state while an image is being submitted and analyzed. |
+| FR-05 | If submission fails, the application must present a retry mechanism without requiring the user to re-select the image. |
+| FR-06 | The application must not submit duplicate identical images within a configurable cooldown window. |
+| FR-07 | The application must validate that a selected file is a supported image type before submission. |
+| FR-08 | The application must provide upload progress feedback for large images. |
+
+### Results
+
+| ID | Requirement |
+|----|-------------|
+| FR-09 | The application must display a primary verdict label corresponding to a threat classification received from the backend. |
+| FR-10 | The application must display a numeric or visual threat score in a human-readable format. |
+| FR-11 | The application must display a list of flagged indicators returned by the backend. |
+| FR-12 | Each flagged indicator must include a human-readable description. |
+| FR-13 | The application must display at least one recommended action appropriate to the threat level. |
+| FR-14 | The application must store the result locally in history upon successful analysis completion. |
+| FR-15 | The application must allow the user to share a result summary via the iOS share sheet. |
+
+### History
+
+| ID | Requirement |
+|----|-------------|
+| FR-16 | The application must maintain a local history of past analyses with thumbnail, verdict, date, and result reference. |
+| FR-17 | History must persist across application launches using local storage. |
+| FR-18 | The application must allow individual deletion of history entries. |
+| FR-19 | The application must allow bulk deletion of all history entries. |
+| FR-20 | Tapping a history entry must navigate to a result detail screen for that analysis. |
+
+### Error Handling
+
+| ID | Requirement |
+|----|-------------|
+| FR-21 | The application must detect network unavailability before submission and present an appropriate offline state. |
+| FR-22 | The application must handle backend timeout and present a clear user-facing error with retry action. |
+| FR-23 | The application must handle backend error responses with appropriate messaging mapped to error categories. |
+| FR-24 | The application must never show raw error codes or technical stack information to the user. |
+| FR-25 | The application must log errors to a local diagnostic buffer for debugging purposes. |
+
+### Permissions
+
+| ID | Requirement |
+|----|-------------|
+| FR-26 | The application must request photo library access only at the point of first submission attempt. |
+| FR-27 | The application must request camera access only when the user elects to use the camera capture flow. |
+| FR-28 | The application must handle permission denial gracefully, presenting a settings redirect prompt. |
+| FR-29 | The application must re-check permission status on each submission attempt and respond accordingly. |
+
+---
+
+## 8. Non-Functional Requirements
+
+### Performance
+
+| ID | Requirement |
+|----|-------------|
+| NFR-01 | The application must launch to the home screen within 1.5 seconds on a supported device under normal conditions. |
+| NFR-02 | The submission UI must respond to user interaction within 100ms. |
+| NFR-03 | Loading states must appear within 200ms of a submission action to prevent perceived freezing. |
+| NFR-04 | Image compression and preparation for upload must not block the main thread. |
+| NFR-05 | History list must render 100+ entries without perceptible lag. |
+
+### Reliability
+
+| ID | Requirement |
+|----|-------------|
+| NFR-06 | The application must not crash on any user-reachable interaction path. |
+| NFR-07 | The application must retain a pending submission across an unexpected app termination, surfacing it upon relaunch. |
+| NFR-08 | Local history must be resilient to unexpected termination during write operations. |
+
+### Security
+
+| ID | Requirement |
+|----|-------------|
+| NFR-09 | All network communication must use HTTPS with certificate pinning. |
+| NFR-10 | No submitted image or analysis result must be stored unencrypted on disk beyond the explicit history feature. |
+| NFR-11 | Authentication tokens and sensitive identifiers must be stored in the iOS Keychain, never in UserDefaults or unprotected storage. |
+| NFR-12 | The application must not log sensitive user data (image content, analysis results) to any external logging service. |
+| NFR-13 | The application must be hardened against common iOS attack vectors relevant to its data handling scope. |
+
+### Accessibility
+
+| ID | Requirement |
+|----|-------------|
+| NFR-14 | The application must conform to WCAG 2.1 Level AA for all interactive elements. |
+| NFR-15 | All interactive elements must have VoiceOver-compatible accessibility labels and hints. |
+| NFR-16 | The application must support Dynamic Type across all text elements. |
+| NFR-17 | The application must respect the Reduce Motion system preference. |
+| NFR-18 | Color must never be the sole differentiator for threat severity — shape, label, and iconography must supplement color. |
+| NFR-19 | Minimum tappable target size must be 44x44 points for all interactive elements. |
+
+### Maintainability
+
+| ID | Requirement |
+|----|-------------|
+| NFR-20 | The codebase must be structured such that a new feature can be added in isolation without modifying existing modules. |
+| NFR-21 | All business logic must be unit-testable without UI or network dependencies. |
+| NFR-22 | The application must support a remote feature flag mechanism to enable or disable features without a release. |
+
+### Privacy
+
+| ID | Requirement |
+|----|-------------|
+| NFR-23 | The application must not collect device identifiers beyond a randomly generated, non-resettable session token for analysis correlation. |
+| NFR-24 | The application must comply with Apple's App Privacy requirements and provide an accurate App Privacy Nutrition Label. |
+| NFR-25 | The application must not use any third-party advertising SDKs. |
+
+---
+
+## 9. Assumptions
+
+- **AS-01:** The backend API is RESTful and will return structured JSON responses conforming to a shared API contract document.
+- **AS-02:** The backend provides a defined set of threat classifications that map to the application's verdict tiers (e.g., safe, suspicious, dangerous).
+- **AS-03:** The backend will return both a threat score and a list of human-readable indicator descriptions.
+- **AS-04:** The backend defines maximum accepted image dimensions and file size; the application will compress and resize to these limits.
+- **AS-05:** The backend provides a health check endpoint that the application can poll to determine service availability.
+- **AS-06:** Analysis results are available within a reasonable synchronous response window. If long-polling or push notification is required, the architecture will accommodate it without a major structural change.
+- **AS-07:** The application does not require user authentication in the initial version. A device-level anonymous session identifier is sufficient.
+- **AS-08:** The backend supports a request cancellation mechanism or the app-side timeout behavior is acceptable if it does not.
+
+---
+
+## 10. Constraints
+
+- **C-01:** The application targets iOS 16.0 and later.
+- **C-02:** The application is built with SwiftUI as the UI framework.
+- **C-03:** The iOS engineering team has no access to or responsibility for backend infrastructure.
+- **C-04:** The application must pass Apple App Store review, including compliance with guideline 5.1.1 (Data Collection and Storage) and 5.1.2 (Data Use and Sharing).
+- **C-05:** No third-party analytics SDKs that transmit user data to third parties are permitted without explicit privacy disclosure and user consent.
+- **C-06:** The application must function as a client-only layer — no on-device ML inference is required or expected in version 1.0.
+- **C-07:** The design language must adhere to Apple's Human Interface Guidelines while maintaining a distinctive brand identity.
+
+---
+
+## 11. Success Metrics
+
+### Acquisition and Activation
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| Onboarding completion rate | > 75% | Users who complete onboarding vs. those who open the app |
+| First submission rate | > 60% | Users who submit at least one analysis within first session |
+| Day-1 retention | > 40% | Users who return within 24 hours of install |
+
+### Engagement
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| Submissions per active user per month | > 3 | Indicates habitual use |
+| Session duration | 45–90 seconds | Target for meaningful use without friction |
+| History screen visit rate | > 30% of active users | Indicates reference value |
+
+### Quality
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| Crash-free session rate | > 99.5% | Measured via crash reporting |
+| Analysis failure rate (app-side) | < 2% | Excluding backend-side failures |
+| Retry success rate | > 80% | Of retried submissions that succeed |
+
+### User Satisfaction
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| App Store rating | > 4.3 stars | Post-launch within 90 days |
+| Support contact rate | < 1% of active users | Indicates self-serve resolution |
+
+---
+
+## 12. Future Roadmap
+
+### Phase 2 (3–6 months post-launch)
+
+- **Real-time scan suggestion:** Detect when a user screenshots suspicious content and proactively prompt them to analyze it via a notification or widget.
+- **Share Extension:** Allow users to share content directly from other apps (Messages, Mail, Safari) to TrustScan without launching the full app.
+- **Multi-image batch submission:** Submit a sequence of screenshots representing a conversation for holistic analysis.
+
+### Phase 3 (6–12 months post-launch)
+
+- **User accounts and sync:** Optional account creation to sync history across devices.
+- **Family sharing:** Allow one account to manage analysis for multiple family members (with consent).
+- **Trend intelligence:** Display community-level scam trend data (anonymized) to help users understand what is circulating.
+- **URL manual entry:** Allow users to type or paste a URL for direct analysis without needing a screenshot.
+
+### Phase 4 (12+ months post-launch)
+
+- **Widget support:** Quick-submission widget for the iOS home screen and lock screen.
+- **Siri integration:** Submit analysis requests via Siri Shortcuts.
+- **iPad native layout:** Optimized multi-column layout for iPad using the available screen real estate.
+- **Enterprise/MDM support:** Configuration profiles and policy management for business deployments.
+- **Localization:** Multi-language support prioritizing top scam-affected markets.

@@ -1,0 +1,53 @@
+"SCAN_HERO_TITLE" = "What looks suspicious today?";
+"SCAN_HERO_BODY" = "Upload a screenshot to check for scams instantly.";
+"SCAN_HERO_BADGE_1" = "No sign-in required";
+"SCAN_HERO_BADGE_2" = "Local history";
+
+"SCAN_SOURCE_TITLE" = "Choose a source";
+"SCAN_SOURCE_PHOTO_CTA" = "Choose Screenshot";
+"SCAN_SOURCE_CAMERA_CTA" = "Take Photo";
+
+"SCAN_PREVIEW_TITLE" = "Preview";
+"SCAN_PREVIEW_CTA" = "Analyze Screenshot";
+"SCAN_START_OVER_CTA" = "Start Over";
+
+"SCAN_RECENT_TITLE" = "Recent Scans";
+
+"RESULT_VERDICT_SAFE" = "Likely Safe";
+"RESULT_VERDICT_SUSPICIOUS" = "Suspicious";
+"RESULT_VERDICT_DANGEROUS" = "High Risk";
+"RESULT_VERDICT_INCONCLUSIVE" = "Needs Review";
+
+"RESULT_RISK_SCORE_LABEL" = "Risk Score";
+"RESULT_INDICATORS_TITLE" = "What We Found";
+"RESULT_RECOMMENDATIONS_TITLE" = "What to Do";
+"RESULT_EXTRACTED_TEXT_TITLE" = "Extracted text";
+"RESULT_SHARE_CTA" = "Share";
+
+"HISTORY_EMPTY_TITLE" = "No scans yet";
+"HISTORY_EMPTY_BODY" = "Run your first screenshot through the scanner and it will show up here automatically.";
+"HISTORY_EMPTY_CTA" = "Start Scanning";
+
+"SETTINGS_TITLE" = "Settings";
+"SETTINGS_ACCOUNT_SECTION" = "Account";
+"SETTINGS_SIGN_OUT_CTA" = "Sign Out";
+"SETTINGS_DATA_SECTION" = "Local Data";
+"SETTINGS_DELETE_HISTORY_CTA" = "Delete all local history";
+"SETTINGS_PERMISSIONS_SECTION" = "Permissions";
+"SETTINGS_ABOUT_SECTION" = "About";
+
+"AUTH_LOGIN_TITLE" = "TrustScan";
+"AUTH_LOGIN_BODY" = "Scan suspicious messages before they cost you.";
+"AUTH_EMAIL_PLACEHOLDER" = "Email";
+"AUTH_PASSWORD_PLACEHOLDER" = "Password";
+"AUTH_CONFIRM_PASSWORD_PLACEHOLDER" = "Confirm Password";
+"AUTH_SIGN_IN_CTA" = "Sign In";
+"AUTH_CREATE_ACCOUNT_CTA" = "Create Account";
+"AUTH_CONTINUE_APPLE_CTA" = "Continue with Apple";
+"AUTH_CONTINUE_GOOGLE_CTA" = "Continue with Google";
+
+"ERROR_INVALID_IMAGE" = "This image could not be processed.";
+"ERROR_NETWORK_UNAVAILABLE" = "No internet connection. Please check your connection and try again.";
+"ERROR_SERVER_UNAVAILABLE" = "Something went wrong on our end. Please try again later.";
+"ERROR_AUTH_REQUIRED" = "Please sign in to continue.";
+"ERROR_AUTH_FAILED" = "Check your credentials and try again.";

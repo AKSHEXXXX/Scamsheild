@@ -1,0 +1,650 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3D4E5F6A1B2C3D4E011 /* TrustScanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */; };
+		A1B2C3D4E5F6A1B2C3D4E012 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */; };
+		A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */; };
+		NEWF1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF2 /* Environment.swift */; };
+		NEWF3 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF4 /* DesignTokens.swift */; };
+		NEWF5 /* UIKitBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF6 /* UIKitBridges.swift */; };
+		NEWF7 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF8 /* NetworkMonitor.swift */; };
+		NEWF9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFA /* Components.swift */; };
+		NEWFB /* PermissionManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFC /* PermissionManagers.swift */; };
+		NEWFD /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFE /* AnalysisResult.swift */; };
+		NEWFF /* ThreatIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW10 /* ThreatIndicator.swift */; };
+		NEW11 /* HistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW12 /* HistoryEntry.swift */; };
+		NEW13 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW14 /* AppConfiguration.swift */; };
+		NEW15 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW16 /* AppError.swift */; };
+		NEW17 /* SubmitAnalysisUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW18 /* SubmitAnalysisUseCase.swift */; };
+		NEW19 /* HistoryUseCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW1A /* HistoryUseCases.swift */; };
+		NEW1B /* FetchConfigurationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW1C /* FetchConfigurationUseCase.swift */; };
+		NEW1D /* AnalysisRepositoryPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW1E /* AnalysisRepositoryPort.swift */; };
+		NEW1F /* HistoryRepositoryPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW20 /* HistoryRepositoryPort.swift */; };
+		NEW21 /* ConfigurationRepositoryPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW22 /* ConfigurationRepositoryPort.swift */; };
+		NEW23 /* DTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW24 /* DTOs.swift */; };
+		NEW25 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW26 /* APIClient.swift */; };
+		NEW27 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW28 /* SupabaseAuthService.swift */; };
+		NEW29 /* LocalAnalysisRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2A /* LocalAnalysisRepository.swift */; };
+		NEW2B /* RemoteAnalysisRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2C /* RemoteAnalysisRepository.swift */; };
+		NEW2D /* FileHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2E /* FileHistoryRepository.swift */; };
+		NEW2F /* RemoteConfigurationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW30 /* RemoteConfigurationRepository.swift */; };
+		NEW31 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW32 /* AuthViewModel.swift */; };
+		NEW33 /* AuthViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW34 /* AuthViews.swift */; };
+		NEW35 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW36 /* OnboardingView.swift */; };
+		NEW37 /* SubmissionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW38 /* SubmissionHomeView.swift */; };
+		NEW39 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3A /* ResultViews.swift */; };
+		NEW3B /* HistoryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3C /* HistoryViews.swift */; };
+		NEW3D /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3E /* SettingsViews.swift */; };
+		NEW3F /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW40 /* ViewModels.swift */; };
+		NEW41 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW42 /* RootView.swift */; };
+		NEW43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = NEW44 /* Localizable.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustScanApp.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		NEWF2 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrustScan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		NEWF4 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		NEWF6 /* UIKitBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBridges.swift; sourceTree = "<group>"; };
+		NEWF8 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		NEWFA /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		NEWFC /* PermissionManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagers.swift; sourceTree = "<group>"; };
+		NEWFE /* AnalysisResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
+		NEW10 /* ThreatIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreatIndicator.swift; sourceTree = "<group>"; };
+		NEW12 /* HistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
+		NEW14 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		NEW16 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		NEW18 /* SubmitAnalysisUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAnalysisUseCase.swift; sourceTree = "<group>"; };
+		NEW1A /* HistoryUseCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryUseCases.swift; sourceTree = "<group>"; };
+		NEW1C /* FetchConfigurationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchConfigurationUseCase.swift; sourceTree = "<group>"; };
+		NEW1E /* AnalysisRepositoryPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisRepositoryPort.swift; sourceTree = "<group>"; };
+		NEW20 /* HistoryRepositoryPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRepositoryPort.swift; sourceTree = "<group>"; };
+		NEW22 /* ConfigurationRepositoryPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationRepositoryPort.swift; sourceTree = "<group>"; };
+		NEW24 /* DTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOs.swift; sourceTree = "<group>"; };
+		NEW26 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		NEW28 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		NEW2A /* LocalAnalysisRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAnalysisRepository.swift; sourceTree = "<group>"; };
+		NEW2C /* RemoteAnalysisRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAnalysisRepository.swift; sourceTree = "<group>"; };
+		NEW2E /* FileHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHistoryRepository.swift; sourceTree = "<group>"; };
+		NEW30 /* RemoteConfigurationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationRepository.swift; sourceTree = "<group>"; };
+		NEW32 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		NEW34 /* AuthViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViews.swift; sourceTree = "<group>"; };
+		NEW36 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		NEW38 /* SubmissionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionHomeView.swift; sourceTree = "<group>"; };
+		NEW3A /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
+		NEW3C /* HistoryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViews.swift; sourceTree = "<group>"; };
+		NEW3E /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
+		NEW40 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
+		NEW42 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		NEW44 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D4E5F6A1B2C3D4E052 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3D4E5F6A1B2C3D4E031 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A1B2C3D4E032 /* TrustScan */,
+				A1B2C3D4E5F6A1B2C3D4E033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6A1B2C3D4E032 /* TrustScan */ = {
+			isa = PBXGroup;
+			children = (
+				GRP_APP /* App */,
+				GRP_CORE /* Core */,
+				GRP_DOMAIN /* Domain */,
+				GRP_DATA /* Data */,
+				GRP_FEATURES /* Features */,
+				GRP_DESIGN /* Design */,
+				NEW44 /* Localizable.strings */,
+				A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */,
+			);
+			path = TrustScan;
+			sourceTree = "<group>";
+		};
+		GRP_APP /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */,
+				A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */,
+				NEWF2 /* Environment.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		GRP_CORE /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				NEWF4 /* DesignTokens.swift */,
+				NEWF6 /* UIKitBridges.swift */,
+				NEWF8 /* NetworkMonitor.swift */,
+				GRP_CORE_COMPONENTS /* Components */,
+				GRP_CORE_PERMISSIONS /* Permissions */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		GRP_CORE_COMPONENTS /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				NEWFA /* Components.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		GRP_CORE_PERMISSIONS /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				NEWFC /* PermissionManagers.swift */,
+			);
+			path = Permissions;
+			sourceTree = "<group>";
+		};
+		GRP_DOMAIN /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				GRP_DOMAIN_MODELS /* Models */,
+				GRP_DOMAIN_USECASES /* UseCases */,
+				GRP_DOMAIN_PORTS /* Ports */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		GRP_DOMAIN_MODELS /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				NEWFE /* AnalysisResult.swift */,
+				NEW10 /* ThreatIndicator.swift */,
+				NEW12 /* HistoryEntry.swift */,
+				NEW14 /* AppConfiguration.swift */,
+				NEW16 /* AppError.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		GRP_DOMAIN_USECASES /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				NEW18 /* SubmitAnalysisUseCase.swift */,
+				NEW1A /* HistoryUseCases.swift */,
+				NEW1C /* FetchConfigurationUseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		GRP_DOMAIN_PORTS /* Ports */ = {
+			isa = PBXGroup;
+			children = (
+				NEW1E /* AnalysisRepositoryPort.swift */,
+				NEW20 /* HistoryRepositoryPort.swift */,
+				NEW22 /* ConfigurationRepositoryPort.swift */,
+			);
+			path = Ports;
+			sourceTree = "<group>";
+		};
+		GRP_DATA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				GRP_DATA_DTOS /* DTOs */,
+				GRP_DATA_NETWORKING /* Networking */,
+				GRP_DATA_AUTH /* Auth */,
+				GRP_DATA_REPOSITORIES /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_DTOS /* DTOs */ = {
+			isa = PBXGroup;
+			children = (
+				NEW24 /* DTOs.swift */,
+			);
+			path = DTOs;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_NETWORKING /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				NEW26 /* APIClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_AUTH /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				NEW28 /* SupabaseAuthService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_REPOSITORIES /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				NEW2A /* LocalAnalysisRepository.swift */,
+				NEW2C /* RemoteAnalysisRepository.swift */,
+				NEW2E /* FileHistoryRepository.swift */,
+				NEW30 /* RemoteConfigurationRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				GRP_FEATURES_SHARED /* Shared */,
+				GRP_FEATURES_AUTH /* Auth */,
+				GRP_FEATURES_ONBOARDING /* Onboarding */,
+				GRP_FEATURES_SUBMISSION /* Submission */,
+				GRP_FEATURES_RESULTS /* Results */,
+				GRP_FEATURES_HISTORY /* History */,
+				GRP_FEATURES_SETTINGS /* Settings */,
+				GRP_FEATURES_VIEWMODELS /* ViewModels */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_SHARED /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				NEW42 /* RootView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_AUTH /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				NEW32 /* AuthViewModel.swift */,
+				NEW34 /* AuthViews.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_ONBOARDING /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				NEW36 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_SUBMISSION /* Submission */ = {
+			isa = PBXGroup;
+			children = (
+				NEW38 /* SubmissionHomeView.swift */,
+			);
+			path = Submission;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_RESULTS /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				NEW3A /* ResultViews.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_HISTORY /* History */ = {
+			isa = PBXGroup;
+			children = (
+				NEW3C /* HistoryViews.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_SETTINGS /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				NEW3E /* SettingsViews.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_VIEWMODELS /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				NEW40 /* ViewModels.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		GRP_DESIGN /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6A1B2C3D4E033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3D4E5F6A1B2C3D4E041 /* TrustScan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D4E5F6A1B2C3D4E071 /* Build configuration list for PBXNativeTarget "TrustScan" */;
+			buildPhases = (
+				A1B2C3D4E5F6A1B2C3D4E051 /* Sources */,
+				A1B2C3D4E5F6A1B2C3D4E052 /* Frameworks */,
+				A1B2C3D4E5F6A1B2C3D4E053 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TrustScan;
+			packageProductDependencies = (
+			);
+			productName = TrustScan;
+			productReference = A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3D4E5F6A1B2C3D4E081 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A1B2C3D4E5F6A1B2C3D4E041 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3D4E5F6A1B2C3D4E072 /* Build configuration list for PBXProject "TrustScan" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A1B2C3D4E5F6A1B2C3D4E031;
+			packageReferences = (
+			);
+			productRefGroup = A1B2C3D4E5F6A1B2C3D4E033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3D4E5F6A1B2C3D4E041 /* TrustScan */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3D4E5F6A1B2C3D4E053 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */,
+				NEW43 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3D4E5F6A1B2C3D4E051 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F6A1B2C3D4E011 /* TrustScanApp.swift in Sources */,
+				A1B2C3D4E5F6A1B2C3D4E012 /* AppEnvironment.swift in Sources */,
+				NEWF1 /* Environment.swift in Sources */,
+				NEWF3 /* DesignTokens.swift in Sources */,
+				NEWF5 /* UIKitBridges.swift in Sources */,
+				NEWF7 /* NetworkMonitor.swift in Sources */,
+				NEWF9 /* Components.swift in Sources */,
+				NEWFB /* PermissionManagers.swift in Sources */,
+				NEWFD /* AnalysisResult.swift in Sources */,
+				NEWFF /* ThreatIndicator.swift in Sources */,
+				NEW11 /* HistoryEntry.swift in Sources */,
+				NEW13 /* AppConfiguration.swift in Sources */,
+				NEW15 /* AppError.swift in Sources */,
+				NEW17 /* SubmitAnalysisUseCase.swift in Sources */,
+				NEW19 /* HistoryUseCases.swift in Sources */,
+				NEW1B /* FetchConfigurationUseCase.swift in Sources */,
+				NEW1D /* AnalysisRepositoryPort.swift in Sources */,
+				NEW1F /* HistoryRepositoryPort.swift in Sources */,
+				NEW21 /* ConfigurationRepositoryPort.swift in Sources */,
+				NEW23 /* DTOs.swift in Sources */,
+				NEW25 /* APIClient.swift in Sources */,
+				NEW27 /* SupabaseAuthService.swift in Sources */,
+				NEW29 /* LocalAnalysisRepository.swift in Sources */,
+				NEW2B /* RemoteAnalysisRepository.swift in Sources */,
+				NEW2D /* FileHistoryRepository.swift in Sources */,
+				NEW2F /* RemoteConfigurationRepository.swift in Sources */,
+				NEW31 /* AuthViewModel.swift in Sources */,
+				NEW33 /* AuthViews.swift in Sources */,
+				NEW35 /* OnboardingView.swift in Sources */,
+				NEW37 /* SubmissionHomeView.swift in Sources */,
+				NEW39 /* ResultViews.swift in Sources */,
+				NEW3B /* HistoryViews.swift in Sources */,
+				NEW3D /* SettingsViews.swift in Sources */,
+				NEW3F /* ViewModels.swift in Sources */,
+				NEW41 /* RootView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1B2C3D4E5F6A1B2C3D4E061 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrustScan/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.binaryztech.trustscan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A1B2C3D4E5F6A1B2C3D4E062 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrustScan/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.binaryztech.trustscan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A1B2C3D4E5F6A1B2C3D4E063 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILER_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A1B2C3D4E5F6A1B2C3D4E064 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B2C3D4E5F6A1B2C3D4E071 /* Build configuration list for PBXNativeTarget "TrustScan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F6A1B2C3D4E061 /* Debug */,
+				A1B2C3D4E5F6A1B2C3D4E062 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3D4E5F6A1B2C3D4E072 /* Build configuration list for PBXProject "TrustScan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F6A1B2C3D4E063 /* Debug */,
+				A1B2C3D4E5F6A1B2C3D4E064 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1B2C3D4E5F6A1B2C3D4E081 /* Project object */;
+}
