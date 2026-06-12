@@ -1,13 +1,20 @@
+import os
 import pytest
 from httpx import AsyncClient, ASGITransport
 from main import app
 from app.config import settings
 from app.database import supabase
 
+skip_if_no_supabase = pytest.mark.skipif(
+    not os.environ.get("SUPABASE_URL") or not os.environ.get("SUPABASE_SERVICE_KEY"),
+    reason="SUPABASE_URL and SUPABASE_SERVICE_KEY must be set"
+)
+
 @pytest.fixture
 def anyio_backend():
     return "asyncio"
 
+@skip_if_no_supabase
 @pytest.mark.anyio
 async def test_health():
     transport = ASGITransport(app=app)
@@ -16,6 +23,7 @@ async def test_health():
     assert resp.status_code == 200
     assert resp.json()["status"] == "ok"
 
+@skip_if_no_supabase
 @pytest.mark.anyio
 async def test_config_endpoint():
     transport = ASGITransport(app=app)

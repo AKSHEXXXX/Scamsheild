@@ -1,1 +1,0 @@
-- [[ios-testconnection]] — iOS SwiftUI Test Connection app with Supabase + OAuth auth, built via xtool
