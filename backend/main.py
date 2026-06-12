@@ -1,20 +1,21 @@
 import os
 import uuid
 import logging
+from typing import Optional
 from datetime import datetime, timezone
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.models import ScanIn, AnalyzeTextIn, AnalyzeOut, ConfigOut, ReportIn, ReportOut, HistoryOut, HistoryCounts, HistoryItem
 from app.database import supabase
-from app.auth import resolve_identity, enforce_credit_cap
+from app.auth import require_user, enforce_credit_cap
 from app.ocr import run_ocr
 from app.config import settings
 from app.analyzer import analyze
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("scamshield")
-app = FastAPI(title="ScamShield API", version="1.1.0")
+app = FastAPI(title="ScamShield API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,13 +37,13 @@ def get_config_dict() -> dict:
         "config_version": row["config_version"],
     }
 
-def persist_scan(kind: str, device_id: str, user_id, body_os: str,
+def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str],
                  input_text: str, result: dict, warned: bool):
     scan_id = str(uuid.uuid4())
     record = {
         "id": scan_id,
         "kind": kind,
-        "device_id": device_id,
+        "user_id": user_id,
         "os": body_os,
         "input_text": input_text[:200],
         "result_json": result,
@@ -51,13 +52,13 @@ def persist_scan(kind: str, device_id: str, user_id, body_os: str,
         "warning_count": result["warning_count"],
         "flagged": warned,
     }
-    if user_id:
-        record["user_id"] = user_id
+    if device_id:
+        record["device_id"] = device_id
     supabase.table("scans").insert(record).execute()
     return scan_id
 
 # ---------------------------------------------------------------------------
-# Config
+# Config — no auth required (public read)
 # ---------------------------------------------------------------------------
 @app.get("/api/v1/config", response_model=ConfigOut)
 def get_config():
@@ -68,29 +69,27 @@ def get_config():
 # ---------------------------------------------------------------------------
 @app.post("/api/v1/analyze-text", response_model=AnalyzeOut)
 async def analyze_text(body: AnalyzeTextIn,
-                       x_device_id: str = Header(None),
-                       authorization: str = Header(None)):
-    device_id, user_id = resolve_identity(x_device_id, authorization)
+                       authorization: str = Header(None),
+                       x_device_id: Optional[str] = Header(None)):
+    user_id = require_user(authorization)
 
     config = get_config_dict()
     cap = config["scan_credit_cap"]
     today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
 
-    sub = user_id or device_id
-    col = "user_id" if user_id else "device_id"
     count_result = supabase.table("scans") \
         .select("id", count="exact") \
-        .eq(col, sub) \
+        .eq("user_id", user_id) \
         .gte("created_at", today_start) \
         .execute()
     scan_count = count_result.count if count_result.count is not None else 0
-    enforce_credit_cap(sub, cap, scan_count)
+    enforce_credit_cap(user_id, cap, scan_count)
 
     if body.os not in ("iOS", "Android"):
         raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
 
     result = await analyze(body.text)
-    scan_id = persist_scan("message", device_id, user_id, body.os,
+    scan_id = persist_scan("message", user_id, body.os, x_device_id,
                            body.text, result, result["verdict"] == "high_risk")
 
     return AnalyzeOut(scan_id=scan_id, kind="message", **result)
@@ -100,30 +99,28 @@ async def analyze_text(body: AnalyzeTextIn,
 # ---------------------------------------------------------------------------
 @app.post("/api/v1/sandbox-image", response_model=AnalyzeOut)
 async def sandbox_image(body: ScanIn,
-                        x_device_id: str = Header(None),
-                        authorization: str = Header(None)):
-    device_id, user_id = resolve_identity(x_device_id, authorization)
+                        authorization: str = Header(None),
+                        x_device_id: Optional[str] = Header(None)):
+    user_id = require_user(authorization)
 
     config = get_config_dict()
     cap = config["scan_credit_cap"]
     today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
 
-    sub = user_id or device_id
-    col = "user_id" if user_id else "device_id"
     count_result = supabase.table("scans") \
         .select("id", count="exact") \
-        .eq(col, sub) \
+        .eq("user_id", user_id) \
         .gte("created_at", today_start) \
         .execute()
     scan_count = count_result.count if count_result.count is not None else 0
-    enforce_credit_cap(sub, cap, scan_count)
+    enforce_credit_cap(user_id, cap, scan_count)
 
     if body.os not in ("iOS", "Android"):
         raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
 
     text = run_ocr(body.image_base64)
     result = await analyze(text)
-    scan_id = persist_scan("screenshot", device_id, user_id, body.os,
+    scan_id = persist_scan("screenshot", user_id, body.os, x_device_id,
                            text, result, result["verdict"] == "high_risk")
 
     return AnalyzeOut(scan_id=scan_id, kind="screenshot", **result)
@@ -133,9 +130,9 @@ async def sandbox_image(body: ScanIn,
 # ---------------------------------------------------------------------------
 @app.post("/api/v1/report", response_model=ReportOut)
 async def report(body: ReportIn,
-                 x_device_id: str = Header(None),
-                 authorization: str = Header(None)):
-    device_id, user_id = resolve_identity(x_device_id, authorization)
+                 authorization: str = Header(None),
+                 x_device_id: Optional[str] = Header(None)):
+    user_id = require_user(authorization)
 
     if body.report_type not in ("upi", "phone", "link", "other"):
         raise HTTPException(status_code=400, detail="Invalid report_type")
@@ -150,10 +147,10 @@ async def report(body: ReportIn,
         "channel": body.channel,
         "description": body.description,
         "os": body.os,
-        "device_id": device_id,
+        "user_id": user_id,
     }
-    if user_id:
-        record["user_id"] = user_id
+    if x_device_id:
+        record["device_id"] = x_device_id
 
     result = supabase.table("reports").insert(record).execute()
     report_id = result.data[0]["id"]
@@ -163,23 +160,19 @@ async def report(body: ReportIn,
 # History
 # ---------------------------------------------------------------------------
 @app.get("/api/v1/history", response_model=HistoryOut)
-def get_history(x_device_id: str = Header(None),
-                authorization: str = Header(None)):
-    device_id, user_id = resolve_identity(x_device_id, authorization)
-
-    sub = user_id or device_id
-    col = "user_id" if user_id else "device_id"
+def get_history(authorization: str = Header(None)):
+    user_id = require_user(authorization)
 
     scans = supabase.table("scans") \
         .select("id,kind,verdict,input_text,created_at") \
-        .eq(col, sub) \
+        .eq("user_id", user_id) \
         .order("created_at", desc=True) \
         .limit(50) \
         .execute()
 
     reports = supabase.table("reports") \
         .select("id", count="exact") \
-        .eq(col, sub) \
+        .eq("user_id", user_id) \
         .execute()
 
     items = []
@@ -212,19 +205,16 @@ def get_history(x_device_id: str = Header(None),
 # Scan detail
 # ---------------------------------------------------------------------------
 @app.get("/api/v1/scan/{scan_id}")
-async def get_scan(scan_id: str,
-                   x_device_id: str = Header(None),
-                   authorization: str = Header(None)):
-    device_id, user_id = resolve_identity(x_device_id, authorization)
+def get_scan(scan_id: str,
+             authorization: str = Header(None)):
+    user_id = require_user(authorization)
 
     result = supabase.table("scans").select("*").eq("id", scan_id).single().execute()
     if not result.data:
         raise HTTPException(status_code=404, detail="Scan not found")
 
     row = result.data
-    sub = user_id or device_id
-    col = "user_id" if user_id else "device_id"
-    if row.get(col) != sub:
+    if row.get("user_id") != user_id:
         raise HTTPException(status_code=403, detail="Not your scan")
 
     return row["result_json"]
@@ -234,7 +224,7 @@ async def get_scan(scan_id: str,
 # ---------------------------------------------------------------------------
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "1.1.0"}
+    return {"status": "ok", "version": "2.0.0"}
 
 @app.exception_handler(422)
 async def validation_exception_handler(request: Request, exc):
