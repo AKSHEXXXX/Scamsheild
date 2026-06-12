@@ -18,6 +18,11 @@ build/
 *.swo
 *~
 
+# Agent / tooling
+.agents/
+.memory/
+skills-lock.json
+
 # OS
 .DS_Store
 Thumbs.db

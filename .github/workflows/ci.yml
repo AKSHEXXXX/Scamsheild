@@ -2,13 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [ main, backend/** ]
+    branches: [ main, backend, ios, android ]
   pull_request:
     branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL || '' }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY || '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -18,6 +21,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install Tesseract
+        if: env.SUPABASE_URL != ''
         run: sudo apt-get update && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng
 
       - name: Install dependencies
@@ -25,10 +29,7 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
-      - name: Run tests
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      - name: Run all tests
         run: |
           cd backend
           python -m pytest tests/ -v
