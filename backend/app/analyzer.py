@@ -97,7 +97,10 @@ async def analyze(text: str) -> dict:
 
     # Scoring
     domain_risk = 100 if any(u["reputation"] == "malicious" for u in flagged_urls) else 0
-    score = round(0.6 * tscore + 0.4 * domain_risk)
+    impersonation_boost = 25 if any(
+        f["type"] == "impersonation" and f["severity"] == "high" for f in findings
+    ) else 0
+    score = round(0.6 * tscore + 0.4 * domain_risk) + impersonation_boost
     warning_count = sum(1 for f in findings if f["severity"] in ("high", "medium"))
 
     cfg = supabase.table("app_config").select("sensitivity_threshold").eq("id", 1).single().execute().data
