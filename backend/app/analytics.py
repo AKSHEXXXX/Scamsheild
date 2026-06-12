@@ -63,7 +63,6 @@ RISK_KEYWORDS = [
     # --- Order / transaction references ---
     r"\border\s*(?:no|#|number|id)",
     r"\border\s*id",
-    r"\btransaction",
     r"\breference\s*(?:no|#|number)",
     r"\binvoice",
     r"\breceipt",
@@ -98,6 +97,20 @@ RISK_KEYWORDS = [
     r"\btech\s*support",
     r"\bremote\s*(?:access|support|login)",
     r"\binstall\s*(?:app|software|anydesk|teamviewer)",
+    r"\bvirus",
+    r"\bcall\s*(?:now|us|immediately|our|this)",
+    # --- Fake job / work from home ---
+    r"\bwork\s*(?:from\s*home|remotely)",
+    r"\bearn\s*(?:money|cash|rs|extra)",
+    r"\bpart\s*time",
+    r"\bregister\s*(?:now|today|free)",
+    r"\bprocessing\s*fee",
+    # --- Expiry / update (broader verb forms) ---
+    r"\bexpir(?:e|ed|es|ing)",
+    r"\bupdate\s*(?:now|today|immediately)",
+    r"\bfreeze",
+    r"\bdeactivat",
+    r"\bblock\s*(?:your|this)",
 ]
 
 def text_risk_analysis(text: str):
