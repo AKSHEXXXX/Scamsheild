@@ -1,21 +1,20 @@
 import os
+import uuid
 import logging
 from datetime import datetime, timezone
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.models import ScanIn, ConfigOut, ScanOut
+from app.models import ScanIn, AnalyzeTextIn, AnalyzeOut, ConfigOut, ReportIn, ReportOut, HistoryOut, HistoryCounts, HistoryItem
 from app.database import supabase
-from app.auth import get_user_id, enforce_credit_cap
+from app.auth import resolve_identity, enforce_credit_cap
 from app.ocr import run_ocr
-from app.analytics import text_risk_analysis
-from app.sandbox import sandbox_urls
-from app.scoring import compliance_score
 from app.config import settings
+from app.analyzer import analyze
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("scamshield")
-app = FastAPI(title="ScamShield API", version="1.0.0")
+app = FastAPI(title="ScamShield API", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,6 +23,218 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def get_config_dict() -> dict:
+    result = supabase.table("app_config").select("*").eq("id", 1).single().execute()
+    row = result.data
+    if not row:
+        raise HTTPException(status_code=500, detail="Config not found")
+    return {
+        "scan_credit_cap": row["scan_credit_cap"],
+        "ad_frequency": row["ad_frequency"],
+        "sensitivity_threshold": row["sensitivity_threshold"],
+        "config_version": row["config_version"],
+    }
+
+def persist_scan(kind: str, device_id: str, user_id, body_os: str,
+                 input_text: str, result: dict, warned: bool):
+    scan_id = str(uuid.uuid4())
+    record = {
+        "id": scan_id,
+        "kind": kind,
+        "device_id": device_id,
+        "os": body_os,
+        "input_text": input_text[:200],
+        "result_json": result,
+        "risk_score": result["risk_score"],
+        "verdict": result["verdict"],
+        "warning_count": result["warning_count"],
+        "flagged": warned,
+    }
+    if user_id:
+        record["user_id"] = user_id
+    supabase.table("scans").insert(record).execute()
+    return scan_id
+
+# ---------------------------------------------------------------------------
+# Config
+# ---------------------------------------------------------------------------
+@app.get("/api/v1/config", response_model=ConfigOut)
+def get_config():
+    return get_config_dict()
+
+# ---------------------------------------------------------------------------
+# Analyze text
+# ---------------------------------------------------------------------------
+@app.post("/api/v1/analyze-text", response_model=AnalyzeOut)
+async def analyze_text(body: AnalyzeTextIn,
+                       x_device_id: str = Header(None),
+                       authorization: str = Header(None)):
+    device_id, user_id = resolve_identity(x_device_id, authorization)
+
+    config = get_config_dict()
+    cap = config["scan_credit_cap"]
+    today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
+
+    sub = user_id or device_id
+    col = "user_id" if user_id else "device_id"
+    count_result = supabase.table("scans") \
+        .select("id", count="exact") \
+        .eq(col, sub) \
+        .gte("created_at", today_start) \
+        .execute()
+    scan_count = count_result.count if count_result.count is not None else 0
+    enforce_credit_cap(sub, cap, scan_count)
+
+    if body.os not in ("iOS", "Android"):
+        raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
+
+    result = await analyze(body.text)
+    scan_id = persist_scan("message", device_id, user_id, body.os,
+                           body.text, result, result["verdict"] == "high_risk")
+
+    return AnalyzeOut(scan_id=scan_id, kind="message", **result)
+
+# ---------------------------------------------------------------------------
+# Sandbox image
+# ---------------------------------------------------------------------------
+@app.post("/api/v1/sandbox-image", response_model=AnalyzeOut)
+async def sandbox_image(body: ScanIn,
+                        x_device_id: str = Header(None),
+                        authorization: str = Header(None)):
+    device_id, user_id = resolve_identity(x_device_id, authorization)
+
+    config = get_config_dict()
+    cap = config["scan_credit_cap"]
+    today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
+
+    sub = user_id or device_id
+    col = "user_id" if user_id else "device_id"
+    count_result = supabase.table("scans") \
+        .select("id", count="exact") \
+        .eq(col, sub) \
+        .gte("created_at", today_start) \
+        .execute()
+    scan_count = count_result.count if count_result.count is not None else 0
+    enforce_credit_cap(sub, cap, scan_count)
+
+    if body.os not in ("iOS", "Android"):
+        raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
+
+    text = run_ocr(body.image_base64)
+    result = await analyze(text)
+    scan_id = persist_scan("screenshot", device_id, user_id, body.os,
+                           text, result, result["verdict"] == "high_risk")
+
+    return AnalyzeOut(scan_id=scan_id, kind="screenshot", **result)
+
+# ---------------------------------------------------------------------------
+# Report
+# ---------------------------------------------------------------------------
+@app.post("/api/v1/report", response_model=ReportOut)
+async def report(body: ReportIn,
+                 x_device_id: str = Header(None),
+                 authorization: str = Header(None)):
+    device_id, user_id = resolve_identity(x_device_id, authorization)
+
+    if body.report_type not in ("upi", "phone", "link", "other"):
+        raise HTTPException(status_code=400, detail="Invalid report_type")
+    if body.channel not in ("whatsapp", "sms", "phone_call", "email"):
+        raise HTTPException(status_code=400, detail="Invalid channel")
+    if body.os not in ("iOS", "Android"):
+        raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
+
+    record = {
+        "report_type": body.report_type,
+        "value": body.value,
+        "channel": body.channel,
+        "description": body.description,
+        "os": body.os,
+        "device_id": device_id,
+    }
+    if user_id:
+        record["user_id"] = user_id
+
+    result = supabase.table("reports").insert(record).execute()
+    report_id = result.data[0]["id"]
+    return ReportOut(ok=True, report_id=report_id)
+
+# ---------------------------------------------------------------------------
+# History
+# ---------------------------------------------------------------------------
+@app.get("/api/v1/history", response_model=HistoryOut)
+def get_history(x_device_id: str = Header(None),
+                authorization: str = Header(None)):
+    device_id, user_id = resolve_identity(x_device_id, authorization)
+
+    sub = user_id or device_id
+    col = "user_id" if user_id else "device_id"
+
+    scans = supabase.table("scans") \
+        .select("id,kind,verdict,input_text,created_at") \
+        .eq(col, sub) \
+        .order("created_at", desc=True) \
+        .limit(50) \
+        .execute()
+
+    reports = supabase.table("reports") \
+        .select("id", count="exact") \
+        .eq(col, sub) \
+        .execute()
+
+    items = []
+    msg_count = 0
+    ss_count = 0
+    for s in scans.data:
+        if s["kind"] == "message":
+            msg_count += 1
+        elif s["kind"] == "screenshot":
+            ss_count += 1
+        preview = (s.get("input_text") or "")[:60]
+        items.append(HistoryItem(
+            scan_id=s["id"],
+            kind=s["kind"],
+            verdict=s["verdict"],
+            preview=preview,
+            created_at=s["created_at"],
+        ))
+
+    return HistoryOut(
+        counts=HistoryCounts(
+            messages=msg_count,
+            screenshots=ss_count,
+            reports=reports.count or 0,
+        ),
+        items=items,
+    )
+
+# ---------------------------------------------------------------------------
+# Scan detail
+# ---------------------------------------------------------------------------
+@app.get("/api/v1/scan/{scan_id}")
+async def get_scan(scan_id: str,
+                   x_device_id: str = Header(None),
+                   authorization: str = Header(None)):
+    device_id, user_id = resolve_identity(x_device_id, authorization)
+
+    result = supabase.table("scans").select("*").eq("id", scan_id).single().execute()
+    if not result.data:
+        raise HTTPException(status_code=404, detail="Scan not found")
+
+    row = result.data
+    sub = user_id or device_id
+    col = "user_id" if user_id else "device_id"
+    if row.get(col) != sub:
+        raise HTTPException(status_code=403, detail="Not your scan")
+
+    return row["result_json"]
+
+# ---------------------------------------------------------------------------
+# Health
+# ---------------------------------------------------------------------------
+@app.get("/health")
+def health():
+    return {"status": "ok", "version": "1.1.0"}
 
 @app.exception_handler(422)
 async def validation_exception_handler(request: Request, exc):
@@ -44,69 +255,3 @@ async def validation_exception_handler(request: Request, exc):
         logger.warning(f"422 on {request.url.path}: empty body, content_type={content_type}")
     logger.warning(f"422 detail: {exc.errors()}")
     return JSONResponse(status_code=422, content={"detail": exc.errors()})
-
-# ---------------------------------------------------------------------------
-# 1.3 Config endpoint
-# ---------------------------------------------------------------------------
-@app.get("/api/v1/config", response_model=ConfigOut)
-def get_config():
-    result = supabase.table("app_config").select("*").eq("id", 1).single().execute()
-    row = result.data
-    if not row:
-        raise HTTPException(status_code=500, detail="Config not found")
-    return {
-        "scan_credit_cap": row["scan_credit_cap"],
-        "ad_frequency": row["ad_frequency"],
-        "sensitivity_threshold": row["sensitivity_threshold"],
-        "config_version": row["config_version"],
-    }
-
-# ---------------------------------------------------------------------------
-# 2.x Image sandbox endpoint
-# ---------------------------------------------------------------------------
-@app.post("/api/v1/sandbox-image", response_model=ScanOut)
-async def sandbox_image(body: ScanIn, authorization: str = Header(None)):
-    user_id = get_user_id(authorization)
-
-    config = get_config()
-    cap = config["scan_credit_cap"]
-
-    today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
-    count_result = supabase.table("scans") \
-        .select("id", count="exact") \
-        .eq("user_id", user_id) \
-        .gte("created_at", today_start) \
-        .execute()
-    scan_count = count_result.count if count_result.count is not None else 0
-    enforce_credit_cap(user_id, cap, scan_count)
-
-    if body.os not in ("iOS", "Android"):
-        raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
-
-    text = run_ocr(body.image_base64)
-    text_score, keywords = text_risk_analysis(text)
-    flagged = await sandbox_urls(text)
-    score, verdict = compliance_score(text_score, flagged, config["sensitivity_threshold"])
-
-    supabase.table("scans").insert({
-        "user_id": user_id,
-        "os": body.os,
-        "risk_score": score,
-        "verdict": verdict,
-        "flagged": verdict == "high_risk",
-    }).execute()
-
-    return ScanOut(
-        risk_score=score,
-        verdict=verdict,
-        extracted_text=text,
-        matched_keywords=keywords,
-        flagged_urls=flagged,
-    )
-
-# ---------------------------------------------------------------------------
-# Health check
-# ---------------------------------------------------------------------------
-@app.get("/health")
-def health():
-    return {"status": "ok", "version": "1.0.0"}
