@@ -1,7 +1,9 @@
 import os
+import logging
 from datetime import datetime, timezone
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.models import ScanIn, ConfigOut, ScanOut
 from app.database import supabase
 from app.auth import get_user_id, enforce_credit_cap
@@ -11,6 +13,8 @@ from app.sandbox import sandbox_urls
 from app.scoring import compliance_score
 from app.config import settings
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("scamshield")
 app = FastAPI(title="ScamShield API", version="1.0.0")
 
 app.add_middleware(
@@ -20,6 +24,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.exception_handler(422)
+async def validation_exception_handler(request: Request, exc):
+    body = await request.body()
+    content_type = request.headers.get("content-type", "")
+    if body:
+        import json as j
+        try:
+            data = j.loads(body)
+            logger.warning(f"422 on {request.url.path}: body_keys={list(data.keys())}, "
+                         f"os={data.get('os', '?')}, "
+                         f"b64_len={len(data.get('image_base64', '')) if 'image_base64' in data else 0}, "
+                         f"b64_present={'image_base64' in data}, "
+                         f"content_type={content_type}")
+        except Exception:
+            logger.warning(f"422 on {request.url.path}: invalid JSON body, content_type={content_type}")
+    else:
+        logger.warning(f"422 on {request.url.path}: empty body, content_type={content_type}")
+    logger.warning(f"422 detail: {exc.errors()}")
+    return JSONResponse(status_code=422, content={"detail": exc.errors()})
 
 # ---------------------------------------------------------------------------
 # 1.3 Config endpoint
