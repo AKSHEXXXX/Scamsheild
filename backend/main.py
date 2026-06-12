@@ -4,7 +4,7 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.models import ScanIn, ConfigOut, ScanOut
 from app.database import supabase
-from app.auth import verify_jwt, enforce_credit_cap
+from app.auth import get_user_id, enforce_credit_cap
 from app.ocr import run_ocr
 from app.analytics import text_risk_analysis
 from app.sandbox import sandbox_urls
@@ -42,7 +42,7 @@ def get_config():
 # ---------------------------------------------------------------------------
 @app.post("/api/v1/sandbox-image", response_model=ScanOut)
 async def sandbox_image(body: ScanIn, authorization: str = Header(None)):
-    user_id = verify_jwt(authorization)
+    user_id = get_user_id(authorization)
 
     config = get_config()
     cap = config["scan_credit_cap"]

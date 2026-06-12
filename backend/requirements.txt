@@ -4,8 +4,6 @@ httpx
 pytesseract
 pillow
 supabase
-python-jose[cryptography]
 python-dotenv
 pytest
 pytest-asyncio
-httpx[async]
