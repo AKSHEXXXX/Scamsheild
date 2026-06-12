@@ -93,6 +93,7 @@ RISK_KEYWORDS = [
     r"\bconsignment",
     # --- KYC extended ---
     r"\bkyc\s*(?:update|fail|expire|pending|verification)",
+    r"(?:update|verify|complete|submit)\s+kyc\b",
     # --- Tech support ---
     r"\btech\s*support",
     r"\bremote\s*(?:access|support|login)",
