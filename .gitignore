@@ -1,31 +1,15 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.eggs/
-dist/
+# Xcode
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.build/
 build/
 
-# Environment
-.env
-.env.local
-*.env
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# OS
+# macOS
 .DS_Store
-Thumbs.db
 
-# Test
-.coverage
-htmlcov/
-.pytest_cache/
 
-# Docker
-*.log
