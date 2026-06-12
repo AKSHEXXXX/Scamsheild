@@ -6,6 +6,10 @@ from app.analytics import text_risk_analysis
 UPI_RE = re.compile(r"[\w.\-]+@[\w]+")
 PHONE_RE = re.compile(r"(?:\+91|91|0)?[6-9]\d{9}")
 URL_RE = re.compile(r"https?://[^\s\)\"\'\>\<\]]+")
+TYPO_CON_RE = re.compile(r"\b[A-Za-z0-9]+\.con\b", re.IGNORECASE)
+BRAND_IMPERSONATION_RE = re.compile(
+    r"\b(amazon|google|paytm|phonepe|flipkart|microsoft|apple|netflix|sbi|hdfc|icici)"
+    r"\s*(?:team|customer|support|care|help)\b", re.IGNORECASE)
 
 async def analyze(text: str) -> dict:
     findings = []
@@ -43,6 +47,22 @@ async def analyze(text: str) -> dict:
         for p in phone_found:
             findings.append({"type": "phone", "severity": "high", "title": "Fraud number detected",
                              "detail": f"Phone {p} is linked to known scams"})
+
+    # Brand impersonation detection (typosquat .con domains)
+    con_matches = TYPO_CON_RE.findall(text)
+    if con_matches:
+        for m in con_matches[:3]:
+            findings.append({"type": "impersonation", "severity": "high",
+                             "title": "Brand impersonation detected",
+                             "detail": f"'{m}' mimics a legitimate domain — likely a scam"})
+
+    # Brand name impersonation ("Google team", "Amazon customer support" etc.)
+    brand_matches = BRAND_IMPERSONATION_RE.findall(text)
+    if brand_matches:
+        brands = set(m[0] for m in brand_matches)
+        findings.append({"type": "impersonation", "severity": "medium",
+                         "title": "Fake brand communication",
+                         "detail": f"Impersonating: {', '.join(b.title() for b in brands)}"})
 
     # Pressure language analysis
     tscore, keywords = text_risk_analysis(text)
