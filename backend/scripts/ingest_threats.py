@@ -30,10 +30,10 @@ supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 # ---------------------------------------------------------------------------
 FEEDS = {
     "domains": [
-        # OpenPhish – phishing domains
-        "https://openphish.com/feed.txt",
-        # PhishTank – raw CSV of phishing URLs (use raw CSV endpoint)
-        "https://data.phishtank.com/data/online-valid.csv",
+        # OpenPhish – phishing domains (raw GitHub mirror)
+        "https://raw.githubusercontent.com/openphish/public_feed/refs/heads/main/feed.txt",
+        # PhishTank – verified phishing URLs
+        "https://phishtank.org/feeds/verified_online.csv",
     ],
     "phone_numbers": [
         # Example: national do-not-call / spam-number lists.
@@ -46,7 +46,7 @@ FEEDS = {
 
 def fetch_text(url: str) -> str | None:
     try:
-        r = httpx.get(url, timeout=30)
+        r = httpx.get(url, follow_redirects=True, timeout=30)
         r.raise_for_status()
         return r.text
     except Exception as exc:
@@ -55,22 +55,23 @@ def fetch_text(url: str) -> str | None:
 
 def extract_domains(text: str) -> list[str]:
     """Extract unique domain names from plain-text URL lists."""
+    from urllib.parse import urlparse
     domains = set()
     for line in text.strip().splitlines():
         line = line.strip()
-        if not line or line.startswith("#") or line.startswith("http"):
-            # If it's a full URL, extract host
-            if line.startswith("http"):
-                try:
-                    from urllib.parse import urlparse
-                    domain = urlparse(line).hostname
-                    if domain and "." in domain:
-                        domains.add(domain.lower())
-                except Exception:
-                    pass
+        if not line or line.startswith("#"):
             continue
-        if "." in line:
-            domains.add(line.lower())
+        # Try to extract hostname from URL
+        try:
+            if not line.startswith(("http://", "https://")):
+                line = "https://" + line
+            domain = urlparse(line).hostname
+            if domain and "." in domain and len(domain) < 253:
+                # Remove www prefix for dedup
+                domain = domain.removeprefix("www.")
+                domains.add(domain.lower())
+        except Exception:
+            pass
     return list(domains)
 
 def upsert_domains(domains: list[str], source: str):
@@ -102,8 +103,16 @@ def main():
         text = fetch_text(url)
         if text is None:
             continue
-        domains = extract_domains(text)
         source = "openphish" if "openphish" in url else "phishtank"
+        # PhishTank is CSV with URL in column 2, OpenPhish is plain text URLs
+        if "phishtank" in url:
+            import csv, io
+            rows = list(csv.reader(io.StringIO(text)))
+            # Skip header row, extract URLs from column 2
+            urls = [row[1] for row in rows[1:] if len(row) > 1]
+            domains = extract_domains("\n".join(urls))
+        else:
+            domains = extract_domains(text)
         upsert_domains(domains, source)
 
     # Phone numbers (placeholder – add real sources)
