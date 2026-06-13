@@ -11,30 +11,35 @@ struct OnboardingView: View {
 
       TabView(selection: $page) {
         onboardingCard(
-          title: "Scan. Detect. Stay Safer.",
-          copy: "TrustScan gives you a fast second opinion when a message, invoice, or alert feels off.",
-          symbol: "shield.checkered"
+          title: "Scammers are getting smarter.",
+          copy: "Fake invoices, phishing links, and impersonation calls cost billions every year.",
+          symbol: "exclamationmark.bubble"
         )
         .tag(0)
 
         onboardingCard(
-          title: "Start With A Screenshot",
-          copy: "Pick a screenshot or capture a photo, then let the app read the text and flag common scam patterns.",
-          symbol: "photo.on.rectangle.angled"
+          title: "One scan tells you everything.",
+          copy: "Upload any screenshot — message, email, invoice, or alert — and TrustScan gives you a risk verdict in seconds.",
+          symbol: "shield.checkered"
         )
         .tag(1)
 
         onboardingCard(
-          title: "Your Privacy Matters",
-          copy: "We never store your images longer than needed. Your results are private and never shared. No account required to scan.",
+          title: "Your data stays on your device.",
+          copy: "Scans are analyzed privately. No data is stored on our servers without your permission.",
           symbol: "lock.shield"
         )
         .tag(2)
       }
       .tabViewStyle(.page(indexDisplayMode: .always))
+      .indexViewStyle(.page(backgroundDisplayMode: .always))
+      .onAppear {
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(ColorTokens.acc)
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor(ColorTokens.acc).withAlphaComponent(0.3)
+      }
 
       VStack(spacing: SpacingTokens.small) {
-        Button(page == 2 ? "Start Scanning" : "Next") {
+        Button(page == 2 ? "Get Started" : "Next") {
           if page < 2 {
             withAnimation(.easeInOut) {
               page += 1
@@ -45,12 +50,15 @@ struct OnboardingView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(ColorTokens.acc)
+        .frame(maxWidth: .infinity, minHeight: 52)
 
-        Button("Skip") {
-          onFinish()
+        Button(action: { onFinish() }) {
+          Text("Skip")
+            .font(TypographyTokens.body)
+            .foregroundStyle(ColorTokens.st)
+            .frame(minWidth: 60, minHeight: 44)
         }
-        .font(TypographyTokens.body)
-        .foregroundStyle(ColorTokens.st)
+        .accessibilityLabel("Skip onboarding")
       }
 
       Spacer(minLength: SpacingTokens.large)

@@ -1,4 +1,5 @@
 import SwiftUI
+import LocalAuthentication
 
 @MainActor
 final class AuthViewModel: ObservableObject {
@@ -9,11 +10,39 @@ final class AuthViewModel: ObservableObject {
   @Published var errorMessage: String?
   @Published var isShowingSignUp = false
   @Published var signUpSuccessMessage: String?
+  @Published var canUseBiometrics = false
 
   let authService: SupabaseAuthService
 
   init(authService: SupabaseAuthService) {
     self.authService = authService
+    checkBiometricAvailability()
+  }
+
+  func checkBiometricAvailability() {
+    let context = LAContext()
+    var error: NSError?
+    if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+      canUseBiometrics = true
+    } else {
+      canUseBiometrics = false
+    }
+  }
+
+  func authenticateWithBiometrics() async {
+    let context = LAContext()
+    do {
+      let success = try await context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Authenticate to access TrustScan")
+      if success {
+        // If they successfully authenticate biometrically, and we had a saved token,
+        // we'd log them in. Since our app auto-logs in if the token is valid,
+        // this is more of a placeholder for if we implement forced biometric unlock
+        // or keychain credential saving in the future.
+        print("Biometric auth succeeded")
+      }
+    } catch {
+      errorMessage = "Biometric authentication failed."
+    }
   }
 
   func signIn() async {

@@ -12,6 +12,34 @@ struct SubmissionHomeView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: SpacingTokens.large) {
+        
+        // Custom Header
+        HStack {
+          Text("TrustScan")
+            .font(.system(size: 28, weight: .heavy, design: .rounded))
+            .foregroundStyle(ColorTokens.ik)
+          
+          Spacer()
+          
+          NavigationLink {
+            ProfileView(hasCompletedOnboarding: .constant(true))
+          } label: {
+            AsyncImage(url: URL(string: "https://api.multiavatar.com/\(environment.authService.currentUser?.email ?? "akshat").png")) { phase in
+              if let image = phase.image {
+                image.resizable().scaledToFill()
+              } else if phase.error != nil {
+                Circle().fill(ColorTokens.acc.opacity(0.2))
+                  .overlay(Text(String((environment.authService.currentUser?.email ?? "A").prefix(1).uppercased())).foregroundStyle(ColorTokens.acc))
+              } else {
+                ProgressView()
+              }
+            }
+            .frame(width: 44, height: 44)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(ColorTokens.st.opacity(0.2), lineWidth: 1))
+          }
+        }
+        
         // Offline banner
         if !networkMonitor.isConnected && !dismissedOfflineBanner {
           OfflineBanner { dismissedOfflineBanner = true }
@@ -36,7 +64,7 @@ struct SubmissionHomeView: View {
       .padding(SpacingTokens.large)
     }
     .background(ColorTokens.bg.ignoresSafeArea())
-    .navigationTitle("Scan")
+    .navigationBarHidden(true)
     .sheet(isPresented: $viewModel.isShowingCamera) {
       CameraImagePicker { data in
         viewModel.handlePickedImage(data)
@@ -87,7 +115,7 @@ struct SubmissionHomeView: View {
         .foregroundStyle(ColorTokens.st)
 
       HStack(spacing: SpacingTokens.small) {
-        Label("No sign-in required", systemImage: "person.crop.circle.badge.checkmark")
+        Label(String(localized: "HOME_ACCOUNT_SECURED"), systemImage: "lock.shield")
         Label("Local history", systemImage: "internaldrive")
       }
       .font(TypographyTokens.caption)
@@ -158,29 +186,40 @@ struct SubmissionHomeView: View {
           preferredItemEncoding: .automatic
         ) {
           Label("Choose Screenshot", systemImage: "photo.badge.plus")
-            .frame(maxWidth: .infinity)
+            .font(.system(size: 16, weight: .semibold))
+            .frame(maxWidth: .infinity, minHeight: 52)
         }
-        .buttonStyle(.borderedProminent)
-        .tint(ColorTokens.acc)
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+        .background(ColorTokens.acc)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .disabled(!networkMonitor.isConnected)
       } else {
         Button {
           viewModel.isShowingPhotoDenied = true
         } label: {
           Label("Choose Screenshot", systemImage: "photo.badge.plus")
-            .frame(maxWidth: .infinity)
+            .font(.system(size: 16, weight: .semibold))
+            .frame(maxWidth: .infinity, minHeight: 52)
         }
-        .buttonStyle(.borderedProminent)
-        .tint(ColorTokens.acc)
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+        .background(ColorTokens.acc)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
       }
 
       Button {
         viewModel.checkCameraPermission()
       } label: {
         Label("Take Photo", systemImage: "camera")
-          .frame(maxWidth: .infinity)
+          .font(.system(size: 16, weight: .semibold))
+          .frame(maxWidth: .infinity, minHeight: 52)
       }
-      .buttonStyle(.bordered)
+      .buttonStyle(.plain)
+      .foregroundStyle(ColorTokens.acc)
+      .background(ColorTokens.sf)
+      .clipShape(RoundedRectangle(cornerRadius: 12))
+      .overlay(RoundedRectangle(cornerRadius: 12).stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1.5))
     }
   }
 

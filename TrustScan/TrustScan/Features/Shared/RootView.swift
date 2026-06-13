@@ -47,6 +47,14 @@ struct MainTabView: View {
       .tag(AppTab.scan)
 
       NavigationStack {
+        BlogsView()
+      }
+      .tabItem {
+        Label("Blogs", systemImage: "newspaper")
+      }
+      .tag(AppTab.blogs)
+
+      NavigationStack {
         HistoryListView(
           viewModel: environment.historyViewModel,
           onScanRequested: { selectedTab = .scan }
@@ -57,22 +65,6 @@ struct MainTabView: View {
       }
       .tag(AppTab.history)
 
-      NavigationStack {
-        SettingsView(
-          viewModel: environment.settingsViewModel,
-          hasCompletedOnboarding: $hasCompletedOnboarding,
-          onHistoryChanged: {
-            Task { await environment.historyViewModel.loadHistory(forceLoading: true) }
-          },
-          onSignOut: {
-            environment.authService.signOut()
-          }
-        )
-      }
-      .tabItem {
-        Label("Settings", systemImage: "gearshape")
-      }
-      .tag(AppTab.settings)
     }
     .tint(ColorTokens.acc)
     .environmentObject(environment.networkMonitor)
@@ -86,6 +78,7 @@ struct MainTabView: View {
 
 enum AppTab: Hashable {
   case scan
+  case blogs
   case history
-  case settings
+  case profile
 }

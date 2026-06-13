@@ -4,131 +4,193 @@ import AuthenticationServices
 struct LoginView: View {
   @ObservedObject var viewModel: AuthViewModel
   @Environment(\.openURL) private var openURL
+  @State private var isPasswordVisible = false
 
   var body: some View {
-    ScrollView {
-      VStack(spacing: SpacingTokens.large) {
-        Spacer(minLength: SpacingTokens.xLarge)
-
-        // Logo / Branding
+    GeometryReader { proxy in
+      ScrollView {
         VStack(spacing: SpacingTokens.medium) {
-          Image(systemName: "shield.checkered")
-            .font(.system(size: 72, weight: .bold))
-            .foregroundStyle(ColorTokens.acc)
+          Spacer()
 
-          Text("TrustScan")
-            .font(.system(size: 40, weight: .bold, design: .rounded))
-            .foregroundStyle(ColorTokens.ik)
+          // Logo / Branding
+          VStack(spacing: SpacingTokens.medium) {
+            Image(systemName: "shield.checkered")
+              .font(.system(size: 72, weight: .bold))
+              .foregroundStyle(ColorTokens.acc)
 
-          Text("Scan suspicious messages before they cost you.")
-            .font(TypographyTokens.body)
-            .foregroundStyle(ColorTokens.st)
-            .multilineTextAlignment(.center)
-        }
+            Text("TrustScan")
+              .font(.system(size: 40, weight: .bold, design: .rounded))
+              .foregroundStyle(ColorTokens.ik)
 
-        Spacer(minLength: SpacingTokens.medium)
+            Text("Scan suspicious messages before they cost you.")
+              .font(TypographyTokens.body)
+              .foregroundStyle(ColorTokens.st)
+              .multilineTextAlignment(.center)
+          }
 
-        // Sign In Form
-        VStack(spacing: SpacingTokens.medium) {
-          TextField("Email", text: $viewModel.email)
-            .textContentType(.emailAddress)
-            .keyboardType(.emailAddress)
-            .autocapitalization(.none)
-            .disableAutocorrection(true)
-            .padding()
-            .background(ColorTokens.sf)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .accessibilityLabel("Email address")
+          Spacer().frame(height: SpacingTokens.small)
 
-          SecureField("Password", text: $viewModel.password)
-            .textContentType(.password)
+          // Sign In Form
+          VStack(spacing: SpacingTokens.medium) {
+            TextField("Email", text: $viewModel.email)
+              .textContentType(.emailAddress)
+              .keyboardType(.emailAddress)
+              .autocapitalization(.none)
+              .disableAutocorrection(true)
+              .padding()
+              .background(ColorTokens.sf)
+              .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+              .accessibilityLabel("Email address")
+
+            HStack {
+              if isPasswordVisible {
+                TextField("Password", text: $viewModel.password)
+                  .textContentType(.password)
+                  .autocapitalization(.none)
+                  .disableAutocorrection(true)
+              } else {
+                SecureField("Password", text: $viewModel.password)
+                  .textContentType(.password)
+              }
+              Button(action: { isPasswordVisible.toggle() }) {
+                Image(systemName: isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                  .foregroundStyle(ColorTokens.st)
+              }
+            }
             .padding()
             .background(ColorTokens.sf)
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .accessibilityLabel("Password")
-        }
 
-        // Error Message
-        if let error = viewModel.errorMessage {
-          Text(error)
-            .font(TypographyTokens.caption)
-            .foregroundStyle(ColorTokens.dng)
-            .multilineTextAlignment(.center)
-        }
-
-        // Success Message (after sign up)
-        if let success = viewModel.signUpSuccessMessage {
-          Text(success)
-            .font(TypographyTokens.caption)
-            .foregroundStyle(ColorTokens.sfe)
-            .multilineTextAlignment(.center)
-        }
-
-        // Sign In Button
-        Button {
-          Task { await viewModel.signIn() }
-        } label: {
-          if viewModel.isLoading {
-            ProgressView()
-              .tint(.white)
-              .frame(maxWidth: .infinity)
-          } else {
-            Text("Sign In")
-              .font(TypographyTokens.sectionTitle)
-              .frame(maxWidth: .infinity)
+            HStack {
+              Spacer()
+              Button("Forgot Password?") {
+                // TODO: Implement forgot password
+              }
+              .font(.system(size: 13, weight: .medium))
+              .foregroundStyle(ColorTokens.acc)
+            }
+            .padding(.top, 4)
           }
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(ColorTokens.acc)
-        .disabled(viewModel.isLoading)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
 
-        // Divider
-        HStack {
-          Rectangle().fill(ColorTokens.st.opacity(0.3)).frame(height: 1)
-          Text("or")
-            .font(TypographyTokens.caption)
-            .foregroundStyle(ColorTokens.st)
-          Rectangle().fill(ColorTokens.st.opacity(0.3)).frame(height: 1)
-        }
-
-        // OAuth Buttons
-        Button {
-          if let url = viewModel.authService.oAuthURL(provider: "apple") {
-            openURL(url)
+          // Error Message
+          if let error = viewModel.errorMessage {
+            Text(error)
+              .font(TypographyTokens.caption)
+              .foregroundStyle(ColorTokens.dng)
+              .multilineTextAlignment(.center)
           }
-        } label: {
-          Label("Continue with Apple", systemImage: "applelogo")
-            .font(TypographyTokens.body)
-            .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(.bordered)
-        .tint(ColorTokens.ik)
 
-        Button {
-          if let url = viewModel.authService.oAuthURL(provider: "google") {
-            openURL(url)
+          // Success Message (after sign up)
+          if let success = viewModel.signUpSuccessMessage {
+            Text(success)
+              .font(TypographyTokens.caption)
+              .foregroundStyle(ColorTokens.sfe)
+              .multilineTextAlignment(.center)
           }
-        } label: {
-          Label("Continue with Google", systemImage: "globe")
-            .font(TypographyTokens.body)
-            .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(.bordered)
 
-        // Create Account Link
-        Button {
-          viewModel.isShowingSignUp = true
-          viewModel.errorMessage = nil
-        } label: {
-          Text("Don't have an account? **Create one**")
-            .font(TypographyTokens.body)
+          // Sign In Button
+          Button {
+            Task { await viewModel.signIn() }
+          } label: {
+            if viewModel.isLoading {
+              ProgressView()
+                .tint(.white)
+                .frame(maxWidth: .infinity, minHeight: 48)
+            } else {
+              Text("Sign In")
+                .font(TypographyTokens.sectionTitle)
+                .frame(maxWidth: .infinity, minHeight: 48)
+            }
+          }
+          .buttonStyle(.plain)
+          .foregroundStyle(.white)
+          .background(ColorTokens.acc)
+          .clipShape(RoundedRectangle(cornerRadius: 16))
+          .disabled(viewModel.isLoading)
+
+          // Divider
+          HStack {
+            Rectangle().fill(ColorTokens.st.opacity(0.3)).frame(height: 1)
+            Text("or")
+              .font(TypographyTokens.caption)
+              .foregroundStyle(ColorTokens.st)
+            Rectangle().fill(ColorTokens.st.opacity(0.3)).frame(height: 1)
+          }
+
+          // OAuth Buttons
+          VStack(spacing: SpacingTokens.medium) {
+            Button {
+              if let url = viewModel.authService.oAuthURL(provider: "apple") {
+                openURL(url)
+              }
+            } label: {
+              HStack {
+                Image(systemName: "applelogo")
+                  .frame(width: 20, height: 20)
+                Text("Continue with Apple")
+                  .font(.system(size: 16, weight: .semibold))
+              }
+              .frame(maxWidth: .infinity, minHeight: 48)
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(ColorTokens.ik)
+            .background(ColorTokens.sf)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.st.opacity(0.3), lineWidth: 1.5))
+
+            Button {
+              if let url = viewModel.authService.oAuthURL(provider: "google") {
+                openURL(url)
+              }
+            } label: {
+              HStack {
+                Image("google_g_logo")
+                  .resizable()
+                  .scaledToFit()
+                  .frame(width: 20, height: 20)
+                Text("Continue with Google")
+                  .font(.system(size: 16, weight: .semibold))
+              }
+              .frame(maxWidth: .infinity, minHeight: 48)
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(ColorTokens.ik)
+            .background(ColorTokens.sf)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.st.opacity(0.3), lineWidth: 1.5))
+
+            // Biometric Login Button
+            Button {
+              Task { await viewModel.authenticateWithBiometrics() }
+            } label: {
+              Label("Sign in with Face ID", systemImage: "faceid")
+                .font(.system(size: 16, weight: .semibold))
+                .frame(maxWidth: .infinity, minHeight: 48)
+            }
+            .buttonStyle(.plain)
             .foregroundStyle(ColorTokens.acc)
-        }
+            .background(ColorTokens.sf)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1.5))
+          }
 
-        Spacer(minLength: SpacingTokens.large)
+          // Create Account Link
+          Button {
+            viewModel.isShowingSignUp = true
+            viewModel.errorMessage = nil
+          } label: {
+            Text("Don't have an account? **Create one**")
+              .font(TypographyTokens.body)
+              .foregroundStyle(ColorTokens.acc)
+          }
+
+          Spacer()
+        }
+        .padding(.horizontal, SpacingTokens.large)
+        .padding(.vertical, SpacingTokens.large)
+        .frame(minHeight: proxy.size.height)
       }
-      .padding(.horizontal, SpacingTokens.large)
     }
     .background(
       LinearGradient(

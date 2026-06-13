@@ -51,3 +51,6 @@
 "ERROR_SERVER_UNAVAILABLE" = "Something went wrong on our end. Please try again later.";
 "ERROR_AUTH_REQUIRED" = "Please sign in to continue.";
 "ERROR_AUTH_FAILED" = "Check your credentials and try again.";
+
+"HOME_ACCOUNT_SECURED" = "Account Secured";
+"HOME_OFFLINE_BANNER" = "No internet connection. Scanning unavailable.";

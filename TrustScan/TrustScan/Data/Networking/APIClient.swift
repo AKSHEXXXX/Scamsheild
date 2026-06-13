@@ -61,13 +61,19 @@ final class APIClient: @unchecked Sendable {
     }
   }
 
-  private func perform<Response: Decodable>(_ request: URLRequest) async throws -> Response {
+  private func perform<Response: Decodable>(_ request: URLRequest, attempt: Int = 1) async throws -> Response {
     let data: Data
     let response: URLResponse
 
     do {
       (data, response) = try await session.data(for: request)
     } catch let urlError as URLError {
+      if attempt < 3 && (urlError.code == .notConnectedToInternet || urlError.code == .networkConnectionLost || urlError.code == .timedOut) {
+        let delaySeconds = Int(pow(2.0, Double(attempt - 1)))
+        try await Task.sleep(for: .seconds(delaySeconds))
+        return try await perform(request, attempt: attempt + 1)
+      }
+
       switch urlError.code {
       case .notConnectedToInternet, .networkConnectionLost:
         throw AppError.networkUnavailable
@@ -97,6 +103,11 @@ final class APIClient: @unchecked Sendable {
     case 400...499:
       throw AppError.unexpected(message: "Request error (code \(httpResponse.statusCode)).")
     case 500...599:
+      if attempt < 3 {
+        let delaySeconds = Int(pow(2.0, Double(attempt - 1)))
+        try await Task.sleep(for: .seconds(delaySeconds))
+        return try await perform(request, attempt: attempt + 1)
+      }
       throw AppError.serverError(statusCode: httpResponse.statusCode)
     default:
       throw AppError.unexpected(message: "Unexpected response (code \(httpResponse.statusCode)).")

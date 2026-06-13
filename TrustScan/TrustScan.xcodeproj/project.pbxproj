@@ -7,17 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B214CC82FDD4D6600431205 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 8B214CC72FDD4D6500431205 /* .env */; };
+		8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B214CC92FDD565800431205 /* BlogsView.swift */; };
+		8B214CCF2FDD565800431205 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B214CCC2FDD565800431205 /* ProfileView.swift */; };
+		8B214CD02FDD565800431205 /* BlogsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B214CCA2FDD565800431205 /* BlogsViewModel.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E011 /* TrustScanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E012 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */; };
-		NEWF1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF2 /* Environment.swift */; };
-		NEWF3 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF4 /* DesignTokens.swift */; };
-		NEWF5 /* UIKitBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF6 /* UIKitBridges.swift */; };
-		NEWF7 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF8 /* NetworkMonitor.swift */; };
-		NEWF9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFA /* Components.swift */; };
-		NEWFB /* PermissionManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFC /* PermissionManagers.swift */; };
-		NEWFD /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFE /* AnalysisResult.swift */; };
-		NEWFF /* ThreatIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW10 /* ThreatIndicator.swift */; };
 		NEW11 /* HistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW12 /* HistoryEntry.swift */; };
 		NEW13 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW14 /* AppConfiguration.swift */; };
 		NEW15 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW16 /* AppError.swift */; };
@@ -44,21 +40,26 @@
 		NEW3F /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW40 /* ViewModels.swift */; };
 		NEW41 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW42 /* RootView.swift */; };
 		NEW43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = NEW44 /* Localizable.strings */; };
+		NEWF1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF2 /* Environment.swift */; };
+		NEWF3 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF4 /* DesignTokens.swift */; };
+		NEWF5 /* UIKitBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF6 /* UIKitBridges.swift */; };
+		NEWF7 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF8 /* NetworkMonitor.swift */; };
+		NEWF9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFA /* Components.swift */; };
+		NEWFB /* PermissionManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFC /* PermissionManagers.swift */; };
+		NEWFD /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFE /* AnalysisResult.swift */; };
+		NEWFF /* ThreatIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW10 /* ThreatIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B214CC72FDD4D6500431205 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
+		8B214CC92FDD565800431205 /* BlogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogsView.swift; sourceTree = "<group>"; };
+		8B214CCA2FDD565800431205 /* BlogsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogsViewModel.swift; sourceTree = "<group>"; };
+		8B214CCC2FDD565800431205 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustScanApp.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		NEWF2 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrustScan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		NEWF4 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
-		NEWF6 /* UIKitBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBridges.swift; sourceTree = "<group>"; };
-		NEWF8 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		NEWFA /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
-		NEWFC /* PermissionManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagers.swift; sourceTree = "<group>"; };
-		NEWFE /* AnalysisResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
 		NEW10 /* ThreatIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreatIndicator.swift; sourceTree = "<group>"; };
 		NEW12 /* HistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
 		NEW14 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
@@ -86,6 +87,13 @@
 		NEW40 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
 		NEW42 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		NEW44 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		NEWF2 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		NEWF4 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		NEWF6 /* UIKitBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBridges.swift; sourceTree = "<group>"; };
+		NEWF8 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		NEWFA /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		NEWFC /* PermissionManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagers.swift; sourceTree = "<group>"; };
+		NEWFE /* AnalysisResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B214CCB2FDD565800431205 /* Blogs */ = {
+			isa = PBXGroup;
+			children = (
+				8B214CC92FDD565800431205 /* BlogsView.swift */,
+				8B214CCA2FDD565800431205 /* BlogsViewModel.swift */,
+			);
+			path = Blogs;
+			sourceTree = "<group>";
+		};
+		8B214CCD2FDD565800431205 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				8B214CCC2FDD565800431205 /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		A1B2C3D4E5F6A1B2C3D4E031 = {
 			isa = PBXGroup;
 			children = (
@@ -118,8 +143,17 @@
 				GRP_DESIGN /* Design */,
 				NEW44 /* Localizable.strings */,
 				A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */,
+				8B214CC72FDD4D6500431205 /* .env */,
 			);
 			path = TrustScan;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6A1B2C3D4E033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		GRP_APP /* App */ = {
@@ -160,6 +194,60 @@
 			path = Permissions;
 			sourceTree = "<group>";
 		};
+		GRP_DATA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				GRP_DATA_DTOS /* DTOs */,
+				GRP_DATA_NETWORKING /* Networking */,
+				GRP_DATA_AUTH /* Auth */,
+				GRP_DATA_REPOSITORIES /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_AUTH /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				NEW28 /* SupabaseAuthService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_DTOS /* DTOs */ = {
+			isa = PBXGroup;
+			children = (
+				NEW24 /* DTOs.swift */,
+			);
+			path = DTOs;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_NETWORKING /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				NEW26 /* APIClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		GRP_DATA_REPOSITORIES /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				NEW2A /* LocalAnalysisRepository.swift */,
+				NEW2C /* RemoteAnalysisRepository.swift */,
+				NEW2E /* FileHistoryRepository.swift */,
+				NEW30 /* RemoteConfigurationRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		GRP_DESIGN /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
 		GRP_DOMAIN /* Domain */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,16 +270,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		GRP_DOMAIN_USECASES /* UseCases */ = {
-			isa = PBXGroup;
-			children = (
-				NEW18 /* SubmitAnalysisUseCase.swift */,
-				NEW1A /* HistoryUseCases.swift */,
-				NEW1C /* FetchConfigurationUseCase.swift */,
-			);
-			path = UseCases;
-			sourceTree = "<group>";
-		};
 		GRP_DOMAIN_PORTS /* Ports */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,55 +280,21 @@
 			path = Ports;
 			sourceTree = "<group>";
 		};
-		GRP_DATA /* Data */ = {
+		GRP_DOMAIN_USECASES /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
-				GRP_DATA_DTOS /* DTOs */,
-				GRP_DATA_NETWORKING /* Networking */,
-				GRP_DATA_AUTH /* Auth */,
-				GRP_DATA_REPOSITORIES /* Repositories */,
+				NEW18 /* SubmitAnalysisUseCase.swift */,
+				NEW1A /* HistoryUseCases.swift */,
+				NEW1C /* FetchConfigurationUseCase.swift */,
 			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		GRP_DATA_DTOS /* DTOs */ = {
-			isa = PBXGroup;
-			children = (
-				NEW24 /* DTOs.swift */,
-			);
-			path = DTOs;
-			sourceTree = "<group>";
-		};
-		GRP_DATA_NETWORKING /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				NEW26 /* APIClient.swift */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		GRP_DATA_AUTH /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				NEW28 /* SupabaseAuthService.swift */,
-			);
-			path = Auth;
-			sourceTree = "<group>";
-		};
-		GRP_DATA_REPOSITORIES /* Repositories */ = {
-			isa = PBXGroup;
-			children = (
-				NEW2A /* LocalAnalysisRepository.swift */,
-				NEW2C /* RemoteAnalysisRepository.swift */,
-				NEW2E /* FileHistoryRepository.swift */,
-				NEW30 /* RemoteConfigurationRepository.swift */,
-			);
-			path = Repositories;
+			path = UseCases;
 			sourceTree = "<group>";
 		};
 		GRP_FEATURES /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				8B214CCB2FDD565800431205 /* Blogs */,
+				8B214CCD2FDD565800431205 /* Profile */,
 				GRP_FEATURES_SHARED /* Shared */,
 				GRP_FEATURES_AUTH /* Auth */,
 				GRP_FEATURES_ONBOARDING /* Onboarding */,
@@ -263,14 +307,6 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_SHARED /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				NEW42 /* RootView.swift */,
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
 		GRP_FEATURES_AUTH /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,30 +314,6 @@
 				NEW34 /* AuthViews.swift */,
 			);
 			path = Auth;
-			sourceTree = "<group>";
-		};
-		GRP_FEATURES_ONBOARDING /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				NEW36 /* OnboardingView.swift */,
-			);
-			path = Onboarding;
-			sourceTree = "<group>";
-		};
-		GRP_FEATURES_SUBMISSION /* Submission */ = {
-			isa = PBXGroup;
-			children = (
-				NEW38 /* SubmissionHomeView.swift */,
-			);
-			path = Submission;
-			sourceTree = "<group>";
-		};
-		GRP_FEATURES_RESULTS /* Results */ = {
-			isa = PBXGroup;
-			children = (
-				NEW3A /* ResultViews.swift */,
-			);
-			path = Results;
 			sourceTree = "<group>";
 		};
 		GRP_FEATURES_HISTORY /* History */ = {
@@ -312,6 +324,22 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		GRP_FEATURES_ONBOARDING /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				NEW36 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_RESULTS /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				NEW3A /* ResultViews.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
 		GRP_FEATURES_SETTINGS /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -320,28 +348,28 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		GRP_FEATURES_SHARED /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				NEW42 /* RootView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_SUBMISSION /* Submission */ = {
+			isa = PBXGroup;
+			children = (
+				NEW38 /* SubmissionHomeView.swift */,
+			);
+			path = Submission;
+			sourceTree = "<group>";
+		};
 		GRP_FEATURES_VIEWMODELS /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				NEW40 /* ViewModels.swift */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		GRP_DESIGN /* Design */ = {
-			isa = PBXGroup;
-			children = (
-				A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */,
-			);
-			path = Design;
-			sourceTree = "<group>";
-		};
-		A1B2C3D4E5F6A1B2C3D4E033 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -406,6 +434,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B214CC82FDD4D6600431205 /* .env in Resources */,
 				A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */,
 				NEW43 /* Localizable.strings in Resources */,
 			);
@@ -448,6 +477,9 @@
 				NEW33 /* AuthViews.swift in Sources */,
 				NEW35 /* OnboardingView.swift in Sources */,
 				NEW37 /* SubmissionHomeView.swift in Sources */,
+				8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */,
+				8B214CCF2FDD565800431205 /* ProfileView.swift in Sources */,
+				8B214CD02FDD565800431205 /* BlogsViewModel.swift in Sources */,
 				NEW39 /* ResultViews.swift in Sources */,
 				NEW3B /* HistoryViews.swift in Sources */,
 				NEW3D /* SettingsViews.swift in Sources */,

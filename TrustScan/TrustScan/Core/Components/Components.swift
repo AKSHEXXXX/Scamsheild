@@ -49,7 +49,7 @@ struct OfflineBanner: View {
     HStack(spacing: SpacingTokens.small) {
       Image(systemName: "wifi.slash")
         .foregroundStyle(.white)
-      Text("No internet connection — scanning is unavailable.")
+      Text(String(localized: "HOME_OFFLINE_BANNER"))
         .font(TypographyTokens.caption)
         .foregroundStyle(.white)
       Spacer()

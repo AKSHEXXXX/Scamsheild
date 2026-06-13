@@ -27,7 +27,6 @@ final class AppEnvironment: ObservableObject {
 
     // Repositories
     let remoteAnalysis = RemoteAnalysisRepository(apiClient: apiClient)
-    let localAnalysis = LocalAnalysisRepository()
     let historyRepo = FileHistoryRepository()
     let configRepo = RemoteConfigurationRepository(apiClient: apiClient)
 
