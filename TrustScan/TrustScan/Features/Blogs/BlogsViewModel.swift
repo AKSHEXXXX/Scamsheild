@@ -262,21 +262,26 @@ final class BlogsViewModel: ObservableObject {
           }.value
         }
       }
+
       for await result in group {
         all.append(contentsOf: result)
+        
+        // Sort newest first, deduplicate by title
+        var seen = Set<String>()
+        let unique = all
+          .sorted { $0.pubDate > $1.pubDate }
+          .filter { seen.insert($0.title).inserted }
+          
+        // Stream the results to the UI as each feed finishes
+        await MainActor.run {
+          self.articles = unique
+        }
       }
     }
 
-    // Sort newest first, deduplicate by title
-    var seen = Set<String>()
-    let unique = all
-      .sorted { $0.pubDate > $1.pubDate }
-      .filter { seen.insert($0.title).inserted }
-
-    self.articles = unique
     self.isLoading = false
 
-    if unique.isEmpty {
+    if self.articles.isEmpty {
       errorMessage = "Could not load news feeds. Check your internet connection."
     }
   }
