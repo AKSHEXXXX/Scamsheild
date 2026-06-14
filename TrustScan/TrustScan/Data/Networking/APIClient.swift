@@ -41,7 +41,7 @@ final class APIClient: @unchecked Sendable {
     request.setValue("application/json", forHTTPHeaderField: "Accept")
     
     #if canImport(UIKit)
-    let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
+    let deviceId = await MainActor.run { UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString }
     request.setValue(deviceId, forHTTPHeaderField: "X-Device-Id")
     #else
     request.setValue(UUID().uuidString, forHTTPHeaderField: "X-Device-Id")
