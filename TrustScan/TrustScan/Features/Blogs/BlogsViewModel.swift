@@ -87,7 +87,9 @@ class RSSParser: NSObject, XMLParserDelegate {
   func parser(_ parser: XMLParser, didStartElement elementName: String,
               namespaceURI: String?, qualifiedName qName: String?,
               attributes attributeDict: [String: String] = [:]) {
-    currentElement = elementName
+    let qn = qName ?? elementName  // use qualified name to catch media:content etc.
+    currentElement = qn
+
     if elementName == "item" || elementName == "entry" {
       insideItem = true
       currentTitle = ""
@@ -96,14 +98,25 @@ class RSSParser: NSObject, XMLParserDelegate {
       currentDescription = ""
       currentThumbnailURL = ""
     }
-    // <enclosure> or <media:content> holds image URLs
-    if insideItem && (elementName == "enclosure" || elementName == "media:content" || elementName == "media:thumbnail") {
-      if let urlStr = attributeDict["url"] ?? attributeDict["href"], !urlStr.isEmpty {
+
+    // Capture image from <enclosure url="..." type="image/..."> (used by THN)
+    if insideItem && qn == "enclosure" {
+      let urlStr = attributeDict["url"] ?? ""
+      let type   = attributeDict["type"] ?? ""
+      if !urlStr.isEmpty && (type.hasPrefix("image") || type.isEmpty) {
         currentThumbnailURL = urlStr
       }
     }
-    // Atom feed: <link href="...">
-    if insideItem && elementName == "link" {
+
+    // <media:content url="..."> and <media:thumbnail url="..."> (Krebs, others)
+    if insideItem && (qn == "media:content" || qn == "media:thumbnail") {
+      if let urlStr = attributeDict["url"], !urlStr.isEmpty {
+        currentThumbnailURL = urlStr
+      }
+    }
+
+    // Atom <link href="...">  
+    if insideItem && qn == "link" {
       if let href = attributeDict["href"], !href.isEmpty {
         currentLink = href
       }
@@ -113,11 +126,24 @@ class RSSParser: NSObject, XMLParserDelegate {
   func parser(_ parser: XMLParser, foundCharacters string: String) {
     guard insideItem else { return }
     switch currentElement {
-    case "title":       currentTitle       += string
-    case "link":        currentLink        += string
-    case "pubDate", "published", "updated": currentPubDate += string
-    case "description", "summary", "content:encoded": currentDescription += string
+    case "title":         currentTitle       += string
+    case "link":          currentLink        += string
+    case "pubDate", "published", "updated":   currentPubDate    += string
+    case "description", "summary",
+         "content:encoded", "content": currentDescription += string
     default: break
+    }
+  }
+
+  // Called for CDATA sections (descriptions in RSS are often CDATA)
+  func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
+    guard insideItem else { return }
+    if let str = String(data: CDATABlock, encoding: .utf8) {
+      switch currentElement {
+      case "description", "summary", "content:encoded", "content":
+        currentDescription += str
+      default: break
+      }
     }
   }
 
