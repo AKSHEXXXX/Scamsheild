@@ -173,9 +173,9 @@ struct FeaturedBlogCard: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
-      // Thumbnail
-      ZStack {
-        if let thumb = article.thumbnailURL {
+      // Thumbnail or Gradient Banner
+      if let thumb = article.thumbnailURL {
+        ZStack {
           AsyncImage(url: thumb) { phase in
             switch phase {
             case .success(let img):
@@ -188,13 +188,42 @@ struct FeaturedBlogCard: View {
               placeholderView(height: 200)
             }
           }
-        } else {
-          placeholderView(height: 200)
-        }
 
-        // Source badge
-        VStack {
+          // Source badge inside image
+          VStack {
+            HStack {
+              Spacer()
+              Text(article.source)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(Color(hex: article.sourceColor) ?? ColorTokens.acc)
+                .clipShape(Capsule())
+                .padding(10)
+            }
+            Spacer()
+          }
+        }
+      } else {
+        // Aesthetic text-only banner
+        ZStack(alignment: .bottomLeading) {
+          LinearGradient(
+            colors: [
+              (Color(hex: article.sourceColor) ?? ColorTokens.acc).opacity(0.6),
+              (Color(hex: article.sourceColor) ?? ColorTokens.acc).opacity(0.2)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+          .frame(height: 100)
+
           HStack {
+            Image(systemName: "newspaper.fill")
+              .font(.system(size: 30))
+              .foregroundStyle(.white.opacity(0.8))
+              .padding(.bottom, -15)
+              .padding(.leading, 20)
             Spacer()
             Text(article.source)
               .font(.system(size: 11, weight: .bold))
@@ -205,8 +234,8 @@ struct FeaturedBlogCard: View {
               .clipShape(Capsule())
               .padding(10)
           }
-          Spacer()
         }
+        .clipped()
       }
 
       VStack(alignment: .leading, spacing: SpacingTokens.small) {
@@ -249,9 +278,16 @@ struct BlogCard: View {
   let article: ScamArticle
 
   var body: some View {
-    HStack(alignment: .top, spacing: SpacingTokens.medium) {
+    if article.thumbnailURL != nil {
+      imageLayout
+    } else {
+      textOnlyLayout
+    }
+  }
 
-      // Thumbnail
+  // MARK: - Image Layout
+  private var imageLayout: some View {
+    HStack(alignment: .top, spacing: SpacingTokens.medium) {
       ZStack {
         if let thumb = article.thumbnailURL {
           AsyncImage(url: thumb) { phase in
@@ -265,14 +301,11 @@ struct BlogCard: View {
               placeholderView(width: 90, height: 90)
             }
           }
-        } else {
-          placeholderView(width: 90, height: 90)
         }
       }
       .frame(width: 90, height: 90)
       .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
-      // Text content
       VStack(alignment: .leading, spacing: 4) {
         HStack {
           Text(article.source)
@@ -303,6 +336,67 @@ struct BlogCard: View {
     .background(ColorTokens.sf)
     .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     .shadow(color: .black.opacity(0.04), radius: 8, y: 4)
+  }
+
+  // MARK: - Text Only Layout
+  private var textOnlyLayout: some View {
+    VStack(alignment: .leading, spacing: 10) {
+      HStack {
+        Text(article.source)
+          .font(.system(size: 11, weight: .bold))
+          .foregroundStyle(Color(hex: article.sourceColor) ?? ColorTokens.acc)
+        Spacer()
+        Text(article.relativeDate)
+          .font(.system(size: 11))
+          .foregroundStyle(ColorTokens.st)
+      }
+
+      Text(article.title)
+        .font(.system(size: 15, weight: .bold))
+        .foregroundStyle(ColorTokens.ik)
+        .lineLimit(3)
+        .multilineTextAlignment(.leading)
+        .fixedSize(horizontal: false, vertical: true)
+
+      if let desc = article.description, !desc.isEmpty {
+        Text(desc)
+          .font(.system(size: 13))
+          .foregroundStyle(ColorTokens.st)
+          .lineLimit(2)
+          .multilineTextAlignment(.leading)
+      }
+
+      HStack {
+        Text(article.category == .all ? "General" : article.category.rawValue)
+          .font(.system(size: 11, weight: .medium))
+          .padding(.horizontal, 8)
+          .padding(.vertical, 4)
+          .background(ColorTokens.st.opacity(0.1))
+          .foregroundStyle(ColorTokens.st)
+          .clipShape(Capsule())
+        
+        Spacer()
+        
+        Image(systemName: "arrow.up.right.circle.fill")
+          .font(.system(size: 20))
+          .foregroundStyle(ColorTokens.st.opacity(0.3))
+      }
+    }
+    .padding(SpacingTokens.large)
+    .background(ColorTokens.sf)
+    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: 16, style: .continuous)
+        .stroke(
+          LinearGradient(
+            colors: [(Color(hex: article.sourceColor) ?? ColorTokens.acc).opacity(0.4), .clear],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          ),
+          lineWidth: 1
+        )
+    )
+    .shadow(color: .black.opacity(0.03), radius: 10, y: 5)
   }
 }
 
