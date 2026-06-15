@@ -275,8 +275,17 @@ struct SubmissionHomeView: View {
       )
 
     case let .success(result):
-      AnalysisResultView(result: result) {
-        viewModel.isShowingShareSheet = true
+      VStack(alignment: .leading, spacing: SpacingTokens.medium) {
+        if !viewModel.ocrSource.isEmpty {
+          Label(viewModel.ocrSource, systemImage: "cpu")
+            .font(TypographyTokens.caption)
+            .foregroundStyle(ColorTokens.st)
+            .padding(.horizontal, SpacingTokens.large)
+        }
+        
+        AnalysisResultView(result: result) {
+          viewModel.isShowingShareSheet = true
+        }
       }
       .sheet(isPresented: $viewModel.isShowingShareSheet) {
         ShareSheet(items: [shareText(for: result)])

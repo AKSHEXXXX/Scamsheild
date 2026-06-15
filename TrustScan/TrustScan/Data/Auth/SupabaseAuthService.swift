@@ -103,9 +103,14 @@ final class SupabaseAuthService: ObservableObject {
   // MARK: - OAuth (Apple / Google)
 
   func oAuthURL(provider: String) -> URL? {
-    let redirectScheme = "trustscan"
+    let redirectScheme = "scamshield"
     let redirectURL = "\(redirectScheme)://auth-callback"
-    let urlString = "\(supabaseURL)/auth/v1/authorize?provider=\(provider)&redirect_to=\(redirectURL)"
+    var urlString = "\(supabaseURL)/auth/v1/authorize?provider=\(provider)&redirect_to=\(redirectURL)"
+    
+    if provider == "google" {
+        urlString += "&queryParams=%7B%22prompt%22%3A%22select_account%22%7D"
+    }
+    
     return URL(string: urlString)
   }
 

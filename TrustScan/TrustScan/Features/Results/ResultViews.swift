@@ -108,14 +108,6 @@ struct AnalysisResultView: View {
         }
       }
 
-      // Extracted Text
-      if !result.extractedText.isEmpty {
-        SectionCard(title: "Extracted text") {
-          Text(result.extractedText)
-            .font(.system(.footnote, design: .monospaced))
-            .foregroundStyle(ColorTokens.st)
-        }
-      }
     }
     .sheet(item: $selectedIndicator) { indicator in
       IndicatorDetailSheet(indicator: indicator)

@@ -13,6 +13,7 @@ final class SubmissionViewModel: ObservableObject {
   @Published var isShowingShareSheet = false
   @Published var isShowingPhotoDenied = false
   @Published var isShowingCameraDenied = false
+  @Published var ocrSource: String = ""
 
   private let fetchConfigurationUseCase: FetchConfigurationUseCase
   private let submitAnalysisUseCase: SubmitAnalysisUseCase
@@ -84,14 +85,16 @@ final class SubmissionViewModel: ObservableObject {
     state = .loading(message: "Analyzing your image…")
 
     do {
-      let result = try await submitAnalysisUseCase(
-        image: PreparedImagePayload(
-          data: selectedImageData,
-          mimeType: "image/jpeg",
-          fileName: "scan-\(UUID().uuidString).jpg"
-        )
+      guard let uiImage = UIImage(data: selectedImageData) else {
+        throw AppError.invalidImage
+      }
+
+      let (result, sourceString) = try await submitAnalysisUseCase(
+        image: uiImage,
+        fileName: "scan-\(UUID().uuidString).jpg"
       )
 
+      ocrSource = sourceString
       state = .success(result)
 
       do {
@@ -111,8 +114,33 @@ final class SubmissionViewModel: ObservableObject {
 
   func resetFlow() {
     selectedImageData = nil
+    ocrSource = ""
     state = .idle
   }
+
+  func handleSharedFile(filename: String) {
+    guard let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.binaryz.scamshield") else {
+      state = .error(.unexpected(message: "App Group not configured"))
+      return
+    }
+    let fileURL = groupURL.appendingPathComponent(filename)
+    
+    do {
+      let data = try Data(contentsOf: fileURL)
+      self.selectedImageData = data
+      
+      // Clean up the temporary shared file
+      try? FileManager.default.removeItem(at: fileURL)
+      
+      // Auto-trigger analysis
+      Task {
+        await self.analyzeSelectedImage()
+      }
+    } catch {
+      state = .error(.unexpected(message: "Failed to read shared image: \(error.localizedDescription)"))
+    }
+  }
+
 
   private func makeThumbnailData(from data: Data) -> Data? {
     guard let image = UIImage(data: data) else { return nil }

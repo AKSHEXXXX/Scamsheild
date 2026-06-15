@@ -7,6 +7,11 @@ struct ScanInDTO: Encodable {
   let os: String
 }
 
+struct TextScanInDTO: Encodable {
+  let text: String
+  let os: String = "iOS"
+}
+
 // MARK: - Response DTO
 
 struct ScanOutDTO: Decodable {

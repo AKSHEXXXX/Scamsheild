@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B1AA38D2FE02B6400B2A8E8 /* ScamShieldShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8B1AA3832FE02B6300B2A8E8 /* ScamShieldShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8B214CC82FDD4D6600431205 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 8B214CC72FDD4D6500431205 /* .env */; };
 		8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B214CC92FDD565800431205 /* BlogsView.swift */; };
 		8B214CCF2FDD565800431205 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B214CCC2FDD565800431205 /* ProfileView.swift */; };
@@ -50,7 +51,33 @@
 		NEWFF /* ThreatIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW10 /* ThreatIndicator.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8B1AA38B2FE02B6400B2A8E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1B2C3D4E5F6A1B2C3D4E081 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B1AA3822FE02B6300B2A8E8;
+			remoteInfo = ScamShieldShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8B1AA38E2FE02B6400B2A8E8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8B1AA38D2FE02B6400B2A8E8 /* ScamShieldShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		8B1AA3832FE02B6300B2A8E8 /* ScamShieldShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScamShieldShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B1AA3932FE02BA800B2A8E8 /* TrustScan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrustScan.entitlements; sourceTree = "<group>"; };
 		8B214CC72FDD4D6500431205 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
 		8B214CC92FDD565800431205 /* BlogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogsView.swift; sourceTree = "<group>"; };
 		8B214CCA2FDD565800431205 /* BlogsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogsViewModel.swift; sourceTree = "<group>"; };
@@ -96,7 +123,28 @@
 		NEWFE /* AnalysisResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8B1AA3912FE02B6400B2A8E8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8B1AA3822FE02B6300B2A8E8 /* ScamShieldShareExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8B1AA3842FE02B6300B2A8E8 /* ScamShieldShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8B1AA3912FE02B6400B2A8E8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ScamShieldShareExtension; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		8B1AA3802FE02B6300B2A8E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1B2C3D4E5F6A1B2C3D4E052 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F6A1B2C3D4E032 /* TrustScan */,
+				8B1AA3842FE02B6300B2A8E8 /* ScamShieldShareExtension */,
 				A1B2C3D4E5F6A1B2C3D4E033 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,6 +184,7 @@
 		A1B2C3D4E5F6A1B2C3D4E032 /* TrustScan */ = {
 			isa = PBXGroup;
 			children = (
+				8B1AA3932FE02BA800B2A8E8 /* TrustScan.entitlements */,
 				GRP_APP /* App */,
 				GRP_CORE /* Core */,
 				GRP_DOMAIN /* Domain */,
@@ -152,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */,
+				8B1AA3832FE02B6300B2A8E8 /* ScamShieldShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -375,6 +426,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8B1AA3822FE02B6300B2A8E8 /* ScamShieldShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B1AA3922FE02B6400B2A8E8 /* Build configuration list for PBXNativeTarget "ScamShieldShareExtension" */;
+			buildPhases = (
+				8B1AA37F2FE02B6300B2A8E8 /* Sources */,
+				8B1AA3802FE02B6300B2A8E8 /* Frameworks */,
+				8B1AA3812FE02B6300B2A8E8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8B1AA3842FE02B6300B2A8E8 /* ScamShieldShareExtension */,
+			);
+			name = ScamShieldShareExtension;
+			packageProductDependencies = (
+			);
+			productName = ScamShieldShareExtension;
+			productReference = 8B1AA3832FE02B6300B2A8E8 /* ScamShieldShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A1B2C3D4E5F6A1B2C3D4E041 /* TrustScan */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A1B2C3D4E5F6A1B2C3D4E071 /* Build configuration list for PBXNativeTarget "TrustScan" */;
@@ -382,10 +455,12 @@
 				A1B2C3D4E5F6A1B2C3D4E051 /* Sources */,
 				A1B2C3D4E5F6A1B2C3D4E052 /* Frameworks */,
 				A1B2C3D4E5F6A1B2C3D4E053 /* Resources */,
+				8B1AA38E2FE02B6400B2A8E8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8B1AA38C2FE02B6400B2A8E8 /* PBXTargetDependency */,
 			);
 			name = TrustScan;
 			packageProductDependencies = (
@@ -401,9 +476,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					8B1AA3822FE02B6300B2A8E8 = {
+						CreatedOnToolsVersion = 26.5;
+					};
 					A1B2C3D4E5F6A1B2C3D4E041 = {
 						CreatedOnToolsVersion = 15.0;
 					};
@@ -425,11 +503,19 @@
 			projectRoot = "";
 			targets = (
 				A1B2C3D4E5F6A1B2C3D4E041 /* TrustScan */,
+				8B1AA3822FE02B6300B2A8E8 /* ScamShieldShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8B1AA3812FE02B6300B2A8E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1B2C3D4E5F6A1B2C3D4E053 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -443,6 +529,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8B1AA37F2FE02B6300B2A8E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1B2C3D4E5F6A1B2C3D4E051 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -490,18 +583,97 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8B1AA38C2FE02B6400B2A8E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B1AA3822FE02B6300B2A8E8 /* ScamShieldShareExtension */;
+			targetProxy = 8B1AA38B2FE02B6400B2A8E8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		8B1AA38F2FE02B6400B2A8E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = ScamShieldShareExtension/ScamShieldShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VHUU2NTPG7;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScamShieldShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScamShieldShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.binaryztech.trustscan.ScamShieldShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8B1AA3902FE02B6400B2A8E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = ScamShieldShareExtension/ScamShieldShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VHUU2NTPG7;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScamShieldShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScamShieldShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.binaryztech.trustscan.ScamShieldShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		A1B2C3D4E5F6A1B2C3D4E061 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = TrustScan/TrustScan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrustScan/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TrustScan;
+				INFOPLIST_KEY_NSCameraUsageDescription = "TrustScan uses the camera to capture suspicious screens or documents for analysis.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "TrustScan uses your photo library so you can choose screenshots for scam analysis.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -518,13 +690,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = TrustScan/TrustScan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrustScan/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TrustScan;
+				INFOPLIST_KEY_NSCameraUsageDescription = "TrustScan uses the camera to capture suspicious screens or documents for analysis.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "TrustScan uses your photo library so you can choose screenshots for scam analysis.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -658,6 +834,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8B1AA3922FE02B6400B2A8E8 /* Build configuration list for PBXNativeTarget "ScamShieldShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B1AA38F2FE02B6400B2A8E8 /* Debug */,
+				8B1AA3902FE02B6400B2A8E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A1B2C3D4E5F6A1B2C3D4E071 /* Build configuration list for PBXNativeTarget "TrustScan" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

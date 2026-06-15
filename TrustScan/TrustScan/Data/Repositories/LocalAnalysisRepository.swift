@@ -1,47 +1,27 @@
 import Foundation
 import UIKit
-import Vision
 
 struct LocalAnalysisRepository: AnalysisRepositoryPort {
-  func analyze(image: PreparedImagePayload) async throws -> AnalysisResult {
-    guard let uiImage = UIImage(data: image.data) else {
-      throw AppError.invalidImage
-    }
-
-    guard let cgImage = uiImage.cgImage ?? renderedCGImage(from: uiImage) else {
-      throw AppError.invalidImage
-    }
-
-    let extractedText = try recognizeText(in: cgImage).trimmingCharacters(in: .whitespacesAndNewlines)
-    return buildResult(from: extractedText)
+  func analyze(text: String) async throws -> AnalysisResult {
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    return buildResult(from: text)
   }
 
-  private func renderedCGImage(from image: UIImage) -> CGImage? {
-    let format = UIGraphicsImageRendererFormat.default()
-    format.scale = 1
-    let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
-    let renderedImage = renderer.image { _ in
-      image.draw(in: CGRect(origin: .zero, size: image.size))
-    }
-    return renderedImage.cgImage
-  }
-
-  private func recognizeText(in cgImage: CGImage) throws -> String {
-    let request = VNRecognizeTextRequest()
-    request.recognitionLevel = .accurate
-    request.usesLanguageCorrection = true
-    request.recognitionLanguages = ["en-US"]
-
-    let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-    try handler.perform([request])
-
-    let observations = request.results ?? []
-    let lines = observations.compactMap { observation in
-      observation.topCandidates(1).first?.string
+  func analyze(image: PreparedImagePayload, fallbackReason: String) async throws -> AnalysisResult {
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    
+    // Default mock behavior
+    if image.data.count > 2_000_000 {
+      throw AppError.unexpected(message: "Simulated timeout")
     }
 
-    return lines.joined(separator: "\n")
+    if Int.random(in: 1...10) > 7 {
+      return buildResult(from: "URGENT: Your account will be suspended! Click here to verify.")
+    }
+
+    return buildResult(from: "Hey, are we still on for lunch?")
   }
+
 
   private func buildResult(from text: String) -> AnalysisResult {
     let normalized = text.lowercased()

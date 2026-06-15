@@ -1,5 +1,6 @@
 import Foundation
 
 protocol AnalysisRepositoryPort {
-  func analyze(image: PreparedImagePayload) async throws -> AnalysisResult
+  func analyze(text: String) async throws -> AnalysisResult
+  func analyze(image: PreparedImagePayload, fallbackReason: String) async throws -> AnalysisResult
 }
