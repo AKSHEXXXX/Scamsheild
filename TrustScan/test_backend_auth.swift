@@ -2,8 +2,8 @@ import Foundation
 import AppKit
 
 // --- 1. CONFIGURATION ---
-let supabaseUrl = "https://woudapmpknaqkebfxeck.supabase.co"
-let anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdWRhcG1wa25hcWtlYmZ4ZWNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNjc5NTAsImV4cCI6MjA5Njc0Mzk1MH0.4MtlmphsPksoKQTKcdbUOkuiVnSrzLB0IHHdLsFOjFI"
+let supabaseUrl = "https://pmwdoxemzdupicidzmze.supabase.co"
+let anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtd2RveGVtemR1cGljaWR6bXplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNTIzMDMsImV4cCI6MjA5NjgyODMwM30.CC8tytnibLMTJkXgHGP7FE5n_oFjyuXJ44YNPVrwNl0"
 
 let email = "admin@trustscan.app"
 let password = "Admin123!"
