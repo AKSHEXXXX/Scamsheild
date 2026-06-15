@@ -16,28 +16,25 @@ insert into public.app_config (id) values (1) on conflict do nothing;
 
 -- 2. Scans / telemetry log
 create table if not exists public.scans (
-  id            uuid primary key default gen_random_uuid(),
-  kind          text check (kind in ('message','screenshot')),
-  device_id     text,
-  user_id       uuid references auth.users(id),
-  os            text check (os in ('iOS','Android')),
-  input_text    text,
-  result_json   jsonb,
-  risk_score    int,
-  verdict       text,
-  warning_count int default 0,
-  flagged       boolean default false,
-  ocr_method    text default 'text_input',
-  ocr_confidence float default null,
-  created_at    timestamptz not null default now()
+  id              uuid primary key default gen_random_uuid(),
+  kind            text not null check (kind in ('message','screenshot')),
+  user_id         uuid not null references auth.users(id),
+  device_id       text not null default 'unknown',
+  os              text not null check (os in ('iOS','Android')),
+  input_text      text,
+  result_json     jsonb,
+  risk_score      integer not null,
+  verdict         text not null check (verdict in ('low_risk','suspicious','high_risk')),
+  warning_count   integer not null default 0,
+  flagged         boolean not null default false,
+  ocr_method      text,
+  ocr_confidence  double precision,
+  created_at      timestamptz not null default now()
 );
 
-create index if not exists idx_scans_device_id on public.scans (device_id);
-create index if not exists idx_scans_user_id   on public.scans (user_id);
-create index if not exists idx_scans_created_at on public.scans (created_at desc);
-create index if not exists idx_scans_ocr_method on public.scans (ocr_method);
-
-comment on column public.scans.ocr_method is 'text_input | tesseract_preprocessed | tesseract_raw_psm11 | on_device_apple_vision | on_device_mlkit';
+create index if not exists idx_scans_user_id      on public.scans (user_id);
+create index if not exists idx_scans_created_at    on public.scans (created_at desc);
+create index if not exists idx_scans_user_created  on public.scans (user_id, created_at desc);
 
 -- 3. Reports
 create table if not exists public.reports (
@@ -91,11 +88,11 @@ alter table public.blacklisted_domains enable row level security;
 create policy "Service role full access to app_config"
   on public.app_config for all using (true) with check (true);
 
-create policy "Users can read their own scans"
+create policy "scans_owner_select"
   on public.scans for select using (auth.uid() = user_id);
 
-create policy "Service role can insert scans"
-  on public.scans for insert with check (true);
+create policy "scans_owner_insert"
+  on public.scans for insert with check (auth.uid() = user_id);
 
 create policy "Users can read their own reports"
   on public.reports for select using (auth.uid() = user_id);

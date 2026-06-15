@@ -49,6 +49,7 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
         "id": scan_id,
         "kind": kind,
         "user_id": user_id,
+        "device_id": device_id or "unknown",
         "os": body_os,
         "input_text": input_text[:200],
         "result_json": result,
@@ -57,8 +58,6 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
         "warning_count": result["warning_count"],
         "flagged": warned,
     }
-    if device_id:
-        record["device_id"] = device_id
     supabase.table("scans").insert(record).execute()
     return scan_id
 
