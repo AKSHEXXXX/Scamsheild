@@ -1,9 +1,8 @@
 -- ============================================================================
--- ScamShield: Supabase Database Schema
--- Run this in Supabase SQL Editor once to initialize all tables.
+-- ScamShield: Supabase Database Schema Migration
 -- ============================================================================
 
--- 1.3 App configuration (single editable row, managed via Supabase Studio)
+-- 1. App configuration
 create table if not exists public.app_config (
   id                    int primary key default 1,
   scan_credit_cap       int  not null default 50,
@@ -15,18 +14,48 @@ create table if not exists public.app_config (
 
 insert into public.app_config (id) values (1) on conflict do nothing;
 
--- 1.2 Telemetry / scan log
+-- 2. Scans / telemetry log
 create table if not exists public.scans (
+  id            uuid primary key default gen_random_uuid(),
+  kind          text check (kind in ('message','screenshot')),
+  device_id     text,
+  user_id       uuid references auth.users(id),
+  os            text check (os in ('iOS','Android')),
+  input_text    text,
+  result_json   jsonb,
+  risk_score    int,
+  verdict       text,
+  warning_count int default 0,
+  flagged       boolean default false,
+  ocr_method    text default 'text_input',
+  ocr_confidence float default null,
+  created_at    timestamptz not null default now()
+);
+
+create index if not exists idx_scans_device_id on public.scans (device_id);
+create index if not exists idx_scans_user_id   on public.scans (user_id);
+create index if not exists idx_scans_created_at on public.scans (created_at desc);
+create index if not exists idx_scans_ocr_method on public.scans (ocr_method);
+
+comment on column public.scans.ocr_method is 'text_input | tesseract_preprocessed | tesseract_raw_psm11 | on_device_apple_vision | on_device_mlkit';
+
+-- 3. Reports
+create table if not exists public.reports (
   id          uuid primary key default gen_random_uuid(),
-  user_id     uuid references auth.users(id),
+  report_type text check (report_type in ('upi','phone','link','other')),
+  value       text not null,
+  channel     text check (channel in ('whatsapp','sms','phone_call','email')),
+  description text,
   os          text check (os in ('iOS','Android')),
-  risk_score  int,
-  verdict     text,
-  flagged     boolean default false,
+  device_id   text,
+  user_id     uuid references auth.users(id),
   created_at  timestamptz not null default now()
 );
 
--- 3.2 Blacklist tables with B-tree indexes
+create index if not exists idx_reports_device_id on public.reports (device_id);
+create index if not exists idx_reports_user_id   on public.reports (user_id);
+
+-- 4. Blacklist tables
 create table if not exists public.blacklisted_vpas (
   vpa_string text primary key,
   source     text,
@@ -46,18 +75,39 @@ create table if not exists public.blacklisted_domains (
   added_at   timestamptz default now()
 );
 
--- B-tree indexes for fast lookups
 create index if not exists idx_vpas_string    on public.blacklisted_vpas    (vpa_string);
 create index if not exists idx_numbers_phone  on public.blacklisted_numbers (phone_number);
 create index if not exists idx_domains_domain on public.blacklisted_domains (domain);
 
--- ============================================================================
--- Useful admin queries for telemetry
--- ============================================================================
--- Total scans, active users by platform, flagged threats:
--- select
---   count(*) as total_scans,
---   count(distinct user_id) filter (where os='iOS')     as active_ios_users,
---   count(distinct user_id) filter (where os='Android') as active_android_users,
---   count(*) filter (where flagged)                     as flagged_threats
--- from public.scans;
+-- 5. Enable Row Level Security
+alter table public.app_config enable row level security;
+alter table public.scans enable row level security;
+alter table public.reports enable row level security;
+alter table public.blacklisted_vpas enable row level security;
+alter table public.blacklisted_numbers enable row level security;
+alter table public.blacklisted_domains enable row level security;
+
+-- 6. RLS Policies
+create policy "Service role full access to app_config"
+  on public.app_config for all using (true) with check (true);
+
+create policy "Users can read their own scans"
+  on public.scans for select using (auth.uid() = user_id);
+
+create policy "Service role can insert scans"
+  on public.scans for insert with check (true);
+
+create policy "Users can read their own reports"
+  on public.reports for select using (auth.uid() = user_id);
+
+create policy "Service role can insert reports"
+  on public.reports for insert with check (true);
+
+create policy "Service role full access to blacklisted_vpas"
+  on public.blacklisted_vpas for all using (true) with check (true);
+
+create policy "Service role full access to blacklisted_numbers"
+  on public.blacklisted_numbers for all using (true) with check (true);
+
+create policy "Service role full access to blacklisted_domains"
+  on public.blacklisted_domains for all using (true) with check (true);

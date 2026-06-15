@@ -6,16 +6,20 @@ from datetime import datetime, timezone
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.models import ScanIn, AnalyzeTextIn, AnalyzeOut, ConfigOut, ReportIn, ReportOut, HistoryOut, HistoryCounts, HistoryItem
+from app.models import (
+    ScanIn, SandboxImageRequest, AnalyzeTextIn, AnalyzeOut,
+    ConfigOut, ReportIn, ReportOut, HistoryOut, HistoryCounts,
+    HistoryItem, OcrMeta
+)
 from app.database import supabase
 from app.auth import require_user, enforce_credit_cap
-from app.ocr import run_ocr
+from app.ocr import screenshot_ocr
 from app.config import settings
 from app.analyzer import analyze
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("scamshield")
-app = FastAPI(title="ScamShield API", version="2.0.0")
+app = FastAPI(title="ScamShield API", version="2.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,7 +42,8 @@ def get_config_dict() -> dict:
     }
 
 def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str],
-                 input_text: str, result: dict, warned: bool):
+                 input_text: str, result: dict, warned: bool,
+                 ocr_method: Optional[str] = None, ocr_confidence: Optional[float] = None):
     scan_id = str(uuid.uuid4())
     record = {
         "id": scan_id,
@@ -54,11 +59,15 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
     }
     if device_id:
         record["device_id"] = device_id
+    if ocr_method:
+        record["ocr_method"] = ocr_method
+    if ocr_confidence is not None:
+        record["ocr_confidence"] = ocr_confidence
     supabase.table("scans").insert(record).execute()
     return scan_id
 
 # ---------------------------------------------------------------------------
-# Config — no auth required (public read)
+# Config
 # ---------------------------------------------------------------------------
 @app.get("/api/v1/config", response_model=ConfigOut)
 def get_config():
@@ -89,18 +98,25 @@ async def analyze_text(body: AnalyzeTextIn,
         raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
 
     result = await analyze(body.text)
+    ocr_method = body.ocr_source or "text_input"
     scan_id = persist_scan("message", user_id, body.os, x_device_id,
-                           body.text, result, result["verdict"] == "high_risk")
+                           body.text, result, result["verdict"] == "high_risk",
+                           ocr_method=ocr_method)
 
-    return AnalyzeOut(scan_id=scan_id, kind="message", **result)
+    return AnalyzeOut(
+        scan_id=scan_id, kind="message", **result,
+        _meta=OcrMeta(ocr_method=ocr_method, ocr_confidence=1.0, ocr_fallback=False)
+    )
 
 # ---------------------------------------------------------------------------
 # Sandbox image
 # ---------------------------------------------------------------------------
 @app.post("/api/v1/sandbox-image", response_model=AnalyzeOut)
-async def sandbox_image(body: ScanIn,
-                        authorization: str = Header(None),
-                        x_device_id: Optional[str] = Header(None)):
+async def sandbox_image(
+    body: SandboxImageRequest,
+    authorization: str = Header(None),
+    x_device_id: Optional[str] = Header(None)
+):
     user_id = require_user(authorization)
 
     config = get_config_dict()
@@ -115,15 +131,40 @@ async def sandbox_image(body: ScanIn,
     scan_count = count_result.count if count_result.count is not None else 0
     enforce_credit_cap(user_id, cap, scan_count)
 
-    if body.os not in ("iOS", "Android"):
-        raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
+    device_id = body.device_id or x_device_id or "unknown"
 
-    text = run_ocr(body.image_base64)
-    result = await analyze(text)
-    scan_id = persist_scan("screenshot", user_id, body.os, x_device_id,
-                           text, result, result["verdict"] == "high_risk")
+    ocr_output = screenshot_ocr.extract_from_base64(
+        image_b64=body.image,
+        fallback_reason=body.fallback_reason
+    )
 
-    return AnalyzeOut(scan_id=scan_id, kind="screenshot", **result)
+    if not ocr_output.text.strip():
+        raise HTTPException(status_code=422, detail={
+            "error": "Could not extract text from image",
+            "code": "OCR_FAILED",
+            "suggestion": "Please try a clearer screenshot with visible text"
+        })
+
+    logger.info(
+        f"OCR | device={device_id} | method={ocr_output.method} | "
+        f"chars={ocr_output.char_count} | conf={ocr_output.confidence:.2f}"
+    )
+
+    result = await analyze(ocr_output.text)
+    scan_id = persist_scan(
+        "screenshot", user_id, "iOS" if "iOS" in device_id else "Android",
+        device_id, ocr_output.text, result, result["verdict"] == "high_risk",
+        ocr_method=ocr_output.method, ocr_confidence=ocr_output.confidence
+    )
+
+    return AnalyzeOut(
+        scan_id=scan_id, kind="screenshot", **result,
+        _meta=OcrMeta(
+            ocr_method=ocr_output.method,
+            ocr_confidence=round(ocr_output.confidence, 2),
+            ocr_fallback=ocr_output.fallback_used
+        )
+    )
 
 # ---------------------------------------------------------------------------
 # Report
@@ -224,7 +265,7 @@ def get_scan(scan_id: str,
 # ---------------------------------------------------------------------------
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "2.0.0"}
+    return {"status": "ok", "version": "2.1.0"}
 
 @app.exception_handler(422)
 async def validation_exception_handler(request: Request, exc):

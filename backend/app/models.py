@@ -5,9 +5,15 @@ class ScanIn(BaseModel):
     image_base64: str
     os: str
 
+class SandboxImageRequest(BaseModel):
+    image: str
+    device_id: Optional[str] = None
+    fallback_reason: Optional[str] = None
+
 class AnalyzeTextIn(BaseModel):
     text: str
     os: str
+    ocr_source: Optional[str] = "text_input"
 
 class FindingOut(BaseModel):
     type: str
@@ -20,6 +26,11 @@ class FlaggedUrl(BaseModel):
     final_url: str
     reputation: str
 
+class OcrMeta(BaseModel):
+    ocr_method: str
+    ocr_confidence: float
+    ocr_fallback: bool
+
 class AnalyzeOut(BaseModel):
     scan_id: str
     kind: str
@@ -29,6 +40,7 @@ class AnalyzeOut(BaseModel):
     extracted_text: str
     findings: list[FindingOut]
     flagged_urls: list[FlaggedUrl]
+    _meta: Optional[OcrMeta] = None
 
 class ConfigOut(BaseModel):
     scan_credit_cap: int
