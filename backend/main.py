@@ -59,10 +59,6 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
     }
     if device_id:
         record["device_id"] = device_id
-    if ocr_method:
-        record["ocr_method"] = ocr_method
-    if ocr_confidence is not None:
-        record["ocr_confidence"] = ocr_confidence
     supabase.table("scans").insert(record).execute()
     return scan_id
 
