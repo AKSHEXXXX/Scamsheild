@@ -1,8 +1,9 @@
 import SwiftUI
 import LocalAuthentication
+import AuthenticationServices
 
 @MainActor
-final class AuthViewModel: ObservableObject {
+final class AuthViewModel: NSObject, ObservableObject {
   @Published var email = ""
   @Published var password = ""
   @Published var confirmPassword = ""
@@ -16,6 +17,7 @@ final class AuthViewModel: ObservableObject {
 
   init(authService: SupabaseAuthService) {
     self.authService = authService
+    super.init()
     checkBiometricAvailability()
   }
 
@@ -99,6 +101,29 @@ final class AuthViewModel: ObservableObject {
   }
 
   func signInWithOAuth(provider: String) {
-    // OAuth is handled via URL opening in the view
+    guard let url = authService.oAuthURL(provider: provider) else { return }
+
+    let session = ASWebAuthenticationSession(
+      url: url,
+      callbackURLScheme: "scamshield"
+    ) { callbackURL, error in
+      guard error == nil, let callbackURL = callbackURL else {
+        return
+      }
+      Task {
+        try? await self.authService.handleOAuthCallback(url: callbackURL)
+      }
+    }
+    
+    session.presentationContextProvider = self
+    // This forces Google to not use the previous login session
+    session.prefersEphemeralWebBrowserSession = true
+    session.start()
+  }
+}
+
+extension AuthViewModel: ASWebAuthenticationPresentationContextProviding {
+  nonisolated func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+    return ASPresentationAnchor() // iOS 13+ requirement, but ASPresentationAnchor is just UIWindow. 
   }
 }

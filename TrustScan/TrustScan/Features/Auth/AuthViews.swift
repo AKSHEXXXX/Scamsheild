@@ -121,9 +121,7 @@ struct LoginView: View {
           // OAuth Buttons
           VStack(spacing: SpacingTokens.medium) {
             Button {
-              if let url = viewModel.authService.oAuthURL(provider: "apple") {
-                openURL(url)
-              }
+              viewModel.signInWithOAuth(provider: "apple")
             } label: {
               HStack {
                 Image(systemName: "applelogo")
@@ -140,9 +138,7 @@ struct LoginView: View {
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.st.opacity(0.3), lineWidth: 1.5))
 
             Button {
-              if let url = viewModel.authService.oAuthURL(provider: "google") {
-                openURL(url)
-              }
+              viewModel.signInWithOAuth(provider: "google")
             } label: {
               HStack {
                 Image("google_g_logo")
