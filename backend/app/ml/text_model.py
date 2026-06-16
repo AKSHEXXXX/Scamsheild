@@ -14,6 +14,12 @@ _available = False
 ARTIFACT_DIR = os.path.join(os.path.dirname(__file__), "artifacts")
 
 
+def is_loaded() -> bool:
+    return all(os.path.exists(os.path.join(ARTIFACT_DIR, n))
+               for n in ("scamshield_vectorizer.pkl", "scamshield_model.pkl",
+                         "scamshield_label_encoder.pkl", "scamshield_rules.pkl"))
+
+
 def _load():
     global _vectorizer, _classifier, _label_encoder, _rules, _available
     if _available:

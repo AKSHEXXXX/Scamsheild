@@ -14,6 +14,12 @@ _cols = None
 
 ARTIFACT_DIR = os.path.join(os.path.dirname(__file__), "artifacts")
 
+
+def is_loaded() -> bool:
+    return all(os.path.exists(os.path.join(ARTIFACT_DIR, n))
+               for n in ("qr_url_classifier.pkl", "qr_url_scaler.pkl", "qr_url_features.pkl"))
+
+
 SUSPICIOUS_TLDS = {"xyz", "top", "club", "online", "site", "live", "work",
                    "shop", "click", "loan", "download", "review", "bid", "trade"}
 SHORTENER_DOMAINS = {"bit.ly", "tinyurl.com", "tiny.cc", "t.co", "goo.gl",

@@ -14,6 +14,11 @@ _cols = None
 ARTIFACT_DIR = os.path.join(os.path.dirname(__file__), "artifacts")
 
 
+def is_loaded() -> bool:
+    return all(os.path.exists(os.path.join(ARTIFACT_DIR, n))
+               for n in ("url_classifier.pkl", "url_scaler.pkl", "url_feature_cols.pkl"))
+
+
 def _load():
     global _model, _scaler, _cols
     if _model is not None:
