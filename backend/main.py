@@ -16,6 +16,9 @@ from app.auth import require_user, enforce_credit_cap
 from app.ocr import screenshot_ocr
 from app.config import settings
 from app.analyzer import analyze
+from app.ml.text_model import is_loaded as text_model_loaded
+from app.ml.url_model import is_loaded as url_model_loaded
+from app.ml.qr_model import is_loaded as qr_model_loaded
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("scamshield")
@@ -267,7 +270,15 @@ def get_scan(scan_id: str,
 # ---------------------------------------------------------------------------
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "2.1.0"}
+    return {
+        "status": "ok",
+        "version": "2.1.0",
+        "models": {
+            "text": text_model_loaded(),
+            "url": url_model_loaded(),
+            "qr": qr_model_loaded(),
+        },
+    }
 
 @app.exception_handler(422)
 async def validation_exception_handler(request: Request, exc):
