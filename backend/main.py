@@ -16,9 +16,6 @@ from app.auth import require_user, enforce_credit_cap
 from app.ocr import screenshot_ocr
 from app.config import settings
 from app.analyzer import analyze
-from app.ml.text_model import is_loaded as text_model_loaded
-from app.ml.url_model import is_loaded as url_model_loaded
-from app.ml.qr_model import is_loaded as qr_model_loaded
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("scamshield")
@@ -46,7 +43,8 @@ def get_config_dict() -> dict:
 
 def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str],
                  input_text: str, result: dict, warned: bool,
-                 ocr_method: Optional[str] = None, ocr_confidence: Optional[float] = None):
+                 ocr_method: Optional[str] = None, ocr_confidence: Optional[float] = None,
+                 ocr_fallback: Optional[bool] = None):
     scan_id = str(uuid.uuid4())
     record = {
         "id": scan_id,
@@ -61,6 +59,12 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
         "warning_count": result["warning_count"],
         "flagged": warned,
     }
+    if ocr_method is not None:
+        record["ocr_method"] = ocr_method
+    if ocr_confidence is not None:
+        record["ocr_confidence"] = ocr_confidence
+    if ocr_fallback is not None:
+        record["ocr_fallback"] = ocr_fallback
     supabase.table("scans").insert(record).execute()
     return scan_id
 
@@ -152,7 +156,8 @@ async def sandbox_image(
     scan_id = persist_scan(
         "screenshot", user_id, "iOS" if "iOS" in device_id else "Android",
         device_id, ocr_output.text, result, result["verdict"] == "high_risk",
-        ocr_method=ocr_output.method, ocr_confidence=ocr_output.confidence
+        ocr_method=ocr_output.method, ocr_confidence=ocr_output.confidence,
+        ocr_fallback=ocr_output.fallback_used
     )
 
     return AnalyzeOut(
@@ -262,15 +267,7 @@ def get_scan(scan_id: str,
 # ---------------------------------------------------------------------------
 @app.get("/health")
 def health():
-    return {
-        "status": "ok",
-        "version": "2.1.0",
-        "models": {
-            "text": text_model_loaded(),
-            "url": url_model_loaded(),
-            "qr": qr_model_loaded(),
-        },
-    }
+    return {"status": "ok", "version": "2.1.0"}
 
 @app.exception_handler(422)
 async def validation_exception_handler(request: Request, exc):
