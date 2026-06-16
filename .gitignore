@@ -34,3 +34,7 @@ htmlcov/
 
 # Docker
 *.log
+
+# ML model artifacts
+backend/app/ml/artifacts/*
+!backend/app/ml/artifacts/.gitkeep

@@ -8,5 +8,9 @@ python-multipart==0.0.12
 python-dotenv==1.0.1
 numpy==1.26.4
 opencv-python-headless==4.10.0.84
+scikit-learn==1.6.1
+xgboost==2.1.4
+joblib==1.4.2
+boto3==1.37.0
 pytest==8.3.4
 pytest-asyncio==0.24.0
