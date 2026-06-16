@@ -36,5 +36,12 @@ htmlcov/
 *.log
 
 # ML model artifacts
+# Small active model files committed directly (~1.1 MB total)
+# Large HF model (261 MB) excluded — use download_models.py for updates
 backend/app/ml/artifacts/*
 !backend/app/ml/artifacts/.gitkeep
+!backend/app/ml/artifacts/url_classifier.pkl
+!backend/app/ml/artifacts/url_scaler.pkl
+!backend/app/ml/artifacts/url_feature_cols.pkl
+!backend/app/ml/artifacts/url_model_report.json
+!backend/app/ml/artifacts/scamshield_*.pkl
