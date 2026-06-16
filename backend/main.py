@@ -279,5 +279,9 @@ async def validation_exception_handler(request: Request, exc):
             logger.warning(f"422 on {request.url.path}: invalid JSON body, content_type={content_type}")
     else:
         logger.warning(f"422 on {request.url.path}: empty body, content_type={content_type}")
-    logger.warning(f"422 detail: {exc.errors()}")
-    return JSONResponse(status_code=422, content={"detail": exc.errors()})
+    if hasattr(exc, "errors"):
+        detail = exc.errors()
+    else:
+        detail = exc.detail if hasattr(exc, "detail") else str(exc)
+    logger.warning(f"422 detail: {detail}")
+    return JSONResponse(status_code=422, content={"detail": detail})
