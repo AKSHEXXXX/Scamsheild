@@ -71,25 +71,21 @@ actor OCRService {
     func extractQRCode(from image: UIImage) async -> String? {
         guard let cgImage = image.cgImage else { return nil }
         
-        return await withCheckedContinuation { continuation in
-            let request = VNDetectBarcodesRequest { request, error in
-                guard error == nil,
-                      let observations = request.results as? [VNBarcodeObservation],
-                      let barcode = observations.first,
-                      let payload = barcode.payloadStringValue else {
-                    continuation.resume(returning: nil)
-                    return
-                }
-                continuation.resume(returning: payload)
+        let request = VNDetectBarcodesRequest()
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        
+        do {
+            try handler.perform([request])
+            if let observations = request.results as? [VNBarcodeObservation],
+               let barcode = observations.first,
+               let payload = barcode.payloadStringValue {
+                return payload
             }
-            
-            let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-            do {
-                try handler.perform([request])
-            } catch {
-                continuation.resume(returning: nil)
-            }
+        } catch {
+            print("QR detection error: \(error)")
         }
+        
+        return nil
     }
 
     func extractText(from image: UIImage) async -> OCRResult {
@@ -97,47 +93,42 @@ actor OCRService {
             return .fallbackRequired(reason: "Invalid image format")
         }
 
-        return await withCheckedContinuation { continuation in
-            let request = VNRecognizeTextRequest { request, error in
-                guard error == nil,
-                      let observations = request.results as? [VNRecognizedTextObservation],
-                      !observations.isEmpty else {
-                    continuation.resume(returning: .fallbackRequired(reason: "Vision request failed"))
-                    return
-                }
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.recognitionLanguages = ["en-IN", "hi-IN", "en-US"]
+        request.usesLanguageCorrection = true
+        request.minimumTextHeight = 0.01
 
-                let candidates = observations.compactMap { $0.topCandidates(1).first }
-                let avgConfidence = candidates.map(\.confidence).reduce(0, +) / Float(max(candidates.count, 1))
-                let fullText = candidates.map(\.string).joined(separator: "\n")
-
-                if fullText.trimmingCharacters(in: .whitespacesAndNewlines).count < self.minimumTextLength {
-                    continuation.resume(returning: .fallbackRequired(reason: "Insufficient text extracted"))
-                    return
-                }
-
-                if avgConfidence < self.confidenceThreshold {
-                    continuation.resume(returning: .fallbackRequired(reason: "Low confidence: \(avgConfidence)"))
-                    return
-                }
-
-                continuation.resume(returning: .success(
-                    text: fullText,
-                    confidence: avgConfidence,
-                    source: .onDevice
-                ))
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        
+        do {
+            try handler.perform([request])
+            
+            guard let observations = request.results as? [VNRecognizedTextObservation],
+                  !observations.isEmpty else {
+                return .fallbackRequired(reason: "Vision request failed or no text")
             }
 
-            request.recognitionLevel = .accurate
-            request.recognitionLanguages = ["en-IN", "hi-IN", "en-US"]
-            request.usesLanguageCorrection = true
-            request.minimumTextHeight = 0.01
+            let candidates = observations.compactMap { $0.topCandidates(1).first }
+            let avgConfidence = candidates.map(\.confidence).reduce(0, +) / Float(max(candidates.count, 1))
+            let fullText = candidates.map(\.string).joined(separator: "\n")
 
-            let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-            do {
-                try handler.perform([request])
-            } catch {
-                continuation.resume(returning: .fallbackRequired(reason: "Vision handler threw error"))
+            if fullText.trimmingCharacters(in: .whitespacesAndNewlines).count < self.minimumTextLength {
+                return .fallbackRequired(reason: "Insufficient text extracted")
             }
+
+            if avgConfidence < self.confidenceThreshold {
+                return .fallbackRequired(reason: "Low confidence: \(avgConfidence)")
+            }
+
+            return .success(
+                text: fullText,
+                confidence: avgConfidence,
+                source: .onDevice
+            )
+            
+        } catch {
+            return .fallbackRequired(reason: "Vision handler threw error: \(error.localizedDescription)")
         }
     }
 }
