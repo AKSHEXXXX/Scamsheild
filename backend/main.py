@@ -117,14 +117,12 @@ async def analyze_text(body: AnalyzeTextIn,
         raise HTTPException(status_code=400, detail="os must be 'iOS' or 'Android'")
 
     result = await analyze(body.text)
-    ocr_method = body.ocr_source or "text_input"
     scan_id = persist_scan("message", user_id, body.os, x_device_id,
-                           body.text, result, result["verdict"] == "high_risk",
-                           ocr_method=ocr_method)
+                           body.text, result, result["verdict"] == "high_risk")
 
     return AnalyzeOut(
         scan_id=scan_id, kind="message", **result,
-        _meta=OcrMeta(ocr_method=ocr_method, ocr_confidence=1.0, ocr_fallback=False)
+        _meta=None
     )
 
 # ---------------------------------------------------------------------------
