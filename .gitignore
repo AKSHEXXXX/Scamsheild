@@ -44,4 +44,6 @@ backend/app/ml/artifacts/*
 !backend/app/ml/artifacts/url_scaler.pkl
 !backend/app/ml/artifacts/url_feature_cols.pkl
 !backend/app/ml/artifacts/url_model_report.json
+!backend/app/ml/artifacts/qr_url_*.pkl
+!backend/app/ml/artifacts/qr_model_report.json
 !backend/app/ml/artifacts/scamshield_*.pkl

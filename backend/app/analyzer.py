@@ -25,7 +25,7 @@ def _try_ml_text(text: str) -> float:
         return -1.0
 
 
-def _try_ml_urls(urls: list[str]) -> tuple[float, float, float]:
+def _try_ml_urls(urls: list[str], payload_text: str = "") -> tuple[float, float, float]:
     try:
         from app.ml.url_model import predict_url_risk, heuristic_url_score
         from app.ml.qr_model import predict_qr_url_risk
@@ -40,7 +40,7 @@ def _try_ml_urls(urls: list[str]) -> tuple[float, float, float]:
         p = predict_url_risk(clean)
         if p >= 0:
             url_probs.append(p)
-        q = predict_qr_url_risk(clean)
+        q = predict_qr_url_risk(clean, payload_text)
         if q >= 0:
             qr_probs.append(q)
         heuristic_probs.append(heuristic_url_score(clean))
@@ -167,7 +167,7 @@ async def analyze(text: str) -> dict:
 
     # ML model inference (best-effort, falls back to -1.0 if unavailable)
     ml_text_prob = _try_ml_text(text)
-    ml_url_prob, ml_qr_prob, ml_heuristic_prob = _try_ml_urls(urls)
+    ml_url_prob, ml_qr_prob, ml_heuristic_prob = _try_ml_urls(urls, text)
 
     ml_available = ml_text_prob >= 0 or ml_url_prob >= 0 or ml_qr_prob >= 0
 
