@@ -11,6 +11,11 @@ struct SubmitAnalysisUseCase {
   }
 
   func callAsFunction(image: UIImage, fileName: String = "scan-\(UUID().uuidString).jpg") async throws -> (AnalysisResult, String) {
+    if let qrPayload = await ocrService.extractQRCode(from: image) {
+        let result = try await analysisRepository.analyze(qrPayload: qrPayload)
+        return (result, "QR Code Scan")
+    }
+
     let ocrResult = await ocrService.extractText(from: image)
 
     switch ocrResult {
@@ -62,6 +67,30 @@ actor OCRService {
 
     private let confidenceThreshold: Float = 0.6
     private let minimumTextLength = 20
+    
+    func extractQRCode(from image: UIImage) async -> String? {
+        guard let cgImage = image.cgImage else { return nil }
+        
+        return await withCheckedContinuation { continuation in
+            let request = VNDetectBarcodesRequest { request, error in
+                guard error == nil,
+                      let observations = request.results as? [VNBarcodeObservation],
+                      let barcode = observations.first,
+                      let payload = barcode.payloadStringValue else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                continuation.resume(returning: payload)
+            }
+            
+            let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+            do {
+                try handler.perform([request])
+            } catch {
+                continuation.resume(returning: nil)
+            }
+        }
+    }
 
     func extractText(from image: UIImage) async -> OCRResult {
         guard let cgImage = image.cgImage else {
