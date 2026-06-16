@@ -22,6 +22,7 @@ struct QRScanInDTO: Encodable {
 struct ScanOutDTO: Decodable {
   let scan_id: String?
   let score: Int?
+  let risk_score: Int?
   let flagged: Bool?
   let verdict: String?
   let findings: [FindingOutDTO]?
@@ -40,11 +41,13 @@ struct ScanOutDTO: Decodable {
     let threatVerdict = ThreatVerdict(rawValue: verdict?.lowercased() ?? "") ?? .suspicious
     
     let extractedUrls = flagged_urls?.compactMap { $0.url } ?? []
+    
+    let finalScore = score ?? risk_score ?? 0
 
     return AnalysisResult(
       id: UUID(uuidString: scan_id ?? "") ?? UUID(),
       verdict: threatVerdict,
-      score: score ?? 0,
+      score: finalScore,
       flagged: flagged ?? false,
       summary: "", // Kept empty as per new spec
       extractedText: "", // Kept empty as per new spec
