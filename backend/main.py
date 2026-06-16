@@ -76,7 +76,21 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
 # ---------------------------------------------------------------------------
 @app.get("/api/v1/config", response_model=ConfigOut)
 def get_config():
-    return get_config_dict()
+    cfg = get_config_dict()
+    cfg["features"] = {
+        "text_analysis": True,
+        "url_analysis": True,
+        "image_analysis": True,
+        "qr_scanning": True,
+    }
+    cfg["model_version"] = "2.1.0"
+    th = cfg["sensitivity_threshold"]
+    cfg["score_thresholds"] = {
+        "safe": th // 2 - 1,
+        "suspicious": th - 1,
+        "scam": th,
+    }
+    return cfg
 
 # ---------------------------------------------------------------------------
 # Analyze text

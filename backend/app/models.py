@@ -47,6 +47,9 @@ class ConfigOut(BaseModel):
     ad_frequency: int
     sensitivity_threshold: int
     config_version: int
+    features: dict
+    model_version: str
+    score_thresholds: dict
 
 class ReportIn(BaseModel):
     report_type: str
