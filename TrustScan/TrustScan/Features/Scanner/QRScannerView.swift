@@ -41,6 +41,13 @@ class QRScannerViewController: UIViewController, AVCaptureVideoDataOutputSampleB
     }
   }
 
+  private var previewLayer: AVCaptureVideoPreviewLayer?
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    previewLayer?.frame = view.layer.bounds
+  }
+
   private func setupCamera() {
     guard let device = AVCaptureDevice.default(for: .video),
           let input = try? AVCaptureDeviceInput(device: device) else { return }
@@ -55,9 +62,9 @@ class QRScannerViewController: UIViewController, AVCaptureVideoDataOutputSampleB
     }
 
     let preview = AVCaptureVideoPreviewLayer(session: captureSession)
-    preview.frame = view.layer.bounds
     preview.videoGravity = .resizeAspectFill
     view.layer.addSublayer(preview)
+    self.previewLayer = preview
 
     DispatchQueue.global(qos: .userInitiated).async {
       self.captureSession.startRunning()

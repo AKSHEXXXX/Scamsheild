@@ -94,6 +94,10 @@ final class APIClient: @unchecked Sendable {
       do {
         return try decoder.decode(Response.self, from: data)
       } catch {
+        print("Decoding error: \(error)")
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Response JSON: \(jsonString)")
+        }
         throw AppError.unexpected(message: "Unable to read the server's response.")
       }
     case 401:

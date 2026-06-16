@@ -20,45 +20,65 @@ struct QRScanInDTO: Encodable {
 // MARK: - Response DTO
 
 struct ScanOutDTO: Decodable {
-  let scan_id: String
-  let score: Int
-  let flagged: Bool
-  let verdict: String
+  let scan_id: String?
+  let score: Int?
+  let flagged: Bool?
+  let verdict: String?
   let findings: [FindingOutDTO]?
-  let flagged_urls: [String]?
+  let flagged_urls: [FlaggedUrlDTO]?
   let _meta: ScanMetaDTO?
 
   func toDomain() -> AnalysisResult {
     let resultFindings = findings?.map { f in
-      Finding(type: f.type, value: f.value, severity: f.severity, description: f.description)
+      Finding(type: f.type ?? "unknown", value: f.value ?? "", severity: f.severity ?? "low", description: f.description ?? "")
     } ?? []
 
     let resultMeta = _meta.map { m in
       ScanMeta(ocrMethod: m.ocr_method, ocrConfidence: m.ocr_confidence, ocrFallback: m.ocr_fallback)
     }
 
-    let threatVerdict = ThreatVerdict(rawValue: verdict.lowercased()) ?? .suspicious
+    let threatVerdict = ThreatVerdict(rawValue: verdict?.lowercased() ?? "") ?? .suspicious
+    
+    let extractedUrls = flagged_urls?.compactMap { $0.url } ?? []
 
     return AnalysisResult(
-      id: UUID(uuidString: scan_id) ?? UUID(),
+      id: UUID(uuidString: scan_id ?? "") ?? UUID(),
       verdict: threatVerdict,
-      score: score,
-      flagged: flagged,
+      score: score ?? 0,
+      flagged: flagged ?? false,
       summary: "", // Kept empty as per new spec
       extractedText: "", // Kept empty as per new spec
       findings: resultFindings,
-      flaggedUrls: flagged_urls ?? [],
+      flaggedUrls: extractedUrls,
       meta: resultMeta,
       analysisTimestamp: Date()
     )
   }
 }
 
+struct FlaggedUrlDTO: Decodable {
+  let url: String
+  
+  init(from decoder: Decoder) throws {
+    if let container = try? decoder.singleValueContainer(), let stringValue = try? container.decode(String.self) {
+      self.url = stringValue
+    } else if let container = try? decoder.container(keyedBy: CodingKeys.self), let urlValue = try? container.decode(String.self, forKey: .url) {
+      self.url = urlValue
+    } else {
+      self.url = ""
+    }
+  }
+  
+  enum CodingKeys: String, CodingKey {
+    case url
+  }
+}
+
 struct FindingOutDTO: Decodable {
-  let type: String
-  let value: String
-  let severity: String
-  let description: String
+  let type: String?
+  let value: String?
+  let severity: String?
+  let description: String?
 }
 
 struct ScanMetaDTO: Decodable {
