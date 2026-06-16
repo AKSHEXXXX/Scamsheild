@@ -51,7 +51,7 @@ struct ProfileView: View {
           
           HStack(spacing: SpacingTokens.medium) {
             statCard(title: "Scans", value: "\(allEntries.count)")
-            statCard(title: "Threats caught", value: "\(allEntries.filter { $0.verdict == .dangerous }.count)")
+            statCard(title: "Threats caught", value: "\(allEntries.filter { $0.verdict == .scam }.count)")
           }
         }
         

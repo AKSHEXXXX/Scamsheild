@@ -20,7 +20,7 @@ actor FileHistoryRepository: HistoryRepositoryPort {
       id: UUID(),
       analysisId: result.id,
       verdict: result.verdict,
-      threatScore: result.threatScore,
+      score: result.score,
       analyzedAt: result.analysisTimestamp,
       summary: result.summary,
       thumbnailData: thumbnailData,

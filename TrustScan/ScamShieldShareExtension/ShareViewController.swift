@@ -20,8 +20,24 @@ class ShareViewController: UIViewController {
             return
         }
 
-        if attachment.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-            attachment.loadItem(forTypeIdentifier: UTType.image.identifier) { [weak self] data, error in
+        if attachment.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+            attachment.loadItem(forTypeIdentifier: UTType.url.identifier) { [weak self] data, _ in
+                if let url = data as? URL {
+                    self?.openApp(with: "url", value: url.absoluteString)
+                } else {
+                    self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+                }
+            }
+        } else if attachment.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
+            attachment.loadItem(forTypeIdentifier: UTType.plainText.identifier) { [weak self] data, _ in
+                if let text = data as? String {
+                    self?.openApp(with: "text", value: text)
+                } else {
+                    self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+                }
+            }
+        } else if attachment.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+            attachment.loadItem(forTypeIdentifier: UTType.image.identifier) { [weak self] data, _ in
                 var image: UIImage?
                 
                 if let url = data as? URL {
@@ -55,16 +71,16 @@ class ShareViewController: UIViewController {
         
         do {
             try data.write(to: fileURL)
-            self.openApp(with: filename)
+            self.openApp(with: "file", value: filename)
         } catch {
             print("Failed to write to app group: \(error)")
             self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
     }
 
-    private func openApp(with filename: String) {
-        let encoded = filename.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        guard let url = URL(string: "scamshield://scan?file=\(encoded)") else {
+    private func openApp(with key: String, value: String) {
+        let encoded = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        guard let url = URL(string: "scamshield://scan?\(key)=\(encoded)") else {
             self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
             return
         }

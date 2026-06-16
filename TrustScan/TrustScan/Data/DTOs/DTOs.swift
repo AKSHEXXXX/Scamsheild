@@ -12,30 +12,59 @@ struct TextScanInDTO: Encodable {
   let os: String = "iOS"
 }
 
+struct QRScanInDTO: Encodable {
+  let payload: String
+  let os: String = "iOS"
+}
+
 // MARK: - Response DTO
 
 struct ScanOutDTO: Decodable {
   let scan_id: String
-  let kind: String
-  let risk_score: Int
+  let score: Int
+  let flagged: Bool
   let verdict: String
-  let warning_count: Int
-  let extracted_text: String
-  let findings: [FindingOutDTO]
-  let flagged_urls: [FlaggedUrlDTO]
+  let findings: [FindingOutDTO]?
+  let flagged_urls: [String]?
+  let _meta: ScanMetaDTO?
+
+  func toDomain() -> AnalysisResult {
+    let resultFindings = findings?.map { f in
+      Finding(type: f.type, value: f.value, severity: f.severity, description: f.description)
+    } ?? []
+
+    let resultMeta = _meta.map { m in
+      ScanMeta(ocrMethod: m.ocr_method, ocrConfidence: m.ocr_confidence, ocrFallback: m.ocr_fallback)
+    }
+
+    let threatVerdict = ThreatVerdict(rawValue: verdict.lowercased()) ?? .suspicious
+
+    return AnalysisResult(
+      id: UUID(uuidString: scan_id) ?? UUID(),
+      verdict: threatVerdict,
+      score: score,
+      flagged: flagged,
+      summary: "", // Kept empty as per new spec
+      extractedText: "", // Kept empty as per new spec
+      findings: resultFindings,
+      flaggedUrls: flagged_urls ?? [],
+      meta: resultMeta,
+      analysisTimestamp: Date()
+    )
+  }
 }
 
 struct FindingOutDTO: Decodable {
   let type: String
+  let value: String
   let severity: String
-  let title: String
-  let detail: String
+  let description: String
 }
 
-struct FlaggedUrlDTO: Decodable {
-  let url: String
-  let final_url: String
-  let reputation: String
+struct ScanMetaDTO: Decodable {
+  let ocr_method: String?
+  let ocr_confidence: Double?
+  let ocr_fallback: Bool?
 }
 
 // MARK: - Config DTO
@@ -77,160 +106,6 @@ struct SupabaseUser: Decodable, Identifiable {
 
 // MARK: - Mapping to Domain Models
 
-extension ScanOutDTO {
-  func toDomain() -> AnalysisResult {
-    let score = min(Double(risk_score) / 100.0, 1.0)
-
-    let domainVerdict: ThreatVerdict
-    switch verdict.lowercased() {
-    case "safe", "clean", "low_risk":
-      domainVerdict = .safe
-    case "suspicious", "warning", "medium_risk":
-      domainVerdict = .suspicious
-    case "dangerous", "scam", "malicious", "high_risk":
-      domainVerdict = .dangerous
-    default:
-      domainVerdict = .inconclusive
-    }
-
-    var indicators: [ThreatIndicator] = []
-
-    for finding in findings {
-      let severityEnum: IndicatorSeverity
-      switch finding.severity.lowercased() {
-      case "high": severityEnum = .high
-      case "medium": severityEnum = .medium
-      default: severityEnum = .low
-      }
-      
-      let category = categorize(type: finding.type)
-      
-      indicators.append(
-        ThreatIndicator(
-          id: UUID(),
-          category: category,
-          title: finding.title,
-          description: finding.detail,
-          severity: severityEnum,
-          rawValue: finding.type
-        )
-      )
-    }
-
-    for flaggedUrl in flagged_urls {
-      indicators.append(
-        ThreatIndicator(
-          id: UUID(),
-          category: .urlThreat,
-          title: "Flagged URL",
-          description: "This URL was flagged as \(flaggedUrl.reputation). Final destination: \(flaggedUrl.final_url)",
-          severity: flaggedUrl.reputation.lowercased() == "malicious" ? .high : .medium,
-          rawValue: flaggedUrl.url
-        )
-      )
-    }
-
-    let summary = buildSummary(verdict: domainVerdict, findings: findings, urls: flagged_urls)
-    let recommendations = buildRecommendations(verdict: domainVerdict, hasUrls: !flagged_urls.isEmpty, findings: findings)
-    let education = educationalContent(for: domainVerdict)
-
-    return AnalysisResult(
-      id: UUID(),
-      verdict: domainVerdict,
-      threatScore: score,
-      summary: summary,
-      extractedText: extracted_text,
-      indicators: indicators.sorted { severityWeight($0.severity) > severityWeight($1.severity) },
-      recommendations: recommendations,
-      analysisTimestamp: Date(),
-      educationalContext: education
-    )
-  }
-
-  private func categorize(type: String) -> ThreatCategory {
-    let lower = type.lowercased()
-    if ["urgency", "time"].contains(where: { lower.contains($0) }) {
-      return .urgencyManipulation
-    }
-    if ["personal", "identity", "data"].contains(where: { lower.contains($0) }) {
-      return .personalDataRequest
-    }
-    if ["payment", "money", "finance", "crypto"].contains(where: { lower.contains($0) }) {
-      return .paymentFraud
-    }
-    if ["impersonation", "spoof"].contains(where: { lower.contains($0) }) {
-      return .impersonation
-    }
-    return .socialEngineering
-  }
-
-  private func titleFor(category: ThreatCategory) -> String {
-    switch category {
-    case .urgencyManipulation: return "Urgency language"
-    case .personalDataRequest: return "Sensitive information request"
-    case .paymentFraud: return "Payment pressure"
-    case .impersonation: return "Brand impersonation"
-    case .urlThreat: return "Suspicious link"
-    case .unknownSender: return "Unknown sender"
-    case .maliciousContent: return "Malicious content"
-    case .socialEngineering: return "Social engineering"
-    case .other: return "Other indicator"
-    }
-  }
-
-  private func severityWeight(_ severity: IndicatorSeverity) -> Int {
-    switch severity {
-    case .high: return 3
-    case .medium: return 2
-    case .low: return 1
-    }
-  }
-
-  private func buildSummary(verdict: ThreatVerdict, findings: [FindingOutDTO], urls: [FlaggedUrlDTO]) -> String {
-    switch verdict {
-    case .dangerous:
-      let topTypes = findings.prefix(3).map { $0.type }.joined(separator: ", ")
-      return "This screenshot shows several high-risk scam traits including \(topTypes)."
-    case .suspicious:
-      return "This screenshot contains warning signs that deserve caution."
-    case .safe:
-      return "No clear scam traits stood out, but verify the sender before acting."
-    case .inconclusive:
-      return "The scan was only partially readable and needs a manual check."
-    }
-  }
-
-  private func buildRecommendations(verdict: ThreatVerdict, hasUrls: Bool, findings: [FindingOutDTO]) -> [RecommendedAction] {
-    var actions: [RecommendedAction] = []
-
-    if verdict == .dangerous || verdict == .suspicious {
-      actions.append(RecommendedAction(id: UUID(), priority: 1, actionText: "Do not tap links or reply until the sender is verified.", actionType: .informational))
-    }
-    if hasUrls {
-      actions.append(RecommendedAction(id: UUID(), priority: 2, actionText: "Compare any link with the official domain before visiting.", actionType: .informational))
-    }
-    if findings.contains(where: { ["personal", "identity", "data", "login"].contains($0.type.lowercased()) }) {
-      actions.append(RecommendedAction(id: UUID(), priority: 3, actionText: "Never share passwords, one-time codes, or identity details from a message like this.", actionType: .informational))
-    }
-    if actions.isEmpty {
-      actions.append(RecommendedAction(id: UUID(), priority: 1, actionText: "If unsure, verify the sender independently before responding.", actionType: .informational))
-    }
-    return actions
-  }
-
-  private func educationalContent(for verdict: ThreatVerdict) -> EducationalContent {
-    switch verdict {
-    case .dangerous:
-      return EducationalContent(title: "Why this matters", body: "Scam campaigns combine urgency, authority, and a shortcut to action. Slowing the decision down is the best first defense.")
-    case .suspicious:
-      return EducationalContent(title: "What to watch for", body: "Messages that push you outside your normal routine deserve extra scrutiny, especially involving links, codes, or money.")
-    case .safe:
-      return EducationalContent(title: "Healthy habit", body: "Even when a message looks okay, independent verification is still the safest response for anything important.")
-    case .inconclusive:
-      return EducationalContent(title: "Better scan quality helps", body: "Clear screenshots with the full message and sender details give the scanner more useful evidence.")
-    }
-  }
-}
 
 extension ConfigOutDTO {
   func toDomain() -> AppConfiguration {

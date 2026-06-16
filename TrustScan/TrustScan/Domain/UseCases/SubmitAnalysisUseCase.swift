@@ -34,6 +34,16 @@ struct SubmitAnalysisUseCase {
       return (result, "Enhanced scan (server)")
     }
   }
+
+  func analyzeQR(payload: String) async throws -> (AnalysisResult, String) {
+    let result = try await analysisRepository.analyze(qrPayload: payload)
+    return (result, "QR Code Scan")
+  }
+
+  func analyzeText(_ text: String) async throws -> (AnalysisResult, String) {
+    let result = try await analysisRepository.analyze(text: text)
+    return (result, "Text Scan")
+  }
 }
 import Vision
 import UIKit

@@ -78,8 +78,7 @@ extension ThreatVerdict {
     switch self {
     case .safe: return "Likely Safe"
     case .suspicious: return "Suspicious"
-    case .dangerous: return "High Risk"
-    case .inconclusive: return "Needs Review"
+    case .scam: return "High Risk Scam"
     }
   }
 
@@ -87,8 +86,7 @@ extension ThreatVerdict {
     switch self {
     case .safe: return ColorTokens.sfe
     case .suspicious: return ColorTokens.sus
-    case .dangerous: return ColorTokens.dng
-    case .inconclusive: return ColorTokens.inc
+    case .scam: return ColorTokens.dng
     }
   }
 
@@ -96,18 +94,7 @@ extension ThreatVerdict {
     switch self {
     case .safe: return "checkmark.shield.fill"
     case .suspicious: return "exclamationmark.triangle.fill"
-    case .dangerous: return "xmark.shield.fill"
-    case .inconclusive: return "questionmark.shield.fill"
-    }
-  }
-}
-
-extension IndicatorSeverity {
-  var tintColor: Color {
-    switch self {
-    case .low: return ColorTokens.sfe
-    case .medium: return ColorTokens.sus
-    case .high: return ColorTokens.dng
+    case .scam: return "xmark.shield.fill"
     }
   }
 }

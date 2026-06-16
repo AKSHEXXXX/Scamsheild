@@ -10,9 +10,14 @@ struct TrustScanApp: App {
         .onOpenURL { url in
           if url.scheme == "scamshield" && url.host == "scan" {
             // Handle Share Extension Deep Link
-            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-               let filename = components.queryItems?.first(where: { $0.name == "file" })?.value {
-               environment.submissionViewModel.handleSharedFile(filename: filename)
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+              if let filename = components.queryItems?.first(where: { $0.name == "file" })?.value {
+                environment.submissionViewModel.handleSharedFile(filename: filename)
+              } else if let text = components.queryItems?.first(where: { $0.name == "text" })?.value {
+                environment.submissionViewModel.handleSharedText(text)
+              } else if let sharedUrl = components.queryItems?.first(where: { $0.name == "url" })?.value {
+                environment.submissionViewModel.handleSharedText(sharedUrl)
+              }
             }
           } else {
             // Handle Supabase Auth Callback

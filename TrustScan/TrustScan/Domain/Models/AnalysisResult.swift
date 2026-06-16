@@ -3,44 +3,33 @@ import Foundation
 enum ThreatVerdict: String, Codable, CaseIterable, Hashable, Identifiable {
   case safe
   case suspicious
-  case dangerous
-  case inconclusive
+  case scam
 
   var id: String { rawValue }
 }
 
-enum ThreatCategory: String, Codable, Hashable {
-  case urlThreat
-  case impersonation
-  case urgencyManipulation
-  case personalDataRequest
-  case paymentFraud
-  case unknownSender
-  case maliciousContent
-  case socialEngineering
-  case other
+struct Finding: Codable, Hashable {
+  let type: String
+  let value: String
+  let severity: String
+  let description: String
 }
 
-enum IndicatorSeverity: String, Codable, Hashable {
-  case low
-  case medium
-  case high
-}
-
-enum ActionType: String, Codable, Hashable {
-  case informational
-  case deepLink
-  case systemAction
+struct ScanMeta: Codable, Hashable {
+  let ocrMethod: String?
+  let ocrConfidence: Double?
+  let ocrFallback: Bool?
 }
 
 struct AnalysisResult: Identifiable, Codable, Hashable {
   let id: UUID
   let verdict: ThreatVerdict
-  let threatScore: Double
+  let score: Int
+  let flagged: Bool
   let summary: String
   let extractedText: String
-  let indicators: [ThreatIndicator]
-  let recommendations: [RecommendedAction]
+  let findings: [Finding]
+  let flaggedUrls: [String]
+  let meta: ScanMeta?
   let analysisTimestamp: Date
-  let educationalContext: EducationalContent?
 }

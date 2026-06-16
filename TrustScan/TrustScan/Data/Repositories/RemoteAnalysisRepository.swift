@@ -23,4 +23,15 @@ struct RemoteAnalysisRepository: AnalysisRepositoryPort {
     let response: ScanOutDTO = try await apiClient.post(path: "/api/v1/sandbox-image", body: request)
     return response.toDomain()
   }
+
+  func analyze(qrPayload: String) async throws -> AnalysisResult {
+    let request = QRScanInDTO(payload: qrPayload)
+    let response: ScanOutDTO = try await apiClient.post(path: "/api/v1/check-qr", body: request)
+    return response.toDomain()
+  }
+
+  func fetchHistory() async throws -> [AnalysisResult] {
+    let response: [ScanOutDTO] = try await apiClient.get(path: "/api/v1/history")
+    return response.map { $0.toDomain() }
+  }
 }

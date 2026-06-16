@@ -48,7 +48,7 @@
 		NEWF9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFA /* Components.swift */; };
 		NEWFB /* PermissionManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFC /* PermissionManagers.swift */; };
 		NEWFD /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFE /* AnalysisResult.swift */; };
-		NEWFF /* ThreatIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW10 /* ThreatIndicator.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,7 +87,7 @@
 		A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrustScan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		NEW10 /* ThreatIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreatIndicator.swift; sourceTree = "<group>"; };
+
 		NEW12 /* HistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
 		NEW14 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		NEW16 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -313,7 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				NEWFE /* AnalysisResult.swift */,
-				NEW10 /* ThreatIndicator.swift */,
+
 				NEW12 /* HistoryEntry.swift */,
 				NEW14 /* AppConfiguration.swift */,
 				NEW16 /* AppError.swift */,
@@ -549,7 +549,7 @@
 				NEWF9 /* Components.swift in Sources */,
 				NEWFB /* PermissionManagers.swift in Sources */,
 				NEWFD /* AnalysisResult.swift in Sources */,
-				NEWFF /* ThreatIndicator.swift in Sources */,
+
 				NEW11 /* HistoryEntry.swift in Sources */,
 				NEW13 /* AppConfiguration.swift in Sources */,
 				NEW15 /* AppError.swift in Sources */,

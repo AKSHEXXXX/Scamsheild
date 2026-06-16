@@ -112,6 +112,31 @@ final class SubmissionViewModel: ObservableObject {
     }
   }
 
+  func analyzeQR(payload: String) async {
+    state = .loading(message: "Checking QR Code…")
+
+    do {
+      let (result, sourceString) = try await submitAnalysisUseCase.analyzeQR(payload: payload)
+
+      ocrSource = sourceString
+      state = .success(result)
+
+      do {
+        // Thumbnail generation is nil for QR scan, but we can pass it
+        try await saveHistoryEntryUseCase(
+          result: result,
+          thumbnailData: nil
+        )
+      } catch {
+        // Silent failure
+      }
+    } catch let appError as AppError {
+      state = .error(appError)
+    } catch {
+      state = .error(.unexpected(message: error.localizedDescription))
+    }
+  }
+
   func resetFlow() {
     selectedImageData = nil
     ocrSource = ""
@@ -138,6 +163,32 @@ final class SubmissionViewModel: ObservableObject {
       }
     } catch {
       state = .error(.unexpected(message: "Failed to read shared image: \(error.localizedDescription)"))
+    }
+  }
+
+  func handleSharedText(_ text: String) {
+    Task {
+      await self.analyzeText(text)
+    }
+  }
+
+  func analyzeText(_ text: String) async {
+    state = .loading(message: "Analyzing text…")
+    do {
+      // Create a temporary SubmissionUseCase for text?
+      // Since SubmitAnalysisUseCase only takes UIImage, we can bypass it and use repo directly
+      // However, we don't have access to repo directly in ViewModel, but we can inject it or add to AppEnvironment.
+      // Wait, we can just add an analyzeText method to SubmitAnalysisUseCase!
+      let (result, sourceString) = try await submitAnalysisUseCase.analyzeText(text)
+      
+      ocrSource = sourceString
+      state = .success(result)
+      
+      try? await saveHistoryEntryUseCase(result: result, thumbnailData: nil)
+    } catch let appError as AppError {
+      state = .error(appError)
+    } catch {
+      state = .error(.unexpected(message: error.localizedDescription))
     }
   }
 
