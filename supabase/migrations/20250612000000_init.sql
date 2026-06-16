@@ -44,12 +44,11 @@ create table if not exists public.reports (
   channel     text check (channel in ('whatsapp','sms','phone_call','email')),
   description text,
   os          text check (os in ('iOS','Android')),
-  device_id   text,
-  user_id     uuid references auth.users(id),
+  device_id   text not null default 'unknown',
+  user_id     uuid not null references auth.users(id),
   created_at  timestamptz not null default now()
 );
 
-create index if not exists idx_reports_device_id on public.reports (device_id);
 create index if not exists idx_reports_user_id   on public.reports (user_id);
 
 -- 4. Blacklist tables

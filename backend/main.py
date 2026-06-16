@@ -184,9 +184,8 @@ async def report(body: ReportIn,
         "description": body.description,
         "os": body.os,
         "user_id": user_id,
+        "device_id": x_device_id or "unknown",
     }
-    if x_device_id:
-        record["device_id"] = x_device_id
 
     result = supabase.table("reports").insert(record).execute()
     report_id = result.data[0]["id"]
