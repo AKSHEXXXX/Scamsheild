@@ -72,11 +72,12 @@ actor OCRService {
         guard let cgImage = image.cgImage else { return nil }
         
         let request = VNDetectBarcodesRequest()
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        let orientation = CGImagePropertyOrientation(image.imageOrientation)
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
         
         do {
             try handler.perform([request])
-            if let observations = request.results as? [VNBarcodeObservation],
+            if let observations = request.results,
                let barcode = observations.first,
                let payload = barcode.payloadStringValue {
                 return payload
@@ -99,12 +100,13 @@ actor OCRService {
         request.usesLanguageCorrection = true
         request.minimumTextHeight = 0.01
 
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        let orientation = CGImagePropertyOrientation(image.imageOrientation)
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
         
         do {
             try handler.perform([request])
             
-            guard let observations = request.results as? [VNRecognizedTextObservation],
+            guard let observations = request.results,
                   !observations.isEmpty else {
                 return .fallbackRequired(reason: "Vision request failed or no text")
             }
@@ -129,6 +131,22 @@ actor OCRService {
             
         } catch {
             return .fallbackRequired(reason: "Vision handler threw error: \(error.localizedDescription)")
+        }
+    }
+}
+
+extension CGImagePropertyOrientation {
+    init(_ orientation: UIImage.Orientation) {
+        switch orientation {
+        case .up: self = .up
+        case .upMirrored: self = .upMirrored
+        case .down: self = .down
+        case .downMirrored: self = .downMirrored
+        case .left: self = .left
+        case .leftMirrored: self = .leftMirrored
+        case .right: self = .right
+        case .rightMirrored: self = .rightMirrored
+        @unknown default: self = .up
         }
     }
 }
