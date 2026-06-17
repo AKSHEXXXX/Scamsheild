@@ -86,9 +86,9 @@ def get_config():
     cfg["model_version"] = "2.1.0"
     th = cfg["sensitivity_threshold"]
     cfg["score_thresholds"] = {
-        "safe": th // 2 - 1,
+        "low_risk": th // 2 - 1,
         "suspicious": th - 1,
-        "scam": th,
+        "high_risk": th,
     }
     return cfg
 
