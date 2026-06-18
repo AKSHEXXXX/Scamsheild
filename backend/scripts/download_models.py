@@ -23,7 +23,11 @@ def download_public_url(name: str, url: str):
 
 
 def download_s3(name: str, bucket: str, key: str, endpoint: str, access_key: str, secret_key: str, region: str):
-    import boto3
+    try:
+        import boto3
+    except ImportError:
+        logger.error("boto3 not installed — cannot download from S3. Install with: pip install boto3")
+        return
     dest = ARTIFACT_DIR / name
     logger.info("Downloading s3://%s/%s ...", bucket, key)
     session = boto3.Session(

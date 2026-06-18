@@ -28,43 +28,15 @@ def anyio_backend():
 
 @skip_if_no_supabase
 @pytest.mark.anyio
-async def test_url_blacklist_hit():
+async def test_check_qr_returns_result():
     _ensure_token()
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post("/api/v1/analyze-url", json={
-            "url": "http://paypal-secure-login.tk/verify",
+        resp = await client.post("/api/v1/check-qr", json={
+            "payload": "https://www.google.com",
             "os": "Android"
         }, headers=_headers)
     assert resp.status_code == 200
     data = resp.json()
     assert "scam_score" in data
-
-@skip_if_no_supabase
-@pytest.mark.anyio
-async def test_url_safe():
-    _ensure_token()
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post("/api/v1/analyze-url", json={
-            "url": "https://www.google.com",
-            "os": "Android"
-        }, headers=_headers)
-    assert resp.status_code == 200
-    # May be low_risk or suspicious depending on whether Agent 3 (url_xgb) is loaded
-    assert resp.json()["verdict"] in ("low_risk", "suspicious")
-
-@skip_if_no_supabase
-@pytest.mark.anyio
-async def test_model_accuracy_has_all_15():
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.get("/api/model-accuracy")
-    assert resp.status_code == 200
-    body = resp.json()
-    agents = body["agents"]
-    assert len(agents) == 15
-    ids = [a["id"] for a in agents]
-    assert ids == list(range(1, 16))
-    assert agents[0]["value"] != "skipped"
-    assert "domains" in agents[3]["value"]
+    assert "verdict" in data

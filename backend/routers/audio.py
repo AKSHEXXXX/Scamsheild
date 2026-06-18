@@ -30,7 +30,7 @@ async def analyze_audio(body: AnalyzeAudioIn,
     if not transcript:
         return {
             "scan_id": str(uuid.uuid4()), "kind": "audio",
-            "risk_score": 0, "verdict": "low_risk",
+            "scam_score": 0, "verdict": "low_risk",
             "warning_count": 0, "extracted_text": "",
             "findings": [{"type": "asr", "severity": "info",
                           "title": "ASR not available",
@@ -46,7 +46,7 @@ async def analyze_audio(body: AnalyzeAudioIn,
         scan_type="audio",
     )
     result = {
-        "risk_score": min(100, score),
+        "scam_score": min(100, score),
         "verdict": verdict,
         "warning_count": 1 if verdict == "high_risk" else 0,
         "extracted_text": transcript,
@@ -54,5 +54,9 @@ async def analyze_audio(body: AnalyzeAudioIn,
                       "title": "ML scores", "detail": str(ml_debug)}],
         "flagged_urls": [],
     }
-    scan_id = persist_scan("audio", user_id, body.os, x_device_id, transcript, result, verdict == "high_risk")
+    try:
+        scan_id = persist_scan("audio", user_id, body.os, x_device_id, transcript, result, verdict == "high_risk")
+    except Exception as e:
+        logger.warning("Failed to persist scan (non-fatal): %s", e)
+        scan_id = ""
     return {"scan_id": scan_id, "kind": "audio", **result, "_meta": {"asr_method": asr.get("method", "unavailable")}}

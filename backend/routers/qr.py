@@ -53,12 +53,16 @@ async def check_qr(body: CheckQRIn,
                  "detail": str(ml_debug)}]
     warning_count = sum(1 for f in findings if f["severity"] in ("high", "medium"))
     result = {
-        "risk_score": min(100, score),
+        "scam_score": min(100, score),
         "verdict": verdict,
         "warning_count": warning_count,
         "extracted_text": payload,
         "findings": findings,
         "flagged_urls": [],
     }
-    scan_id = persist_scan("qr", user_id, body.os, x_device_id, payload, result, verdict == "high_risk")
+    try:
+        scan_id = persist_scan("qr", user_id, body.os, x_device_id, payload, result, verdict == "high_risk")
+    except Exception as e:
+        logger.warning("Failed to persist scan (non-fatal): %s", e)
+        scan_id = ""
     return {"scan_id": scan_id, "kind": "qr", **result, "_meta": None}

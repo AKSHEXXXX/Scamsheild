@@ -36,7 +36,7 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
         "os": body_os,
         "input_text": input_text[:200],
         "result_json": result,
-        "risk_score": result["risk_score"],
+        "risk_score": result.get("scam_score", result.get("risk_score", 0)),
         "verdict": result["verdict"],
         "warning_count": result["warning_count"],
         "flagged": warned,

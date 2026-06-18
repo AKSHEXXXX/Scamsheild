@@ -47,6 +47,9 @@ async def sandbox_image(body: SandboxImageRequest,
         })
     logger.info("OCR | device=%s | method=%s | chars=%d | conf=%.2f",
                 device_id, ocr_output.method, ocr_output.char_count, ocr_output.confidence)
+    from app.ml.agents.inference import agent14_score_text
+    regex_result = agent14_score_text(ocr_output.text)
+    logger.info("Agent 14 regex on OCR text | score=%d severity=%s", regex_result["score"], regex_result["severity"])
     result = await analyze(ocr_output.text)
     scan_id = persist_scan(
         "screenshot", user_id, "iOS" if "iOS" in device_id else "Android",
@@ -82,12 +85,16 @@ async def sandbox_file(body: SandboxFileIn,
     findings = [{"type": "malware", "severity": "high" if malware_prob > 0.5 else "low",
                  "title": "Malware Analysis", "detail": f"Malware probability: {malware_prob:.4f}"}]
     result = {
-        "risk_score": min(100, score),
+        "scam_score": min(100, score),
         "verdict": verdict,
         "warning_count": 1 if malware_prob > 0.5 else 0,
         "extracted_text": body.filename,
         "findings": findings,
         "flagged_urls": [],
     }
-    scan_id = persist_scan("file", user_id, body.os, x_device_id, body.filename, result, verdict == "high_risk")
+    try:
+        scan_id = persist_scan("file", user_id, body.os, x_device_id, body.filename, result, verdict == "high_risk")
+    except Exception as e:
+        logger.warning("Failed to persist scan (non-fatal): %s", e)
+        scan_id = ""
     return {"scan_id": scan_id, "kind": "file", **result, "_meta": None}

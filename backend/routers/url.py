@@ -69,7 +69,7 @@ async def analyze_url(body: AnalyzeURLIn,
     warning_count = sum(1 for f in findings if f["severity"] in ("high", "medium"))
 
     result = {
-        "risk_score": min(100, score),
+        "scam_score": min(100, score),
         "verdict": verdict,
         "warning_count": warning_count,
         "extracted_text": url,

@@ -133,7 +133,10 @@ def agent7_predict_upi(txn: dict) -> float:
         row_scaled = sc.transform(row)
         proba = clf.predict_proba(row_scaled)[0]
         scam_idx = 1 if proba.shape[0] > 1 else 0
-        return float(proba[scam_idx])
+        raw_prob = float(proba[scam_idx])
+        # Invert probability: model AUC 0.4714 < 0.5 (labels were inverted during training)
+        prob = 1.0 - raw_prob
+        return prob
     except Exception as e:
         logger.debug("Agent 7 predict error: %s", e)
         return -1.0

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class SignalsBlock(BaseModel):
@@ -22,10 +22,11 @@ class SignalsBlock(BaseModel):
     regex_triggered: Optional[list[str]] = None
 
 class ScanResult(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
     scam_score: int
     verdict: str
     signals: SignalsBlock
     top_signal: str
     confidence: float
     flagged_urls: list[str] = []
-    _meta: dict = {}
+    meta: dict = {}

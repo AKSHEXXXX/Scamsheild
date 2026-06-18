@@ -38,8 +38,9 @@ async def test_analyze_text_scam():
         }, headers=_headers)
     assert resp.status_code == 200
     data = resp.json()
-    assert data["risk_score"] >= 40
-    assert "scan_id" in data
+    assert data["scam_score"] >= 40
+    assert "signals" in data
+    assert data["signals"]["text_tfidf_prob"] is not None
 
 @skip_if_no_supabase
 @pytest.mark.anyio
@@ -54,3 +55,39 @@ async def test_analyze_text_safe():
     assert resp.status_code == 200
     data = resp.json()
     assert data["verdict"] == "low_risk"
+
+@skip_if_no_supabase
+@pytest.mark.anyio
+async def test_analyze_text_regex_runs_first():
+    _ensure_token()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.post("/api/v1/analyze-text", json={
+            "text": "URGENT: Your account is blocked. KYC pending. Share OTP 123456 immediately.",
+            "os": "Android"
+        }, headers=_headers)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["signals"]["regex_score"] is not None
+    assert data["signals"]["regex_score"] > 0
+
+@skip_if_no_supabase
+@pytest.mark.anyio
+async def test_analyze_text_returns_scan_result_schema():
+    """Verify the response matches the ScanResult schema"""
+    _ensure_token()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.post("/api/v1/analyze-text", json={
+            "text": "Hey, are we still on for lunch tomorrow?",
+            "os": "Android"
+        }, headers=_headers)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "scam_score" in data
+    assert "verdict" in data
+    assert "signals" in data
+    assert "top_signal" in data
+    assert "confidence" in data
+    assert "flagged_urls" in data
+    assert "meta" in data

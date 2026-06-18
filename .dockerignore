@@ -1,0 +1,17 @@
+.env
+*.env.*
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.pkl
+*.pt
+*.safetensors
+scam_text_model_final/
+notebooks and models/
+.git/
+tests/
+*.md
+appspec.yaml
+scripts/

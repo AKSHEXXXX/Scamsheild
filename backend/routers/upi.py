@@ -44,12 +44,16 @@ async def analyze_upi(body: AnalyzeUPIIn,
                  "title": "UPI Rule Engine", "detail": heuristic["explanation"]}]
     warning_count = 1 if heuristic["severity"] in ("HIGH", "MEDIUM") else 0
     result = {
-        "risk_score": min(100, score),
+        "scam_score": min(100, score),
         "verdict": verdict,
         "warning_count": warning_count,
         "extracted_text": body.note,
         "findings": findings,
         "flagged_urls": [],
     }
-    scan_id = persist_scan("upi", user_id, body.os, x_device_id, body.note, result, verdict == "high_risk")
+    try:
+        scan_id = persist_scan("upi", user_id, body.os, x_device_id, body.note, result, verdict == "high_risk")
+    except Exception as e:
+        logger.warning("Failed to persist scan (non-fatal): %s", e)
+        scan_id = ""
     return {"scan_id": scan_id, "kind": "upi", **result, "_meta": None}
