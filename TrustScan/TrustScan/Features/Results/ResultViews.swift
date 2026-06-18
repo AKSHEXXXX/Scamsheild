@@ -1,5 +1,14 @@
 import SwiftUI
 
+private func severityColor(_ severity: String) -> Color {
+  switch severity.lowercased() {
+  case "high": return ColorTokens.dng
+  case "medium": return ColorTokens.sus
+  case "low": return ColorTokens.sfe
+  default: return ColorTokens.st
+  }
+}
+
 struct AnalysisResultView: View {
   let result: AnalysisResult
   let onShare: () -> Void
@@ -188,14 +197,6 @@ struct AnalysisResultView: View {
     }
   }
 
-  private func severityColor(_ severity: String) -> Color {
-    switch severity.lowercased() {
-    case "high": return ColorTokens.dng
-    case "medium": return ColorTokens.sus
-    case "low": return ColorTokens.sfe
-    default: return ColorTokens.st
-    }
-  }
 }
 
 // Wrapper for Identifiable conformance
@@ -280,13 +281,5 @@ struct FindingDetailSheet: View {
     .presentationDetents([.medium, .large])
   }
 
-  private func severityColor(_ severity: String) -> Color {
-    switch severity.lowercased() {
-    case "high": return ColorTokens.dng
-    case "medium": return ColorTokens.sus
-    case "low": return ColorTokens.sfe
-    default: return ColorTokens.st
-    }
-  }
 }
 

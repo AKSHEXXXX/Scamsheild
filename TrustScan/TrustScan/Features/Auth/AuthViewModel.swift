@@ -11,24 +11,12 @@ final class AuthViewModel: NSObject, ObservableObject {
   @Published var errorMessage: String?
   @Published var isShowingSignUp = false
   @Published var signUpSuccessMessage: String?
-  @Published var canUseBiometrics = false
 
   let authService: SupabaseAuthService
 
   init(authService: SupabaseAuthService) {
     self.authService = authService
     super.init()
-    checkBiometricAvailability()
-  }
-
-  func checkBiometricAvailability() {
-    let context = LAContext()
-    var error: NSError?
-    if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-      canUseBiometrics = true
-    } else {
-      canUseBiometrics = false
-    }
   }
 
   func authenticateWithBiometrics() async {

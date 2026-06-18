@@ -30,8 +30,4 @@ struct RemoteAnalysisRepository: AnalysisRepositoryPort {
     return response.toDomain()
   }
 
-  func fetchHistory() async throws -> [AnalysisResult] {
-    let response: [ScanOutDTO] = try await apiClient.get(path: "/api/v1/history")
-    return response.map { $0.toDomain() }
-  }
 }

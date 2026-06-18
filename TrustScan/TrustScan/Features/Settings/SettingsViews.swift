@@ -90,10 +90,6 @@ struct SettingsView: View {
     }
   }
 
-  private func openAppSettings() {
-    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-    UIApplication.shared.open(url)
-  }
 }
 
 // MARK: - Privacy Policy View (S-13)

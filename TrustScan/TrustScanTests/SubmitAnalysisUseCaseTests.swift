@@ -7,14 +7,15 @@ final class SubmitAnalysisUseCaseTests: XCTestCase {
     let repository = MockAnalysisRepository()
     let expectedResult = AnalysisResult(
       id: UUID(),
-      verdict: .dangerous,
-      threatScore: 0.95,
+      verdict: .scam,
+      score: 95,
+      flagged: true,
       summary: "High risk test",
       extractedText: "test data",
-      indicators: [],
-      recommendations: [],
-      analysisTimestamp: Date(),
-      educationalContext: nil
+      findings: [],
+      flaggedUrls: [],
+      meta: nil,
+      analysisTimestamp: Date()
     )
     repository.mockResult = expectedResult
     
@@ -26,7 +27,7 @@ final class SubmitAnalysisUseCaseTests: XCTestCase {
     let (result, source) = try await useCase.callAsFunction(image: testImage)
 
     // Assert
-    XCTAssertEqual(result.verdict, .dangerous)
+    XCTAssertEqual(result.verdict, .scam)
     XCTAssertTrue(repository.analyzeTextWasCalled)
     XCTAssertFalse(repository.analyzeImageWasCalled)
     XCTAssertTrue(source.contains("On-device"))
@@ -38,13 +39,14 @@ final class SubmitAnalysisUseCaseTests: XCTestCase {
     let expectedResult = AnalysisResult(
       id: UUID(),
       verdict: .safe,
-      threatScore: 0.1,
+      score: 10,
+      flagged: false,
       summary: "Safe test",
       extractedText: "",
-      indicators: [],
-      recommendations: [],
-      analysisTimestamp: Date(),
-      educationalContext: nil
+      findings: [],
+      flaggedUrls: [],
+      meta: nil,
+      analysisTimestamp: Date()
     )
     repository.mockResult = expectedResult
     
@@ -103,6 +105,11 @@ class MockAnalysisRepository: AnalysisRepositoryPort {
 
   func analyze(image: PreparedImagePayload, fallbackReason: String) async throws -> AnalysisResult {
     analyzeImageWasCalled = true
+    if let error = mockError { throw error }
+    return mockResult!
+  }
+
+  func analyze(qrPayload: String) async throws -> AnalysisResult {
     if let error = mockError { throw error }
     return mockResult!
   }

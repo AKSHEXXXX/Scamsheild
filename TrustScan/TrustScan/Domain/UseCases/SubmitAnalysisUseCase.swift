@@ -62,7 +62,6 @@ actor OCRService {
 
     enum OCRSource {
         case onDevice
-        case backend
     }
 
     private let confidenceThreshold: Float = 0.6

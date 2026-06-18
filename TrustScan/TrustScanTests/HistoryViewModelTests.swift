@@ -6,7 +6,27 @@ final class HistoryViewModelTests: XCTestCase {
   func testLoadHistory_Success() async {
     // Arrange
     let mockRepo = MockHistoryRepository()
-    let entry = HistoryEntry(id: UUID(), analysisId: UUID(), verdict: .suspicious, threatScore: 0.5, analyzedAt: Date(), summary: "Test", thumbnailData: nil, resultSnapshot: AnalysisResult(id: UUID(), verdict: .suspicious, threatScore: 0.5, summary: "", extractedText: "", indicators: [], recommendations: [], analysisTimestamp: Date(), educationalContext: nil))
+    let entry = HistoryEntry(
+      id: UUID(),
+      analysisId: UUID(),
+      verdict: .suspicious,
+      score: 50,
+      analyzedAt: Date(),
+      summary: "Test",
+      thumbnailData: nil,
+      resultSnapshot: AnalysisResult(
+        id: UUID(),
+        verdict: .suspicious,
+        score: 50,
+        flagged: true,
+        summary: "",
+        extractedText: "",
+        findings: [],
+        flaggedUrls: [],
+        meta: nil,
+        analysisTimestamp: Date()
+      )
+    )
     mockRepo.mockEntries = [entry]
 
     let viewModel = HistoryViewModel(

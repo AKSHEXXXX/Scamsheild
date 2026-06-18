@@ -27,7 +27,6 @@
 		NEW23 /* DTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW24 /* DTOs.swift */; };
 		NEW25 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW26 /* APIClient.swift */; };
 		NEW27 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW28 /* SupabaseAuthService.swift */; };
-		NEW29 /* LocalAnalysisRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2A /* LocalAnalysisRepository.swift */; };
 		NEW2B /* RemoteAnalysisRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2C /* RemoteAnalysisRepository.swift */; };
 		NEW2D /* FileHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2E /* FileHistoryRepository.swift */; };
 		NEW2F /* RemoteConfigurationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW30 /* RemoteConfigurationRepository.swift */; };
@@ -35,6 +34,7 @@
 		NEW33 /* AuthViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW34 /* AuthViews.swift */; };
 		NEW35 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW36 /* OnboardingView.swift */; };
 		NEW37 /* SubmissionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW38 /* SubmissionHomeView.swift */; };
+		QRS03 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = QRS02 /* QRScannerView.swift */; };
 		NEW39 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3A /* ResultViews.swift */; };
 		NEW3B /* HistoryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3C /* HistoryViews.swift */; };
 		NEW3D /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3E /* SettingsViews.swift */; };
@@ -100,7 +100,6 @@
 		NEW24 /* DTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOs.swift; sourceTree = "<group>"; };
 		NEW26 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		NEW28 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
-		NEW2A /* LocalAnalysisRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAnalysisRepository.swift; sourceTree = "<group>"; };
 		NEW2C /* RemoteAnalysisRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAnalysisRepository.swift; sourceTree = "<group>"; };
 		NEW2E /* FileHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHistoryRepository.swift; sourceTree = "<group>"; };
 		NEW30 /* RemoteConfigurationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationRepository.swift; sourceTree = "<group>"; };
@@ -108,6 +107,7 @@
 		NEW34 /* AuthViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViews.swift; sourceTree = "<group>"; };
 		NEW36 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		NEW38 /* SubmissionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionHomeView.swift; sourceTree = "<group>"; };
+		QRS02 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		NEW3A /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
 		NEW3C /* HistoryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViews.swift; sourceTree = "<group>"; };
 		NEW3E /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
@@ -283,7 +283,6 @@
 		GRP_DATA_REPOSITORIES /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				NEW2A /* LocalAnalysisRepository.swift */,
 				NEW2C /* RemoteAnalysisRepository.swift */,
 				NEW2E /* FileHistoryRepository.swift */,
 				NEW30 /* RemoteConfigurationRepository.swift */,
@@ -350,6 +349,7 @@
 				GRP_FEATURES_AUTH /* Auth */,
 				GRP_FEATURES_ONBOARDING /* Onboarding */,
 				GRP_FEATURES_SUBMISSION /* Submission */,
+				QRS01 /* Scanner */,
 				GRP_FEATURES_RESULTS /* Results */,
 				GRP_FEATURES_HISTORY /* History */,
 				GRP_FEATURES_SETTINGS /* Settings */,
@@ -421,6 +421,14 @@
 				NEW40 /* ViewModels.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		QRS01 /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				QRS02 /* QRScannerView.swift */,
+			);
+			path = Scanner;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -562,7 +570,6 @@
 				NEW23 /* DTOs.swift in Sources */,
 				NEW25 /* APIClient.swift in Sources */,
 				NEW27 /* SupabaseAuthService.swift in Sources */,
-				NEW29 /* LocalAnalysisRepository.swift in Sources */,
 				NEW2B /* RemoteAnalysisRepository.swift in Sources */,
 				NEW2D /* FileHistoryRepository.swift in Sources */,
 				NEW2F /* RemoteConfigurationRepository.swift in Sources */,
@@ -570,6 +577,7 @@
 				NEW33 /* AuthViews.swift in Sources */,
 				NEW35 /* OnboardingView.swift in Sources */,
 				NEW37 /* SubmissionHomeView.swift in Sources */,
+				QRS03 /* QRScannerView.swift in Sources */,
 				8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */,
 				8B214CCF2FDD565800431205 /* ProfileView.swift in Sources */,
 				8B214CD02FDD565800431205 /* BlogsViewModel.swift in Sources */,

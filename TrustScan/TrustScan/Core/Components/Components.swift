@@ -1,5 +1,10 @@
 import SwiftUI
 
+func openAppSettings() {
+  guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+  UIApplication.shared.open(url)
+}
+
 struct SectionCard<Content: View>: View {
   let title: String?
   @ViewBuilder let content: Content

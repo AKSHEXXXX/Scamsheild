@@ -80,5 +80,4 @@ enum AppTab: Hashable {
   case scan
   case blogs
   case history
-  case profile
 }

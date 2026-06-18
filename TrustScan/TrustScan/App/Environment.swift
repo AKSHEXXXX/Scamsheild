@@ -32,8 +32,4 @@ enum APIEnvironment {
   static var backendBaseURL: String {
     env["BACKEND_URL"] ?? "https://placeholder-backend.com"
   }
-
-  // Hardwired admin credentials
-  static let adminEmail = "admin@trustscan.app"
-  static let adminPassword = "Admin123!"
 }
