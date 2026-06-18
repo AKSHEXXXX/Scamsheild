@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger("scamshield.ml.ensemble")
+logger = logging.getLogger("scamshield.agents.ensemble")
 
 WEIGHT_TABLES = {
     "text": {"text_prob": 0.50, "url_prob": 0.10, "blacklist_hit_flat": 20,
@@ -25,7 +25,6 @@ WEIGHT_TABLES = {
 
 VERDICT_SAFE = 39
 VERDICT_SUSPICIOUS = 69
-VERDICT_SCAM = 70
 
 def compute(signals: dict, scan_type: str = "text") -> dict:
     weights = WEIGHT_TABLES.get(scan_type, WEIGHT_TABLES["text"])
@@ -35,13 +34,11 @@ def compute(signals: dict, scan_type: str = "text") -> dict:
     text_prob = signals.get("text_prob", -1)
     if text_prob >= 0:
         weighted += text_prob * weights["text_prob"] * 100
-    if text_prob >= 0:
-        contributions["text_prob"] = round(text_prob, 4)
+    contributions["text_prob"] = round(text_prob, 4) if text_prob >= 0 else None
 
     url_prob = signals.get("url_prob", -1)
     if url_prob >= 0:
         weighted += url_prob * weights["url_prob"] * 100
-    if url_prob >= 0:
         contributions["url_prob"] = round(url_prob, 4)
 
     if weights["blacklist_hit_flat"] and signals.get("blacklist_hit"):
@@ -97,7 +94,7 @@ def compute(signals: dict, scan_type: str = "text") -> dict:
     else:
         verdict = "high_risk"
 
-    top_signal = max(contributions, key=contributions.get) if contributions else "none"
+    top_signal = max((k for k, v in contributions.items() if v is not None), key=lambda k: contributions[k] or 0) if any(v is not None for v in contributions.values()) else "none"
     confidence = round(score / 100.0, 2)
 
     return {

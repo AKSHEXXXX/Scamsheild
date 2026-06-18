@@ -47,3 +47,7 @@ backend/app/ml/artifacts/*
 !backend/app/ml/artifacts/qr_url_*.pkl
 !backend/app/ml/artifacts/qr_model_report.json
 !backend/app/ml/artifacts/scamshield_*.pkl
+!backend/app/ml/artifacts/text_*.pkl
+!backend/app/ml/artifacts/text_*.json
+!backend/app/ml/artifacts/url_blacklist.pkl
+!backend/app/ml/artifacts/agent4_*.json

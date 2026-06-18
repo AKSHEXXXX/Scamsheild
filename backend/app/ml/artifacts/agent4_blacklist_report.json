@@ -1,0 +1,9 @@
+{
+  "total_domains": 437255,
+  "sources": [
+    "OpenPhish",
+    "Phishing.Database"
+  ],
+  "last_updated": "2026-06-18 14:49:13.409432",
+  "description": "URL Blacklist for ScamShield - Agent 4"
+}

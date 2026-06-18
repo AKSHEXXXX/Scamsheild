@@ -1,7 +1,11 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_DIR = Path(os.getenv("MODEL_DIR", str(BASE_DIR / "app" / "ml" / "artifacts")))
 
 class Settings:
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")

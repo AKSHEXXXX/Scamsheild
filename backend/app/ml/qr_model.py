@@ -122,7 +122,7 @@ def _load():
         return
     for name in ("qr_url_classifier.pkl", "qr_url_scaler.pkl", "qr_url_features.pkl"):
         if not os.path.exists(os.path.join(ARTIFACT_DIR, name)):
-            logger.warning("QR model files not found — falling back")
+            logger.warning("QR model files not found ΓÇö falling back")
             return
     _model = joblib.load(os.path.join(ARTIFACT_DIR, "qr_url_classifier.pkl"))
     _scaler = joblib.load(os.path.join(ARTIFACT_DIR, "qr_url_scaler.pkl"))

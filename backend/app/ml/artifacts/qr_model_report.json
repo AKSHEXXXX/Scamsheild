@@ -1,299 +1,48 @@
 {
-  "auc_roc": 0.998,
-  "accuracy": 0.976,
-  "features_used": [
-    "url_length",
-    "normalized_url_length",
-    "host_length",
-    "path_length",
-    "query_length",
-    "fragment_length",
-    "num_dots",
-    "num_hyphens",
-    "num_underscores",
-    "num_slashes",
-    "num_question_marks",
-    "num_equals",
-    "num_ampersands",
-    "num_percent",
-    "num_at",
-    "digit_count",
-    "letter_count",
-    "digit_ratio",
-    "special_char_count",
-    "special_char_ratio",
-    "entropy",
-    "host_entropy",
-    "path_entropy",
-    "has_https",
-    "has_http",
-    "missing_scheme",
-    "is_ip_host",
-    "has_port",
-    "subdomain_count",
-    "domain_token_length",
-    "tld_length",
-    "is_suspicious_tld",
-    "is_shortener",
-    "has_punycode",
-    "has_url_encoding",
-    "has_base64_like",
-    "has_hex_like",
-    "query_param_count",
-    "has_redirect_param",
-    "has_login_word",
-    "has_verify_word",
-    "has_kyc_word",
-    "has_otp_word",
-    "has_bank_word",
-    "has_upi_word",
-    "brand_keyword_count",
-    "risk_word_count",
-    "contains_rupee",
-    "payload_is_plain_text",
-    "payload_has_upi",
-    "payload_has_phone"
-  ],
-  "n_train": 7650,
-  "n_val": 850,
-  "n_test": 1500,
-  "class_counts": {
-    "benign": 5000,
-    "malicious": 5000
+  "model": "XGBoost QR Threat Classifier",
+  "agent": "Agent 5",
+  "auc": 0.9863,
+  "n_train": 16000,
+  "n_test": 4000,
+  "raw_label_distribution": {
+    "0": 100700,
+    "1": 100700
   },
-  "classification_report_text": "              precision    recall  f1-score   support\n\n      Benign       0.98      0.97      0.98       750\n   Malicious       0.97      0.98      0.98       750\n\n    accuracy                           0.98      1500\n   macro avg       0.98      0.98      0.98      1500\nweighted avg       0.98      0.98      0.98      1500\n",
-  "confusion_matrix": [
-    [
-      726,
-      24
-    ],
-    [
-      12,
-      738
-    ]
+  "sample_label_distribution": {
+    "1": 10000,
+    "0": 10000
+  },
+  "feature_label_distribution": {
+    "1": 10000,
+    "0": 10000
+  },
+  "decode_rate_by_class": {
+    "0": 0.9479,
+    "1": 0.9434
+  },
+  "features": [
+    "IsURL",
+    "IsUPI",
+    "IsTel",
+    "PayloadLen",
+    "HasSuspiciousKeyword",
+    "IsHTTPS",
+    "HasIP",
+    "URLLen",
+    "NumDots",
+    "NumSlash",
+    "NumDash",
+    "NumAt",
+    "NumEquals",
+    "NumQMark",
+    "NumAmpersand",
+    "NumDigits",
+    "SubdomainCount",
+    "Decodable"
   ],
-  "sample_errors": [
-    {
-      "payload": "91754    https://www.ww1.dowtheoryletters.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.5731161832809448
-    },
-    {
-      "payload": "62036    https://www.queenelizabethii2011.blogspot.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.6480579972267151
-    },
-    {
-      "payload": "345821    http://cooperdonto-se.com.br/webbenefits.php\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.4858933091163635
-    },
-    {
-      "payload": "65242    https://www.route66news.com/campgrounds/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.9657177925109863
-    },
-    {
-      "payload": "81444    https://www.ufdc.ufl.edu/UF00098809/00408\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.819767415523529
-    },
-    {
-      "payload": "95312    https://www.62644.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.9156885147094727
-    },
-    {
-      "payload": "46002    https://www.mp3panda.com/letter/j/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.9942505359649658
-    },
-    {
-      "payload": "42739    https://www.miltonhigh1961.com/2994/3036.html\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.5197824835777283
-    },
-    {
-      "payload": "407089    http://www.totaloverland.com/07857378/eShare/2/\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.4280315637588501
-    },
-    {
-      "payload": "371983    http://subang.go.id/wg153\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.22802972793579102
-    },
-    {
-      "payload": "92662    https://www.123people.ca/s/steve+lang\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.5055768489837646
-    },
-    {
-      "payload": "366947    http://my.digitalfilth.info/404/admin.php\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.1267366260290146
-    },
-    {
-      "payload": "352193    http://nyumbabora.co.ke/filder/a000l.html\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.30853965878486633
-    },
-    {
-      "payload": "26812    https://www.home.earthlink.net/%7Emacsharp/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.643157958984375
-    },
-    {
-      "payload": "94537    https://www.1funcity.com/hotel/roomsrates.asp\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.6837278604507446
-    },
-    {
-      "payload": "367651    http://download-hot.ru/installs/573/0539cbb4.exe\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.4291788637638092
-    },
-    {
-      "payload": "61500    https://www.public.fotki.com/francise33/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.7860062718391418
-    },
-    {
-      "payload": "364190    http://tabidzuwek.ru/ldl01/index.php\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.45797014236450195
-    },
-    {
-      "payload": "95207    https://www.505live.net/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.5017947554588318
-    },
-    {
-      "payload": "20454    https://www.fremont-oh.a2zcity.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.7736185789108276
-    },
-    {
-      "payload": "94650    https://www.20essexst.com/member/simon-milnes\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.8588069081306458
-    },
-    {
-      "payload": "62442    https://www.radio3.cbc.ca/bands/PETER-ELKAS\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.8806595206260681
-    },
-    {
-      "payload": "323684    http://coalimpex.com/web/hot-venda/hven_01.php\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.4503653645515442
-    },
-    {
-      "payload": "27538    https://www.hosted.where2getit.com/reitmans/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.8700217604637146
-    },
-    {
-      "payload": "54626    https://www.pasko-mp3chikitita.blogspot.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.6388440728187561
-    },
-    {
-      "payload": "26869    https://www.home.gwi.net/~frenchgen/correct1.htm\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.9015161991119385
-    },
-    {
-      "payload": "66108    https://www.sanrock.livejournal.com/29934.html\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.7504514455795288
-    },
-    {
-      "payload": "35632    https://www.larch-www.lcs.mit.edu:8001/~corbato/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.9174724221229553
-    },
-    {
-      "payload": "353002    http://aguasdelatrato.com/web/tmp/2016/index.php\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.48109671473503113
-    },
-    {
-      "payload": "353438    http://appsweb.in/fonts/sample.php?email=%0%\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.3560270369052887
-    },
-    {
-      "payload": "48047    https://www.musicproducer4hire.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.987166702747345
-    },
-    {
-      "payload": "334643    http://fb-me-bit-ly.wapka.me/site_1.xhtml\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.24290315806865692
-    },
-    {
-      "payload": "63153    https://www.realdealmafia.com/montreal6.html\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.8932204842567444
-    },
-    {
-      "payload": "27479    https://www.horizonsrecruitment.co.uk/xSJzv7u/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.6279737949371338
-    },
-    {
-      "payload": "383561    http://www.myinfo.ocry.com/images/D2015_id.jpg\nName: url, dtype: object",
-      "true": "Malicious",
-      "pred": "Benign",
-      "malicious_probability": 0.47963768243789673
-    },
-    {
-      "payload": "39578    https://www.m3-consulting.com/\nName: url, dtype: object",
-      "true": "Benign",
-      "pred": "Malicious",
-      "malicious_probability": 0.9392687082290649
-    }
-  ],
-  "required_files": [
-    "qr_url_classifier.pkl",
-    "qr_url_scaler.pkl",
-    "qr_url_features.pkl",
-    "qr_model_report.json"
+  "artifacts": [
+    "qr_classifier.pkl",
+    "qr_scaler.pkl",
+    "qr_feature_cols.pkl"
   ]
 }
