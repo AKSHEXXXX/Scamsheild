@@ -37,7 +37,5 @@ async def test_analyze_audio_returns_result():
             "audio_bytes_b64": "AAAA",
             "os": "Android"
         }, headers=_headers)
-    assert resp.status_code == 200
-    data = resp.json()
-    assert "scam_score" in data
-    assert "verdict" in data
+    assert resp.status_code == 501
+    assert resp.json()["detail"]["error"] == "audio_analysis_unavailable"

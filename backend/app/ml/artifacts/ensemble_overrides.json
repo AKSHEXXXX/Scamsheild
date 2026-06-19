@@ -1,0 +1,11 @@
+{
+  "VERDICT_SAFE": 39,
+  "VERDICT_SUSPICIOUS": 69,
+  "hard_overrides": [
+    {"condition": "blacklist_hit", "min_score": 80},
+    {"condition": "upi_rule_gte_70", "min_score": 65},
+    {"condition": "brand_flag", "min_score": 60},
+    {"condition": "deepfake_prob_gt_0.85", "min_score": 70},
+    {"condition": "regex_high", "min_score": 60}
+  ]
+}

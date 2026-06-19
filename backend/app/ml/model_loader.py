@@ -13,6 +13,7 @@ MODEL_DIR = Path(__file__).resolve().parent / "artifacts"
 
 _models: dict[str, Any] = {}
 _accuracy: dict[str, Any] = {}
+_reports: dict[str, Any] = {}
 
 def _load_json(path: Path) -> dict:
     try:
@@ -48,6 +49,7 @@ def _load_agent1_text():
         _models["agent1_vectorizer"] = vec
         _models["agent1_classifier"] = clf
         _models["agent1_label_encoder"] = enc
+        _models["agent1"] = {"vectorizer": vec, "classifier": clf}
         try:
             rep = _load_json(MODEL_DIR / "scamshield_model_report.json")
             if not rep:
@@ -65,9 +67,9 @@ def _load_agent2_distilbert():
     logger.info("[STARTUP] Agent 2 — DistilBERT FP16 skipped (requires PyTorch)")
 
 def _load_agent3_url():
-    clf = _load_pickle(MODEL_DIR / "url_xgb_classifier.pkl")
-    sc = _load_pickle(MODEL_DIR / "url_xgb_scaler.pkl")
-    cols = _load_pickle(MODEL_DIR / "url_xgb_feature_cols.pkl")
+    clf = _load_pickle(MODEL_DIR / "url_classifier.pkl")
+    sc = _load_pickle(MODEL_DIR / "url_scaler.pkl")
+    cols = _load_pickle(MODEL_DIR / "url_feature_cols.pkl")
     if clf is not None and sc is not None and cols is not None:
         _models["agent3_classifier"] = clf
         _models["agent3_scaler"] = sc
@@ -80,22 +82,24 @@ def _load_agent3_url():
         _accuracy["agent3"] = {"metric": "AUC", "value": "N/A"}
 
 def _load_agent4_blacklist():
-    p = _load_pickle(MODEL_DIR / "phishing_domains.pkl")
+    p = _load_pickle(MODEL_DIR / "url_blacklist.pkl")
     if p is not None:
         domains = p if isinstance(p, set) else p.get("domains", set())
         _models["agent4_blacklist"] = domains
+        _models["agent4"] = {"domains": domains, "meta": {"total_domains": len(domains)}}
         total = len(domains)
         _accuracy["agent4"] = {"metric": "Coverage", "value": f"{total} domains"}
         logger.info("[STARTUP] Agent 4 — URL Blacklist Checker loaded ✓ (%d domains)", total)
     else:
         logger.warning("[STARTUP] Agent 4 — URL Blacklist Checker FAILED, using Supabase blacklist only")
         _models["agent4_blacklist"] = set()
+        _models["agent4"] = {"domains": set(), "meta": {"total_domains": 0}}
         _accuracy["agent4"] = {"metric": "Coverage", "value": "Supabase only"}
 
 def _load_agent5_qr():
-    clf = _load_pickle(MODEL_DIR / "qr_xgb_classifier.pkl")
-    sc = _load_pickle(MODEL_DIR / "qr_xgb_scaler.pkl")
-    cols = _load_pickle(MODEL_DIR / "qr_xgb_feature_cols.pkl")
+    clf = _load_pickle(MODEL_DIR / "qr_url_classifier.pkl")
+    sc = _load_pickle(MODEL_DIR / "qr_url_scaler.pkl")
+    cols = _load_pickle(MODEL_DIR / "qr_url_features.pkl")
     if clf is not None and sc is not None and cols is not None:
         _models["agent5_classifier"] = clf
         _models["agent5_scaler"] = sc
@@ -212,9 +216,40 @@ def load_all():
     _load_agent12_whisper()
     _load_agent13_call_transcript()
     _load_agent15_ensemble()
+    _populate_reports()
     logger.info("Model loading complete — %d/%d agents loaded", 
                 sum(1 for k in _models if not k.endswith("_available")), 15)
     return _models
+
+def _populate_reports():
+    reports_map = {
+        "agent1": _accuracy.get("agent1", {}).get("value", "N/A"),
+        "agent2": "skipped — model not loaded",
+        "agent3": _accuracy.get("agent3", {}).get("value", "N/A"),
+        "agent4": _accuracy.get("agent4", {}).get("value", "N/A"),
+        "agent5": _accuracy.get("agent5", {}).get("value", "N/A"),
+        "agent7": _accuracy.get("agent7", {}).get("value", "N/A"),
+        "agent8": _accuracy.get("agent8", {}).get("value", "N/A"),
+        "agent9": "skipped — model not loaded",
+        "agent10": "skipped — model not loaded",
+        "agent11": _accuracy.get("agent11", {}).get("value", "N/A"),
+        "agent12": "skipped — model not loaded",
+        "agent13": "skipped — model not loaded",
+    }
+    for aid, val in reports_map.items():
+        if val == "skipped — model not loaded":
+            _reports[aid] = {"auc": val} if aid not in ("agent4", "agent12") else (
+                {"total_domains": 0} if aid == "agent4" else {"wer": val})
+        elif aid == "agent4":
+            total = int(val.split()[0]) if val != "Supabase only" else 0
+            _reports[aid] = {"total_domains": total}
+        elif aid == "agent8":
+            _reports[aid] = {"precision": val}
+        else:
+            _reports[aid] = {"auc": val}
+    _reports["agent6"] = {"type": "Rule-based: 100% deterministic"}
+    _reports["agent14"] = {"type": "Rule-based: 36 rules, 100% deterministic"}
+    _reports["agent15"] = {"type": "Calibrated weight tables + hard overrides"}
 
 def get_models() -> dict:
     return _models
@@ -222,11 +257,11 @@ def get_models() -> dict:
 def get_accuracy() -> dict:
     return _accuracy
 
+def get_reports() -> dict:
+    return _reports
+
 def get_models_loaded_count() -> int:
     count = 0
-    for k in _models:
-        if k in ("agent1_vectorizer", "agent1_classifier", "agent1_label_encoder"):
-            count = count + 1 if k == "agent1_classifier" else count
     if "agent1_classifier" in _models:
         count += 1
     if "agent3_classifier" in _models:
@@ -236,6 +271,10 @@ def get_models_loaded_count() -> int:
     if "agent5_classifier" in _models:
         count += 1
     if "agent6_upi_engine" in _models:
+        count += 1
+    if "agent7_classifier" in _models:
+        count += 1
+    if "agent8_whitelist" in _models:
         count += 1
     if "agent11_classifier" in _models:
         count += 1

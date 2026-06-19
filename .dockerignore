@@ -5,7 +5,6 @@ __pycache__/
 *.pyo
 .venv/
 venv/
-*.pkl
 *.pt
 *.safetensors
 scam_text_model_final/
@@ -14,4 +13,3 @@ notebooks and models/
 tests/
 *.md
 appspec.yaml
-scripts/

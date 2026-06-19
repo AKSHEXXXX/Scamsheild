@@ -7,7 +7,7 @@ from app.auth import require_user
 from app.helpers import persist_scan
 from agents.agent1_text_tfidf import predict as agent1_predict
 from agents.agent15_ensemble import compute
-from models.loader import get_models
+from app.ml.model_loader import get_models
 from schemas.scan_result import ScanResult, SignalsBlock
 from utils.url import extract_domain
 

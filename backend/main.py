@@ -13,8 +13,6 @@ async def lifespan(app: FastAPI):
     logger.info("Loading all AI agents at startup...")
     from app.ml.model_loader import load_all
     load_all()
-    from models.loader import load_all_models
-    load_all_models()
     yield
 
 app = FastAPI(title="ScamShield API", version="2.1.0", lifespan=lifespan)

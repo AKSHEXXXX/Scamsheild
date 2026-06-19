@@ -51,3 +51,12 @@ backend/app/ml/artifacts/*
 !backend/app/ml/artifacts/text_*.json
 !backend/app/ml/artifacts/url_blacklist.pkl
 !backend/app/ml/artifacts/agent4_*.json
+!backend/app/ml/artifacts/brand_*.pkl
+!backend/app/ml/artifacts/brand_*.json
+!backend/app/ml/artifacts/malware_*.pkl
+!backend/app/ml/artifacts/upi_*.pkl
+!backend/app/ml/artifacts/upi_*.json
+!backend/app/ml/artifacts/ensemble_*.json
+!backend/app/ml/artifacts/phishing_domains.pkl
+!backend/app/ml/artifacts/regex_engine_report.json
+!backend/app/ml/artifacts/scamshield_rules_metadata.json

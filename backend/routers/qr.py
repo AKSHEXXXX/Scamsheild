@@ -6,7 +6,7 @@ from app.auth import require_user
 from app.helpers import persist_scan
 from agents.agent4_blacklist import check as blacklist_check
 from agents.agent15_ensemble import compute_ensemble_verdict
-from models.loader import get_models
+from app.ml.model_loader import get_models
 
 router = APIRouter(tags=["qr"])
 logger = logging.getLogger("scamshield.qr")

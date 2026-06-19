@@ -1,30 +1,20 @@
+import json
 import logging
+from pathlib import Path
 
 logger = logging.getLogger("scamshield.agents.ensemble")
 
-WEIGHT_TABLES = {
-    "text": {"text_prob": 0.50, "url_prob": 0.10, "blacklist_hit_flat": 20,
-             "brand_flag": 0.10, "upi_rule_score": 0.05, "upi_xgb_prob": 0.0,
-             "deepfake_prob": 0.0, "malware_prob": 0.0, "call_fraud_prob": 0.0, "regex_score": 0.15},
-    "url":  {"text_prob": 0.10, "url_prob": 0.55, "blacklist_hit_flat": 20,
-             "brand_flag": 0.20, "upi_rule_score": 0.05, "upi_xgb_prob": 0.0,
-             "deepfake_prob": 0.0, "malware_prob": 0.0, "call_fraud_prob": 0.0, "regex_score": 0.05},
-    "qr":   {"text_prob": 0.10, "url_prob": 0.30, "blacklist_hit_flat": 20,
-             "brand_flag": 0.15, "upi_rule_score": 0.10, "upi_xgb_prob": 0.05,
-             "deepfake_prob": 0.0, "malware_prob": 0.0, "call_fraud_prob": 0.0, "regex_score": 0.10},
-    "upi":  {"text_prob": 0.05, "url_prob": 0.05, "blacklist_hit_flat": 0,
-             "brand_flag": 0.05, "upi_rule_score": 0.50, "upi_xgb_prob": 0.30,
-             "deepfake_prob": 0.0, "malware_prob": 0.0, "call_fraud_prob": 0.0, "regex_score": 0.05},
-    "image": {"text_prob": 0.10, "url_prob": 0.05, "blacklist_hit_flat": 0,
-              "brand_flag": 0.05, "upi_rule_score": 0.05, "upi_xgb_prob": 0.0,
-              "deepfake_prob": 0.60, "malware_prob": 0.15, "call_fraud_prob": 0.0, "regex_score": 0.05},
-    "audio": {"text_prob": 0.40, "url_prob": 0.05, "blacklist_hit_flat": 0,
-              "brand_flag": 0.05, "upi_rule_score": 0.05, "upi_xgb_prob": 0.0,
-              "deepfake_prob": 0.0, "malware_prob": 0.0, "call_fraud_prob": 0.40, "regex_score": 0.05},
-}
+_ARTIFACTS = Path(__file__).resolve().parent.parent / "app" / "ml" / "artifacts"
 
-VERDICT_SAFE = 39
-VERDICT_SUSPICIOUS = 69
+with open(_ARTIFACTS / "ensemble_weights.json") as f:
+    WEIGHT_TABLES = json.load(f)
+
+with open(_ARTIFACTS / "ensemble_overrides.json") as f:
+    _overrides = json.load(f)
+
+VERDICT_SAFE = _overrides.get("VERDICT_SAFE", 39)
+VERDICT_SUSPICIOUS = _overrides.get("VERDICT_SUSPICIOUS", 69)
+HARD_OVERRIDES = _overrides.get("hard_overrides", [])
 
 def compute(signals: dict, scan_type: str = "text") -> dict:
     weights = WEIGHT_TABLES.get(scan_type, WEIGHT_TABLES["text"])
@@ -74,16 +64,19 @@ def compute(signals: dict, scan_type: str = "text") -> dict:
 
     score = int(round(weighted))
 
-    if signals.get("blacklist_hit"):
-        score = max(score, 80)
-    if upi_rule >= 70:
-        score = max(score, 65)
-    if signals.get("brand_flag"):
-        score = max(score, 60)
-    if deepfake and deepfake > 0.85:
-        score = max(score, 70)
-    if signals.get("regex_high"):
-        score = max(score, 60)
+    for override in HARD_OVERRIDES:
+        cond = override.get("condition", "")
+        min_scr = override.get("min_score", 0)
+        if cond == "blacklist_hit" and signals.get("blacklist_hit"):
+            score = max(score, min_scr)
+        elif cond == "upi_rule_gte_70" and upi_rule >= 70:
+            score = max(score, min_scr)
+        elif cond == "brand_flag" and signals.get("brand_flag"):
+            score = max(score, min_scr)
+        elif cond == "deepfake_prob_gt_0.85" and deepfake and deepfake > 0.85:
+            score = max(score, min_scr)
+        elif cond == "regex_high" and signals.get("regex_high"):
+            score = max(score, min_scr)
 
     score = min(100, max(0, score))
 

@@ -10,13 +10,11 @@ router = APIRouter(tags=["meta"])
 
 @router.get("/health")
 def health():
-    from models.loader import get_models_loaded_count, get_reports
-    from app.ml.model_loader import get_models_loaded_count as get_old_count
+    from app.ml.model_loader import get_models_loaded_count
     return {
         "status": "ok",
         "version": "2.1.0",
-        "models_loaded": get_old_count(),
-        "new_models_loaded": get_models_loaded_count(),
+        "models_loaded": get_models_loaded_count(),
     }
 
 @router.get("/api/v1/config", response_model=ConfigOut)
@@ -39,7 +37,7 @@ def get_config():
 
 @router.get("/api/model-accuracy")
 def model_accuracy():
-    from models.loader import get_reports, get_models_loaded_count
+    from app.ml.model_loader import get_reports, get_models_loaded_count
     reports = get_reports()
     agents_list = [
         {"id": 1,  "name": "Text Scam Classifier (TF-IDF + LogReg)",    "metric": "AUC",        "value": reports.get("agent1", {}).get("auc", "N/A")},

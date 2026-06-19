@@ -1,0 +1,169 @@
+{
+  "rules": [
+    {
+      "name": "OTP_REQUEST",
+      "pattern": "\\b(otp|one.?time.?pass|verification code)\\b",
+      "severity": "HIGH",
+      "score": 85
+    },
+    {
+      "name": "PIN_REQUEST",
+      "pattern": "\\b(share.{0,15}pin|enter.{0,15}pin|pin.{0,10}expired)\\b",
+      "severity": "HIGH",
+      "score": 85
+    },
+    {
+      "name": "ACCOUNT_BLOCK",
+      "pattern": "\\b(account.{0,20}(blocked|suspended|frozen|disabled))\\b",
+      "severity": "HIGH",
+      "score": 80
+    },
+    {
+      "name": "KYC_URGENCY",
+      "pattern": "\\b(kyc.{0,20}(update|expire|pending|verify))\\b",
+      "severity": "HIGH",
+      "score": 80
+    },
+    {
+      "name": "BANK_VERIFY",
+      "pattern": "\\b(verify.{0,20}(bank|account|upi|card))\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "CARD_DETAILS",
+      "pattern": "\\b(card.{0,15}(number|cvv|expiry|details))\\b",
+      "severity": "HIGH",
+      "score": 85
+    },
+    {
+      "name": "UPI_COLLECT",
+      "pattern": "\\b(upi.{0,20}collect|collect request|approve.{0,10}upi)\\b",
+      "severity": "HIGH",
+      "score": 80
+    },
+    {
+      "name": "FAKE_REFUND",
+      "pattern": "\\b(refund.{0,20}(link|click|upi|paytm|phonepe))\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "CASHBACK_SCAM",
+      "pattern": "\\b(cashback.{0,20}(claim|link|click|verify))\\b",
+      "severity": "MED",
+      "score": 60
+    },
+    {
+      "name": "LOTTERY_WIN",
+      "pattern": "\\b(won|winner|winning|lottery|lucky draw|selected)\\b",
+      "severity": "HIGH",
+      "score": 80
+    },
+    {
+      "name": "PRIZE_CLAIM",
+      "pattern": "\\b(prize.{0,20}(claim|collect|transfer|amount))\\b",
+      "severity": "HIGH",
+      "score": 80
+    },
+    {
+      "name": "FREE_GIFT",
+      "pattern": "\\b(free.{0,15}(gift|iphone|laptop|tv|bike|car|cash))\\b",
+      "severity": "MED",
+      "score": 65
+    },
+    {
+      "name": "JOB_OFFER",
+      "pattern": "\\b(job.{0,20}(offer|opening|vacancy|apply|earn).{0,20}(home|online|daily|week))\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "WORK_FROM_HOME",
+      "pattern": "\\b(work from home.{0,30}(earn|\u20b9|rs\\.?|lakh|thousand))\\b",
+      "severity": "MED",
+      "score": 65
+    },
+    {
+      "name": "PART_TIME_EARN",
+      "pattern": "\\b(part.?time.{0,20}earn.{0,20}(daily|week|month))\\b",
+      "severity": "MED",
+      "score": 60
+    },
+    {
+      "name": "URGENT_ACTION",
+      "pattern": "\\b(urgent|immediately|last chance|expire.{0,10}(today|hour|minute))\\b",
+      "severity": "MED",
+      "score": 60
+    },
+    {
+      "name": "LEGAL_THREAT",
+      "pattern": "\\b(legal action|court|arrest|fir|police.{0,20}complaint)\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "ACCOUNT_DELETE",
+      "pattern": "\\b(account.{0,20}(delete|close|terminat).{0,20}(hour|day|today))\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "SHORTENED_URL",
+      "pattern": "\\b(bit\\.ly|tinyurl\\.com|t\\.co|goo\\.gl|ow\\.ly|rb\\.gy)\\b",
+      "severity": "MED",
+      "score": 65
+    },
+    {
+      "name": "CLICK_LINK",
+      "pattern": "\\b(click.{0,20}(link|here|now|below).{0,20}(verify|win|claim|update))\\b",
+      "severity": "MED",
+      "score": 60
+    },
+    {
+      "name": "APK_INSTALL",
+      "pattern": "\\b(install.{0,20}(app|apk)|download.{0,20}(app|apk))\\b",
+      "severity": "HIGH",
+      "score": 70
+    },
+    {
+      "name": "PM_SCHEME",
+      "pattern": "\\b(pm.{0,15}(yojana|scheme|modi|awas|kisan).{0,20}(benefit|amount|apply))\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "AADHAAR_SCAM",
+      "pattern": "\\b(aadhaar.{0,20}(update|link|expire|verify|block))\\b",
+      "severity": "HIGH",
+      "score": 80
+    },
+    {
+      "name": "ELECTRICITY_BILL",
+      "pattern": "\\b(electricity.{0,20}(bill|disconnect|cut).{0,20}(today|hour|pay))\\b",
+      "severity": "HIGH",
+      "score": 75
+    },
+    {
+      "name": "INSURANCE_SCAM",
+      "pattern": "\\b(insurance.{0,20}(policy|claim|expire|bonus).{0,20}(click|link|call))\\b",
+      "severity": "MED",
+      "score": 60
+    },
+    {
+      "name": "LARGE_AMOUNT",
+      "pattern": "(\u20b9|rs\\.?|inr).{0,5}[0-9,]+\\s*(lakh|crore|thousand|k\\b)",
+      "severity": "MED",
+      "score": 55
+    },
+    {
+      "name": "DAILY_EARN",
+      "pattern": "\\b(earn.{0,15}(\u20b9|rs\\.?|inr).{0,10}(daily|per day|everyday))\\b",
+      "severity": "MED",
+      "score": 60
+    }
+  ],
+  "scam_threshold": 20,
+  "suspicious_threshold": 40,
+  "version": "1.0"
+}

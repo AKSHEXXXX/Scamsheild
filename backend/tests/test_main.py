@@ -99,3 +99,63 @@ def test_labeled_split_all_legit_pass():
             failures.append(f"  {s['label']}: got '{verdict}' ({score}), expected {s['expected_verdict_in']}")
 
     assert not failures, f"\n{len(failures)} legit message(s) falsely flagged:\n" + "\n".join(failures)
+
+
+_headers = {}
+
+def _ensure_token():
+    if _headers:
+        return
+    try:
+        resp = supabase.auth.sign_in_with_password({"email": "test-runner@scamshield.com", "password": "testpass123"})
+        _headers["Authorization"] = f"Bearer {resp.session.access_token}"
+    except Exception:
+        resp = supabase.auth.admin.create_user({"email": "test-runner@scamshield.com", "password": "testpass123", "email_confirm": True})
+        resp2 = supabase.auth.sign_in_with_password({"email": "test-runner@scamshield.com", "password": "testpass123"})
+        _headers["Authorization"] = f"Bearer {resp2.session.access_token}"
+
+@skip_if_no_supabase
+@pytest.mark.anyio
+async def test_report_submission():
+    _ensure_token()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.post("/api/v1/report", json={
+            "report_type": "other",
+            "value": "test-report@example.com",
+            "channel": "email",
+            "os": "Android"
+        }, headers=_headers)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["ok"] is True
+
+@skip_if_no_supabase
+@pytest.mark.anyio
+async def test_history_returns_structured():
+    _ensure_token()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.get("/api/v1/history", headers=_headers)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "counts" in data
+    assert "items" in data
+
+@skip_if_no_supabase
+@pytest.mark.anyio
+async def test_get_scan_by_id():
+    _ensure_token()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        await client.post("/api/v1/analyze-text", json={
+            "text": "test scan for id lookup",
+            "os": "Android"
+        }, headers=_headers)
+        history = await client.get("/api/v1/history", headers=_headers)
+        assert history.status_code == 200
+        items = history.json()["items"]
+        assert len(items) > 0
+        scan_id = items[0]["scan_id"]
+        resp = await client.get(f"/api/v1/scan/{scan_id}", headers=_headers)
+        assert resp.status_code == 200
