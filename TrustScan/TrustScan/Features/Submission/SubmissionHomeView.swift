@@ -100,6 +100,12 @@ struct SubmissionHomeView: View {
     .onChange(of: networkMonitor.isConnected) { connected in
       if connected { dismissedOfflineBanner = false }
     }
+    .alert("Daily Limit Reached", isPresented: $viewModel.showDailyLimitAlert) {
+      Button("Upgrade to Pro") { /* paywall — Sprint 3 */ }
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text("You've used all your free scans today. Resets at \(viewModel.dailyLimitResetTime).")
+    }
   }
 
   // MARK: - Sections

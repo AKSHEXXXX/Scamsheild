@@ -14,6 +14,8 @@ final class SubmissionViewModel: ObservableObject {
   @Published var isShowingPhotoDenied = false
   @Published var isShowingCameraDenied = false
   @Published var ocrSource: String = ""
+  @Published var showDailyLimitAlert = false
+  @Published var dailyLimitResetTime: String = ""
 
   private let fetchConfigurationUseCase: FetchConfigurationUseCase
   private let submitAnalysisUseCase: SubmitAnalysisUseCase
@@ -105,6 +107,9 @@ final class SubmissionViewModel: ObservableObject {
       } catch {
         // Silent failure — result still displays
       }
+    } catch AppError.dailyLimitReached(_, let resetsAt) {
+      dailyLimitResetTime = resetsAt
+      showDailyLimitAlert = true
     } catch let appError as AppError {
       state = .error(appError)
     } catch {
@@ -130,6 +135,9 @@ final class SubmissionViewModel: ObservableObject {
       } catch {
         // Silent failure
       }
+    } catch AppError.dailyLimitReached(_, let resetsAt) {
+      dailyLimitResetTime = resetsAt
+      showDailyLimitAlert = true
     } catch let appError as AppError {
       state = .error(appError)
     } catch {
@@ -185,6 +193,9 @@ final class SubmissionViewModel: ObservableObject {
       state = .success(result)
       
       try? await saveHistoryEntryUseCase(result: result, thumbnailData: nil)
+    } catch AppError.dailyLimitReached(_, let resetsAt) {
+      dailyLimitResetTime = resetsAt
+      showDailyLimitAlert = true
     } catch let appError as AppError {
       state = .error(appError)
     } catch {

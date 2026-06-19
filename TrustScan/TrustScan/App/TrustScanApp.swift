@@ -1,7 +1,9 @@
 import SwiftUI
+import UIKit
 
 @main
 struct TrustScanApp: App {
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   @StateObject private var environment = AppEnvironment()
 
   var body: some Scene {
@@ -27,5 +29,53 @@ struct TrustScanApp: App {
           }
         }
     }
+  }
+}
+
+final class AppDelegate: NSObject, UIApplicationDelegate {
+  private var protectionWindow: UIWindow?
+
+  func applicationDidBecomeActive(_ application: UIApplication) {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(screenCaptureChanged),
+      name: UIScreen.capturedDidChangeNotification,
+      object: nil
+    )
+    updateProtection()
+  }
+
+  @objc private func screenCaptureChanged() {
+    updateProtection()
+  }
+
+  private func updateProtection() {
+    if UIScreen.main.isCaptured {
+      showOverlay()
+    } else {
+      hideOverlay()
+    }
+  }
+
+  private func showOverlay() {
+    guard protectionWindow == nil else { return }
+    guard let windowScene = UIApplication.shared.connectedScenes
+      .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+    else { return }
+    let w = UIWindow(windowScene: windowScene)
+    w.windowLevel = .alert + 1
+    w.backgroundColor = .black
+    let lbl = UILabel(frame: w.bounds)
+    lbl.text = "Content hidden during screen recording"
+    lbl.textColor = .white
+    lbl.textAlignment = .center
+    w.addSubview(lbl)
+    w.isHidden = false
+    protectionWindow = w
+  }
+
+  private func hideOverlay() {
+    protectionWindow?.isHidden = true
+    protectionWindow = nil
   }
 }

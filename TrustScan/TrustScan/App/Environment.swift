@@ -30,6 +30,10 @@ enum APIEnvironment {
   }
   
   static var backendBaseURL: String {
-    env["BACKEND_URL"] ?? "https://placeholder-backend.com"
+    #if DEBUG
+    return "https://scamsheild-production-2f8f.up.railway.app"
+    #else
+    return "https://scamsheild-production-2f8f.up.railway.app"
+    #endif
   }
 }

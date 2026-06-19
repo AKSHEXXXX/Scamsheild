@@ -3,6 +3,14 @@ import Foundation
 import UIKit
 #endif
 
+private struct RateLimitError: Decodable {
+  let error: String
+  let message: String
+  let scans_used: Int
+  let daily_cap: Int
+  let resets_at: String
+}
+
 final class APIClient: @unchecked Sendable {
   private let session: URLSession
   private let baseURL: String
@@ -104,6 +112,12 @@ final class APIClient: @unchecked Sendable {
       throw AppError.authenticationRequired
     case 422:
       throw AppError.unexpected(message: "The server rejected the request. Please try a different image.")
+    case 429:
+      let body = try? JSONDecoder().decode(RateLimitError.self, from: data)
+      throw AppError.dailyLimitReached(
+        message: body?.message ?? "Daily scan limit reached.",
+        resetsAt: body?.resets_at ?? "midnight"
+      )
     case 400...499:
       throw AppError.unexpected(message: "Request error (code \(httpResponse.statusCode)).")
     case 500...599:

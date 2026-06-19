@@ -14,6 +14,7 @@ enum AppError: Error, LocalizedError, Hashable, Identifiable {
   case authenticationRequired
   case authenticationFailed(message: String)
   case unexpected(message: String)
+  case dailyLimitReached(message: String, resetsAt: String)
 
   var id: String { localizedDescription }
 
@@ -44,6 +45,8 @@ enum AppError: Error, LocalizedError, Hashable, Identifiable {
     case let .authenticationFailed(message):
       return message
     case let .unexpected(message):
+      return message
+    case let .dailyLimitReached(message, _):
       return message
     }
   }
@@ -76,6 +79,8 @@ enum AppError: Error, LocalizedError, Hashable, Identifiable {
       return "Check your credentials and try again."
     case .unexpected:
       return "Retry once. If it keeps happening, restart the app."
+    case .dailyLimitReached:
+      return "Upgrade to Pro for unlimited scans, or try again tomorrow."
     }
   }
 
