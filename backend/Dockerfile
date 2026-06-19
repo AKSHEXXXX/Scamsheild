@@ -23,3 +23,5 @@ ENV PORT=8080
 EXPOSE 8080
 
 RUN python scripts/download_models.py
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
