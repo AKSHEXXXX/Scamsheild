@@ -17,6 +17,9 @@ struct RootView: View {
       } else if !hasCompletedOnboarding {
         OnboardingView {
           hasCompletedOnboarding = true
+          if let userId = authService.currentUser?.id {
+            UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding_\(userId)")
+          }
         }
       } else {
         MainTabView(environment: environment, hasCompletedOnboarding: $hasCompletedOnboarding)
@@ -26,6 +29,11 @@ struct RootView: View {
     .animation(.easeInOut(duration: 0.3), value: hasCompletedOnboarding)
     .onChange(of: environment.authService.accessToken) { _ in
       environment.syncAuthToken()
+    }
+    .onChange(of: environment.authService.isAuthenticated) { isAuthenticated in
+      if !isAuthenticated {
+        environment.submissionViewModel.resetFlow()
+      }
     }
   }
 }
@@ -70,6 +78,7 @@ struct MainTabView: View {
     .environmentObject(environment.networkMonitor)
     .environmentObject(environment)
     .task {
+      environment.submissionViewModel.resetFlow()
       await environment.submissionViewModel.loadConfiguration()
       await environment.historyViewModel.loadHistory(forceLoading: true)
     }

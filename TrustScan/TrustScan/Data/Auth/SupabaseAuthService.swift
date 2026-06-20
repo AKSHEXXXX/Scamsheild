@@ -150,6 +150,7 @@ final class SupabaseAuthService: ObservableObject {
   func signOut() {
     UserDefaults.standard.removeObject(forKey: tokenKey)
     UserDefaults.standard.removeObject(forKey: refreshTokenKey)
+    UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
     accessToken = nil
     currentUser = nil
     isAuthenticated = false
@@ -168,14 +169,19 @@ final class SupabaseAuthService: ObservableObject {
 
     do {
       let (data, response) = try await session.data(for: request)
-      guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+      guard let httpResponse = response as? HTTPURLResponse else { return }
+      if httpResponse.statusCode == 401 {
         signOut()
         return
       }
+      guard httpResponse.statusCode == 200 else { return }
       currentUser = try JSONDecoder().decode(SupabaseUser.self, from: data)
+      if let userId = currentUser?.id,
+         UserDefaults.standard.bool(forKey: "hasCompletedOnboarding_\(userId)") {
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+      }
     } catch {
-      // Token may be expired
-      signOut()
+      // Network or decode error — keep user logged in, will retry on next launch
     }
   }
 

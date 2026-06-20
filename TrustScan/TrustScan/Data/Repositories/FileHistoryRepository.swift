@@ -47,11 +47,17 @@ actor FileHistoryRepository: HistoryRepositoryPort {
       return []
     }
 
-    let data = try Data(contentsOf: url)
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .iso8601
-    return try decoder.decode([HistoryEntry].self, from: data)
-      .sorted { $0.analyzedAt > $1.analyzedAt }
+    do {
+      let data = try Data(contentsOf: url)
+      let decoder = JSONDecoder()
+      decoder.dateDecodingStrategy = .iso8601
+      return try decoder.decode([HistoryEntry].self, from: data)
+        .sorted { $0.analyzedAt > $1.analyzedAt }
+    } catch {
+      // File is corrupted or from an incompatible version — remove and treat as empty
+      try? fileManager.removeItem(at: url)
+      return []
+    }
   }
 
   private func write(_ entries: [HistoryEntry]) throws {
