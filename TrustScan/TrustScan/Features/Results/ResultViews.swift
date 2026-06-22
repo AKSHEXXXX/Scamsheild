@@ -21,33 +21,52 @@ struct AnalysisResultView: View {
   }
 
   @State private var animatedScore: Double = 0
-  
+
   var body: some View {
     VStack(alignment: .leading, spacing: SpacingTokens.large) {
-      // Premium Score Header
-      VStack(spacing: SpacingTokens.large) {
+      // Result Header Card
+      VStack(alignment: .leading, spacing: SpacingTokens.medium) {
+
+        // Share button top-right
         HStack {
-          VerdictBadge(verdict: result.verdict)
           Spacer()
           Button {
             onShare()
           } label: {
             Image(systemName: "square.and.arrow.up")
-              .font(.system(size: 16, weight: .semibold))
-              .foregroundStyle(.white)
-              .padding(.horizontal, 16)
-              .padding(.vertical, 8)
-              .background(ColorTokens.acc)
-              .clipShape(Capsule())
-              .shadow(color: ColorTokens.acc.opacity(0.3), radius: 8, x: 0, y: 4)
+              .font(.system(size: 15, weight: .semibold))
+              .foregroundStyle(ColorTokens.acc)
+              .padding(10)
+              .background(ColorTokens.acc.opacity(0.1))
+              .clipShape(Circle())
           }
         }
-        
-        // Circular Gauge
+
+        // Icon + Verdict title
+        HStack(spacing: SpacingTokens.small) {
+          Image(systemName: result.verdict.iconName)
+            .font(.system(size: 40, weight: .semibold))
+            .foregroundStyle(result.verdict.tintColor)
+          VStack(alignment: .leading, spacing: 2) {
+            Text(result.verdict.displayTitle)
+              .font(.system(size: 22, weight: .bold, design: .rounded))
+              .foregroundStyle(result.verdict.tintColor)
+            if let signal = result.topSignal {
+              Text(signal.replacingOccurrences(of: "_", with: " ").capitalized)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(result.verdict.tintColor)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(result.verdict.tintColor.opacity(0.12))
+                .clipShape(Capsule())
+            }
+          }
+        }
+
+        // Large centred score gauge — prominent centrepiece
         ZStack {
           Circle()
-            .stroke(Color.gray.opacity(0.15), lineWidth: 16)
-          
+            .stroke(Color.gray.opacity(0.12), lineWidth: 16)
           Circle()
             .trim(from: 0, to: CGFloat(animatedScore) / 100.0)
             .stroke(
@@ -60,30 +79,61 @@ struct AnalysisResultView: View {
               style: StrokeStyle(lineWidth: 16, lineCap: .round)
             )
             .rotationEffect(.degrees(-90))
-            .shadow(color: result.verdict.tintColor.opacity(0.4), radius: 10, x: 0, y: 0)
-          
+            .shadow(color: result.verdict.tintColor.opacity(0.4), radius: 10)
           VStack(spacing: 4) {
             Text("Risk Score")
               .font(TypographyTokens.caption)
               .foregroundStyle(ColorTokens.st)
               .textCase(.uppercase)
-            
             Text("\(Int(animatedScore))%")
               .font(.system(size: 48, weight: .bold, design: .rounded))
               .foregroundStyle(result.verdict.tintColor)
               .contentTransition(.numericText())
           }
         }
-        .frame(width: 180, height: 180)
-        .padding(.vertical, SpacingTokens.medium)
-        
-        if !result.summary.isEmpty {
-          Text(result.summary)
-            .font(TypographyTokens.body)
-            .foregroundStyle(ColorTokens.ik)
-            .multilineTextAlignment(.center)
-            .padding(.horizontal)
+        .frame(width: 160, height: 160)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, SpacingTokens.small)
+
+        // Stats chips row — below the gauge
+        ScrollView(.horizontal, showsIndicators: false) {
+          HStack(spacing: SpacingTokens.small) {
+            if result.warningCount > 0 {
+              statChip(
+                icon: "exclamationmark.triangle.fill",
+                label: "\(result.warningCount) warning\(result.warningCount == 1 ? "" : "s")",
+                color: ColorTokens.sus
+              )
+            }
+            if !result.flaggedUrls.isEmpty {
+              statChip(
+                icon: "link.badge.plus",
+                label: "\(result.flaggedUrls.count) flagged link\(result.flaggedUrls.count == 1 ? "" : "s")",
+                color: ColorTokens.dng
+              )
+            }
+            if !result.findings.isEmpty {
+              statChip(
+                icon: "exclamationmark.shield.fill",
+                label: "\(result.findings.count) indicator\(result.findings.count == 1 ? "" : "s") found",
+                color: result.verdict.tintColor
+              )
+            }
+            if result.warningCount == 0 && result.flaggedUrls.isEmpty && result.findings.isEmpty {
+              statChip(icon: "checkmark.shield.fill", label: "No threats detected", color: ColorTokens.sfe)
+            }
+          }
         }
+
+        Divider()
+          .padding(.vertical, SpacingTokens.xSmall)
+
+        // Contextual summary — below the gauge and chips
+        Text(result.contextualSummary)
+          .font(TypographyTokens.body)
+          .foregroundStyle(ColorTokens.ik)
+          .fixedSize(horizontal: false, vertical: true)
+          .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(SpacingTokens.large)
       .background(
@@ -197,6 +247,20 @@ struct AnalysisResultView: View {
     }
   }
 
+  private func statChip(icon: String, label: String, color: Color) -> some View {
+    HStack(spacing: 6) {
+      Image(systemName: icon)
+        .font(.system(size: 12, weight: .semibold))
+        .foregroundStyle(color)
+      Text(label)
+        .font(.system(size: 13, weight: .medium, design: .rounded))
+        .foregroundStyle(ColorTokens.ik)
+    }
+    .padding(.horizontal, 10)
+    .padding(.vertical, 6)
+    .background(color.opacity(0.1))
+    .clipShape(Capsule())
+  }
 }
 
 // Wrapper for Identifiable conformance

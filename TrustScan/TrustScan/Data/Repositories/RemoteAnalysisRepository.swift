@@ -15,18 +15,20 @@ struct RemoteAnalysisRepository: AnalysisRepositoryPort {
 
   func analyze(image: PreparedImagePayload, fallbackReason: String) async throws -> AnalysisResult {
     let base64String = image.data.base64EncodedString()
-    
     let request = ScanInDTO(
-        image_base64: base64String,
-        os: "iOS"
+      image: base64String,           // field renamed to "image" per new contract
+      os: "iOS",
+      device_id: nil,                // APIClient sets X-Device-Id header; nil here is fine
+      fallback_reason: fallbackReason
     )
     let response: ScanOutDTO = try await apiClient.post(path: "/api/v1/sandbox-image", body: request)
     return response.toDomain()
   }
 
   func analyze(qrPayload: String) async throws -> AnalysisResult {
-    let request = TextScanInDTO(text: qrPayload)
-    let response: ScanOutDTO = try await apiClient.post(path: "/api/v1/analyze-text", body: request)
+    // QR codes use the dedicated /check-qr endpoint per new backend contract
+    let request = QRScanInDTO(payload: qrPayload)
+    let response: ScanOutDTO = try await apiClient.post(path: "/api/v1/check-qr", body: request)
     return response.toDomain()
   }
 

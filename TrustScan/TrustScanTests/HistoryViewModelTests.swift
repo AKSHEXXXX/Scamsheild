@@ -23,6 +23,8 @@ final class HistoryViewModelTests: XCTestCase {
         extractedText: "",
         findings: [],
         flaggedUrls: [],
+        topSignal: nil,
+        warningCount: 0,
         meta: nil,
         analysisTimestamp: Date()
       )

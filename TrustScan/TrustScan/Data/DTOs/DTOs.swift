@@ -3,8 +3,10 @@ import Foundation
 // MARK: - Request DTO
 
 struct ScanInDTO: Encodable {
-  let image_base64: String
+  let image: String           // was image_base64 — contract field name is "image"
   let os: String
+  let device_id: String?
+  let fallback_reason: String?
 }
 
 struct TextScanInDTO: Encodable {
@@ -17,42 +19,65 @@ struct QRScanInDTO: Encodable {
   let os: String = "iOS"
 }
 
+struct URLScanInDTO: Encodable {
+  let url: String
+  let os: String = "iOS"
+}
+
 // MARK: - Response DTO
 
 struct ScanOutDTO: Decodable {
+  // Stable contract fields (only rely on these per backend spec)
   let scan_id: String?
-  let score: Int?
-  let risk_score: Int?
+  let kind: String?
   let flagged: Bool?
-  let verdict: String?
+  let scam_score: Int?        // canonical score field per new spec
+  let verdict: String?        // low_risk | suspicious | high_risk
+  let top_signal: String?
+  let warning_count: Int?
   let findings: [FindingOutDTO]?
   let flagged_urls: [FlaggedUrlDTO]?
-  let _meta: ScanMetaDTO?
+  // Image-specific stable fields
+  let extracted_text: String?
+  let meta: ScanMetaDTO?
 
   func toDomain() -> AnalysisResult {
     let resultFindings = findings?.map { f in
-      Finding(type: f.type ?? "unknown", value: f.value ?? "", severity: f.severity ?? "low", description: f.description ?? "")
+      // Backend spec uses "message" field; "description" kept as fallback
+      Finding(
+        type: f.type ?? "unknown",
+        value: f.value ?? "",
+        severity: f.severity ?? "low",
+        description: f.message ?? f.description ?? ""
+      )
     } ?? []
 
-    let resultMeta = _meta.map { m in
+    let resultMeta = meta.map { m in
       ScanMeta(ocrMethod: m.ocr_method, ocrConfidence: m.ocr_confidence, ocrFallback: m.ocr_fallback)
     }
 
-    let threatVerdict = ThreatVerdict(rawValue: verdict?.lowercased() ?? "") ?? .suspicious
-    
-    let extractedUrls = flagged_urls?.compactMap { $0.url } ?? []
-    
-    let finalScore = score ?? risk_score ?? 0
+    // Map backend verdict strings → domain enum
+    // Backend: low_risk → safe, suspicious → suspicious, high_risk → scam
+    let threatVerdict: ThreatVerdict
+    switch verdict?.lowercased() {
+    case "low_risk", "safe":   threatVerdict = .safe
+    case "high_risk", "scam":  threatVerdict = .scam
+    default:                   threatVerdict = .suspicious
+    }
+
+    let extractedUrls = flagged_urls?.compactMap { $0.url }.filter { !$0.isEmpty } ?? []
 
     return AnalysisResult(
       id: UUID(uuidString: scan_id ?? "") ?? UUID(),
       verdict: threatVerdict,
-      score: finalScore,
+      score: scam_score ?? 0,
       flagged: flagged ?? false,
-      summary: "", // Kept empty as per new spec
-      extractedText: "", // Kept empty as per new spec
+      summary: "",
+      extractedText: extracted_text ?? "",
       findings: resultFindings,
       flaggedUrls: extractedUrls,
+      topSignal: top_signal,
+      warningCount: warning_count ?? 0,
       meta: resultMeta,
       analysisTimestamp: Date()
     )
@@ -81,7 +106,8 @@ struct FindingOutDTO: Decodable {
   let type: String?
   let value: String?
   let severity: String?
-  let description: String?
+  let message: String?       // canonical per new spec
+  let description: String?   // kept as fallback
 }
 
 struct ScanMetaDTO: Decodable {
