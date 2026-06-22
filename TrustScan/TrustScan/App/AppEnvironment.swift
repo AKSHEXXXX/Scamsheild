@@ -11,6 +11,7 @@ final class AppEnvironment: ObservableObject {
   let settingsViewModel: SettingsViewModel
   let authViewModel: AuthViewModel
 
+  @MainActor
   init() {
     let authService = SupabaseAuthService()
     let apiClient = APIClient()

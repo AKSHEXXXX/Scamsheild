@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 
 @main
+@MainActor
 struct TrustScanApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   @StateObject private var environment = AppEnvironment()
