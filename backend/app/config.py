@@ -17,7 +17,7 @@ class Settings:
 # Backend uses SERVICE_KEY server-side only
     API_BASE_URL: str = os.getenv("API_BASE_URL", "http://localhost:8000")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    CORS_ORIGINS: list[str] = ["*"]
+    CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "*").split(",")
     SENSITIVITY_THRESHOLD: int = int(os.getenv("SENSITIVITY_THRESHOLD", "70"))
     MODEL_DOWNLOAD_URL: str = os.getenv("MODEL_DOWNLOAD_URL", "")
     MODEL_DOWNLOAD_KEY: str = os.getenv("MODEL_DOWNLOAD_KEY", "")
