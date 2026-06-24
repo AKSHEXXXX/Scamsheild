@@ -1,0 +1,28 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_DIR = Path(os.getenv("MODEL_DIR", str(BASE_DIR / "app" / "ml" / "artifacts")))
+
+class Settings:
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY", "")
+
+# SECURITY: SUPABASE_SERVICE_KEY vs SUPABASE_ANON_KEY
+# - SERVICE_KEY: bypasses RLS -- NEVER expose to clients
+# - ANON_KEY:   RLS enforced -- safe for mobile/web apps
+# Backend uses SERVICE_KEY server-side only
+    API_BASE_URL: str = os.getenv("API_BASE_URL", "http://localhost:8000")
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    CORS_ORIGINS: list[str] = ["*"]
+    SENSITIVITY_THRESHOLD: int = int(os.getenv("SENSITIVITY_THRESHOLD", "70"))
+    MODEL_DOWNLOAD_URL: str = os.getenv("MODEL_DOWNLOAD_URL", "")
+    MODEL_DOWNLOAD_KEY: str = os.getenv("MODEL_DOWNLOAD_KEY", "")
+    MODEL_DOWNLOAD_SECRET: str = os.getenv("MODEL_DOWNLOAD_SECRET", "")
+    MODEL_DOWNLOAD_REGION: str = os.getenv("MODEL_DOWNLOAD_REGION", "auto")
+    INTERNAL_API_KEY: str = os.getenv("INTERNAL_API_KEY", "")
+
+settings = Settings()

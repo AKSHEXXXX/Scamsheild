@@ -1,0 +1,108 @@
+version: "upi_heuristic_v1"
+
+whitelists:
+  vpa_domains:
+    - paytm.com
+    - paytm.in
+    - paytm
+    - googlepay.com
+    - googlepay.in
+    - phonepe.com
+    - phonepe.in
+    - amazonpay.in
+    - axisbank.com
+    - axisbank
+    - hdfcbank.com
+    - hdfcbank
+    - icicibank.com
+    - icici
+    - sbicard.com
+    - sbi
+    - ybl.in
+    - ybl
+    - okhdfcbank
+    - okicici
+    - oksbi
+    - okaxis
+    - payzapp
+    - yesbank
+    - kotak
+    - npci
+    - upi
+
+rules:
+  - name: odd_hours_txn
+    field: timestamp
+    pattern_type: odd_hours
+    start_hour: 23
+    end_hour: 6
+    severity: MEDIUM
+    weight: 20
+    explanation: Transaction initiated during unusual hours (11 PM - 6 AM)
+
+  - name: high_amount
+    field: amount
+    pattern_type: numeric
+    condition: gte
+    threshold: 100000
+    severity: HIGH
+    weight: 40
+    explanation: High-value UPI transaction detected
+
+  - name: round_number_high
+    field: amount
+    pattern_type: round_number_high_amount
+    threshold: 10000
+    multiple: 10000
+    severity: MEDIUM
+    weight: 25
+    explanation: Round number transaction of significant amount
+
+  - name: suspicious_vpa_keyword
+    field: vpa
+    pattern_type: impersonation_keyword_vpa
+    keywords:
+      - bank
+      - pay
+      - credit
+      - loan
+      - refund
+      - cashback
+      - reward
+      - support
+      - help
+      - customer
+    severity: HIGH
+    weight: 50
+    explanation: VPA contains suspicious keywords associated with impersonation
+
+  - name: new_recipient_high
+    field: recipient
+    pattern_type: new_recipient_high_amount
+    threshold: 5000
+    severity: MEDIUM
+    weight: 30
+    explanation: Large amount to a new recipient
+
+  - name: collect_request_suspicious
+    field: note
+    pattern_type: upi_collect_suspicious
+    severity: HIGH
+    weight: 60
+    explanation: UPI collect request with suspicious keywords
+
+  - name: vpa_not_in_whitelist
+    field: vpa
+    pattern_type: vpa_domain_not_in_whitelist
+    severity: LOW
+    weight: 10
+    explanation: VPA domain not in trusted whitelist
+
+scoring:
+  score_cap: 100
+  multi_rule_boost: 10
+  severity_thresholds:
+    HIGH: 80
+    MEDIUM: 60
+    LOW: 40
+    SAFE: 0

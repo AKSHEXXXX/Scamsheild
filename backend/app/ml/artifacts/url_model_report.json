@@ -1,0 +1,15 @@
+{
+    "accuracy": 1.0,
+    "auc": 1.0,
+    "f1": 1.0,
+    "best_params": {
+        "subsample": 1.0,
+        "n_estimators": 200,
+        "max_depth": 8,
+        "learning_rate": 0.01,
+        "colsample_bytree": 0.9
+    },
+    "num_features": 50,
+    "train_rows": 188636,
+    "test_rows": 47159
+}

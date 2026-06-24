@@ -1,0 +1,466 @@
+{
+  "deploy_url": "https://scam-sheild-production.up.railway.app",
+  "timestamp": "2026-06-23T10:21:47.756763+00:00",
+  "elapsed_seconds": 25.483022,
+  "passed": 32,
+  "failed": 0,
+  "total": 32,
+  "results": [
+    {
+      "channel": "url",
+      "label": "shortened generic",
+      "ok": true,
+      "score": 41,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "shortened + brand",
+      "ok": true,
+      "score": 41,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "suspicious TLD",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "brand in subdomain",
+      "ok": true,
+      "score": 65,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "url",
+      "label": "benign google",
+      "ok": true,
+      "score": 0,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "url",
+      "label": "benign amazon",
+      "ok": true,
+      "score": 0,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "url",
+      "label": "suspicious TLD .xyz",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "brand + susp TLD",
+      "ok": true,
+      "score": 65,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "upi",
+      "label": "benign collect",
+      "ok": true,
+      "score": 42,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "benign send",
+      "ok": true,
+      "score": 43,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "keyword + brand VPA",
+      "ok": true,
+      "score": 43,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "keyword + amount",
+      "ok": true,
+      "score": 40,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "urgent + brand VPA",
+      "ok": true,
+      "score": 43,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "brand VPA benign",
+      "ok": true,
+      "score": 41,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "keyword alert",
+      "ok": true,
+      "score": 42,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "benign vpa hello",
+      "ok": true,
+      "score": 43,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "benign hello",
+      "ok": true,
+      "score": 35,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam KYC+URL",
+      "ok": true,
+      "score": 96,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam lottery",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "scam urgency",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "benign meeting",
+      "ok": true,
+      "score": 40,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "scam free + URL",
+      "ok": true,
+      "score": 63,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam brand KYC",
+      "ok": true,
+      "score": 85,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam OTP urgency",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "benign package delay",
+      "ok": true,
+      "score": 4,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam fake job",
+      "ok": true,
+      "score": 31,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR URL shortened",
+      "ok": true,
+      "score": 42,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "qr",
+      "label": "QR URL shortened+brand",
+      "ok": true,
+      "score": 65,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR UPI scam+keyword",
+      "ok": true,
+      "score": 65,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR WiFi config",
+      "ok": true,
+      "score": 5,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR plain text",
+      "ok": true,
+      "score": 5,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR UPI urgent",
+      "ok": true,
+      "score": 65,
+      "verdict": "high_risk"
+    }
+  ],
+  "dashboard": {
+    "status": 200,
+    "elapsed_ms": 244.158,
+    "data": {
+      "deployment_id": "1b610437-24ea-46e4-8a1b-bf29618cc102",
+      "time_window_minutes": 43200,
+      "generated_at": "2026-06-23T10:22:13.973372+00:00Z",
+      "overview": {
+        "total_scans": 76,
+        "by_channel": {
+          "upi": {
+            "count": 1,
+            "high_risk": 0,
+            "suspicious": 0,
+            "low_risk": 0
+          },
+          "message": {
+            "count": 72,
+            "high_risk": 18,
+            "suspicious": 27,
+            "low_risk": 27
+          },
+          "text": {
+            "count": 3,
+            "high_risk": 0,
+            "suspicious": 0,
+            "low_risk": 0
+          }
+        },
+        "score_distribution": {
+          "upi": {
+            "p10": 65,
+            "p50": 65,
+            "p90": 65
+          },
+          "message": {
+            "p10": 31,
+            "p50": 60,
+            "p90": 96
+          },
+          "text": {
+            "p10": 60,
+            "p50": 60,
+            "p90": 60
+          }
+        }
+      },
+      "quality": {
+        "approx_fn_fp": {},
+        "by_agent": [
+          {
+            "agent_id": 1,
+            "name": "Text Scam Classifier (TF-IDF + LogReg)",
+            "status": "READY",
+            "model_version": "agent1-ready",
+            "signals_used": 4,
+            "metric": "AUC",
+            "metric_value": "N/A",
+            "notes": "Production-grade, AUC 0.85+"
+          },
+          {
+            "agent_id": 2,
+            "name": "DistilBERT FP16",
+            "status": "NOT_READY",
+            "model_version": "agent2-not_ready",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": "N/A",
+            "notes": "Stub \u2014 real model requires GPU memory not available on current Railway plan"
+          },
+          {
+            "agent_id": 3,
+            "name": "URL Phishing Classifier (XGBoost)",
+            "status": "READY",
+            "model_version": "agent3-ready",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": 1.0,
+            "notes": "Known issues: weak on .xyz/.info/.ltd TLDs, zero scores on subdomain phishing"
+          },
+          {
+            "agent_id": 4,
+            "name": "URL Blacklist Checker",
+            "status": "READY",
+            "model_version": "agent4-ready",
+            "signals_used": 0,
+            "metric": "Coverage",
+            "metric_value": "437255 domains",
+            "notes": "Production-grade, 437K domains loaded"
+          },
+          {
+            "agent_id": 5,
+            "name": "QR Threat Classifier (XGBoost)",
+            "status": "BETA",
+            "model_version": "agent5-beta",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": 0.9863,
+            "notes": "BETA \u2014 limited training data, scores may under-report"
+          },
+          {
+            "agent_id": 6,
+            "name": "UPI Heuristic Rule Engine",
+            "status": "READY",
+            "model_version": "agent6-ready",
+            "signals_used": 1,
+            "metric": "Type",
+            "metric_value": "Rule-based: 100% deterministic",
+            "notes": "Production-grade, YAML-defined deterministic rules"
+          },
+          {
+            "agent_id": 7,
+            "name": "UPI Meta Classifier (XGBoost)",
+            "status": "BETA",
+            "model_version": "agent7-beta",
+            "signals_used": 1,
+            "metric": "AUC",
+            "metric_value": 0.4714,
+            "notes": "BETA \u2014 labels inverted during training (AUC 0.47), inversion applied in inference, confidence gate at \u00b10.12"
+          },
+          {
+            "agent_id": 8,
+            "name": "Brand Guard v1 (Edit-Distance)",
+            "status": "READY",
+            "model_version": "agent8-ready",
+            "signals_used": 0,
+            "metric": "Precision",
+            "metric_value": "N/A",
+            "notes": "Production-grade, Levenshtein on curated brand whitelist"
+          },
+          {
+            "agent_id": 9,
+            "name": "Brand Guard v2 (Siamese BiLSTM)",
+            "status": "NOT_READY",
+            "model_version": "agent9-not_ready",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": "N/A",
+            "notes": "Stub \u2014 real model requires GPU"
+          },
+          {
+            "agent_id": 10,
+            "name": "Deepfake / AI Image Detector (DeiT)",
+            "status": "NOT_READY",
+            "model_version": "agent10-not_ready",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": "N/A",
+            "notes": "Stub \u2014 real model requires GPU"
+          },
+          {
+            "agent_id": 11,
+            "name": "Malware File Analyzer (Random Forest)",
+            "status": "READY",
+            "model_version": "agent11-ready",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": "N/A (report file is .md)",
+            "notes": "Production-grade, byte-level RF classifier"
+          },
+          {
+            "agent_id": 12,
+            "name": "Whisper ASR (Speech-to-Text)",
+            "status": "NOT_READY",
+            "model_version": "agent12-not_ready",
+            "signals_used": 0,
+            "metric": "WER",
+            "metric_value": "N/A",
+            "notes": "Stub \u2014 coming in Sprint 3 (audio pipeline)"
+          },
+          {
+            "agent_id": 13,
+            "name": "Call Transcript Fraud Detector",
+            "status": "NOT_READY",
+            "model_version": "agent13-not_ready",
+            "signals_used": 0,
+            "metric": "AUC",
+            "metric_value": "N/A",
+            "notes": "Stub \u2014 coming in Sprint 3 (audio pipeline)"
+          },
+          {
+            "agent_id": 14,
+            "name": "Regex Rule Engine",
+            "status": "READY",
+            "model_version": "agent14-ready",
+            "signals_used": 4,
+            "metric": "",
+            "metric_value": "N/A",
+            "notes": "Production-grade, 36+ patterns covering KYC/UPI/urgency"
+          },
+          {
+            "agent_id": 15,
+            "name": "Ensemble Scorer & Overrides",
+            "status": "READY",
+            "model_version": "agent15-ready",
+            "signals_used": 4,
+            "metric": "Type",
+            "metric_value": "Calibrated weight tables + hard overrides",
+            "notes": "Production-grade, calibrated weight tables + hard overrides"
+          }
+        ]
+      },
+      "anomalies": [
+        {
+          "type": "traffic_drop",
+          "severity": "info",
+          "count": 0,
+          "window": "2026-06-23 09:59:50.938000"
+        }
+      ],
+      "delta_vs_previous_deploy": {
+        "previous_deploy": "1b610437-24ea-46e4-8a1b-bf29618cc102",
+        "current_deploy": "1b610437-24ea-46e4-8a1b-bf29618cc102",
+        "high_risk_ratio_by_channel": {
+          "text": {
+            "high_risk_ratio_change": 0,
+            "total_change": 0
+          },
+          "message": {
+            "high_risk_ratio_change": 0,
+            "total_change": 0
+          },
+          "upi": {
+            "high_risk_ratio_change": 0,
+            "total_change": 0
+          }
+        },
+        "fn_fp_by_channel": {},
+        "high_risk_ratio_change": 0
+      }
+    }
+  }
+}

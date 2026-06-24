@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+*.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Agent / tooling
+.agents/
+.memory/
+skills-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Docker
+*.log
+
+# ML model artifacts
+# Small active model files committed directly (~1.1 MB total)
+# Large HF model (261 MB) excluded — use download_models.py for updates
+backend/app/ml/artifacts/*
+!backend/app/ml/artifacts/upi_heuristic_rules.yaml
+!backend/app/ml/artifacts/.gitkeep
+!backend/app/ml/artifacts/url_classifier.pkl
+!backend/app/ml/artifacts/url_scaler.pkl
+!backend/app/ml/artifacts/url_feature_cols.pkl
+!backend/app/ml/artifacts/url_model_report.json
+!backend/app/ml/artifacts/qr_url_*.pkl
+!backend/app/ml/artifacts/qr_model_report.json
+!backend/app/ml/artifacts/scamshield_*.pkl
+!backend/app/ml/artifacts/text_*.pkl
+!backend/app/ml/artifacts/text_*.json
+!backend/app/ml/artifacts/url_blacklist.pkl
+!backend/app/ml/artifacts/agent4_*.json
+!backend/app/ml/artifacts/brand_*.pkl
+!backend/app/ml/artifacts/brand_*.json
+!backend/app/ml/artifacts/malware_*.pkl
+!backend/app/ml/artifacts/upi_*.pkl
+!backend/app/ml/artifacts/upi_*.json
+!backend/app/ml/artifacts/ensemble_*.json
+!backend/app/ml/artifacts/agent_status.json
+!backend/app/ml/artifacts/phishing_domains.pkl
+!backend/app/ml/artifacts/regex_engine_report.json
+!backend/app/ml/artifacts/scamshield_rules_metadata.json

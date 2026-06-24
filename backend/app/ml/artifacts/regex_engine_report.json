@@ -1,0 +1,19 @@
+{
+  "model": "Regex Rule Engine",
+  "agent": "Agent 14",
+  "num_rules": 27,
+  "best_threshold": 20,
+  "best_f1": 0.3255,
+  "dataset_size": 5573,
+  "top_rules": {
+    "LOTTERY_WIN": 131,
+    "URGENT_ACTION": 77,
+    "PRIZE_CLAIM": 25,
+    "APK_INSTALL": 1,
+    "LEGAL_THREAT": 1
+  },
+  "artifacts": [
+    "scamshield_rules.pkl",
+    "scamshield_rules.json"
+  ]
+}

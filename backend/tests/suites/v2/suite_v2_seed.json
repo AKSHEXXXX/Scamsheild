@@ -1,0 +1,204 @@
+{
+  "seeds": [
+    {
+      "bucket": "digital_arrest",
+      "samples": [
+        {
+          "channel": "message",
+          "text": "Your Aadhaar has been used for illegal activities. Call 9876543210 immediately to avoid arrest.",
+          "verdict": "high_risk",
+          "score": 85,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Cyber crime department notice: your PAN card linked to money laundering. Contact us at 9123456789 within 2 hours to avoid legal action.",
+          "verdict": "high_risk",
+          "score": 90,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "FINAL NOTICE: Arrest warrant issued under section 420 IPC. Call cyber cell immediately at +919000123456.",
+          "verdict": "high_risk",
+          "score": 88,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Your mobile number has been involved in cyber crime. Contact the investigating officer on 9876540000 within 24 hours or face imprisonment.",
+          "verdict": "high_risk",
+          "score": 82,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Digital arrest warrant issued by Supreme Court. You must pay 50000 to avoid immediate custody. Call 9988776655 for details.",
+          "verdict": "high_risk",
+          "score": 92,
+          "label": "scam"
+        }
+      ]
+    },
+    {
+      "bucket": "upi_scams",
+      "samples": [
+        {
+          "channel": "message",
+          "text": "Congratulations! You won 1000000. Pay processing fee of 5000 to receive your prize.",
+          "verdict": "high_risk",
+          "score": 80,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Google Pay lottery: You have been selected for 25 lakh cash prize. Send 2000 registration fee to claim now.",
+          "verdict": "high_risk",
+          "score": 78,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Your Paytm wallet has won 5 lakh in lucky draw. Deposit 1000 to credit the amount immediately.",
+          "verdict": "high_risk",
+          "score": 82,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Double your money in 24 hours with our new investment scheme. Minimum investment 1000 and get 2000 back.",
+          "verdict": "high_risk",
+          "score": 75,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "You have received a cashback of 15000 from Amazon. Click the link to claim: http://amzn-cashback.today",
+          "verdict": "high_risk",
+          "score": 70,
+          "label": "scam"
+        }
+      ]
+    },
+    {
+      "bucket": "job_scams",
+      "samples": [
+        {
+          "channel": "message",
+          "text": "Work from home data entry job. Earn 50000 per month. No experience needed. Register now with 500 registration fee.",
+          "verdict": "high_risk",
+          "score": 72,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Part time online job: Like YouTube videos and earn 200 per video. Daily payout. Join now with 1000 deposit.",
+          "verdict": "suspicious",
+          "score": 65,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Urgent hiring for work from home. Earn 50k-1L per month. Submit 2000 for training and registration.",
+          "verdict": "high_risk",
+          "score": 70,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Make money online by doing simple tasks. Daily salary 2000 plus bonuses. Quick registration fee required.",
+          "verdict": "suspicious",
+          "score": 68,
+          "label": "scam"
+        },
+        {
+          "channel": "message",
+          "text": "Data entry jobs at home. Earn while you sleep. Monthly income 75000+. Limited seats. Register now with 1500.",
+          "verdict": "high_risk",
+          "score": 72,
+          "label": "scam"
+        }
+      ]
+    },
+    {
+      "bucket": "benign_urls",
+      "samples": [
+        {
+          "channel": "url",
+          "text": "https://www.thehindu.com/news/national/breaking-news-today",
+          "verdict": "low_risk",
+          "score": 5,
+          "label": "legit"
+        },
+        {
+          "channel": "url",
+          "text": "Check this article on Times of India about the new policy https://timesofindia.indiatimes.com/india",
+          "verdict": "low_risk",
+          "score": 3,
+          "label": "legit"
+        },
+        {
+          "channel": "url",
+          "text": "Read the latest news on BBC at https://www.bbc.com/news/world",
+          "verdict": "low_risk",
+          "score": 2,
+          "label": "legit"
+        },
+        {
+          "channel": "message",
+          "text": "Did you see the news about the budget today? The finance minister announced new tax slabs.",
+          "verdict": "low_risk",
+          "score": 8,
+          "label": "legit"
+        },
+        {
+          "channel": "message",
+          "text": "Breaking: Supreme Court verdict on Article 370 published on NDTV. Check https://www.ndtv.com/india",
+          "verdict": "low_risk",
+          "score": 6,
+          "label": "legit"
+        }
+      ]
+    },
+    {
+      "bucket": "benign_transactional",
+      "samples": [
+        {
+          "channel": "message",
+          "text": "Your OTP for transaction of INR 2500 at Amazon is 384729. Do not share this OTP with anyone.",
+          "verdict": "low_risk",
+          "score": 2,
+          "label": "legit"
+        },
+        {
+          "channel": "message",
+          "text": "INR 15000 debited from your account 1234 for bill payment. Reference ID: TXN7890123.",
+          "verdict": "low_risk",
+          "score": 5,
+          "label": "legit"
+        },
+        {
+          "channel": "message",
+          "text": "Your ICICI Bank account statement is ready for download. Login to net banking to view.",
+          "verdict": "low_risk",
+          "score": 10,
+          "label": "legit"
+        },
+        {
+          "channel": "message",
+          "text": "Thank you for your payment of INR 999. Your Netflix subscription is active until next month.",
+          "verdict": "low_risk",
+          "score": 3,
+          "label": "legit"
+        },
+        {
+          "channel": "message",
+          "text": "Your Aadhaar has been successfully linked to your SBI account. Reference: SBILNK562341",
+          "verdict": "low_risk",
+          "score": 4,
+          "label": "legit"
+        }
+      ]
+    }
+  ]
+}

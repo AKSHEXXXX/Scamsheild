@@ -1,0 +1,48 @@
+{
+  "model": "XGBoost QR Threat Classifier",
+  "agent": "Agent 5",
+  "auc": 0.9863,
+  "n_train": 16000,
+  "n_test": 4000,
+  "raw_label_distribution": {
+    "0": 100700,
+    "1": 100700
+  },
+  "sample_label_distribution": {
+    "1": 10000,
+    "0": 10000
+  },
+  "feature_label_distribution": {
+    "1": 10000,
+    "0": 10000
+  },
+  "decode_rate_by_class": {
+    "0": 0.9479,
+    "1": 0.9434
+  },
+  "features": [
+    "IsURL",
+    "IsUPI",
+    "IsTel",
+    "PayloadLen",
+    "HasSuspiciousKeyword",
+    "IsHTTPS",
+    "HasIP",
+    "URLLen",
+    "NumDots",
+    "NumSlash",
+    "NumDash",
+    "NumAt",
+    "NumEquals",
+    "NumQMark",
+    "NumAmpersand",
+    "NumDigits",
+    "SubdomainCount",
+    "Decodable"
+  ],
+  "artifacts": [
+    "qr_classifier.pkl",
+    "qr_scaler.pkl",
+    "qr_feature_cols.pkl"
+  ]
+}

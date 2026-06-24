@@ -1,0 +1,239 @@
+{
+  "deploy_url": "https://scam-sheild-production.up.railway.app",
+  "timestamp": "2026-06-23T10:07:11.748739+00:00",
+  "elapsed_seconds": 27.590248,
+  "passed": 22,
+  "failed": 10,
+  "total": 32,
+  "results": [
+    {
+      "channel": "url",
+      "label": "shortened generic",
+      "ok": false,
+      "score": 1,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "url",
+      "label": "shortened + brand",
+      "ok": false,
+      "score": 1,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "url",
+      "label": "suspicious TLD",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "brand in subdomain",
+      "ok": false,
+      "score": 0,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "url",
+      "label": "benign google",
+      "ok": true,
+      "score": 0,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "url",
+      "label": "benign amazon",
+      "ok": false,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "suspicious TLD .xyz",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "url",
+      "label": "brand + susp TLD",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "benign collect",
+      "ok": true,
+      "score": 42,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "benign send",
+      "ok": true,
+      "score": 43,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "keyword + brand VPA",
+      "ok": true,
+      "score": 73,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "upi",
+      "label": "keyword + amount",
+      "ok": true,
+      "score": 40,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "urgent + brand VPA",
+      "ok": true,
+      "score": 73,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "upi",
+      "label": "brand VPA benign",
+      "ok": false,
+      "score": 71,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "upi",
+      "label": "keyword alert",
+      "ok": true,
+      "score": 47,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "upi",
+      "label": "benign vpa hello",
+      "ok": false,
+      "score": 73,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "benign hello",
+      "ok": true,
+      "score": 35,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam KYC+URL",
+      "ok": true,
+      "score": 96,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam lottery",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "scam urgency",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "benign meeting",
+      "ok": false,
+      "score": 40,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "scam free + URL",
+      "ok": true,
+      "score": 63,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam brand KYC",
+      "ok": true,
+      "score": 85,
+      "verdict": "high_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam OTP urgency",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "text",
+      "label": "benign package delay",
+      "ok": true,
+      "score": 4,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "text",
+      "label": "scam fake job",
+      "ok": false,
+      "score": 31,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR URL shortened",
+      "ok": true,
+      "score": 42,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "qr",
+      "label": "QR URL shortened+brand",
+      "ok": false,
+      "score": 42,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "qr",
+      "label": "QR UPI scam+keyword",
+      "ok": false,
+      "score": 60,
+      "verdict": "suspicious"
+    },
+    {
+      "channel": "qr",
+      "label": "QR WiFi config",
+      "ok": true,
+      "score": 5,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR plain text",
+      "ok": true,
+      "score": 5,
+      "verdict": "low_risk"
+    },
+    {
+      "channel": "qr",
+      "label": "QR UPI urgent",
+      "ok": true,
+      "score": 60,
+      "verdict": "suspicious"
+    }
+  ],
+  "dashboard": {
+    "status": 422,
+    "elapsed_ms": 218.911,
+    "error": "{\"detail\":[{\"type\":\"less_than_equal\",\"loc\":[\"query\",\"minutes\"],\"msg\":\"Input should be less than or equal to 1440\",\"input\":\"43200\",\"ctx\":{\"le\":1440}}]}"
+  }
+}

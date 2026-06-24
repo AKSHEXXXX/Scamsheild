@@ -1,0 +1,1 @@
+# schemas/scan_result

@@ -1,0 +1,13 @@
+{
+  "model": "Brand Guard v1 (Edit-Distance Rules)",
+  "agent": "Agent 8",
+  "best_threshold": 4,
+  "best_f1": 0.9649,
+  "whitelist_size": 39,
+  "phishing_domains_indexed": 11113,
+  "artifacts": [
+    "brand_whitelist.pkl",
+    "brand_guard_config.pkl",
+    "phishing_domains.pkl"
+  ]
+}
