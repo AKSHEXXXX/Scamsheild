@@ -24,6 +24,16 @@ struct URLScanInDTO: Encodable {
   let os: String = "iOS"
 }
 
+struct FeedbackInDTO: Encodable {
+  let scan_id: String
+  let label: String     // "scam" or "legit"
+  let reason: String?
+}
+
+struct FeedbackOutDTO: Decodable {
+  let ok: Bool?  // Optional — backend response shape may vary; any 2xx is treated as success
+}
+
 // MARK: - Response DTO
 
 struct ScanOutDTO: Decodable {

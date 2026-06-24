@@ -115,3 +115,4 @@ extension AuthViewModel: ASWebAuthenticationPresentationContextProviding {
     return ASPresentationAnchor() // iOS 13+ requirement, but ASPresentationAnchor is just UIWindow. 
   }
 }
+

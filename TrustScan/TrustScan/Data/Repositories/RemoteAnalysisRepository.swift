@@ -32,4 +32,9 @@ struct RemoteAnalysisRepository: AnalysisRepositoryPort {
     return response.toDomain()
   }
 
+  func submitFeedback(scanId: String, label: String) async throws {
+    let body = FeedbackInDTO(scan_id: scanId, label: label, reason: nil)
+    let _: FeedbackOutDTO = try await apiClient.post(path: "/api/v1/feedback", body: body)
+  }
+
 }

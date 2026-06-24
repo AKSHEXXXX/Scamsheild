@@ -376,9 +376,11 @@ struct SubmissionHomeView: View {
             .padding(.horizontal, SpacingTokens.large)
         }
         
-        AnalysisResultView(result: result) {
-          viewModel.isShowingShareSheet = true
-        }
+        AnalysisResultView(
+          result: result,
+          onShare: { viewModel.isShowingShareSheet = true },
+          onFeedback: { label, completion in viewModel.submitFeedback(scanId: result.id, label: label, completion: completion) }
+        )
       }
       .sheet(isPresented: $viewModel.isShowingShareSheet) {
         ShareSheet(items: [shareText(for: result)])

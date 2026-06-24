@@ -12,12 +12,19 @@ private func severityColor(_ severity: String) -> Color {
 struct AnalysisResultView: View {
   let result: AnalysisResult
   let onShare: () -> Void
+  let onFeedback: (String, @escaping (Bool) -> Void) -> Void   // label + completion(success)
 
   @State private var selectedFinding: Finding?
+  @State private var feedbackState: FeedbackBarView.State = .idle
 
-  init(result: AnalysisResult, onShare: @escaping () -> Void = {}) {
+  init(
+    result: AnalysisResult,
+    onShare: @escaping () -> Void = {},
+    onFeedback: @escaping (String, @escaping (Bool) -> Void) -> Void = { _, _ in }
+  ) {
     self.result = result
     self.onShare = onShare
+    self.onFeedback = onFeedback
   }
 
   @State private var animatedScore: Double = 0
@@ -234,6 +241,16 @@ struct AnalysisResultView: View {
         }
       }
     }
+
+    // Feedback bar — inline card, no overlay
+    FeedbackBarView(state: $feedbackState) { label in
+      feedbackState = .sending
+      onFeedback(label) { success in
+        DispatchQueue.main.async {
+          feedbackState = success ? .submitted : .failed
+        }
+      }
+    }
     .onAppear {
       withAnimation(.spring(response: 1.5, dampingFraction: 0.8, blendDuration: 0)) {
         animatedScore = Double(result.score)
@@ -268,6 +285,95 @@ struct FindingIdentifiableWrapper: Identifiable {
   let id = UUID()
   let finding: Finding
 }
+
+// MARK: - Feedback Bar
+
+struct FeedbackBarView: View {
+  enum State { case idle, sending, submitted, failed }
+
+  @Binding var state: State
+  let onSubmit: (String) -> Void   // "scam" or "legit"
+
+  var body: some View {
+    VStack(spacing: SpacingTokens.small) {
+      switch state {
+      case .idle, .failed:
+        Text("Was this result accurate?")
+          .font(TypographyTokens.caption)
+          .foregroundStyle(ColorTokens.st)
+
+        if case .failed = state {
+          Text("Couldn't submit — tap to retry")
+            .font(.system(size: 11, weight: .medium))
+            .foregroundStyle(ColorTokens.dng)
+        }
+
+        HStack(spacing: SpacingTokens.small) {
+          feedbackButton(
+            label: "This was a scam",
+            icon: "exclamationmark.octagon.fill",
+            color: ColorTokens.dng,
+            value: "scam"
+          )
+          feedbackButton(
+            label: "This was safe",
+            icon: "checkmark.shield.fill",
+            color: ColorTokens.sfe,
+            value: "legit"
+          )
+        }
+
+      case .sending:
+        HStack(spacing: SpacingTokens.small) {
+          ProgressView()
+            .tint(ColorTokens.acc)
+          Text("Submitting…")
+            .font(TypographyTokens.caption)
+            .foregroundStyle(ColorTokens.st)
+        }
+
+      case .submitted:
+        HStack(spacing: SpacingTokens.xSmall) {
+          Image(systemName: "checkmark.circle.fill")
+            .foregroundStyle(ColorTokens.sfe)
+          Text("Thanks for the feedback!")
+            .font(.system(size: 13, weight: .semibold, design: .rounded))
+            .foregroundStyle(ColorTokens.ik)
+        }
+      }
+    }
+    .frame(maxWidth: .infinity)
+    .padding(SpacingTokens.medium)
+    .background(
+      RoundedRectangle(cornerRadius: 16, style: .continuous)
+        .fill(ColorTokens.sfm)
+        .shadow(color: Color.black.opacity(0.03), radius: 6, x: 0, y: 2)
+    )
+    .animation(.easeInOut(duration: 0.2), value: state == .submitted)
+  }
+
+  @ViewBuilder
+  private func feedbackButton(label: String, icon: String, color: Color, value: String) -> some View {
+    Button {
+      onSubmit(value)
+    } label: {
+      HStack(spacing: 6) {
+        Image(systemName: icon)
+          .font(.system(size: 13, weight: .semibold))
+        Text(label)
+          .font(.system(size: 13, weight: .semibold, design: .rounded))
+      }
+      .foregroundStyle(color)
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, 10)
+      .background(color.opacity(0.1))
+      .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+    .buttonStyle(.plain)
+  }
+}
+
+extension FeedbackBarView.State: Equatable {}
 
 // MARK: - Finding Detail Sheet
 

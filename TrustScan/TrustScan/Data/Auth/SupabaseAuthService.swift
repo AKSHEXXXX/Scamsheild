@@ -185,6 +185,37 @@ final class SupabaseAuthService: ObservableObject {
     }
   }
 
+  // MARK: - Token Refresh
+
+  /// Exchanges the stored refresh token for a new access token.
+  /// Called before auth-gated endpoints (e.g. feedback) to recover from expired JWTs.
+  func refreshAccessToken() async throws {
+    guard let refreshToken = UserDefaults.standard.string(forKey: refreshTokenKey) else {
+      throw AppError.authenticationRequired
+    }
+
+    let url = URL(string: "\(supabaseURL)/auth/v1/token?grant_type=refresh_token")!
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue(anonKey, forHTTPHeaderField: "apikey")
+    request.httpBody = try JSONEncoder().encode(["refresh_token": refreshToken])
+
+    let (data, response) = try await session.data(for: request)
+    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+      signOut()
+      throw AppError.authenticationRequired
+    }
+
+    let authResponse = try JSONDecoder().decode(SupabaseAuthResponse.self, from: data)
+    guard let newToken = authResponse.access_token else {
+      signOut()
+      throw AppError.authenticationRequired
+    }
+
+    persistTokens(access: newToken, refresh: authResponse.refresh_token)
+  }
+
   // MARK: - Private
 
   private func persistTokens(access: String, refresh: String?) {

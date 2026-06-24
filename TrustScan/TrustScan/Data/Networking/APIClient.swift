@@ -96,6 +96,10 @@ final class APIClient: @unchecked Sendable {
       throw AppError.unexpected(message: "Invalid server response.")
     }
 
+    let path = request.url?.path ?? "?"
+    let tokenSnippet = request.value(forHTTPHeaderField: "Authorization").map { String($0.prefix(30)) } ?? "nil"
+    print("[APIClient] \(request.httpMethod ?? "?") \(path) → \(httpResponse.statusCode) | auth=\(tokenSnippet)")
+
     switch httpResponse.statusCode {
     case 200...299:
       let decoder = JSONDecoder()

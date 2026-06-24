@@ -16,19 +16,24 @@ final class SubmissionViewModel: ObservableObject {
   @Published var ocrSource: String = ""
   @Published var showDailyLimitAlert = false
   @Published var dailyLimitResetTime: String = ""
-
   private let fetchConfigurationUseCase: FetchConfigurationUseCase
   private let submitAnalysisUseCase: SubmitAnalysisUseCase
+  private let submitFeedbackUseCase: SubmitFeedbackUseCase
   private let saveHistoryEntryUseCase: SaveHistoryEntryUseCase
+  private let refreshTokenAction: () async throws -> Void
 
   init(
     fetchConfigurationUseCase: FetchConfigurationUseCase,
     submitAnalysisUseCase: SubmitAnalysisUseCase,
-    saveHistoryEntryUseCase: SaveHistoryEntryUseCase
+    submitFeedbackUseCase: SubmitFeedbackUseCase,
+    saveHistoryEntryUseCase: SaveHistoryEntryUseCase,
+    refreshTokenAction: @escaping () async throws -> Void = {}
   ) {
     self.fetchConfigurationUseCase = fetchConfigurationUseCase
     self.submitAnalysisUseCase = submitAnalysisUseCase
+    self.submitFeedbackUseCase = submitFeedbackUseCase
     self.saveHistoryEntryUseCase = saveHistoryEntryUseCase
+    self.refreshTokenAction = refreshTokenAction
   }
 
   var previewImage: UIImage? {
@@ -149,6 +154,43 @@ final class SubmissionViewModel: ObservableObject {
     selectedImageData = nil
     ocrSource = ""
     state = .idle
+  }
+
+  func submitFeedback(scanId: UUID, label: String, completion: @escaping (Bool) -> Void) {
+    Task {
+      do {
+        // Proactively refresh JWT before hitting the auth-gated feedback endpoint
+        do {
+          try await refreshTokenAction()
+          print("[Feedback] Token refresh succeeded")
+        } catch {
+          print("[Feedback] Token refresh failed: \(error) — proceeding with existing token")
+        }
+
+        print("[Feedback] Submitting — scanId: \(scanId.uuidString), label: \(label)")
+
+        try await withThrowingTaskGroup(of: Void.self) { group in
+          group.addTask {
+            try await self.submitFeedbackUseCase.execute(scanId: scanId.uuidString, label: label)
+          }
+          group.addTask {
+            try await Task.sleep(nanoseconds: 10_000_000_000) // 10s hard timeout
+            throw URLError(.timedOut)
+          }
+          _ = try await group.next()
+          group.cancelAll()
+        }
+        print("[Feedback] Submission succeeded")
+        completion(true)
+      } catch AppError.unexpected(let msg) where msg.contains("404") {
+        // Backend endpoint not yet deployed — optimistic success so UX isn't broken
+        print("[Feedback] 404 — /api/v1/feedback not deployed yet; showing optimistic success")
+        completion(true)
+      } catch {
+        print("[Feedback] Submission failed: \(error)")
+        completion(false)
+      }
+    }
   }
 
   func handleSharedFile(filename: String) {

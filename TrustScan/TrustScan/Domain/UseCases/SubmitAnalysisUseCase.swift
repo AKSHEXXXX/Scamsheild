@@ -50,6 +50,20 @@ struct SubmitAnalysisUseCase {
     return (result, "Text Scan")
   }
 }
+
+// MARK: - Feedback Use Case
+
+struct SubmitFeedbackUseCase {
+  private let repository: any AnalysisRepositoryPort
+
+  init(repository: any AnalysisRepositoryPort) {
+    self.repository = repository
+  }
+
+  func execute(scanId: String, label: String) async throws {
+    try await repository.submitFeedback(scanId: scanId, label: label)
+  }
+}
 import Vision
 import UIKit
 
