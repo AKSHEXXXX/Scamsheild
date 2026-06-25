@@ -21,19 +21,22 @@ final class SubmissionViewModel: ObservableObject {
   private let submitFeedbackUseCase: SubmitFeedbackUseCase
   private let saveHistoryEntryUseCase: SaveHistoryEntryUseCase
   private let refreshTokenAction: () async throws -> Void
+  private let reloadHistoryAction: () async -> Void
 
   init(
     fetchConfigurationUseCase: FetchConfigurationUseCase,
     submitAnalysisUseCase: SubmitAnalysisUseCase,
     submitFeedbackUseCase: SubmitFeedbackUseCase,
     saveHistoryEntryUseCase: SaveHistoryEntryUseCase,
-    refreshTokenAction: @escaping () async throws -> Void = {}
+    refreshTokenAction: @escaping () async throws -> Void = {},
+    reloadHistoryAction: @escaping () async -> Void = {}
   ) {
     self.fetchConfigurationUseCase = fetchConfigurationUseCase
     self.submitAnalysisUseCase = submitAnalysisUseCase
     self.submitFeedbackUseCase = submitFeedbackUseCase
     self.saveHistoryEntryUseCase = saveHistoryEntryUseCase
     self.refreshTokenAction = refreshTokenAction
+    self.reloadHistoryAction = reloadHistoryAction
   }
 
   var previewImage: UIImage? {
@@ -109,6 +112,7 @@ final class SubmissionViewModel: ObservableObject {
           result: result,
           thumbnailData: makeThumbnailData(from: selectedImageData)
         )
+        await reloadHistoryAction()
       } catch {
         // Silent failure — result still displays
       }
@@ -137,6 +141,7 @@ final class SubmissionViewModel: ObservableObject {
           result: result,
           thumbnailData: nil
         )
+        await reloadHistoryAction()
       } catch {
         // Silent failure
       }
@@ -156,38 +161,19 @@ final class SubmissionViewModel: ObservableObject {
     state = .idle
   }
 
-  func submitFeedback(scanId: UUID, label: String, completion: @escaping (Bool) -> Void) {
+  func submitFeedback(scanId: String, label: String, completion: @escaping (Bool) -> Void) {
     Task {
       do {
-        // Proactively refresh JWT before hitting the auth-gated feedback endpoint
+        try? await refreshTokenAction()
         do {
+          try await submitFeedbackUseCase.execute(scanId: scanId, label: label)
+        } catch AppError.authenticationRequired {
+          // Token expired despite proactive refresh — do one hard refresh and retry.
           try await refreshTokenAction()
-          print("[Feedback] Token refresh succeeded")
-        } catch {
-          print("[Feedback] Token refresh failed: \(error) — proceeding with existing token")
+          try await submitFeedbackUseCase.execute(scanId: scanId, label: label)
         }
-
-        print("[Feedback] Submitting — scanId: \(scanId.uuidString), label: \(label)")
-
-        try await withThrowingTaskGroup(of: Void.self) { group in
-          group.addTask {
-            try await self.submitFeedbackUseCase.execute(scanId: scanId.uuidString, label: label)
-          }
-          group.addTask {
-            try await Task.sleep(nanoseconds: 10_000_000_000) // 10s hard timeout
-            throw URLError(.timedOut)
-          }
-          _ = try await group.next()
-          group.cancelAll()
-        }
-        print("[Feedback] Submission succeeded")
-        completion(true)
-      } catch AppError.unexpected(let msg) where msg.contains("404") {
-        // Backend endpoint not yet deployed — optimistic success so UX isn't broken
-        print("[Feedback] 404 — /api/v1/feedback not deployed yet; showing optimistic success")
         completion(true)
       } catch {
-        print("[Feedback] Submission failed: \(error)")
         completion(false)
       }
     }
@@ -233,8 +219,9 @@ final class SubmissionViewModel: ObservableObject {
       
       ocrSource = sourceString
       state = .success(result)
-      
+
       try? await saveHistoryEntryUseCase(result: result, thumbnailData: nil)
+      await reloadHistoryAction()
     } catch AppError.dailyLimitReached(_, let resetsAt) {
       dailyLimitResetTime = resetsAt
       showDailyLimitAlert = true

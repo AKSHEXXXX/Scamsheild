@@ -41,26 +41,33 @@ final class AppEnvironment: ObservableObject {
     let clearHistory = ClearHistoryUseCase(historyRepository: historyRepo)
 
     // Closure that refreshes the Supabase JWT and immediately syncs it to APIClient.
-    // Passed to SubmissionViewModel so it can recover from expired tokens before
-    // hitting auth-gated endpoints (e.g. /api/v1/feedback).
+    // Guard against nil: if accessToken is nil after refresh, keep the existing token.
     let refreshTokenAction: () async throws -> Void = {
       try await authService.refreshAccessToken()
-      apiClient.setAuthToken(authService.accessToken)
+      if let token = authService.accessToken { apiClient.setAuthToken(token) }
     }
 
-    // View Models
+    // View Models — historyVm is a local let so the reloadHistoryAction closure can capture it
+    // before self.historyViewModel is assigned.
+    let historyVm = HistoryViewModel(
+      loadHistoryUseCase: loadHistory,
+      deleteHistoryEntryUseCase: deleteHistory
+    )
+
+    let reloadHistoryAction: () async -> Void = {
+      await historyVm.loadHistory(forceLoading: false)
+    }
+
     self.submissionViewModel = SubmissionViewModel(
       fetchConfigurationUseCase: fetchConfig,
       submitAnalysisUseCase: submitAnalysis,
       submitFeedbackUseCase: submitFeedback,
       saveHistoryEntryUseCase: saveHistory,
-      refreshTokenAction: refreshTokenAction
+      refreshTokenAction: refreshTokenAction,
+      reloadHistoryAction: reloadHistoryAction
     )
 
-    self.historyViewModel = HistoryViewModel(
-      loadHistoryUseCase: loadHistory,
-      deleteHistoryEntryUseCase: deleteHistory
-    )
+    self.historyViewModel = historyVm
 
     self.settingsViewModel = SettingsViewModel(
       loadHistoryUseCase: loadHistory,
@@ -71,6 +78,6 @@ final class AppEnvironment: ObservableObject {
   }
 
   func syncAuthToken() {
-    apiClient.setAuthToken(authService.accessToken)
+    if let token = authService.accessToken { apiClient.setAuthToken(token) }
   }
 }

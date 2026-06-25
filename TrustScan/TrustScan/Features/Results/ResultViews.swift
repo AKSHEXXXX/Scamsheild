@@ -12,7 +12,7 @@ private func severityColor(_ severity: String) -> Color {
 struct AnalysisResultView: View {
   let result: AnalysisResult
   let onShare: () -> Void
-  let onFeedback: (String, @escaping (Bool) -> Void) -> Void   // label + completion(success)
+  let onFeedback: ((String, @escaping (Bool) -> Void) -> Void)?   // nil = hide feedback bar
 
   @State private var selectedFinding: Finding?
   @State private var feedbackState: FeedbackBarView.State = .idle
@@ -20,7 +20,7 @@ struct AnalysisResultView: View {
   init(
     result: AnalysisResult,
     onShare: @escaping () -> Void = {},
-    onFeedback: @escaping (String, @escaping (Bool) -> Void) -> Void = { _, _ in }
+    onFeedback: ((String, @escaping (Bool) -> Void) -> Void)? = nil
   ) {
     self.result = result
     self.onShare = onShare
@@ -240,14 +240,16 @@ struct AnalysisResultView: View {
           }
         }
       }
-    }
 
-    // Feedback bar — inline card, no overlay
-    FeedbackBarView(state: $feedbackState) { label in
-      feedbackState = .sending
-      onFeedback(label) { success in
-        DispatchQueue.main.async {
-          feedbackState = success ? .submitted : .failed
+      // Feedback bar — only shown when the backend returned a real scan_id to correlate against
+      if let onFeedback {
+        FeedbackBarView(state: $feedbackState) { label in
+          feedbackState = .sending
+          onFeedback(label) { success in
+            DispatchQueue.main.async {
+              feedbackState = success ? .submitted : .failed
+            }
+          }
         }
       }
     }

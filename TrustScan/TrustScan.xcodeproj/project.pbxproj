@@ -33,6 +33,7 @@
 		NEW31 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW32 /* AuthViewModel.swift */; };
 		NEW33 /* AuthViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW34 /* AuthViews.swift */; };
 		NEW35 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW36 /* OnboardingView.swift */; };
+		SLC01 /* ScamLossCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SLC02 /* ScamLossCounterView.swift */; };
 		NEW37 /* SubmissionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW38 /* SubmissionHomeView.swift */; };
 		QRS03 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = QRS02 /* QRScannerView.swift */; };
 		NEW39 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3A /* ResultViews.swift */; };
@@ -106,6 +107,7 @@
 		NEW32 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		NEW34 /* AuthViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViews.swift; sourceTree = "<group>"; };
 		NEW36 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		SLC02 /* ScamLossCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScamLossCounterView.swift; sourceTree = "<group>"; };
 		NEW38 /* SubmissionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionHomeView.swift; sourceTree = "<group>"; };
 		QRS02 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		NEW3A /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				NEW36 /* OnboardingView.swift */,
+				SLC02 /* ScamLossCounterView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				NEW31 /* AuthViewModel.swift in Sources */,
 				NEW33 /* AuthViews.swift in Sources */,
 				NEW35 /* OnboardingView.swift in Sources */,
+				SLC01 /* ScamLossCounterView.swift in Sources */,
 				NEW37 /* SubmissionHomeView.swift in Sources */,
 				QRS03 /* QRScannerView.swift in Sources */,
 				8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */,

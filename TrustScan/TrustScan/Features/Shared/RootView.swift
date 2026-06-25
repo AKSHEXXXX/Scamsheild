@@ -47,7 +47,7 @@ struct MainTabView: View {
   var body: some View {
     TabView(selection: $selectedTab) {
       NavigationStack {
-        SubmissionHomeView(viewModel: environment.submissionViewModel)
+        SubmissionHomeView(viewModel: environment.submissionViewModel, historyViewModel: environment.historyViewModel)
       }
       .tabItem {
         Label("Scan", systemImage: "shield.checkered")
