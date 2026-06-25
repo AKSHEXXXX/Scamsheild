@@ -3,6 +3,7 @@ import PhotosUI
 
 struct SubmissionHomeView: View {
   @ObservedObject var viewModel: SubmissionViewModel
+  @ObservedObject var historyViewModel: HistoryViewModel
   @EnvironmentObject private var networkMonitor: NetworkMonitor
   @EnvironmentObject private var environment: AppEnvironment
 
@@ -51,7 +52,7 @@ struct SubmissionHomeView: View {
             heroSection
 
             // Recent Scans
-            let recentScans = environment.historyViewModel.recentEntries()
+            let recentScans = historyViewModel.recentEntries()
             if !recentScans.isEmpty {
               recentScansSection(entries: recentScans)
             }
@@ -220,25 +221,47 @@ struct SubmissionHomeView: View {
   }
 
   private func recentScanCard(entry: HistoryEntry) -> some View {
-    VStack(alignment: .leading, spacing: SpacingTokens.xSmall) {
-      VerdictBadge(verdict: entry.verdict)
+    VStack(alignment: .leading, spacing: 0) {
+      if let data = entry.thumbnailData, let uiImage = UIImage(data: data) {
+        Image(uiImage: uiImage)
+          .resizable()
+          .scaledToFill()
+          .frame(width: 180, height: 88)
+          .clipped()
+      } else {
+        ZStack {
+          ColorTokens.sfm
+          Image(systemName: "doc.text.magnifyingglass")
+            .font(.system(size: 22, weight: .light))
+            .foregroundStyle(ColorTokens.st.opacity(0.35))
+        }
+        .frame(width: 180, height: 88)
+      }
 
-      Text(entry.summary)
-        .font(TypographyTokens.caption)
-        .foregroundStyle(ColorTokens.st)
-        .lineLimit(2)
+      VStack(alignment: .leading, spacing: SpacingTokens.xSmall) {
+        VerdictBadge(verdict: entry.verdict)
 
-      Text(entry.analyzedAt.formatted(date: .abbreviated, time: .shortened))
-        .font(.system(size: 11, weight: .regular, design: .rounded))
-        .foregroundStyle(ColorTokens.st.opacity(0.7))
+        let desc = entry.resultSnapshot.summary.isEmpty ? entry.summary : entry.resultSnapshot.summary
+        if !desc.isEmpty {
+          Text(desc)
+            .font(TypographyTokens.caption)
+            .foregroundStyle(ColorTokens.st)
+            .lineLimit(1)
+        }
+
+        Text(entry.analyzedAt.formatted(date: .abbreviated, time: .shortened))
+          .font(.system(size: 11, weight: .regular, design: .rounded))
+          .foregroundStyle(ColorTokens.st.opacity(0.7))
+      }
+      .padding(SpacingTokens.medium)
     }
-    .padding(SpacingTokens.medium)
     .frame(width: 180, alignment: .leading)
     .background(
       RoundedRectangle(cornerRadius: 20, style: .continuous)
         .fill(ColorTokens.sf)
         .shadow(color: .black.opacity(0.04), radius: 8, y: 4)
     )
+    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
   }
 
   @State private var isShowingQRScanner = false
@@ -379,7 +402,9 @@ struct SubmissionHomeView: View {
         AnalysisResultView(
           result: result,
           onShare: { viewModel.isShowingShareSheet = true },
-          onFeedback: { label, completion in viewModel.submitFeedback(scanId: result.id, label: label, completion: completion) }
+          onFeedback: result.backendScanId.map { scanId in
+            { label, completion in viewModel.submitFeedback(scanId: scanId, label: label, completion: completion) }
+          }
         )
       }
       .sheet(isPresented: $viewModel.isShowingShareSheet) {
