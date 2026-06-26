@@ -80,7 +80,7 @@ struct MainTabView: View {
     .task {
       environment.submissionViewModel.resetFlow()
       await environment.submissionViewModel.loadConfiguration()
-      await environment.historyViewModel.loadHistory(forceLoading: true)
+      await environment.historyViewModel.loadHistory(forceLoading: true, limit: 20)
     }
   }
 }

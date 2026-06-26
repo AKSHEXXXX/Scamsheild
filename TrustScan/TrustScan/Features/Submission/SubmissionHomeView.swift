@@ -40,6 +40,7 @@ struct SubmissionHomeView: View {
               .clipShape(Circle())
               .overlay(Circle().stroke(ColorTokens.st.opacity(0.2), lineWidth: 1))
             }
+            .accessibilityLabel("View profile")
           }
 
           // Offline banner
@@ -147,6 +148,7 @@ struct SubmissionHomeView: View {
           HStack(spacing: SpacingTokens.small) {
             Image(systemName: "shield.checkered")
               .font(.system(size: 18, weight: .semibold))
+              .accessibilityHidden(true)
             Text("Analyze Screenshot")
               .font(.system(size: 17, weight: .semibold, design: .rounded))
           }
@@ -156,6 +158,7 @@ struct SubmissionHomeView: View {
         .tint(ColorTokens.acc)
         .disabled(!networkMonitor.isConnected)
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .accessibilityLabel("Analyze screenshot")
 
         Button("Start Over") {
           viewModel.resetFlow()
@@ -228,12 +231,14 @@ struct SubmissionHomeView: View {
           .scaledToFill()
           .frame(width: 180, height: 88)
           .clipped()
+          .accessibilityHidden(true)
       } else {
         ZStack {
           ColorTokens.sfm
           Image(systemName: "doc.text.magnifyingglass")
             .font(.system(size: 22, weight: .light))
             .foregroundStyle(ColorTokens.st.opacity(0.35))
+            .accessibilityHidden(true)
         }
         .frame(width: 180, height: 88)
       }
@@ -262,6 +267,8 @@ struct SubmissionHomeView: View {
         .shadow(color: .black.opacity(0.04), radius: 8, y: 4)
     )
     .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel("\(entry.verdict.displayTitle) scan from \(entry.analyzedAt.formatted(date: .abbreviated, time: .shortened))")
   }
 
   @State private var isShowingQRScanner = false
@@ -281,6 +288,7 @@ struct SubmissionHomeView: View {
         }
         .buttonStyle(.plain)
         .padding(.vertical, SpacingTokens.xSmall)
+        .accessibilityLabel("Change image or source")
       } else {
         Text("Choose a source")
           .font(TypographyTokens.sectionTitle)
@@ -301,6 +309,8 @@ struct SubmissionHomeView: View {
           .background(ColorTokens.acc)
           .clipShape(RoundedRectangle(cornerRadius: 12))
           .disabled(!networkMonitor.isConnected)
+          .accessibilityLabel("Choose screenshot")
+          .accessibilityHint("Opens your photo library")
         } else {
           Button {
             viewModel.isShowingPhotoDenied = true
@@ -313,6 +323,7 @@ struct SubmissionHomeView: View {
           .foregroundStyle(.white)
           .background(ColorTokens.acc)
           .clipShape(RoundedRectangle(cornerRadius: 12))
+          .accessibilityLabel("Choose screenshot")
         }
 
         Button {
@@ -327,6 +338,8 @@ struct SubmissionHomeView: View {
         .background(ColorTokens.sf)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1.5))
+        .accessibilityLabel("Take photo")
+        .accessibilityHint("Opens the camera")
 
         Button {
           isShowingQRScanner = true
@@ -340,6 +353,8 @@ struct SubmissionHomeView: View {
         .background(ColorTokens.sf)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1.5))
+        .accessibilityLabel("Scan QR code")
+        .accessibilityHint("Opens the QR scanner")
       }
     }
     .sheet(isPresented: $isShowingQRScanner) {
@@ -364,6 +379,7 @@ struct SubmissionHomeView: View {
         .scaledToFit()
         .frame(maxWidth: .infinity)
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .accessibilityLabel("Selected screenshot preview")
     }
     .padding(SpacingTokens.large)
     .frame(maxWidth: .infinity, alignment: .leading)

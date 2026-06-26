@@ -7,8 +7,8 @@ struct LoadHistoryUseCase {
     self.historyRepository = historyRepository
   }
 
-  func callAsFunction() async throws -> [HistoryEntry] {
-    try await historyRepository.loadHistory()
+  func callAsFunction(limit: Int? = nil) async throws -> [HistoryEntry] {
+    try await historyRepository.loadHistory(limit: limit)
   }
 }
 

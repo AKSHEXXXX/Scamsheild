@@ -110,6 +110,9 @@ struct ProfileView: View {
     }
     .background(ColorTokens.bg.ignoresSafeArea())
     .navigationTitle("Profile")
+    .task {
+      await environment.historyViewModel.loadHistory(forceLoading: false)
+    }
   }
   
   private func statCard(title: String, value: String) -> some View {

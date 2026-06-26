@@ -264,13 +264,13 @@ final class HistoryViewModel: ObservableObject {
     self.deleteHistoryEntryUseCase = deleteHistoryEntryUseCase
   }
 
-  func loadHistory(forceLoading: Bool = false) async {
+  func loadHistory(forceLoading: Bool = false, limit: Int? = nil) async {
     if forceLoading || isInitialState {
       state = .loading(message: "Loading your scans…")
     }
 
     do {
-      let entries = try await loadHistoryUseCase()
+      let entries = try await loadHistoryUseCase(limit: limit)
       state = entries.isEmpty ? .empty : .success(entries)
     } catch {
       state = .error(.unexpected(message: "We couldn't load local scan history."))
@@ -278,10 +278,16 @@ final class HistoryViewModel: ObservableObject {
   }
 
   func delete(entryID: UUID) async {
+    // Optimistically remove before the disk write so the UI responds instantly
+    if case let .success(entries) = state {
+      let updated = entries.filter { $0.id != entryID }
+      state = updated.isEmpty ? .empty : .success(updated)
+    }
     do {
       try await deleteHistoryEntryUseCase(entryID: entryID)
-      await loadHistory(forceLoading: false)
     } catch {
+      // Roll back by reloading the real state
+      await loadHistory(forceLoading: true)
       state = .error(.unexpected(message: "We couldn't delete this scan."))
     }
   }

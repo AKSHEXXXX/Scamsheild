@@ -8,8 +8,8 @@ actor FileHistoryRepository: HistoryRepositoryPort {
     self.fileManager = fileManager
   }
 
-  func loadHistory() async throws -> [HistoryEntry] {
-    try readEntries()
+  func loadHistory(limit: Int? = nil) async throws -> [HistoryEntry] {
+    try readEntries(limit: limit)
   }
 
   func save(result: AnalysisResult, thumbnailData: Data?) async throws {
@@ -28,6 +28,8 @@ actor FileHistoryRepository: HistoryRepositoryPort {
     )
 
     entries.insert(entry, at: 0)
+    // Keep at most 100 entries to bound file size (thumbnails are ~10–50 KB each)
+    if entries.count > 100 { entries = Array(entries.prefix(100)) }
     try write(entries)
   }
 
@@ -40,7 +42,7 @@ actor FileHistoryRepository: HistoryRepositoryPort {
     try write([])
   }
 
-  private func readEntries() throws -> [HistoryEntry] {
+  private func readEntries(limit: Int? = nil) throws -> [HistoryEntry] {
     let url = try storageURL()
 
     guard fileManager.fileExists(atPath: url.path) else {
@@ -51,8 +53,12 @@ actor FileHistoryRepository: HistoryRepositoryPort {
       let data = try Data(contentsOf: url)
       let decoder = JSONDecoder()
       decoder.dateDecodingStrategy = .iso8601
-      return try decoder.decode([HistoryEntry].self, from: data)
+      let entries = try decoder.decode([HistoryEntry].self, from: data)
         .sorted { $0.analyzedAt > $1.analyzedAt }
+      if let limit {
+        return Array(entries.prefix(max(limit, 0)))
+      }
+      return entries
     } catch {
       // File is corrupted or from an incompatible version — remove and treat as empty
       try? fileManager.removeItem(at: url)

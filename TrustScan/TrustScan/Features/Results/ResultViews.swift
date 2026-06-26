@@ -47,6 +47,8 @@ struct AnalysisResultView: View {
               .background(ColorTokens.acc.opacity(0.1))
               .clipShape(Circle())
           }
+          .accessibilityLabel("Share result")
+          .accessibilityHint("Opens the share sheet")
         }
 
         // Icon + Verdict title
@@ -54,6 +56,7 @@ struct AnalysisResultView: View {
           Image(systemName: result.verdict.iconName)
             .font(.system(size: 40, weight: .semibold))
             .foregroundStyle(result.verdict.tintColor)
+            .accessibilityHidden(true)
           VStack(alignment: .leading, spacing: 2) {
             Text(result.verdict.displayTitle)
               .font(.system(size: 22, weight: .bold, design: .rounded))
@@ -101,6 +104,8 @@ struct AnalysisResultView: View {
         .frame(width: 160, height: 160)
         .frame(maxWidth: .infinity)
         .padding(.vertical, SpacingTokens.small)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Risk score \(result.score) percent")
 
         // Stats chips row — below the gauge
         ScrollView(.horizontal, showsIndicators: false) {
@@ -166,6 +171,7 @@ struct AnalysisResultView: View {
                 Image(systemName: "link.badge.plus")
                   .foregroundStyle(ColorTokens.dng)
                   .font(.system(size: 14, weight: .bold))
+                  .accessibilityHidden(true)
               }
               
               Text(url)
@@ -182,6 +188,8 @@ struct AnalysisResultView: View {
                 .fill(ColorTokens.sf)
                 .shadow(color: Color.black.opacity(0.03), radius: 6, x: 0, y: 2)
             )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Flagged link \(url)")
           }
         }
       }
@@ -204,6 +212,7 @@ struct AnalysisResultView: View {
                     .font(.system(size: 24))
                     .foregroundStyle(severityColor(finding.severity))
                     .padding(.top, 2)
+                    .accessibilityHidden(true)
                   
                   VStack(alignment: .leading, spacing: 4) {
                     HStack {
@@ -236,6 +245,8 @@ struct AnalysisResultView: View {
                 )
               }
               .buttonStyle(.plain)
+              .accessibilityLabel("\(finding.type.capitalized.replacingOccurrences(of: "_", with: " ")), \(finding.severity) severity. \(finding.description)")
+              .accessibilityHint("Shows finding details")
             }
           }
         }
@@ -271,6 +282,7 @@ struct AnalysisResultView: View {
       Image(systemName: icon)
         .font(.system(size: 12, weight: .semibold))
         .foregroundStyle(color)
+        .accessibilityHidden(true)
       Text(label)
         .font(.system(size: 13, weight: .medium, design: .rounded))
         .foregroundStyle(ColorTokens.ik)
@@ -279,6 +291,8 @@ struct AnalysisResultView: View {
     .padding(.vertical, 6)
     .background(color.opacity(0.1))
     .clipShape(Capsule())
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel(label)
   }
 }
 
@@ -338,6 +352,7 @@ struct FeedbackBarView: View {
         HStack(spacing: SpacingTokens.xSmall) {
           Image(systemName: "checkmark.circle.fill")
             .foregroundStyle(ColorTokens.sfe)
+            .accessibilityHidden(true)
           Text("Thanks for the feedback!")
             .font(.system(size: 13, weight: .semibold, design: .rounded))
             .foregroundStyle(ColorTokens.ik)
@@ -362,6 +377,7 @@ struct FeedbackBarView: View {
       HStack(spacing: 6) {
         Image(systemName: icon)
           .font(.system(size: 13, weight: .semibold))
+          .accessibilityHidden(true)
         Text(label)
           .font(.system(size: 13, weight: .semibold, design: .rounded))
       }
@@ -372,6 +388,7 @@ struct FeedbackBarView: View {
       .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
     .buttonStyle(.plain)
+    .accessibilityLabel(label)
   }
 }
 
@@ -392,6 +409,7 @@ struct FindingDetailSheet: View {
             Image(systemName: "exclamationmark.triangle.fill")
               .font(.system(size: 40, weight: .semibold))
               .foregroundStyle(severityColor(finding.severity))
+              .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: SpacingTokens.xSmall) {
               Text(finding.type.capitalized.replacingOccurrences(of: "_", with: " "))
@@ -454,4 +472,3 @@ struct FindingDetailSheet: View {
   }
 
 }
-

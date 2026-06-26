@@ -55,7 +55,7 @@ final class AppEnvironment: ObservableObject {
     )
 
     let reloadHistoryAction: () async -> Void = {
-      await historyVm.loadHistory(forceLoading: false)
+      await historyVm.loadHistory(forceLoading: false, limit: 20)
     }
 
     self.submissionViewModel = SubmissionViewModel(
