@@ -5,6 +5,7 @@ from fastapi import APIRouter, Header
 from pydantic import BaseModel
 from app.auth import require_user
 from app.helpers import persist_scan
+from schemas.scan_result import verdict_label as _verdict_label
 from agents.agent1_text_tfidf import predict as agent1_predict
 from agents.agent15_ensemble import compute
 from app.ml.model_loader import get_models
@@ -33,14 +34,14 @@ async def analyze_text(body: AnalyzeTextIn,
     if not stripped or not has_content or (len(stripped) < 4 and not any(k in stripped for k in ("@", "http", "www"))):
         scan_id = ""
         try:
-            scan_id = persist_scan("message", user_id, body.os, x_device_id, text,
-                                   {"risk_score": 0, "verdict": "low_risk",
+            scan_id = await persist_scan("message", user_id, body.os, x_device_id, text,
+                                   {"risk_score": 0, "verdict": "low_risk", "verdict_label": "Low Risk",
                                     "warning_count": 0, "findings": [],
                                     "flagged_urls": []}, False)
         except Exception:
             pass
         return {
-            "scan_id": scan_id, "scam_score": 0, "verdict": "low_risk",
+            "scan_id": scan_id, "scam_score": 0, "verdict": "low_risk", "verdict_label": "Low Risk",
             "top_signal": "empty_or_very_short_input", "confidence": 1.0,
             "flagged_urls": [], "findings": [], "warning_count": 0,
             "extracted_text": text, "kind": "message", "flagged": False,
@@ -121,8 +122,8 @@ async def analyze_text(body: AnalyzeTextIn,
 
     scan_id = ""
     try:
-        scan_id = persist_scan("message", user_id, body.os, x_device_id, text,
-                               {"risk_score": scam_score, "verdict": verdict,
+        scan_id = await persist_scan("message", user_id, body.os, x_device_id, text,
+                               {"risk_score": scam_score, "verdict": verdict, "verdict_label": _verdict_label(verdict),
                                 "warning_count": len(findings), "findings": findings,
                                 "flagged_urls": flagged_urls},
                                verdict == "high_risk")
@@ -132,7 +133,7 @@ async def analyze_text(body: AnalyzeTextIn,
     return {
         "scan_id": scan_id,
         "scam_score": scam_score,
-        "verdict": verdict,
+        "verdict": verdict, "verdict_label": _verdict_label(verdict),
         "top_signal": result["top_signal"],
         "confidence": confidence,
         "flagged_urls": flagged_urls,

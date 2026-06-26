@@ -4,6 +4,7 @@ from fastapi import APIRouter, Header
 from pydantic import BaseModel, Field
 from app.auth import require_user
 from app.helpers import persist_scan
+from schemas.scan_result import verdict_label as _verdict_label
 from agents.agent15_ensemble import compute_ensemble_verdict
 
 router = APIRouter(tags=["upi"])
@@ -48,14 +49,14 @@ async def analyze_upi(body: AnalyzeUPIIn,
     flagged = verdict == "high_risk"
     result = {
         "scam_score": min(100, score),
-        "verdict": verdict,
+        "verdict": verdict, "verdict_label": _verdict_label(verdict),
         "warning_count": warning_count,
         "extracted_text": body.note,
         "findings": findings,
         "flagged_urls": [],
     }
     try:
-        scan_id = persist_scan("upi", user_id, body.os, x_device_id, body.note, result, flagged)
+        scan_id = await persist_scan("upi", user_id, body.os, x_device_id, body.note, result, flagged)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
         scan_id = ""

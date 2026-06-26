@@ -5,6 +5,7 @@ from fastapi import APIRouter, Header
 from pydantic import BaseModel, Field
 from app.auth import require_user
 from app.helpers import persist_scan
+from schemas.scan_result import verdict_label as _verdict_label
 from agents.agent4_blacklist import check as blacklist_check
 from app.ml.model_loader import get_models
 
@@ -42,7 +43,7 @@ async def check_qr(body: CheckQRIn,
     if payload_upper.startswith("BEGIN:VCARD") or payload_upper.startswith("WIFI:"):
         return {
             "scan_id": "", "kind": "qr", "flagged": False,
-            "scam_score": 5, "verdict": "low_risk",
+            "scam_score": 5, "verdict": "low_risk", "verdict_label": "Low Risk",
             "top_signal": "structured_benign_payload",
             "warning_count": 0, "extracted_text": payload[:60],
             "findings": [{"type": "info", "severity": "none",
@@ -152,14 +153,14 @@ async def check_qr(body: CheckQRIn,
     flagged = verdict == "high_risk" or (score >= 60 and brand_flag)
     result = {
         "scam_score": min(100, score),
-        "verdict": verdict,
+        "verdict": verdict, "verdict_label": _verdict_label(verdict),
         "warning_count": warning_count,
         "extracted_text": payload,
         "findings": findings,
         "flagged_urls": [],
     }
     try:
-        scan_id = persist_scan("qr", user_id, body.os, x_device_id, payload, result, flagged)
+        scan_id = await persist_scan("qr", user_id, body.os, x_device_id, payload, result, flagged)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
         scan_id = ""

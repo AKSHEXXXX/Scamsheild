@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from typing import Optional
 from functools import lru_cache
@@ -22,10 +23,11 @@ def get_config_dict() -> dict:
         "config_version": row["config_version"],
     }
 
-def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str],
-                 input_text: str, result: dict, warned: bool,
-                 ocr_method: Optional[str] = None, ocr_confidence: Optional[float] = None,
-                 ocr_fallback: Optional[bool] = None):
+def _persist_scan_sync(kind: str, user_id: str, body_os: str, device_id: Optional[str],
+                       input_text: str, result: dict, warned: bool,
+                       ocr_method: Optional[str] = None, ocr_confidence: Optional[float] = None,
+                       ocr_fallback: Optional[bool] = None) -> str:
+    """Blocking implementation — always call via persist_scan() from async routes."""
     sb = _get_service_client()
     scan_id = str(uuid.uuid4())
     record = {
@@ -50,6 +52,19 @@ def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str]
     sb.table("scans").insert(record).execute()
     _mongo_save_scan(scan_id, user_id, body_os, device_id, kind, input_text, result, warned)
     return scan_id
+
+
+async def persist_scan(kind: str, user_id: str, body_os: str, device_id: Optional[str],
+                       input_text: str, result: dict, warned: bool,
+                       ocr_method: Optional[str] = None, ocr_confidence: Optional[float] = None,
+                       ocr_fallback: Optional[bool] = None) -> str:
+    """Non-blocking wrapper — offloads Supabase + MongoDB writes to a thread pool
+    so the FastAPI event loop is not stalled on synchronous I/O."""
+    return await asyncio.to_thread(
+        _persist_scan_sync,
+        kind, user_id, body_os, device_id, input_text, result, warned,
+        ocr_method, ocr_confidence, ocr_fallback,
+    )
 
 
 def _mongo_save_scan(scan_id, user_id, body_os, device_id, kind, input_text, result, warned):

@@ -1,5 +1,6 @@
 import os
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
 from datetime import datetime, timezone
 from fastapi import APIRouter, Header, HTTPException, Query
@@ -38,16 +39,36 @@ def internal_dashboard(
         get_bounty_results,
     )
 
-    overview = get_overview_metrics(minutes)
-    quality = get_quality_metrics(minutes)
-    agents = get_agent_quality_metrics(minutes)
-    anomalies = get_recent_anomalies(minutes)
     deploy_id = os.getenv("RAILWAY_DEPLOYMENT_ID", "local")
 
-    delta = _compute_delta(deploy_id, overview, quality)
+    # Run all six independent MongoDB queries concurrently in a thread pool
+    tasks = {
+        "overview":  lambda: get_overview_metrics(minutes),
+        "quality":   lambda: get_quality_metrics(minutes),
+        "agents":    lambda: get_agent_quality_metrics(minutes),
+        "anomalies": lambda: get_recent_anomalies(minutes),
+        "feedback":  lambda: compute_feedback_stats(),
+        "bounty":    lambda: get_bounty_results(limit=5),
+    }
+    results = {}
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        futures = {pool.submit(fn): key for key, fn in tasks.items()}
+        for future in as_completed(futures):
+            key = futures[future]
+            try:
+                results[key] = future.result()
+            except Exception as exc:
+                logger.warning("Dashboard query %s failed: %s", key, exc)
+                results[key] = {}
 
-    feedback_stats = compute_feedback_stats()
-    bounty = get_bounty_results(limit=5)
+    overview       = results.get("overview", {})
+    quality        = results.get("quality", {})
+    agents         = results.get("agents", {})
+    anomalies      = results.get("anomalies", [])
+    feedback_stats = results.get("feedback", {})
+    bounty         = results.get("bounty", [])
+
+    delta = _compute_delta(deploy_id, overview, quality)
 
     return {
         "deployment_id": deploy_id,

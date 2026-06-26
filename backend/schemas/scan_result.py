@@ -1,6 +1,15 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
+_VERDICT_LABELS = {
+    "low_risk": "Low Risk",
+    "suspicious": "Suspicious",
+    "high_risk": "High Risk",
+}
+
+def verdict_label(verdict: str) -> str:
+    return _VERDICT_LABELS.get(verdict, verdict.replace("_", " ").title())
+
 class SignalsBlock(BaseModel):
     text_tfidf_prob: Optional[float] = None
     text_distilbert_prob: Optional[float] = None
@@ -32,6 +41,7 @@ class ScanResult(BaseModel):
     scan_id: str = ""
     scam_score: int
     verdict: str
+    verdict_label: str = ""
     signals: SignalsBlock
     top_signal: str
     confidence: float

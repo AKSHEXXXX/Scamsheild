@@ -6,6 +6,7 @@ from fastapi import APIRouter, Header
 from pydantic import BaseModel, Field
 from app.auth import require_user
 from app.helpers import persist_scan
+from schemas.scan_result import verdict_label as _verdict_label
 from agents.agent4_blacklist import check as blacklist_check
 from agents.agent15_ensemble import compute
 from app.ml.model_loader import get_models
@@ -42,12 +43,12 @@ async def analyze_url(body: AnalyzeURLIn,
     non_http_schemes = {"file", "ftp", "javascript", "data", "vbscript"}
     scheme = (parsed.scheme or "").lower()
     if scheme in non_http_schemes:
-        result = {"scam_score": 45, "verdict": "suspicious", "warning_count": 1,
+        result = {"scam_score": 45, "verdict": "suspicious", "verdict_label": "Suspicious", "warning_count": 1,
                   "extracted_text": url, "findings": [{"type": "scheme", "severity": "medium",
                   "title": "Non-HTTP URL scheme", "detail": f"URL uses '{scheme}' scheme which is unusual in messaging"}],
                   "flagged_urls": [url]}
         try:
-            scan_id = persist_scan("url", user_id, body.os, x_device_id, url, result, False)
+            scan_id = await persist_scan("url", user_id, body.os, x_device_id, url, result, False)
         except Exception as e:
             logger.warning("Failed to persist scan (non-fatal): %s", e)
             scan_id = ""
@@ -55,22 +56,22 @@ async def analyze_url(body: AnalyzeURLIn,
 
     if raw_ip is not None:
         if raw_ip.is_loopback or raw_ip.is_private:
-            result = {"scam_score": 0, "verdict": "low_risk", "warning_count": 0,
+            result = {"scam_score": 0, "verdict": "low_risk", "verdict_label": "Low Risk", "warning_count": 0,
                       "extracted_text": url, "findings": [{"type": "info", "severity": "info",
                       "title": "Local/private IP", "detail": f"{host} is a local/private address"}],
                       "flagged_urls": []}
             try:
-                scan_id = persist_scan("url", user_id, body.os, x_device_id, url, result, False)
+                scan_id = await persist_scan("url", user_id, body.os, x_device_id, url, result, False)
             except Exception as e:
                 logger.warning("Failed to persist scan (non-fatal): %s", e)
                 scan_id = ""
             return {"scan_id": scan_id, "kind": "url", "flagged": False, **result, "_meta": None}
-        result = {"scam_score": 75, "verdict": "high_risk", "warning_count": 1,
+        result = {"scam_score": 75, "verdict": "high_risk", "verdict_label": "High Risk", "warning_count": 1,
                   "extracted_text": url, "findings": [{"type": "ip_address", "severity": "high",
                   "title": "Direct IP address URL", "detail": f"{host} is a direct IP address"}],
                   "flagged_urls": [url]}
         try:
-            scan_id = persist_scan("url", user_id, body.os, x_device_id, url, result, True)
+            scan_id = await persist_scan("url", user_id, body.os, x_device_id, url, result, True)
         except Exception as e:
             logger.warning("Failed to persist scan (non-fatal): %s", e)
             scan_id = ""
@@ -154,14 +155,14 @@ async def analyze_url(body: AnalyzeURLIn,
     flagged = verdict == "high_risk" or (score >= 60 and brand_flag)
     result = {
         "scam_score": min(100, score),
-        "verdict": verdict,
+        "verdict": verdict, "verdict_label": _verdict_label(verdict),
         "warning_count": warning_count,
         "extracted_text": url,
         "findings": findings,
         "flagged_urls": [url],
     }
     try:
-        scan_id = persist_scan("url", user_id, body.os, x_device_id, url, result, flagged)
+        scan_id = await persist_scan("url", user_id, body.os, x_device_id, url, result, flagged)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
         scan_id = ""

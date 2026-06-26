@@ -81,7 +81,7 @@ async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_devi
                      regex_safe=regex_result.get("regex_safe", False))
     scan_id = ""
     try:
-        scan_id = persist_scan(
+        scan_id = await persist_scan(
             "screenshot", user_id, "iOS" if "iOS" in device_id else "Android",
             device_id, ocr_output.text, result, result["verdict"] == "high_risk",
             ocr_method=ocr_output.method, ocr_confidence=ocr_output.confidence,
@@ -138,7 +138,7 @@ async def sandbox_file(body: SandboxFileIn,
                          "title": "Filename Scam Signal", "detail": f"Matched: {', '.join(regex_result['triggered'])}"})
     result = {
         "scam_score": min(100, score),
-        "verdict": verdict,
+        "verdict": verdict, "verdict_label": _verdict_label(verdict),
         "warning_count": (1 if malware_prob > 0.5 else 0) + len(regex_result["triggered"]),
         "extracted_text": body.filename,
         "findings": findings,
@@ -146,7 +146,7 @@ async def sandbox_file(body: SandboxFileIn,
     }
     flagged = verdict == "high_risk"
     try:
-        scan_id = persist_scan("file", user_id, body.os, x_device_id, body.filename, result, flagged)
+        scan_id = await persist_scan("file", user_id, body.os, x_device_id, body.filename, result, flagged)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
         scan_id = ""
