@@ -87,7 +87,7 @@ struct HistoryRow: View {
       VStack(alignment: .leading, spacing: SpacingTokens.xSmall) {
         VerdictBadge(verdict: entry.verdict)
 
-        Text(entry.summary)
+        Text(entry.resultSnapshot.contextualSummary)
           .font(TypographyTokens.body)
           .foregroundStyle(ColorTokens.ik)
           .lineLimit(2)

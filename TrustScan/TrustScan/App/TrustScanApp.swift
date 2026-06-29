@@ -11,8 +11,11 @@ struct TrustScanApp: App {
     WindowGroup {
       RootView(environment: environment)
         .onOpenURL { url in
-          if url.scheme == "scamshield" && url.host == "scan" {
-            // Handle Share Extension Deep Link
+          guard url.scheme == "scamshield" else { return }
+
+          switch url.host {
+          case "scan":
+            // Share Extension deep links
             if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
               if let filename = components.queryItems?.first(where: { $0.name == "file" })?.value {
                 environment.submissionViewModel.handleSharedFile(filename: filename)
@@ -22,8 +25,18 @@ struct TrustScanApp: App {
                 environment.submissionViewModel.handleSharedText(sharedUrl)
               }
             }
-          } else {
-            // Handle Supabase Auth Callback
+
+          case "invite":
+            // Referral invite links: scamshield://invite/CODE or scamshield://invite?ref=CODE
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            let code = components?.queryItems?.first(where: { $0.name == "ref" })?.value
+                    ?? url.pathComponents.dropFirst().first
+            if let code, !code.isEmpty {
+              UserDefaults.standard.set(code, forKey: "pendingReferralCode")
+            }
+
+          default:
+            // Supabase OAuth callback
             Task {
               try? await environment.authService.handleOAuthCallback(url: url)
             }

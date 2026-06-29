@@ -26,19 +26,16 @@ struct SubmissionHomeView: View {
             NavigationLink {
               ProfileView(hasCompletedOnboarding: .constant(true))
             } label: {
-              AsyncImage(url: URL(string: "https://api.multiavatar.com/\(environment.authService.currentUser?.email ?? "akshat").png")) { phase in
-                if let image = phase.image {
-                  image.resizable().scaledToFill()
-                } else if phase.error != nil {
-                  Circle().fill(ColorTokens.acc.opacity(0.2))
-                    .overlay(Text(String((environment.authService.currentUser?.email ?? "A").prefix(1).uppercased())).foregroundStyle(ColorTokens.acc))
-                } else {
-                  ProgressView()
-                }
-              }
-              .frame(width: 44, height: 44)
-              .clipShape(Circle())
-              .overlay(Circle().stroke(ColorTokens.st.opacity(0.2), lineWidth: 1))
+              let initial = String((environment.authService.currentUser?.email ?? "A").prefix(1).uppercased())
+              Circle()
+                .fill(ColorTokens.acc.opacity(0.2))
+                .overlay(
+                  Text(initial)
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .foregroundStyle(ColorTokens.acc)
+                )
+                .frame(width: 44, height: 44)
+                .overlay(Circle().stroke(ColorTokens.st.opacity(0.2), lineWidth: 1))
             }
             .accessibilityLabel("View profile")
           }
@@ -122,7 +119,6 @@ struct SubmissionHomeView: View {
         }
       }
       .alert("Daily Limit Reached", isPresented: $viewModel.showDailyLimitAlert) {
-        Button("Upgrade to Pro") { /* paywall — Sprint 3 */ }
         Button("OK", role: .cancel) {}
       } message: {
         Text("You've used all your free scans today. Resets at \(viewModel.dailyLimitResetTime).")
@@ -216,9 +212,21 @@ struct SubmissionHomeView: View {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: SpacingTokens.medium) {
           ForEach(entries) { entry in
-            recentScanCard(entry: entry)
+            NavigationLink(value: entry) {
+              recentScanCard(entry: entry)
+            }
+            .buttonStyle(.plain)
           }
         }
+      }
+      .navigationDestination(for: HistoryEntry.self) { entry in
+        ScrollView {
+          AnalysisResultView(result: entry.resultSnapshot)
+            .padding(SpacingTokens.large)
+        }
+        .background(ColorTokens.bg.ignoresSafeArea())
+        .navigationTitle("Scan Result")
+        .navigationBarTitleDisplayMode(.inline)
       }
     }
   }
@@ -246,13 +254,10 @@ struct SubmissionHomeView: View {
       VStack(alignment: .leading, spacing: SpacingTokens.xSmall) {
         VerdictBadge(verdict: entry.verdict)
 
-        let desc = entry.resultSnapshot.summary.isEmpty ? entry.summary : entry.resultSnapshot.summary
-        if !desc.isEmpty {
-          Text(desc)
-            .font(TypographyTokens.caption)
-            .foregroundStyle(ColorTokens.st)
-            .lineLimit(1)
-        }
+        Text(entry.resultSnapshot.contextualSummary)
+          .font(TypographyTokens.caption)
+          .foregroundStyle(ColorTokens.st)
+          .lineLimit(1)
 
         Text(entry.analyzedAt.formatted(date: .abbreviated, time: .shortened))
           .font(.system(size: 11, weight: .regular, design: .rounded))

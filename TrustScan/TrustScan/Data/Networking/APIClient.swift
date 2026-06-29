@@ -11,6 +11,8 @@ private struct RateLimitError: Decodable {
   let resets_at: String
 }
 
+private struct FastAPIDetail: Decodable { let detail: String? }
+
 final class APIClient: @unchecked Sendable {
   private let session: URLSession
   private let baseURL: String
@@ -111,7 +113,10 @@ final class APIClient: @unchecked Sendable {
     case 401:
       throw AppError.authenticationRequired
     case 422:
-      throw AppError.unexpected(message: "The server rejected the request. Please try a different image.")
+      let detail = (try? JSONDecoder().decode(FastAPIDetail.self, from: data))?.detail
+      let msg = detail.map { "Server validation failed: \($0)" }
+               ?? "The server rejected the request. Please try a different image."
+      throw AppError.unexpected(message: msg)
     case 429:
       let body = try? JSONDecoder().decode(RateLimitError.self, from: data)
       throw AppError.dailyLimitReached(

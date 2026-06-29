@@ -65,10 +65,11 @@ struct LoginView: View {
             HStack {
               Spacer()
               Button("Forgot Password?") {
-                // TODO: Implement forgot password
+                Task { await viewModel.resetPassword() }
               }
               .font(.system(size: 13, weight: .medium))
               .foregroundStyle(ColorTokens.acc)
+              .disabled(viewModel.isLoading)
             }
             .padding(.top, 4)
           }
@@ -205,6 +206,7 @@ struct LoginView: View {
 struct SignUpView: View {
   @ObservedObject var viewModel: AuthViewModel
   @Environment(\.dismiss) private var dismiss
+  @AppStorage("pendingReferralCode") private var pendingReferralCode: String = ""
 
   var body: some View {
     NavigationStack {
@@ -215,6 +217,25 @@ struct SignUpView: View {
           Image(systemName: "person.badge.plus")
             .font(.system(size: 54, weight: .semibold))
             .foregroundStyle(ColorTokens.acc)
+
+          // Invite banner — shown when user arrived via a referral link
+          if !pendingReferralCode.isEmpty {
+            HStack(spacing: SpacingTokens.small) {
+              Image(systemName: "gift.fill")
+                .foregroundStyle(ColorTokens.sfe)
+                .accessibilityHidden(true)
+              Text("You were invited! Sign up to get **5 free bonus scans**.")
+                .font(TypographyTokens.caption)
+                .foregroundStyle(ColorTokens.ik)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(SpacingTokens.medium)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(ColorTokens.sfe.opacity(0.12))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("You were invited. Sign up to get 5 free bonus scans.")
+          }
 
           Text("Create Account")
             .font(TypographyTokens.hero)

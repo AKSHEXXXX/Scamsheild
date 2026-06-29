@@ -2,8 +2,13 @@ import SwiftUI
 
 struct ProfileView: View {
   @EnvironmentObject private var environment: AppEnvironment
+  @Environment(\.openURL) private var openURL
   @Binding var hasCompletedOnboarding: Bool
-  
+
+  @State private var isShowingDeleteConfirm = false
+  @State private var isDeletingAccount = false
+  @State private var deleteError: String?
+
   var body: some View {
     ScrollView {
       VStack(spacing: SpacingTokens.large) {
@@ -76,16 +81,30 @@ struct ProfileView: View {
             } label: {
               menuRow(icon: "gearshape.fill", title: "Settings")
             }
-            
+
             Divider().padding(.leading, 44)
-            
-            Button(action: {}) {
+
+            NavigationLink {
+              ReferralView()
+            } label: {
+              menuRow(icon: "person.badge.plus", title: "Invite Friends")
+            }
+
+            Divider().padding(.leading, 44)
+
+            NavigationLink {
+              PrivacyPolicyView()
+            } label: {
               menuRow(icon: "lock.fill", title: "Privacy Policy")
             }
-            
+
             Divider().padding(.leading, 44)
-            
-            Button(action: {}) {
+
+            Button {
+              if let url = URL(string: "mailto:support@trustscan.app") {
+                openURL(url)
+              }
+            } label: {
               menuRow(icon: "questionmark.bubble.fill", title: "Help & Support")
             }
           }
@@ -104,7 +123,32 @@ struct ProfileView: View {
             .background(ColorTokens.sf)
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
-        
+        .accessibilityLabel("Sign out of your account")
+
+        // Delete Account
+        if let err = deleteError {
+          Text(err)
+            .font(TypographyTokens.caption)
+            .foregroundStyle(ColorTokens.dng)
+            .multilineTextAlignment(.center)
+        }
+
+        Button(action: {
+          isShowingDeleteConfirm = true
+        }) {
+          if isDeletingAccount {
+            ProgressView()
+              .frame(maxWidth: .infinity, minHeight: 52)
+          } else {
+            Text("Delete Account")
+              .font(.system(size: 15, weight: .medium))
+              .foregroundStyle(ColorTokens.dng.opacity(0.7))
+              .frame(maxWidth: .infinity, minHeight: 52)
+          }
+        }
+        .disabled(isDeletingAccount)
+        .accessibilityLabel("Permanently delete your account and all data")
+
       }
       .padding(SpacingTokens.large)
     }
@@ -112,6 +156,25 @@ struct ProfileView: View {
     .navigationTitle("Profile")
     .task {
       await environment.historyViewModel.loadHistory(forceLoading: false)
+    }
+    .alert("Delete Account?", isPresented: $isShowingDeleteConfirm) {
+      Button("Delete Permanently", role: .destructive) {
+        Task {
+          isDeletingAccount = true
+          deleteError = nil
+          do {
+            try await environment.authService.deleteAccount()
+          } catch let error as AppError {
+            deleteError = error.errorDescription
+          } catch {
+            deleteError = "Something went wrong. Please try again."
+          }
+          isDeletingAccount = false
+        }
+      }
+      Button("Cancel", role: .cancel) {}
+    } message: {
+      Text("This permanently deletes your account and all associated data. This cannot be undone.")
     }
   }
   

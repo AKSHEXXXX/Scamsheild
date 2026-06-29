@@ -45,6 +45,8 @@ final class AuthViewModel: NSObject, ObservableObject {
 
     do {
       try await authService.signIn(email: email, password: password)
+      // Existing users can't redeem a referral — clear any stale pending code
+      UserDefaults.standard.removeObject(forKey: "pendingReferralCode")
     } catch let error as AppError {
       errorMessage = error.errorDescription
     } catch {
@@ -74,7 +76,14 @@ final class AuthViewModel: NSObject, ObservableObject {
     do {
       try await authService.signUp(email: email, password: password)
       if authService.isAuthenticated {
-        // Signed in directly
+        // Redeem any pending referral code from an invite link
+        let pending = UserDefaults.standard.string(forKey: "pendingReferralCode") ?? ""
+        if !pending.isEmpty {
+          Task {
+            await authService.redeemReferral(code: pending)
+            UserDefaults.standard.removeObject(forKey: "pendingReferralCode")
+          }
+        }
       } else {
         signUpSuccessMessage = "Check your email to confirm your account, then sign in."
         isShowingSignUp = false
@@ -85,6 +94,24 @@ final class AuthViewModel: NSObject, ObservableObject {
       errorMessage = error.localizedDescription
     }
 
+    isLoading = false
+  }
+
+  func resetPassword() async {
+    guard !email.isEmpty else {
+      errorMessage = "Enter your email address first, then tap Forgot Password."
+      return
+    }
+    isLoading = true
+    errorMessage = nil
+    do {
+      try await authService.resetPassword(email: email)
+      signUpSuccessMessage = "Password reset email sent — check your inbox."
+    } catch let error as AppError {
+      errorMessage = error.errorDescription
+    } catch {
+      errorMessage = "Failed to send reset email. Please try again."
+    }
     isLoading = false
   }
 
@@ -110,9 +137,9 @@ final class AuthViewModel: NSObject, ObservableObject {
   }
 }
 
-extension AuthViewModel: ASWebAuthenticationPresentationContextProviding {
+extension AuthViewModel: @preconcurrency ASWebAuthenticationPresentationContextProviding {
   nonisolated func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-    return ASPresentationAnchor() // iOS 13+ requirement, but ASPresentationAnchor is just UIWindow. 
+    return ASPresentationAnchor()
   }
 }
 

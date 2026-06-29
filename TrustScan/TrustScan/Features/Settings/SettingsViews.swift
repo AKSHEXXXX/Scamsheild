@@ -55,7 +55,11 @@ struct SettingsView: View {
       }
 
       Section("About") {
-        LabeledContent("Version", value: "1.0 (1)")
+        LabeledContent("Version", value: {
+          let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "–"
+          let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "–"
+          return "\(version) (\(build))"
+        }())
       }
 
       if let lastOperationError = viewModel.lastOperationError {

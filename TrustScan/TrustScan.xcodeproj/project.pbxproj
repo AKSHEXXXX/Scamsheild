@@ -38,6 +38,7 @@
 		QRS03 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = QRS02 /* QRScannerView.swift */; };
 		NEW39 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3A /* ResultViews.swift */; };
 		NEW3B /* HistoryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3C /* HistoryViews.swift */; };
+		REF02 /* ReferralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = REF01 /* ReferralView.swift */; };
 		NEW3D /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3E /* SettingsViews.swift */; };
 		NEW3F /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW40 /* ViewModels.swift */; };
 		NEW41 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW42 /* RootView.swift */; };
@@ -49,6 +50,7 @@
 		NEWF9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFA /* Components.swift */; };
 		NEWFB /* PermissionManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFC /* PermissionManagers.swift */; };
 		NEWFD /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFE /* AnalysisResult.swift */; };
+		PRIV02 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIV01 /* PrivacyInfo.xcprivacy */; };
 
 /* End PBXBuildFile section */
 
@@ -112,6 +114,7 @@
 		QRS02 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		NEW3A /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
 		NEW3C /* HistoryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViews.swift; sourceTree = "<group>"; };
+		REF01 /* ReferralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralView.swift; sourceTree = "<group>"; };
 		NEW3E /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
 		NEW40 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
 		NEW42 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -123,6 +126,7 @@
 		NEWFA /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		NEWFC /* PermissionManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagers.swift; sourceTree = "<group>"; };
 		NEWFE /* AnalysisResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
+		PRIV01 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = "file.xcprivacy"; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -196,6 +200,7 @@
 				NEW44 /* Localizable.strings */,
 				A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */,
 				8B214CC72FDD4D6500431205 /* .env */,
+				PRIV01 /* PrivacyInfo.xcprivacy */,
 			);
 			path = TrustScan;
 			sourceTree = "<group>";
@@ -354,6 +359,7 @@
 				QRS01 /* Scanner */,
 				GRP_FEATURES_RESULTS /* Results */,
 				GRP_FEATURES_HISTORY /* History */,
+				GRP_FEATURES_REFERRAL /* Referral */,
 				GRP_FEATURES_SETTINGS /* Settings */,
 				GRP_FEATURES_VIEWMODELS /* ViewModels */,
 			);
@@ -392,6 +398,14 @@
 				NEW3A /* ResultViews.swift */,
 			);
 			path = Results;
+			sourceTree = "<group>";
+		};
+		GRP_FEATURES_REFERRAL /* Referral */ = {
+			isa = PBXGroup;
+			children = (
+				REF01 /* ReferralView.swift */,
+			);
+			path = Referral;
 			sourceTree = "<group>";
 		};
 		GRP_FEATURES_SETTINGS /* Settings */ = {
@@ -534,6 +548,7 @@
 				8B214CC82FDD4D6600431205 /* .env in Resources */,
 				A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */,
 				NEW43 /* Localizable.strings in Resources */,
+				PRIV02 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,6 +602,7 @@
 				8B214CD02FDD565800431205 /* BlogsViewModel.swift in Sources */,
 				NEW39 /* ResultViews.swift in Sources */,
 				NEW3B /* HistoryViews.swift in Sources */,
+				REF02 /* ReferralView.swift in Sources */,
 				NEW3D /* SettingsViews.swift in Sources */,
 				NEW3F /* ViewModels.swift in Sources */,
 				NEW41 /* RootView.swift in Sources */,
@@ -617,7 +633,7 @@
 				INFOPLIST_FILE = ScamShieldShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ScamShieldShareExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -651,7 +667,7 @@
 				INFOPLIST_FILE = ScamShieldShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ScamShieldShareExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

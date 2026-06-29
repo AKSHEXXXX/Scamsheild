@@ -79,7 +79,7 @@ struct ScanOutDTO: Decodable {
 
     return AnalysisResult(
       id: UUID(uuidString: scan_id ?? "") ?? UUID(),
-      backendScanId: scan_id,
+      backendScanId: scan_id?.isEmpty == false ? scan_id : nil,
       verdict: threatVerdict,
       score: scam_score ?? 0,
       flagged: flagged ?? false,

@@ -1,5 +1,7 @@
 import Foundation
 
+private struct FastAPIDetailPublic: Decodable { let detail: String? }
+
 @MainActor
 final class SupabaseAuthService: ObservableObject {
   @Published var currentUser: SupabaseUser?
@@ -143,6 +145,64 @@ final class SupabaseAuthService: ObservableObject {
     }
 
     throw AppError.authenticationFailed(message: "OAuth sign-in did not return a valid token.")
+  }
+
+  // MARK: - Password Reset
+
+  func resetPassword(email: String) async throws {
+    let url = URL(string: "\(supabaseURL)/auth/v1/recover")!
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue(anonKey, forHTTPHeaderField: "apikey")
+    request.httpBody = try JSONEncoder().encode(["email": email])
+
+    let (_, response) = try await session.data(for: request)
+    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+      throw AppError.unexpected(message: "Failed to send password reset email.")
+    }
+  }
+
+  // MARK: - Referral Redemption
+
+  /// Fire-and-forget: silently fails if the backend endpoint isn't deployed yet.
+  /// Called after a new user signs up with a pending referral code.
+  func redeemReferral(code: String) async {
+    guard let token = accessToken,
+          let url = URL(string: "\(APIEnvironment.backendBaseURL)/api/v1/referral/redeem") else { return }
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    request.httpBody = try? JSONEncoder().encode(["referral_code": code])
+    _ = try? await session.data(for: request)
+  }
+
+  // MARK: - Delete Account
+
+  /// Calls the backend to delete the Supabase user (service-role operation) then wipes local state.
+  /// Backend must implement POST /api/v1/delete-account accepting Bearer <access_token>.
+  func deleteAccount() async throws {
+    guard let token = accessToken else { throw AppError.authenticationRequired }
+
+    let url = URL(string: "\(APIEnvironment.backendBaseURL)/api/v1/delete-account")!
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+    let (data, response) = try await session.data(for: request)
+    guard let httpResponse = response as? HTTPURLResponse else {
+      throw AppError.unexpected(message: "Invalid response from server.")
+    }
+
+    guard httpResponse.statusCode == 200 || httpResponse.statusCode == 204 else {
+      let message = (try? JSONDecoder().decode(FastAPIDetailPublic.self, from: data))?.detail
+                    ?? "Account deletion failed (code \(httpResponse.statusCode))."
+      throw AppError.unexpected(message: message)
+    }
+
+    signOut()
   }
 
   // MARK: - Sign Out

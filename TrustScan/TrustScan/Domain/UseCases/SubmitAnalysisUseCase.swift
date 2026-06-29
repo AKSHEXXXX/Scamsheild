@@ -25,7 +25,8 @@ struct SubmitAnalysisUseCase {
       return (result, sourceString)
       
     case .fallbackRequired(let reason):
-      guard let data = image.jpegData(compressionQuality: 0.8) else {
+      let resized = image.resized(toMaxDimension: 1024)
+      guard let data = resized.jpegData(compressionQuality: 0.75) else {
         throw AppError.invalidImage
       }
       
@@ -146,6 +147,17 @@ actor OCRService {
             return .fallbackRequired(reason: "Vision handler threw error: \(error.localizedDescription)")
         }
     }
+}
+
+private extension UIImage {
+  func resized(toMaxDimension max: CGFloat) -> UIImage {
+    let longest = Swift.max(size.width, size.height)
+    guard longest > max else { return self }
+    let scale = max / longest
+    let newSize = CGSize(width: (size.width * scale).rounded(), height: (size.height * scale).rounded())
+    let renderer = UIGraphicsImageRenderer(size: newSize)
+    return renderer.image { _ in draw(in: CGRect(origin: .zero, size: newSize)) }
+  }
 }
 
 extension CGImagePropertyOrientation {
