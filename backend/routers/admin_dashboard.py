@@ -1,6 +1,7 @@
 import logging
 import time
 import re
+from collections import Counter
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Header, HTTPException, Query, Depends
@@ -110,6 +111,78 @@ def admin_summary(admin: dict = Depends(require_permission("dashboard:view"))):
         "high_risk_scans_today": 0, "suspicious_scans_today": 0,
         "low_risk_scans_today": 0, "unique_active_users_today": 0,
         "avg_score_today": 0,
+    }
+
+
+@router.get("/api/v1/admin/referrals/summary")
+def admin_referrals_summary(admin: dict = Depends(require_permission("dashboard:view"))):
+    _log_audit(admin, "view_referrals_summary", "referrals")
+    sb = _get_service_client()
+
+    referrals_resp = sb.table("referrals").select("id,owner_id,code,created_at").execute()
+    redemptions_resp = sb.table("referral_redemptions").select(
+        "id,referral_id,redeemed_by,redeemed_at,scans_credited"
+    ).execute()
+
+    referrals = referrals_resp.data or []
+    redemptions = redemptions_resp.data or []
+    referral_by_id = {r["id"]: r for r in referrals if r.get("id")}
+
+    total_codes = len(referrals)
+    total_redemptions = len(redemptions)
+    total_bonus_scans_credited = sum(r.get("scans_credited", 0) for r in redemptions)
+    unique_referrers = len({r.get("owner_id") for r in referrals if r.get("owner_id")})
+    unique_redeemers = len({r.get("redeemed_by") for r in redemptions if r.get("redeemed_by")})
+
+    redemptions_last_7_days = 0
+    redemptions_last_30_days = 0
+    now = datetime.now(timezone.utc)
+    for row in redemptions:
+        redeemed_at = row.get("redeemed_at")
+        if not redeemed_at:
+            continue
+        try:
+            ts = datetime.fromisoformat(redeemed_at.replace("Z", "+00:00"))
+        except Exception:
+            continue
+        age = now - ts
+        if age <= timedelta(days=30):
+            redemptions_last_30_days += 1
+        if age <= timedelta(days=7):
+            redemptions_last_7_days += 1
+
+    counts = Counter()
+    for row in redemptions:
+        ref = referral_by_id.get(row.get("referral_id"))
+        if not ref:
+            continue
+        owner_id = ref.get("owner_id")
+        if owner_id:
+            counts[owner_id] += 1
+
+    top_referrers = []
+    for owner_id, redeemed_count in counts.most_common(10):
+        code = None
+        for r in referrals:
+            if r.get("owner_id") == owner_id:
+                code = r.get("code")
+                break
+        top_referrers.append({
+            "owner_id": owner_id,
+            "code": code,
+            "redeemed_count": redeemed_count,
+            "bonus_scans_credited": redeemed_count * 5,
+        })
+
+    return {
+        "total_codes": total_codes,
+        "total_redemptions": total_redemptions,
+        "total_bonus_scans_credited": total_bonus_scans_credited,
+        "unique_referrers": unique_referrers,
+        "unique_redeemers": unique_redeemers,
+        "redemptions_last_7_days": redemptions_last_7_days,
+        "redemptions_last_30_days": redemptions_last_30_days,
+        "top_referrers": top_referrers,
     }
 
 

@@ -1,7 +1,7 @@
 import logging
 import secrets
 import string
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel
 from app.auth import require_user, _sum_bonus_earned, _count_bonus_consumed
 from app.database import supabase
@@ -83,6 +83,78 @@ def referral_status(authorization: str = Header(None)):
     }
 
 
+@router.get("/api/v1/referral/validate/{referral_code}")
+def validate_referral(referral_code: str, authorization: str = Header(None)):
+    current_user_id = require_user(authorization)
+    code = (referral_code or "").strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="referral_code is required")
+
+    referral = supabase.table("referrals") \
+        .select("id,owner_id,code") \
+        .eq("code", code) \
+        .maybe_single() \
+        .execute()
+    if not referral.data:
+        return {
+            "valid": False,
+            "can_redeem": False,
+            "reason": "invalid_code",
+        }
+
+    referrer_id = referral.data["owner_id"]
+    if referrer_id == current_user_id:
+        return {
+            "valid": True,
+            "can_redeem": False,
+            "reason": "self_referral_not_allowed",
+        }
+
+    existing = supabase.table("referral_redemptions") \
+        .select("id") \
+        .eq("redeemed_by", current_user_id) \
+        .maybe_single() \
+        .execute()
+    if existing.data:
+        return {
+            "valid": True,
+            "can_redeem": False,
+            "reason": "already_redeemed",
+        }
+
+    return {
+        "valid": True,
+        "can_redeem": True,
+        "reason": "ok",
+        "referral_code": referral.data["code"],
+    }
+
+
+@router.get("/api/v1/invite/{referral_code}")
+def invite_lookup(referral_code: str):
+    code = (referral_code or "").strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="referral_code is required")
+
+    referral = supabase.table("referrals") \
+        .select("id,owner_id,code") \
+        .eq("code", code) \
+        .maybe_single() \
+        .execute()
+    if not referral.data:
+        return {
+            "valid": False,
+            "referral_code": code,
+            "deep_link": f"trustscan://invite/{code}",
+        }
+
+    return {
+        "valid": True,
+        "referral_code": referral.data["code"],
+        "deep_link": f"trustscan://invite/{referral.data['code']}",
+    }
+
+
 @router.post("/api/v1/referral/redeem")
 def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
     current_user_id = require_user(authorization)
@@ -127,6 +199,42 @@ def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
     }
 
 
+@router.get("/api/v1/referral/redemption-status")
+def redemption_status(authorization: str = Header(None)):
+    user_id = require_user(authorization)
+    redemption = supabase.table("referral_redemptions") \
+        .select("id,referral_id,redeemed_at,scans_credited") \
+        .eq("redeemed_by", user_id) \
+        .maybe_single() \
+        .execute()
+
+    if not redemption.data:
+        return {
+            "has_redeemed": False,
+            "redeemed_at": None,
+            "scans_credited": 0,
+            "referral_code": None,
+        }
+
+    code = None
+    referral_id = redemption.data.get("referral_id")
+    if referral_id:
+        ref = supabase.table("referrals") \
+            .select("code") \
+            .eq("id", referral_id) \
+            .maybe_single() \
+            .execute()
+        if ref.data:
+            code = ref.data.get("code")
+
+    return {
+        "has_redeemed": True,
+        "redeemed_at": redemption.data.get("redeemed_at"),
+        "scans_credited": redemption.data.get("scans_credited", 0),
+        "referral_code": code,
+    }
+
+
 def _insert_notification(user_id: str, kind: str, title: str, body: str):
     try:
         supabase.table("notifications").insert({
@@ -158,3 +266,53 @@ def scan_credits(authorization: str = Header(None)):
         "bonus_scans": bonus_remaining,
         "total_available": base_daily_cap + bonus_remaining,
     }
+
+
+@router.get("/api/v1/referral/scan-credits")
+def referral_scan_credits(authorization: str = Header(None)):
+    # Alias for mobile clients that scope all referral APIs under /referral.
+    return scan_credits(authorization)
+
+
+@router.get("/api/v1/notifications")
+def list_notifications(
+    authorization: str = Header(None),
+    unread_only: bool = Query(False),
+    limit: int = Query(50, ge=1, le=200),
+):
+    user_id = require_user(authorization)
+    query = supabase.table("notifications") \
+        .select("id,kind,title,body,read,created_at") \
+        .eq("user_id", user_id)
+    if unread_only:
+        query = query.eq("read", False)
+
+    resp = query.order("created_at", desc=True).limit(limit).execute()
+    rows = resp.data or []
+    unread_count = sum(1 for n in rows if not n.get("read"))
+    return {
+        "items": rows,
+        "unread_count": unread_count,
+    }
+
+
+@router.post("/api/v1/notifications/{notification_id}/read")
+def mark_notification_read(notification_id: str, authorization: str = Header(None)):
+    user_id = require_user(authorization)
+    supabase.table("notifications") \
+        .update({"read": True}) \
+        .eq("id", notification_id) \
+        .eq("user_id", user_id) \
+        .execute()
+    return {"ok": True}
+
+
+@router.post("/api/v1/notifications/read-all")
+def mark_notifications_read_all(authorization: str = Header(None)):
+    user_id = require_user(authorization)
+    supabase.table("notifications") \
+        .update({"read": True}) \
+        .eq("user_id", user_id) \
+        .eq("read", False) \
+        .execute()
+    return {"ok": True}
