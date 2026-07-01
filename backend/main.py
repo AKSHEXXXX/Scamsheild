@@ -64,10 +64,15 @@ app = FastAPI(
     openapi_url=None,
 )
 
+_cors_origins = settings.CORS_ORIGINS or ["*"]
+_allow_credentials = "*" not in _cors_origins
+if not _allow_credentials:
+    logger.warning("CORS_ORIGINS contains '*' so allow_credentials is disabled for safety")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials=_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )

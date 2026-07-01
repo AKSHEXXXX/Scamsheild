@@ -15,10 +15,13 @@ logger = logging.getLogger("scamshield.meta")
 @router.get("/api/v1/health")
 def health():
     from app.ml.model_loader import get_models_loaded_count
+    from app.database_ext import MongoDBClient, RedisClient
     return {
         "status": "ok",
         "version": "2.1.0",
         "models_loaded": get_models_loaded_count(),
+        "mongodb_connected": MongoDBClient.is_connected(),
+        "redis_connected": RedisClient.is_connected(),
     }
 
 @router.get("/api/v1/config")

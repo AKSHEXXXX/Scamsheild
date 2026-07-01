@@ -2,6 +2,7 @@ import os
 import time
 import json
 import logging
+import uuid
 from typing import Callable, Optional
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -35,11 +36,13 @@ async def _check_rate_limit(key: str, limit: int) -> tuple[bool, int]:
     if r is None:
         return True, 0
     now = int(time.time())
+    now_ms = int(time.time() * 1000)
+    event_member = f"{now_ms}-{uuid.uuid4().hex}"
     window_start = now - WINDOW_SECONDS
     try:
         async with r.pipeline(transaction=True) as pipe:
             await pipe.zremrangebyscore(key, 0, window_start)
-            await pipe.zadd(key, {str(now): now})
+            await pipe.zadd(key, {event_member: now})
             await pipe.zcard(key)
             await pipe.expire(key, WINDOW_SECONDS)
             _, _, count, _ = await pipe.execute()

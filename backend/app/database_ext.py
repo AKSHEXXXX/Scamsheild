@@ -124,4 +124,6 @@ def close_databases():
     try:
         asyncio.run(RedisClient.close())
     except RuntimeError:
-        pass
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            loop.create_task(RedisClient.close())
