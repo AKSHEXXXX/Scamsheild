@@ -7,10 +7,11 @@ from fastapi import APIRouter, Header, HTTPException, File, UploadFile, Form
 from pydantic import BaseModel
 from app.models import AnalyzeOut, SandboxImageRequest
 from app.database import supabase
-from app.auth import require_user, enforce_credit_cap
+from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, record_bonus_consumption
 from app.ocr import screenshot_ocr
 from app.analyzer import analyze
 from app.helpers import get_config_dict, persist_scan
+from schemas.scan_result import verdict_label as _verdict_label
 
 router = APIRouter(tags=["image"])
 logger = logging.getLogger("scamshield.image")
@@ -41,10 +42,10 @@ async def sandbox_image_upload(file: UploadFile = File(...),
 async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_device_id: Optional[str]):
     try:
         config = get_config_dict()
-        cap = config.get("scan_credit_cap", 50)
+        base_cap = config.get("scan_credit_cap", 50)
     except Exception as e:
         logger.warning("get_config_dict failed (is migration applied?): %s", e)
-        cap = 50
+        base_cap = 50
     today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
     count_result = supabase.table("scans") \
         .select("id", count="exact") \
@@ -52,7 +53,8 @@ async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_devi
         .gte("created_at", today_start) \
         .execute()
     scan_count = count_result.count if count_result.count is not None else 0
-    enforce_credit_cap(user_id, cap, scan_count)
+    effective_cap = calculate_effective_cap(user_id, base_cap)
+    enforce_credit_cap(user_id, effective_cap, scan_count)
     device_id = body.device_id or x_device_id or "unknown"
     ocr_output = screenshot_ocr.extract_from_base64(
         image_b64=body.image,
@@ -87,6 +89,8 @@ async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_devi
             ocr_method=ocr_output.method, ocr_confidence=ocr_output.confidence,
             ocr_fallback=ocr_output.fallback_used
         )
+        if scan_id and scan_count >= base_cap:
+            record_bonus_consumption(user_id, scan_id)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
     flagged_urls = [u["url"] if isinstance(u, dict) else str(u)

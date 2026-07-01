@@ -1,10 +1,12 @@
 import logging
+from datetime import datetime, timezone
 from typing import Literal, Optional
 from urllib.parse import urlparse, parse_qs
 from fastapi import APIRouter, Header
 from pydantic import BaseModel, Field
-from app.auth import require_user
-from app.helpers import persist_scan
+from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, record_bonus_consumption
+from app.database import supabase
+from app.helpers import get_config_dict, persist_scan
 from schemas.scan_result import verdict_label as _verdict_label
 from agents.agent4_blacklist import check as blacklist_check
 from app.ml.model_loader import get_models
@@ -25,6 +27,23 @@ async def check_qr(body: CheckQRIn,
                    authorization: str = Header(None),
                    x_device_id: Optional[str] = Header(None)):
     user_id = require_user(authorization)
+
+    try:
+        config = get_config_dict()
+        base_cap = config.get("scan_credit_cap", 50)
+    except Exception as e:
+        logger.warning("get_config_dict failed (is migration applied?): %s", e)
+        base_cap = 50
+    today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
+    count_result = supabase.table("scans") \
+        .select("id", count="exact") \
+        .eq("user_id", user_id) \
+        .gte("created_at", today_start) \
+        .execute()
+    scan_count = count_result.count if count_result.count is not None else 0
+    effective_cap = calculate_effective_cap(user_id, base_cap)
+    enforce_credit_cap(user_id, effective_cap, scan_count)
+
     from app.preprocessing.text_normalizer import normalize
     payload = body.payload
 
@@ -161,6 +180,8 @@ async def check_qr(body: CheckQRIn,
     }
     try:
         scan_id = await persist_scan("qr", user_id, body.os, x_device_id, payload, result, flagged)
+        if scan_id and scan_count >= base_cap:
+            record_bonus_consumption(user_id, scan_id)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
         scan_id = ""

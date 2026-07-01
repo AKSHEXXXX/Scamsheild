@@ -1,10 +1,12 @@
 import logging
 import re
+from datetime import datetime, timezone
 from typing import Literal, Optional
 from fastapi import APIRouter, Header
 from pydantic import BaseModel
-from app.auth import require_user
-from app.helpers import persist_scan
+from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, record_bonus_consumption
+from app.database import supabase
+from app.helpers import get_config_dict, persist_scan
 from schemas.scan_result import verdict_label as _verdict_label
 from agents.agent1_text_tfidf import predict as agent1_predict
 from agents.agent15_ensemble import compute
@@ -25,6 +27,23 @@ async def analyze_text(body: AnalyzeTextIn,
                        authorization: str = Header(None),
                        x_device_id: Optional[str] = Header(None)):
     user_id = require_user(authorization)
+
+    try:
+        config = get_config_dict()
+        base_cap = config.get("scan_credit_cap", 50)
+    except Exception as e:
+        logger.warning("get_config_dict failed (is migration applied?): %s", e)
+        base_cap = 50
+    today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
+    count_result = supabase.table("scans") \
+        .select("id", count="exact") \
+        .eq("user_id", user_id) \
+        .gte("created_at", today_start) \
+        .execute()
+    scan_count = count_result.count if count_result.count is not None else 0
+    effective_cap = calculate_effective_cap(user_id, base_cap)
+    enforce_credit_cap(user_id, effective_cap, scan_count)
+
     from app.preprocessing.text_normalizer import normalize
     text = normalize(body.text)
 
@@ -38,6 +57,8 @@ async def analyze_text(body: AnalyzeTextIn,
                                    {"risk_score": 0, "verdict": "low_risk", "verdict_label": "Low Risk",
                                     "warning_count": 0, "findings": [],
                                     "flagged_urls": []}, False)
+            if scan_id and scan_count >= base_cap:
+                record_bonus_consumption(user_id, scan_id)
         except Exception:
             pass
         return {
@@ -127,6 +148,8 @@ async def analyze_text(body: AnalyzeTextIn,
                                 "warning_count": len(findings), "findings": findings,
                                 "flagged_urls": flagged_urls},
                                verdict == "high_risk")
+        if scan_id and scan_count >= base_cap:
+            record_bonus_consumption(user_id, scan_id)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
 

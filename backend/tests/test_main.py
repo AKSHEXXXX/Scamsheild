@@ -153,6 +153,7 @@ async def test_get_scan_by_id(mock_table, mock_persist, mock_text_auth, mock_met
                    "input_text": "test scan for id lookup", "created_at": "2026-01-01T00:00:00Z"}]
     mock_table.return_value.select.return_value.eq.return_value.order.return_value.limit.return_value.execute.return_value = MagicMock(data=mock_scans)
     mock_table.return_value.select.return_value.eq.return_value.execute.return_value = MagicMock(count=0)
+    mock_table.return_value.select.return_value.eq.return_value.gte.return_value.execute.return_value = MagicMock(count=0)
     mock_table.return_value.select.return_value.eq.return_value.single.return_value.execute.return_value = MagicMock(
         data={"id": "mock-scan-id", "user_id": "mock-scan-user", "result_json": {"scam_score": 50, "verdict": "low_risk"}}
     )

@@ -85,6 +85,7 @@ from routers.scan import router as scan_router
 from routers.dashboard import router as dashboard_router
 from routers.feedback import router as feedback_router
 from routers.admin_dashboard import router as admin_router
+from routers.referral import router as referral_router
 app.include_router(meta_router)
 app.include_router(scan_router)
 app.include_router(dashboard_router)
@@ -96,6 +97,7 @@ app.include_router(upi_router)
 app.include_router(image_router)
 app.include_router(audio_router)
 app.include_router(admin_router)
+app.include_router(referral_router)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc):
