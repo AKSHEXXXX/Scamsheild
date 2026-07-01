@@ -19,6 +19,8 @@ if _admin_domain:
 logger = logging.getLogger("scamshield")
 
 _anomaly_task = None
+_blacklist_refresh_task = None
+BLACKLIST_REFRESH_INTERVAL_SECONDS = 7 * 24 * 3600  # weekly
 
 
 async def _run_anomaly_monitor():
@@ -41,18 +43,38 @@ async def _run_anomaly_monitor():
         await asyncio.sleep(600)
 
 
+async def _run_blacklist_refresh():
+    """Weekly pull from OpenPhish / URLhaus / PhishTank into Agent 4's
+    blacklist (SCA-137). Runs in-process (not a subprocess) so the merged
+    domain set is hot-swapped into the live agent immediately via
+    model_loader.reload_agent4_blacklist(), with no redeploy required."""
+    await asyncio.sleep(120)
+    while True:
+        try:
+            from jobs.refresh_url_blacklist import run_and_save
+            summary = await asyncio.to_thread(run_and_save)
+            logger.info("Weekly blacklist refresh complete: Agent 4 loaded %d domains (+%d) | sources=%s",
+                       summary["total_domains"], summary["added"], summary["sources"])
+        except Exception as e:
+            logger.warning("blacklist refresh run failed: %s", e)
+        await asyncio.sleep(BLACKLIST_REFRESH_INTERVAL_SECONDS)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _anomaly_task
+    global _anomaly_task, _blacklist_refresh_task
     logger.info("Starting background model loading and database connections...")
     from app.ml.model_loader import load_all
     asyncio.create_task(asyncio.to_thread(load_all))
     from app.database_ext import connect_databases, close_databases
     connect_databases()
     _anomaly_task = asyncio.create_task(_run_anomaly_monitor())
+    _blacklist_refresh_task = asyncio.create_task(_run_blacklist_refresh())
     yield
     if _anomaly_task:
         _anomaly_task.cancel()
+    if _blacklist_refresh_task:
+        _blacklist_refresh_task.cancel()
     close_databases()
 
 app = FastAPI(
@@ -91,6 +113,7 @@ from routers.dashboard import router as dashboard_router
 from routers.feedback import router as feedback_router
 from routers.admin_dashboard import router as admin_router
 from routers.referral import router as referral_router
+from routers.account import router as account_router
 app.include_router(meta_router)
 app.include_router(scan_router)
 app.include_router(dashboard_router)
@@ -103,8 +126,14 @@ app.include_router(image_router)
 app.include_router(audio_router)
 app.include_router(admin_router)
 app.include_router(referral_router)
+app.include_router(account_router)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc):
-    logger.info("422 on %s: invalid request body", request.url.path)
+    try:
+        raw_body = await request.body()
+    except Exception:
+        raw_body = b""
+    logger.info("422 on %s: invalid request body | content-type=%s | body=%r | errors=%s",
+                request.url.path, request.headers.get("content-type", ""), raw_body[:500], exc.errors())
     return JSONResponse(status_code=422, content={"detail": "Invalid request body"})

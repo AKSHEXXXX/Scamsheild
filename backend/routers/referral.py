@@ -158,18 +158,21 @@ def invite_lookup(referral_code: str):
 @router.post("/api/v1/referral/redeem")
 def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
     current_user_id = require_user(authorization)
+    code = (body.referral_code or "").strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="referral_code is required")
 
     referral = supabase.table("referrals") \
         .select("*") \
-        .eq("code", body.referral_code) \
+        .eq("code", code) \
         .maybe_single() \
         .execute()
     if not referral.data:
-        raise HTTPException(status_code=400, detail="Invalid or already used referral code.")
+        raise HTTPException(status_code=404, detail="Referral code not found.")
 
     referrer_id = referral.data["owner_id"]
     if referrer_id == current_user_id:
-        raise HTTPException(status_code=400, detail="Invalid or already used referral code.")
+        raise HTTPException(status_code=409, detail="You cannot redeem your own referral code.")
 
     existing = supabase.table("referral_redemptions") \
         .select("id") \
@@ -177,7 +180,7 @@ def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
         .maybe_single() \
         .execute()
     if existing.data:
-        raise HTTPException(status_code=400, detail="Invalid or already used referral code.")
+        raise HTTPException(status_code=409, detail="You have already redeemed a referral code.")
 
     scans_credited = 5
     supabase.table("referral_redemptions").insert({

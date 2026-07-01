@@ -29,7 +29,7 @@ def _load_json(path: Path) -> dict:
     if not path.exists():
         return {}
     try:
-        return json.loads(path.read_text())
+        return json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
         logger.warning("Could not load %s: %s", path.name, e)
         return {}
@@ -101,12 +101,19 @@ def _load_agent4_blacklist():
         _models["agent4"] = {"domains": domains, "meta": {"total_domains": len(domains)}}
         total = len(domains)
         _accuracy["agent4"] = {"metric": "Coverage", "value": f"{total} domains"}
-        logger.info("[STARTUP] Agent 4 — URL Blacklist Checker loaded ✓ (%d domains)", total)
+        logger.info("[STARTUP] Agent 4 loaded %d domains (URL Blacklist Checker) ✓", total)
     else:
         logger.warning("[STARTUP] Agent 4 — URL Blacklist Checker FAILED, using Supabase blacklist only")
         _models["agent4_blacklist"] = set()
         _models["agent4"] = {"domains": set(), "meta": {"total_domains": 0}}
         _accuracy["agent4"] = {"metric": "Coverage", "value": "Supabase only"}
+
+
+def reload_agent4_blacklist():
+    """Re-read url_blacklist.pkl from disk and hot-swap the in-memory set.
+    Called by jobs.refresh_url_blacklist after it writes a freshly merged
+    blacklist, so the weekly refresh takes effect without a process restart."""
+    _load_agent4_blacklist()
 
 def _load_agent5_qr():
     clf = _load_pickle(MODEL_DIR / "qr_url_classifier.pkl")

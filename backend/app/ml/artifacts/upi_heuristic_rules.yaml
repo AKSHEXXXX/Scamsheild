@@ -29,6 +29,42 @@ whitelists:
     - kotak
     - npci
     - upi
+    - pnb
+    - pnbindia
+    - canarabank
+    - unionbank
+    - unionbankofindia
+    - bankofbaroda
+    - boi
+    - federal
+    - federalbank
+    - idfcfirst
+    - idfcbank
+    - indus
+    - indusind
+    - rbl
+    - rblbank
+    - idbi
+    - idbibank
+    - freecharge
+    - mobikwik
+    - cred
+    - slice
+    - fi
+    - jupiter
+    - niyo
+    - airtel
+    - jio
+    - bhim
+    - upsbi
+    - hsbc
+    - citi
+    - citibank
+    - scb
+    - standardchartered
+    - dbs
+    - razorpay
+    - cashfree
 
 rules:
   - name: odd_hours_txn

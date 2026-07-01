@@ -23,8 +23,12 @@ create table if not exists public.bonus_scan_consumptions (
 create index if not exists idx_bonus_consumptions_user
   on public.bonus_scan_consumptions (user_id);
 
--- RLS: service-role only (backend uses service key)
+-- RLS: service-role only (backend uses service key).
+-- Scoped `to service_role` — without it, `using (true)` grants access to
+-- anon/authenticated as well, exposing every user's bonus scan ledger.
 alter table public.bonus_scan_consumptions enable row level security;
 
 create policy "Service role full access to bonus_scan_consumptions"
-  on public.bonus_scan_consumptions for all using (true) with check (true);
+  on public.bonus_scan_consumptions for all
+  to service_role
+  using (true) with check (true);

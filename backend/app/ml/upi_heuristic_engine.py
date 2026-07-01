@@ -94,8 +94,18 @@ class UPIHeuristicEngine:
         if pt == 'impersonation_keyword_vpa':
             vpa = normalize_vpa(txn.get(field, ''))
             domain = extract_vpa_domain(vpa)
+            if domain and domain in self.vpa_domain_whitelist:
+                return False
+            local_part = vpa.split('@')[0] if '@' in vpa else vpa
             keys = [_safe_lower(x) for x in rule.get('keywords', [])]
-            return bool(vpa and any(k in vpa for k in keys) and domain not in self.vpa_domain_whitelist)
+            for k in keys:
+                # Word-boundary-safe match: a keyword must appear as its own
+                # token (bounded by start/end or a non-alphanumeric separator),
+                # not as a raw substring. This avoids false positives like
+                # "pay" matching inside "paytm" or "payment".
+                if re.search(r'(?:^|[^a-z0-9])' + re.escape(k) + r'(?:$|[^a-z0-9])', local_part):
+                    return True
+            return False
         if pt == 'new_recipient_high_amount':
             return bool(txn.get('is_new_recipient', False)) and _safe_float(txn.get('amount')) >= float(rule.get('threshold', 10000))
         if pt == 'odd_hours':

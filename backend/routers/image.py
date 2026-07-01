@@ -3,8 +3,8 @@ import os
 import logging
 from typing import Literal, Optional
 from datetime import datetime, timezone
-from fastapi import APIRouter, Header, HTTPException, File, UploadFile, Form
-from pydantic import BaseModel
+from fastapi import APIRouter, Header, HTTPException, File, UploadFile, Form, Request
+from pydantic import BaseModel, ValidationError
 from app.models import AnalyzeOut, SandboxImageRequest
 from app.database import supabase
 from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, record_bonus_consumption
@@ -22,10 +22,61 @@ class SandboxFileIn(BaseModel):
     os: Literal["iOS", "Android"]
 
 @router.post("/api/v1/sandbox-image")
-async def sandbox_image(body: SandboxImageRequest,
+async def sandbox_image(request: Request,
                         authorization: str = Header(None),
                         x_device_id: Optional[str] = Header(None)):
+    """Accepts EITHER application/json (base64 image field) OR
+    multipart/form-data (a real uploaded file). Mobile clients that upload
+    a raw image file as multipart previously got a hard 422 here because
+    the route only declared a JSON Pydantic body — this branches on the
+    actual Content-Type instead of assuming one format."""
     user_id = require_user(authorization)
+    content_type = request.headers.get("content-type", "")
+
+    if content_type.startswith("multipart/form-data"):
+        form = await request.form()
+        upload = form.get("file") or form.get("image")
+        if upload is None or not hasattr(upload, "read"):
+            logger.warning("sandbox-image 422: multipart body missing 'file'/'image' field. fields=%s",
+                           list(form.keys()))
+            raise HTTPException(status_code=422, detail={
+                "error": "Expected a 'file' or 'image' multipart field containing the image",
+                "code": "MULTIPART_FIELD_MISSING",
+            })
+        file_bytes = await upload.read()
+        image_b64 = base64.b64encode(file_bytes).decode("utf-8")
+        device_id_field = form.get("device_id")
+        fallback_reason_field = form.get("fallback_reason")
+        body = SandboxImageRequest(
+            image=image_b64,
+            device_id=(device_id_field if isinstance(device_id_field, str) else None) or x_device_id,
+            fallback_reason=(fallback_reason_field if isinstance(fallback_reason_field, str) else None),
+        )
+        return await _process_sandbox_image(body, user_id, x_device_id)
+
+    raw = await request.body()
+    try:
+        import json
+        payload = json.loads(raw or b"{}")
+    except Exception as e:
+        logger.warning("sandbox-image 422: non-JSON body (content-type=%r, len=%d): %r | error=%s",
+                       content_type, len(raw), raw[:300], e)
+        raise HTTPException(status_code=422, detail={
+            "error": "Expected application/json or multipart/form-data",
+            "code": "UNSUPPORTED_CONTENT_TYPE",
+            "content_type_received": content_type,
+        })
+    try:
+        body = SandboxImageRequest(**payload)
+    except ValidationError as e:
+        logger.warning("sandbox-image 422: JSON body did not match schema. body_keys=%s | errors=%s",
+                       list(payload.keys()) if isinstance(payload, dict) else type(payload).__name__, e.errors())
+        raise HTTPException(status_code=422, detail={
+            "error": "Invalid request body",
+            "code": "SCHEMA_MISMATCH",
+            "expected_fields": {"image": "required base64 string", "device_id": "optional string", "fallback_reason": "optional string"},
+            "received_keys": list(payload.keys()) if isinstance(payload, dict) else None,
+        })
     return await _process_sandbox_image(body, user_id, x_device_id)
 
 @router.post("/api/v1/sandbox-image-upload")

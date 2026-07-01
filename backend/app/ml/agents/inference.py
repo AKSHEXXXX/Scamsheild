@@ -178,33 +178,92 @@ def _normalize_brand(s: str) -> str:
     DIGIT_SUBS = str.maketrans("01345", "oieas")
     return normalize_homoglyphs(s.lower().translate(DIGIT_SUBS))
 
+def _extract_label(s: str) -> str:
+    """Reduce a domain/URL/free-form string to its bare registrable label
+    (e.g. 'hdfcbank.com' / 'https://hdfcbank.com/login' -> 'hdfcbank').
+    Falls back to the raw lowercased, alnum-only string when it doesn't
+    look like a real domain (tldextract finds no registrable label)."""
+    raw = (s or "").strip().lower()
+    if "://" in raw:
+        raw = raw.split("://", 1)[1]
+    raw = raw.split("/")[0].split("@")[-1]
+    try:
+        import tldextract
+        ext = tldextract.extract(raw)
+        if ext.domain:
+            return ext.domain
+    except Exception:
+        pass
+    return re.sub(r"[^a-z0-9]", "", raw)
+
+# Brand token -> (official_domain, display_name), built once from the
+# whitelist pickle. Comparing against the short brand TOKEN (e.g. "hdfcbank")
+# instead of the full domain string (e.g. "hdfcbank.com") is what makes
+# edit-distance/containment checks meaningful — comparing full domains
+# (including TLD) made every real-world lookalike distance too large to
+# ever match, which was the root cause of the v1 false negatives.
+_BRAND_TOKENS_CACHE = None
+_BRAND_TOKENS_SOURCE_ID = None
+
+def _get_brand_tokens(whitelist: dict) -> dict:
+    global _BRAND_TOKENS_CACHE, _BRAND_TOKENS_SOURCE_ID
+    if _BRAND_TOKENS_CACHE is not None and _BRAND_TOKENS_SOURCE_ID == id(whitelist):
+        return _BRAND_TOKENS_CACHE
+    tokens = {}
+    for official_domain, display_name in whitelist.items():
+        label = _extract_label(official_domain)
+        if label and label not in tokens:
+            tokens[label] = (official_domain, display_name)
+    _BRAND_TOKENS_CACHE = tokens
+    _BRAND_TOKENS_SOURCE_ID = id(whitelist)
+    return tokens
+
+# Re-tuned for the label-based comparison above (short brand tokens, not
+# full domain+TLD strings). 2 tolerates a single homoglyph/typo swap
+# (e.g. "sbl"->"sbi", "paytrn"->"paytm" folds to distance 2 via rn->m)
+# without over-matching short, unrelated brand tokens.
+BRAND_EDIT_DISTANCE_THRESHOLD = 2
+
 def agent8_check_brand(domain: str) -> tuple:
     if not is_agent_healthy("agent8"):
         return False, None, None
     models = get_models()
     whitelist = models.get("agent8_whitelist")
-    config = models.get("agent8_config")
-    if whitelist is not None and config is not None:
+    if whitelist is not None and isinstance(whitelist, dict):
         try:
-            norm = _normalize_brand(domain)
-            threshold = config.get("edit_distance_threshold", 2) if isinstance(config, dict) else 2
-            brands = whitelist if isinstance(whitelist, dict) else {}
-            official = brands.get("domains", brands) if isinstance(brands, dict) else whitelist
-            for brand in official:
-                d = lev_distance(norm, _normalize_brand(brand))
-                if d <= threshold:
+            input_label = _extract_label(domain)
+            norm_input = _normalize_brand(input_label)
+            if input_label:
+                tokens = _get_brand_tokens(whitelist)
+                # Exact match to a real official label -> legitimate, not impersonation.
+                if input_label in tokens:
                     record_agent_success("agent8")
-                    return True, brand, d
+                    return False, None, None
+                for brand_token, (official_domain, display_name) in tokens.items():
+                    norm_brand = _normalize_brand(brand_token)
+                    # A) fuzzy match: small edit distance from a known brand token
+                    # (catches homoglyph/typo swaps like "sbl"/"paytrn").
+                    d = lev_distance(norm_input, norm_brand)
+                    if 0 < d <= BRAND_EDIT_DISTANCE_THRESHOLD:
+                        record_agent_success("agent8")
+                        return True, display_name, d
+                    # B) containment: brand token embedded with extra content
+                    # (catches "hdfcbank-secure"), but NOT a shorter/legit
+                    # abbreviation like "hdfc" (too short to contain "hdfcbank").
+                    if len(input_label) > len(brand_token) and brand_token in norm_input:
+                        record_agent_success("agent8")
+                        return True, display_name, d
+            record_agent_success("agent8")
         except Exception as e:
             logger.debug("Agent 8 error: %s", e)
             record_agent_error("agent8")
     brand_patterns = [
-        (r"\bhdfc\b", "HDFC Bank"),
-        (r"\bsbi\b", "SBI"),
-        (r"\bicici\b", "ICICI Bank"),
-        (r"\baxis(?:\s*|-)*bank\b", "Axis Bank"),
-        (r"\bkotak\b", "Kotak Mahindra"),
-        (r"\bpaytm\b", "Paytm"),
+        # NOTE: hdfc/sbi/icici/axis/kotak/paytm are intentionally NOT listed
+        # here anymore — they're now handled by the whitelist-token logic
+        # above, which correctly distinguishes a short legitimate variant
+        # ("hdfc.com") from a lookalike ("hdfcbank-secure"). A blunt \bhdfc\b
+        # substring match would re-flag "hdfc.com" as impersonation (the
+        # word boundary at the dot still matches), undoing that fix.
         (r"\bgoogle(?:\s*|-)*(?:pay|login|account|verify)\b", "Google"),
         (r"\bgpay\b", "Google Pay"),
         (r"\bphonepe\b", "PhonePe"),

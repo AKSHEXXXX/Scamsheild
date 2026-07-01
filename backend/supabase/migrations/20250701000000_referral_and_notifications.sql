@@ -37,16 +37,26 @@ create table if not exists public.notifications (
 
 create index if not exists idx_notifications_user_id on public.notifications (user_id);
 
--- 4. RLS — service-role only tables (backend uses service key)
+-- 4. RLS — service-role only tables (backend uses service key).
+-- IMPORTANT: policies must be scoped `to service_role`. A policy with no
+-- `to` clause applies to EVERY role (including anon/authenticated), which
+-- would let any client holding just the public anon key read/write/delete
+-- all referrals, redemptions, and notifications for every user.
 alter table public.referrals            enable row level security;
 alter table public.referral_redemptions enable row level security;
 alter table public.notifications        enable row level security;
 
 create policy "Service role full access to referrals"
-  on public.referrals for all using (true) with check (true);
+  on public.referrals for all
+  to service_role
+  using (true) with check (true);
 
 create policy "Service role full access to referral_redemptions"
-  on public.referral_redemptions for all using (true) with check (true);
+  on public.referral_redemptions for all
+  to service_role
+  using (true) with check (true);
 
 create policy "Service role full access to notifications"
-  on public.notifications for all using (true) with check (true);
+  on public.notifications for all
+  to service_role
+  using (true) with check (true);
