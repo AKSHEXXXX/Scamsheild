@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 from functools import lru_cache
 from fastapi import Header, HTTPException, Depends
 from app.auth import require_user
@@ -30,9 +31,16 @@ def _ensure_admin_user(email: str, name: str) -> str:
     result = sb.table("admin_users").select("id").eq("email", email).execute()
     if result.data:
         admin_id = result.data[0]["id"]
-        sb.table("admin_users").update({"last_login_at": "now()", "name": name}).eq("id", admin_id).execute()
+        sb.table("admin_users").update({
+            "last_login_at": datetime.now(timezone.utc).isoformat(),
+            "name": name,
+        }).eq("id", admin_id).execute()
         return admin_id
-    ins = sb.table("admin_users").insert({"email": email, "name": name}).execute()
+    ins = sb.table("admin_users").insert({
+        "email": email,
+        "name": name,
+        "last_login_at": datetime.now(timezone.utc).isoformat(),
+    }).execute()
     return ins.data[0]["id"]
 
 def _get_user_permissions(user_id: str) -> list[str]:

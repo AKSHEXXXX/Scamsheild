@@ -14,6 +14,17 @@ def _parse_csv_env(name: str, default: str = "") -> list[str]:
         return []
     return [x.strip() for x in raw.split(",") if x.strip()]
 
+
+def _parse_cors_origins() -> list[str]:
+    # Keep production-safe defaults when env is missing.
+    origins = _parse_csv_env("CORS_ORIGINS", "")
+    if origins:
+        return origins
+    return [
+        "https://unique-cat-admin.up.railway.app",
+        "http://localhost:3000",
+    ]
+
 class Settings:
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -24,7 +35,7 @@ class Settings:
 # Backend uses SERVICE_KEY server-side only
     API_BASE_URL: str = os.getenv("API_BASE_URL", "http://localhost:8000")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    CORS_ORIGINS: list[str] = _parse_csv_env("CORS_ORIGINS", "*")
+    CORS_ORIGINS: list[str] = _parse_cors_origins()
     SENSITIVITY_THRESHOLD: int = int(os.getenv("SENSITIVITY_THRESHOLD", "70"))
     MODEL_DOWNLOAD_URL: str = os.getenv("MODEL_DOWNLOAD_URL", "")
     MODEL_DOWNLOAD_KEY: str = os.getenv("MODEL_DOWNLOAD_KEY", "")
