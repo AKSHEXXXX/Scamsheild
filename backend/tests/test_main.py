@@ -144,29 +144,23 @@ async def test_history_returns_structured(mock_auth):
     assert "items" in data
 
 @pytest.mark.anyio
+@patch("app.database.supabase.table")
+@patch("routers.text.enforce_credit_cap")
+@patch("routers.text.calculate_effective_cap", return_value=9999)
 @patch("routers.meta.require_user", return_value="mock-scan-user")
 @patch("routers.text.require_user", return_value="mock-scan-user")
 @patch("routers.text.persist_scan", return_value="mock-scan-id")
-@patch("app.database.supabase.table")
-async def test_get_scan_by_id(mock_table, mock_persist, mock_text_auth, mock_meta_auth):
-    mock_scans = [{"id": "mock-scan-id", "kind": "message", "verdict": "low_risk",
-                   "input_text": "test scan for id lookup", "created_at": "2026-01-01T00:00:00Z"}]
-    mock_table.return_value.select.return_value.eq.return_value.order.return_value.limit.return_value.execute.return_value = MagicMock(data=mock_scans)
-    mock_table.return_value.select.return_value.eq.return_value.execute.return_value = MagicMock(count=0)
-    mock_table.return_value.select.return_value.eq.return_value.gte.return_value.execute.return_value = MagicMock(count=0)
+async def test_get_scan_by_id(mock_persist, mock_text_auth, mock_meta_auth, mock_eff_cap, mock_enforce, mock_table):
     mock_table.return_value.select.return_value.eq.return_value.single.return_value.execute.return_value = MagicMock(
         data={"id": "mock-scan-id", "user_id": "mock-scan-user", "result_json": {"scam_score": 50, "verdict": "low_risk"}}
     )
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        await client.post("/api/v1/analyze-text", json={
+        post_resp = await client.post("/api/v1/analyze-text", json={
             "text": "test scan for id lookup",
             "os": "Android"
         }, headers={"Authorization": "Bearer test"})
-        history = await client.get("/api/v1/history", headers={"Authorization": "Bearer test"})
-        assert history.status_code == 200
-        items = history.json()["items"]
-        assert len(items) > 0
-        scan_id = items[0]["scan_id"]
+        assert post_resp.status_code == 200
+        scan_id = post_resp.json()["scan_id"]
         resp = await client.get(f"/api/v1/scan/{scan_id}", headers={"Authorization": "Bearer test"})
         assert resp.status_code == 200
