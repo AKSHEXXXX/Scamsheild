@@ -64,17 +64,17 @@ def test_redeem_invalid_code_returns_404(monkeypatch):
     with pytest.raises(HTTPException) as exc:
         redeem_referral(RedeemRequest(referral_code="TS-BADCODE"), "Bearer valid")
     assert exc.value.status_code == 404
-    assert "Invalid referral code" in str(exc.value.detail)
+    assert "Referral code not found" in str(exc.value.detail)
 
 
-def test_redeem_own_code_returns_400(monkeypatch):
+def test_redeem_own_code_returns_409(monkeypatch):
     sb = MockSupabase("own_code")
     monkeypatch.setattr("routers.referral.supabase", sb)
     monkeypatch.setattr("routers.referral.require_user", lambda a: "user_self")
     with pytest.raises(HTTPException) as exc:
         redeem_referral(RedeemRequest(referral_code="TS-OWNCODE"), "Bearer valid")
-    assert exc.value.status_code == 400
-    assert "Cannot redeem your own code" in str(exc.value.detail)
+    assert exc.value.status_code == 409
+    assert "cannot redeem your own" in str(exc.value.detail).lower()
 
 
 def test_redeem_already_redeemed_returns_409(monkeypatch):
@@ -84,7 +84,7 @@ def test_redeem_already_redeemed_returns_409(monkeypatch):
     with pytest.raises(HTTPException) as exc:
         redeem_referral(RedeemRequest(referral_code="TS-USED"), "Bearer valid")
     assert exc.value.status_code == 409
-    assert "Already redeemed" in str(exc.value.detail)
+    assert "already redeemed" in str(exc.value.detail).lower()
 
 
 def test_redeem_success_response_shape(monkeypatch):

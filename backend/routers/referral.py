@@ -196,10 +196,7 @@ def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
         body=f"You earned {scans_credited} bonus scans! A new user joined using your code.",
     )
 
-    return {
-        "scans_credited": scans_credited,
-        "referrer_rewarded": True,
-    }
+    return {"bonus_scans_credited": scans_credited}
 
 
 @router.get("/api/v1/referral/redemption-status")

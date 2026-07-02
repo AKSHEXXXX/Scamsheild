@@ -214,6 +214,10 @@ def _get_brand_tokens(whitelist: dict) -> dict:
         label = _extract_label(official_domain)
         if label and label not in tokens:
             tokens[label] = (official_domain, display_name)
+        short = display_name.lower().split()[0]
+        short_norm = _normalize_brand(short)
+        if short_norm and short_norm not in tokens:
+            tokens[short_norm] = (official_domain, display_name)
     _BRAND_TOKENS_CACHE = tokens
     _BRAND_TOKENS_SOURCE_ID = id(whitelist)
     return tokens
@@ -235,24 +239,27 @@ def agent8_check_brand(domain: str) -> tuple:
             norm_input = _normalize_brand(input_label)
             if input_label:
                 tokens = _get_brand_tokens(whitelist)
-                # Exact match to a real official label -> legitimate, not impersonation.
+                # A) Exact match to a known brand token -> brand identified, distance 0
                 if input_label in tokens:
                     record_agent_success("agent8")
-                    return False, None, None
+                    _, display_name = tokens[input_label]
+                    return True, display_name, 0
+                # B) fuzzy match / containment across all brand tokens
                 for brand_token, (official_domain, display_name) in tokens.items():
                     norm_brand = _normalize_brand(brand_token)
-                    # A) fuzzy match: small edit distance from a known brand token
-                    # (catches homoglyph/typo swaps like "sbl"/"paytrn").
                     d = lev_distance(norm_input, norm_brand)
+                    # B1) fuzzy match: small edit distance from a known brand token
+                    # (catches homoglyph/typo swaps like "sbl"/"paytrn").
                     if 0 < d <= BRAND_EDIT_DISTANCE_THRESHOLD:
                         record_agent_success("agent8")
                         return True, display_name, d
-                    # B) containment: brand token embedded with extra content
-                    # (catches "hdfcbank-secure"), but NOT a shorter/legit
-                    # abbreviation like "hdfc" (too short to contain "hdfcbank").
+                    # B2) containment: brand token embedded with extra content
+                    # (catches "hdfcbank-secure" via full token, or
+                    #  "hdfc-secure-login" via short token).
                     if len(input_label) > len(brand_token) and brand_token in norm_input:
                         record_agent_success("agent8")
-                        return True, display_name, d
+                        extra = len(input_label) - len(brand_token)
+                        return True, display_name, min(extra, 2)
             record_agent_success("agent8")
         except Exception as e:
             logger.debug("Agent 8 error: %s", e)

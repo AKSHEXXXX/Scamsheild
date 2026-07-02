@@ -38,6 +38,9 @@ SOURCES = {
     "openphish": "https://openphish.com/feed.txt",
     "urlhaus": "https://urlhaus.abuse.ch/downloads/text_online/",
     "phishtank": "https://data.phishtank.com/data/online-valid.csv",
+    # Feodo Tracker (abuse.ch) deliberately excluded — its feed is IP-based
+    # (C2 infrastructure), not domain-based. Our blacklist is domain-only.
+    # URLhaus from the same platform already covers URL-based malware threats.
 }
 
 # Safety net: never let a major legitimate platform end up in the
