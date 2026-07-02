@@ -11,7 +11,8 @@ from app.config import settings
 from app.rate_limiter import RateLimitMiddleware
 from docs.observability.structured_logging import setup_logging
 
-setup_logging()
+from app.config import settings
+setup_logging(use_json=settings.ENVIRONMENT == "production")
 from app.rbac import set_admin_email_domain
 _admin_domain = os.getenv("ADMIN_EMAIL_DOMAIN", "")
 if _admin_domain:
