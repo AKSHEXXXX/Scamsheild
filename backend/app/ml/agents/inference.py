@@ -134,22 +134,20 @@ def agent6_scan_upi(txn: dict) -> dict:
         return {"score": 0, "severity": "SAFE", "triggered_rules": [], "explanation": str(e)}
 
 def agent7_predict_upi(txn: dict) -> float:
+    from app.ml.agents.upi_feature_extractor import extract_features
     models = get_models()
     clf = models.get("agent7_classifier")
-    sc = models.get("agent7_scaler")
-    cols = models.get("agent7_feature_cols")
-    if clf is None or sc is None or cols is None:
+    whitelist = models.get("agent7_whitelist", {})
+    if clf is None:
         return -1.0
     try:
-        row = np.array([[txn.get(c, 0) for c in cols]])
-        row_scaled = sc.transform(row)
-        proba = clf.predict_proba(row_scaled)[0]
+        vpa = txn.get("vpa", "")
+        message = txn.get("note", "")
+        feats = extract_features(vpa, message, "SEND", whitelist)
+        row = np.array([feats])
+        proba = clf.predict_proba(row)[0]
         scam_idx = 1 if proba.shape[0] > 1 else 0
-        raw_prob = float(proba[scam_idx])
-        # Labels were inverted during training (class 1 = legit, class 0 = fraud).
-        # Invert so that high prob = fraud. Effective AUC after inversion: ~0.53.
-        prob = 1.0 - raw_prob
-        # Confidence gate: suppress predictions near 0.5 (model is uncertain)
+        prob = float(proba[scam_idx])
         if abs(prob - 0.5) < 0.12:
             return 0.0
         return prob

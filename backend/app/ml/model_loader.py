@@ -42,6 +42,15 @@ def _load_pickle(path: Path):
         logger.warning("Could not load %s: %s", path.name, e)
         return None
 
+def _fix_xgb_classifier(clf):
+    """Ensure XGBClassifier has n_classes_ set for predict_proba to work."""
+    if clf is not None and type(clf).__name__ == "XGBClassifier":
+        try:
+            _ = clf.classes_
+        except AttributeError:
+            clf.n_classes_ = 2
+    return clf
+
 def _load_agent14_regex():
     p = MODEL_DIR / "scamshield_rules_v2.pkl"
     if not p.exists():
@@ -79,7 +88,7 @@ def _load_agent2_distilbert():
     logger.info("[STARTUP] Agent 2 — DistilBERT FP16 loaded ✓")
 
 def _load_agent3_url():
-    clf = _load_pickle(MODEL_DIR / "url_classifier.pkl")
+    clf = _fix_xgb_classifier(_load_pickle(MODEL_DIR / "url_classifier.pkl"))
     sc = _load_pickle(MODEL_DIR / "url_scaler.pkl")
     cols = _load_pickle(MODEL_DIR / "url_feature_cols.pkl")
     if clf is not None and sc is not None and cols is not None:
@@ -116,7 +125,7 @@ def reload_agent4_blacklist():
     _load_agent4_blacklist()
 
 def _load_agent5_qr():
-    clf = _load_pickle(MODEL_DIR / "qr_url_classifier.pkl")
+    clf = _fix_xgb_classifier(_load_pickle(MODEL_DIR / "qr_url_classifier.pkl"))
     sc = _load_pickle(MODEL_DIR / "qr_url_scaler.pkl")
     cols = _load_pickle(MODEL_DIR / "qr_url_features.pkl")
     if clf is not None and sc is not None and cols is not None:
@@ -150,13 +159,15 @@ def _load_agent6_upi_heuristic():
         logger.warning("[STARTUP] Agent 6 — UPI Heuristic Rule Engine FAILED: %s", e)
 
 def _load_agent7_upi_xgb():
-    clf = _load_pickle(MODEL_DIR / "upi_xgb_classifier.pkl")
+    clf = _fix_xgb_classifier(_load_pickle(MODEL_DIR / "upi_xgb_classifier.pkl"))
     sc = _load_pickle(MODEL_DIR / "upi_xgb_scaler.pkl")
     cols = _load_pickle(MODEL_DIR / "upi_xgb_feature_cols.pkl")
+    whitelist = _load_json(MODEL_DIR / "upi_vpa_whitelist.json")
     if clf is not None and sc is not None and cols is not None:
         _models["agent7_classifier"] = clf
         _models["agent7_scaler"] = sc
         _models["agent7_feature_cols"] = cols
+        _models["agent7_whitelist"] = whitelist if whitelist else {}
         rep = _load_json(MODEL_DIR / "upi_model_report.json")
         _accuracy["agent7"] = {"metric": "AUC", "value": rep.get("auc", "N/A")}
         logger.info("[STARTUP] Agent 7 — UPI Meta Classifier (XGBoost) loaded ✓")
