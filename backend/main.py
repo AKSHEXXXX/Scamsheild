@@ -21,6 +21,7 @@ logger = logging.getLogger("scamshield")
 
 _anomaly_task = None
 _blacklist_refresh_task = None
+_retraining_task = None
 BLACKLIST_REFRESH_INTERVAL_SECONDS = 7 * 24 * 3600  # weekly
 
 
@@ -61,9 +62,17 @@ async def _run_blacklist_refresh():
         await asyncio.sleep(BLACKLIST_REFRESH_INTERVAL_SECONDS)
 
 
+async def _start_retraining_listener():
+    """Background asyncio task for retraining trigger (SCA-46).
+    Waits for MongoDB to be connected first."""
+    await asyncio.sleep(30)
+    from jobs.retraining_trigger import watch
+    await watch()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _anomaly_task, _blacklist_refresh_task
+    global _anomaly_task, _blacklist_refresh_task, _retraining_task
     logger.info("Starting background model loading and database connections...")
     from app.ml.model_loader import load_all
     asyncio.create_task(asyncio.to_thread(load_all))
@@ -71,11 +80,14 @@ async def lifespan(app: FastAPI):
     connect_databases()
     _anomaly_task = asyncio.create_task(_run_anomaly_monitor())
     _blacklist_refresh_task = asyncio.create_task(_run_blacklist_refresh())
+    _retraining_task = asyncio.create_task(_start_retraining_listener())
     yield
     if _anomaly_task:
         _anomaly_task.cancel()
     if _blacklist_refresh_task:
         _blacklist_refresh_task.cancel()
+    if _retraining_task:
+        _retraining_task.cancel()
     close_databases()
 
 app = FastAPI(
