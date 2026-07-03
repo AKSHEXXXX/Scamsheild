@@ -218,9 +218,15 @@ def _load_agent12_whisper():
     logger.info("[STARTUP] Agent 12 — Whisper ASR loaded ✓")
 
 def _load_agent13_call_transcript():
-    _models["agent13"] = {"loaded": True, "stub": True}
-    _accuracy["agent13"] = {"metric": "AUC", "value": "N/A"}
-    logger.info("[STARTUP] Agent 13 — Call Transcript Detector loaded ✓")
+    try:
+        from app.ml.agents.agent13_inference import agent13_predict  # noqa: F401
+        _models["agent13"] = {"loaded": True, "stub": False, "model_type": "distilbert-multilingual-int8"}
+        _accuracy["agent13"] = {"metric": "macro_F1", "value": "0.73 (co-occurrence adjusted)"}
+        logger.info("[STARTUP] Agent 13 — Call Transcript Fraud Detector (DistilBERT INT8) loaded ✓")
+    except Exception as e:
+        logger.warning("[STARTUP] Agent 13 — Could not import agent13_inference: %s", e)
+        _models["agent13"] = {"loaded": True, "stub": True}
+        _accuracy["agent13"] = {"metric": "macro_F1", "value": "N/A"}
 
 def _load_agent15_ensemble():
     weights = _load_json(MODEL_DIR / "ensemble_weights.json")

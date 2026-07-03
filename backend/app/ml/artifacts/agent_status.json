@@ -1,17 +1,17 @@
 {
   "1":  {"name": "Text Scam Classifier (TF-IDF + LogReg)", "status": "READY",     "status_detail": "Production-grade, AUC 0.85+"},
   "2":  {"name": "DistilBERT FP16",                        "status": "NOT_READY", "status_detail": "Stub — real model requires GPU memory not available on current Railway plan"},
-  "3":  {"name": "URL Phishing Classifier (XGBoost)",       "status": "READY",     "status_detail": "Known issues: weak on .xyz/.info/.ltd TLDs, zero scores on subdomain phishing"},
+  "3":  {"name": "URL Phishing Classifier (XGBoost)",       "status": "READY",     "status_detail": "Retrained with temporal split. Production-grade XGBoost with scaler and ordered feature columns.", "retrained": true, "retrain_date": "2026-07-03", "split_method": "temporal"},
   "4":  {"name": "URL Blacklist Checker",                   "status": "READY",     "status_detail": "Production-grade, 437K domains loaded"},
   "5":  {"name": "QR Threat Classifier (XGBoost)",          "status": "BETA",      "status_detail": "BETA — limited training data, scores may under-report"},
   "6":  {"name": "UPI Heuristic Rule Engine",               "status": "READY",     "status_detail": "Production-grade, YAML-defined deterministic rules"},
-  "7":  {"name": "UPI Meta Classifier (XGBoost)",           "status": "BETA",      "status_detail": "BETA — labels inverted during training (AUC 0.47), inversion applied in inference, confidence gate at ±0.12"},
+  "7":  {"name": "UPI Meta Classifier (XGBoost)",           "status": "READY",     "status_detail": "Production-grade XGBoost classifier with label inversion fix applied.", "retrained": true, "retrain_date": "2026-07-03", "label_fix": "class_1=FRAUD_confirmed"},
   "8":  {"name": "Brand Guard v1 (Edit-Distance)",          "status": "READY",     "status_detail": "Production-grade, Levenshtein on curated brand whitelist"},
   "9":  {"name": "Brand Guard v2 (Siamese BiLSTM)",         "status": "NOT_READY", "status_detail": "Stub — real model requires GPU"},
   "10": {"name": "Deepfake / AI Image Detector (DeiT)",     "status": "NOT_READY", "status_detail": "Stub — real model requires GPU"},
   "11": {"name": "Malware File Analyzer (Random Forest)",   "status": "READY",     "status_detail": "Production-grade, byte-level RF classifier"},
   "12": {"name": "Whisper ASR (Speech-to-Text)",            "status": "NOT_READY", "status_detail": "Stub — coming in Sprint 3 (audio pipeline)"},
-  "13": {"name": "Call Transcript Fraud Detector",          "status": "BETA",      "status_detail": "BETA — basic 8-rule regex engine, no trained model yet"},
+  "13": {"name": "Call Transcript Fraud Detector (DistilBERT-Multilingual INT8)", "status": "READY", "status_detail": "Co-occurrence gate applied. Requires Agent 12 ASR output for live audio; accepts raw text transcript directly for testing.", "model_type": "distilbert-multilingual-int8", "task": "call_transcript_fraud_classification", "retrained": true, "retrain_date": "2026-07-03", "ensemble_weight": 0.15, "notes": "Co-occurrence gate applied. Requires Agent 12 ASR output for live audio; accepts raw text transcript directly for testing."},
   "14": {"name": "Regex Rule Engine",                       "status": "READY",     "status_detail": "Production-grade, 36+ patterns covering KYC/UPI/urgency"},
   "15": {"name": "Ensemble Scorer & Overrides",             "status": "READY",     "status_detail": "Production-grade, calibrated weight tables + hard overrides"}
 }

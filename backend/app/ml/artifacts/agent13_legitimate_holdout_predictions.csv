@@ -1,0 +1,8 @@
+text,label,source,label_source,true_label,raw_pred_label,adjusted_pred_label,safe_prob,suspicious_prob,scam_prob,risk_dimensions_detected,risk_dim_count
+"Hello, this is your bank calling to remind you that we never ask for OTP, PIN, CVV, or password.",safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,safe,safe,0.6810332,0.06735958,0.25160718,"['data_request', 'authority_impersonation']",2
+"Aapke bank se safety reminder hai. OTP kisi ko mat batayein, bank employee ko bhi nahi.",safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,scam,scam,0.22020999,0.05566688,0.7241231,"['data_request', 'authority_impersonation']",2
+Your card replacement request has been received. Visit the branch with your ID proof.,safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,safe,safe,0.4920373,0.10781804,0.4001446,[],0
+Delivery partner calling. Your package is at the gate. Please confirm availability.,safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,safe,safe,0.502802,0.111222476,0.38597545,['urgency'],1
+We are calling from customer support to confirm your service appointment tomorrow.,safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,safe,safe,0.65081125,0.089334406,0.25985438,['urgency'],1
+Restaurant reservation confirmation call. Your table is booked for 8 PM.,safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,safe,safe,0.5105081,0.14347713,0.34601477,['urgency'],1
+Aapka parcel deliver ho chuka hai. Feedback dena ho to app mein rating de sakte hain.,safe,hard_negative_legitimate_calls,curated_legitimate_holdout,safe,safe,safe,0.5056397,0.047496002,0.44686428,['money_request'],1

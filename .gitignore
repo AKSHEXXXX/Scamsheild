@@ -53,7 +53,15 @@ backend/output/
 backend/bounty_report_*.json
 backend/.admin-secrets/
 
-# ML model artifacts
+# One-time admin bootstrap artifacts
+.admin-secrets/
+admin-bootstrap-output.txt
+
+# ML model artifacts — large binary formats never committed
+*.pt
+*.bin
+*.ubj
+
 # Small active model files committed directly (~1.1 MB total)
 # Large HF model (261 MB) excluded — use download_models.py for updates
 backend/app/ml/artifacts/*
@@ -72,7 +80,8 @@ backend/app/ml/artifacts/*
 !backend/app/ml/artifacts/agent4_*.json
 !backend/app/ml/artifacts/brand_*.pkl
 !backend/app/ml/artifacts/brand_*.json
-!backend/app/ml/artifacts/malware_*.pkl
+!backend/app/ml/artifacts/malware_scaler.pkl
+!backend/app/ml/artifacts/malware_feature_indices.pkl
 !backend/app/ml/artifacts/upi_*.pkl
 !backend/app/ml/artifacts/upi_*.json
 !backend/app/ml/artifacts/ensemble_*.json
@@ -80,3 +89,31 @@ backend/app/ml/artifacts/*
 !backend/app/ml/artifacts/phishing_domains.pkl
 !backend/app/ml/artifacts/regex_engine_report.json
 !backend/app/ml/artifacts/scamshield_rules_metadata.json
+# Agent 13 — DistilBERT transformer model metadata (weights excluded — too large for git)
+!backend/app/ml/artifacts/agent13_transformer_model/
+!backend/app/ml/artifacts/agent13_transformer_model/config.json
+!backend/app/ml/artifacts/agent13_transformer_model/tokenizer.json
+!backend/app/ml/artifacts/agent13_transformer_model/tokenizer_config.json
+!backend/app/ml/artifacts/agent13_transformer_model/README.txt
+!backend/app/ml/artifacts/agent13_int8_quantized/
+!backend/app/ml/artifacts/agent13_int8_quantized/tokenizer.json
+!backend/app/ml/artifacts/agent13_int8_quantized/tokenizer_config.json
+!backend/app/ml/artifacts/agent13_int8_quantized/README.txt
+!backend/app/ml/artifacts/agent13_metrics.json
+!backend/app/ml/artifacts/agent13_test_predictions.csv
+!backend/app/ml/artifacts/agent13_legitimate_holdout_predictions.csv
+# Archive directory — old model PKL backups (small, safe to track)
+!backend/app/ml/artifacts/archive/
+!backend/app/ml/artifacts/archive/*.pkl
+
+# Agent 2 — DistilBERT text scam classifier metadata
+!backend/app/ml/artifacts/agent2_transformer_model/
+!backend/app/ml/artifacts/agent2_transformer_model/config.json
+!backend/app/ml/artifacts/agent2_transformer_model/tokenizer.json
+!backend/app/ml/artifacts/agent2_transformer_model/tokenizer_config.json
+!backend/app/ml/artifacts/agent2_int8_quantized/
+!backend/app/ml/artifacts/agent2_int8_quantized/config.json
+!backend/app/ml/artifacts/agent2_int8_quantized/tokenizer.json
+!backend/app/ml/artifacts/agent2_int8_quantized/tokenizer_config.json
+!backend/app/ml/artifacts/agent2_metrics.json
+!backend/app/ml/artifacts/agent2_test_predictions.csv

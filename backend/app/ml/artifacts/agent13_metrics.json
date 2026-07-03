@@ -1,0 +1,186 @@
+{
+  "agent_id": "agent_15",
+  "agent_name": "Call Transcript Fraud Classifier",
+  "created_at_utc": "2026-07-03T09:47:32.177227Z",
+  "base_model": "distilbert-base-multilingual-cased",
+  "primary_dataset": "ysangam/Indian_Cyber_Scam_PhoneCall_Hinglish_Dataset",
+  "labels": [
+    "safe",
+    "suspicious",
+    "scam"
+  ],
+  "label2id": {
+    "safe": 0,
+    "suspicious": 1,
+    "scam": 2
+  },
+  "target_macro_f1": 0.75,
+  "target_legitimate_high_risk_fpr": 0.1,
+  "class_balance_target": {
+    "scam": 0.4,
+    "suspicious": 0.3,
+    "safe": 0.3
+  },
+  "class_counts_train_pool": {
+    "scam": 360,
+    "safe": 270,
+    "suspicious": 270
+  },
+  "human_review_warning": "Weak-labeled rule-seed examples require human review before final production approval.",
+  "weak_label_review_file": "/kaggle/working/agent_15_call_transcript_fraud_classifier/human_review_required_weak_labels_sample.csv",
+  "raw_model": {
+    "accuracy": 0.9888888888888889,
+    "macro_f1": 0.9891444817782373,
+    "confusion_matrix": [
+      [
+        52,
+        0,
+        2
+      ],
+      [
+        0,
+        54,
+        0
+      ],
+      [
+        0,
+        0,
+        72
+      ]
+    ],
+    "classification_report": "              precision    recall  f1-score   support\n\n        safe       1.00      0.96      0.98        54\n  suspicious       1.00      1.00      1.00        54\n        scam       0.97      1.00      0.99        72\n\n    accuracy                           0.99       180\n   macro avg       0.99      0.99      0.99       180\nweighted avg       0.99      0.99      0.99       180\n"
+  },
+  "cooccurrence_adjusted": {
+    "accuracy": 0.7444444444444445,
+    "macro_f1": 0.7302096771012092,
+    "confusion_matrix": [
+      [
+        52,
+        2,
+        0
+      ],
+      [
+        0,
+        54,
+        0
+      ],
+      [
+        23,
+        21,
+        28
+      ]
+    ],
+    "classification_report": "              precision    recall  f1-score   support\n\n        safe       0.69      0.96      0.81        54\n  suspicious       0.70      1.00      0.82        54\n        scam       1.00      0.39      0.56        72\n\n    accuracy                           0.74       180\n   macro avg       0.80      0.78      0.73       180\nweighted avg       0.82      0.74      0.71       180\n"
+  },
+  "legitimate_call_holdout": {
+    "size": 7,
+    "raw_high_risk_false_positive_rate": 0.14285714285714285,
+    "adjusted_high_risk_false_positive_rate": 0.14285714285714285,
+    "raw_any_alert_false_positive_rate": 0.14285714285714285,
+    "adjusted_any_alert_false_positive_rate": 0.14285714285714285,
+    "target_met": false
+  },
+  "cooccurrence_rule": {
+    "description": "High-risk/scam requires at least two distinct risk dimensions before triggering final scam output.",
+    "risk_dimensions": {
+      "urgency": [
+        "urgent",
+        "immediately",
+        "abhi",
+        "turant",
+        "jaldi",
+        "today",
+        "final warning",
+        "block",
+        "blocked",
+        "suspend",
+        "suspended",
+        "arrest",
+        "case",
+        "fir",
+        "deactivate",
+        "expire",
+        "last chance"
+      ],
+      "money_request": [
+        "pay",
+        "payment",
+        "transfer",
+        "bhejo",
+        "fee",
+        "deposit",
+        "processing",
+        "security amount",
+        "upi",
+        "collect request",
+        "qr",
+        "refund",
+        "cashback",
+        "loan",
+        "investment",
+        "crypto",
+        "bitcoin",
+        "tax",
+        "fine",
+        "charge",
+        "rs",
+        "\u20b9"
+      ],
+      "data_request": [
+        "otp",
+        "pin",
+        "password",
+        "cvv",
+        "aadhaar",
+        "pan",
+        "kyc",
+        "login code",
+        "seed phrase",
+        "bank details",
+        "card details",
+        "verification code"
+      ],
+      "authority_impersonation": [
+        "police",
+        "cyber crime",
+        "rbi",
+        "bank",
+        "customs",
+        "tax department",
+        "court",
+        "cbi",
+        "income tax",
+        "government",
+        "officer"
+      ],
+      "unfamiliar_sender_pattern": [
+        "unknown number",
+        "new number",
+        "different number",
+        "customer care se",
+        "bank se bol raha",
+        "department se",
+        "main officer",
+        "verification team"
+      ],
+      "remote_access": [
+        "anydesk",
+        "teamviewer",
+        "screen share",
+        "remote access",
+        "screen sharing"
+      ],
+      "too_good_to_be_true": [
+        "double money",
+        "guaranteed",
+        "5x",
+        "winner",
+        "lottery",
+        "prize",
+        "free",
+        "assured return",
+        "profit guaranteed"
+      ]
+    }
+  }
+}

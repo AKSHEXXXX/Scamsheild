@@ -8,6 +8,26 @@ logger = logging.getLogger("scamshield.ml.agents")
 from app.utils.text import preprocess_text
 from app.ml.model_loader import get_models, is_agent_healthy, record_agent_error, record_agent_success
 
+# Agent 13 — DistilBERT multilingual INT8 call transcript fraud classifier
+# Ensemble weight: 0.15 (conservative until validated in production)
+try:
+    from app.ml.agents.agent13_inference import agent13_predict as _agent13_predict
+    _AGENT13_AVAILABLE = True
+except Exception as _a13_err:
+    logger.warning("[agent13] Import failed — %s. Using stub fallback.", _a13_err)
+    _AGENT13_AVAILABLE = False
+    _agent13_predict = None
+
+# Agent 2 — DistilBERT multilingual text/SMS scam classifier
+# Ensemble weight: 0.18
+try:
+    from app.ml.agents.agent2_inference import agent2_predict as _agent2_predict
+    _AGENT2_AVAILABLE = True
+except Exception as _a2_err:
+    logger.warning("[agent2] Import failed — %s. Using stub fallback.", _a2_err)
+    _AGENT2_AVAILABLE = False
+    _agent2_predict = None
+
 def agent1_predict_text(text: str) -> float:
     if not is_agent_healthy("agent1"):
         return -1.0
@@ -18,7 +38,18 @@ def agent1_predict_text(text: str) -> float:
         return -1.0
     try:
         clean = preprocess_text(text)
-        X = vec.transform([clean])
+        if isinstance(vec, dict):
+            tfidf_vec = vec.get("tfidf_vectorizer")
+            custom_flags = vec.get("custom_flags")
+            if tfidf_vec is not None and custom_flags is not None:
+                from scipy.sparse import hstack
+                X_tfidf = tfidf_vec.transform([clean])
+                X_flags = custom_flags.transform([clean])
+                X = hstack([X_tfidf, X_flags])
+            else:
+                X = tfidf_vec.transform([clean]) if tfidf_vec else vec.transform([clean])
+        else:
+            X = vec.transform([clean])
         proba = clf.predict_proba(X)[0]
         scam_idx = 1 if proba.shape[0] > 1 else 0
         record_agent_success("agent1")
@@ -29,27 +60,96 @@ def agent1_predict_text(text: str) -> float:
         return -1.0
 
 def agent2_predict_text(text: str) -> float:
-    return -1.0
+    """
+    Returns a 0.0-1.0 scam probability for the ensemble.
+    Ensemble weight: 0.18 (applied by the caller).
+    Returns -1.0 (skip signal) when model is not loaded.
 
-def extract_url_features(url: str) -> list:
+    Label mapping:
+      SCAM       -> raw confidence (high)
+      SUSPICIOUS -> clamped to [0.45, 0.60]  — uncertain, not near-SCAM
+      SAFE       -> min(confidence, 0.25)
+    """
+    if not _AGENT2_AVAILABLE or _agent2_predict is None:
+        return -1.0
+    try:
+        result = _agent2_predict(text)
+        if not result.get("model_loaded", False):
+            return -1.0
+        label      = result.get("label", "SAFE").upper()
+        confidence = float(result.get("confidence", 0.0))
+        if label == "SCAM":
+            return confidence
+        elif label == "SUSPICIOUS":
+            # Gate has already downgraded this from SCAM. Clamp to moderate range
+            # so it contributes uncertainty without dominating the ensemble.
+            return min(max(confidence * 0.6, 0.45), 0.60)
+        else:
+            return min(confidence, 0.25)
+    except Exception as e:
+        logger.debug("Agent 2 predict error: %s", e)
+        return -1.0
+
+
+
+def agent2_predict_text_full(text: str) -> dict:
+    """Returns the full dict from the Agent 2 classifier."""
+    if not _AGENT2_AVAILABLE or _agent2_predict is None:
+        return {"label": "SAFE", "confidence": 0.0, "agent": "agent2",
+                "model": "not_loaded", "model_loaded": False}
+    try:
+        return _agent2_predict(text)
+    except Exception as e:
+        logger.debug("Agent 2 full predict error: %s", e)
+        return {"label": "SAFE", "confidence": 0.0, "agent": "agent2",
+                "model": "error", "model_loaded": False, "error": str(e)}
+
+def extract_url_features(url: str) -> dict:
+    """
+    Extract 20 lexical URL features matching the retrained Agent 3 XGBoost model.
+    Column order is enforced by url_feature_cols.pkl at inference time.
+    """
     import tldextract
+    if not url.startswith(("http://", "https://")):
+        url = "https://" + url
     parsed = urlparse(url)
     ext = tldextract.extract(url)
     domain = f"{ext.domain}.{ext.suffix}" if ext.suffix else ext.domain
-    path = parsed.path + parsed.query
+    full_url_lower = url.lower()
+
+    # Known URL shorteners
+    _SHORTENERS = {"bit.ly", "tinyurl.com", "t.co", "ow.ly", "goo.gl",
+                   "rb.gy", "cutt.ly", "is.gd", "buff.ly", "adf.ly"}
+    # Indian bank brand keywords
+    _BANK_BRANDS = ["sbi", "hdfc", "icici", "axis", "kotak", "pnb", "bob",
+                    "canara", "union", "yes bank", "rbl", "iob", "boi"]
+    # UPI-related signals
+    _UPI_SIGNALS = ["upi", "paytm", "phonepe", "gpay", "googlepay", "bhim",
+                    "bhimpay", "upi-update", "kyc", "payment", "wallet"]
+
     return {
-        "URLLength": len(url),
-        "DomainLength": len(domain),
-        "TLDLength": len(ext.suffix),
-        "NoOfSubDomain": len(ext.subdomain.split(".")) if ext.subdomain else 0,
-        "PathLength": len(path),
-        "NoOfEqualsInURL": url.count("="),
-        "NoOfQMarkInURL": url.count("?"),
-        "NoOfAmpersandInURL": url.count("&"),
-        "CharContinuationRate": sum(url.count(c * 2) for c in set(url)) / max(len(url), 1),
-        "IsHTTPS": 1 if parsed.scheme == "https" else 0,
-        "HasIPAddress": 1 if re.search(r'\d+\.\d+\.\d+\.\d+', ext.domain) else 0,
+        "url_length":           len(url),
+        "domain_length":        len(domain),
+        "tld_length":           len(ext.suffix) if ext.suffix else 0,
+        "subdomain_count":      len(ext.subdomain.split(".")) if ext.subdomain else 0,
+        "path_length":          len(parsed.path),
+        "has_https":            1 if parsed.scheme == "https" else 0,
+        "has_ip":               1 if re.search(r"\d+\.\d+\.\d+\.\d+", ext.domain or "") else 0,
+        "count_=":              url.count("="),
+        "count_?":              url.count("?"),
+        "count_&":              url.count("&"),
+        "count_@":              url.count("@"),
+        "count_-":              url.count("-"),
+        "count__":              url.count("_"),
+        "count_/":              url.count("/"),
+        "count_.":              url.count("."),
+        "char_continuation_rate": sum(url.count(c * 2) for c in set(url)) / max(len(url), 1),
+        "is_shortener":         1 if any(s in full_url_lower for s in _SHORTENERS) else 0,
+        "has_.in":              1 if ext.suffix in ("in", "co.in") else 0,
+        "indian_bank_brand":    1 if any(b in full_url_lower for b in _BANK_BRANDS) else 0,
+        "upi_related":          1 if any(s in full_url_lower for s in _UPI_SIGNALS) else 0,
     }
+
 
 def agent3_predict_url(url: str) -> float:
     if not is_agent_healthy("agent3"):
@@ -65,7 +165,9 @@ def agent3_predict_url(url: str) -> float:
         row = np.array([[feats.get(c, 0) for c in cols]])
         row_scaled = sc.transform(row)
         proba = clf.predict_proba(row_scaled)[0]
-        scam_idx = 1 if proba.shape[0] > 1 else 0
+        # Robustly find the index of the phishing/fraud class (label=1)
+        classes = list(clf.classes_)
+        scam_idx = classes.index(1) if 1 in classes else (1 if len(classes) > 1 else 0)
         record_agent_success("agent3")
         return float(proba[scam_idx])
     except Exception as e:
@@ -93,27 +195,36 @@ def agent5_predict_qr_payload(payload: str) -> float:
     clf = models.get("agent5_classifier")
     sc = models.get("agent5_scaler")
     cols = models.get("agent5_feature_cols")
-    if clf is None or sc is None or cols is None:
+    if clf is None or cols is None:
         return -1.0
     try:
-        feats = {c: 0 for c in cols}
-        feats["PayloadLen"] = len(payload)
-        feats["IsURL"] = 1 if payload.startswith(("http://", "https://")) else 0
-        feats["IsUPI"] = 1 if "@" in payload and ("pay" in payload.lower() or "upi" in payload.lower()) else 0
-        feats["IsHTTPS"] = 1 if payload.startswith("https://") else 0
-        feats["NumDigits"] = sum(c.isdigit() for c in payload)
-        feats["NumDots"] = payload.count(".")
-        feats["NumSlash"] = payload.count("/")
-        feats["NumDash"] = payload.count("-")
-        feats["NumAt"] = payload.count("@")
-        feats["NumEquals"] = payload.count("=")
-        feats["NumQMark"] = payload.count("?")
-        feats["NumAmpersand"] = payload.count("&")
-        keywords = ["otp", "kyc", "verify", "urgent", "refund", "free", "prize", "win", "cashback", "reward"]
-        feats["HasSuspiciousKeyword"] = 1 if any(k in payload.lower() for k in keywords) else 0
-        row = np.array([[feats.get(c, 0) for c in cols]])
-        row_scaled = sc.transform(row)
-        proba = clf.predict_proba(row_scaled)[0]
+        if sc is None:
+            # New 60-feature model
+            from app.ml.agents.agent_5_qr_xgb.agent_05_feature_extractor import extract_features
+            feats = extract_features(payload)
+            row = np.array([[feats.get(c, 0.0) for c in cols]], dtype=np.float32)
+            proba = clf.predict_proba(row)[0]
+        else:
+            # Old fallback 13-feature model
+            feats = {c: 0 for c in cols}
+            feats["PayloadLen"] = len(payload)
+            feats["IsURL"] = 1 if payload.startswith(("http://", "https://")) else 0
+            feats["IsUPI"] = 1 if "@" in payload and ("pay" in payload.lower() or "upi" in payload.lower()) else 0
+            feats["IsHTTPS"] = 1 if payload.startswith("https://") else 0
+            feats["NumDigits"] = sum(c.isdigit() for c in payload)
+            feats["NumDots"] = payload.count(".")
+            feats["NumSlash"] = payload.count("/")
+            feats["NumDash"] = payload.count("-")
+            feats["NumAt"] = payload.count("@")
+            feats["NumEquals"] = payload.count("=")
+            feats["NumQMark"] = payload.count("?")
+            feats["NumAmpersand"] = payload.count("&")
+            keywords = ["otp", "kyc", "verify", "urgent", "refund", "free", "prize", "win", "cashback", "reward"]
+            feats["HasSuspiciousKeyword"] = 1 if any(k in payload.lower() for k in keywords) else 0
+            row = np.array([[feats.get(c, 0) for c in cols]])
+            row_scaled = sc.transform(row)
+            proba = clf.predict_proba(row_scaled)[0]
+            
         scam_idx = 1 if proba.shape[0] > 1 else 0
         record_agent_success("agent5")
         return float(proba[scam_idx])
@@ -134,23 +245,48 @@ def agent6_scan_upi(txn: dict) -> dict:
         return {"score": 0, "severity": "SAFE", "triggered_rules": [], "explanation": str(e)}
 
 def agent7_predict_upi(txn: dict) -> float:
-    from app.ml.agents.upi_feature_extractor import extract_features
     models = get_models()
     clf = models.get("agent7_classifier")
-    whitelist = models.get("agent7_whitelist", {})
-    if clf is None:
+    sc = models.get("agent7_scaler")
+    cols = models.get("agent7_feature_cols")
+    if clf is None or sc is None or cols is None:
         return -1.0
     try:
-        vpa = txn.get("vpa", "")
-        message = txn.get("note", "")
-        feats = extract_features(vpa, message, "SEND", whitelist)
-        row = np.array([feats])
-        proba = clf.predict_proba(row)[0]
-        scam_idx = 1 if proba.shape[0] > 1 else 0
-        prob = float(proba[scam_idx])
-        if abs(prob - 0.5) < 0.12:
+        # Derive engineered features from raw input
+        vpa = str(txn.get("vpa", ""))
+        amount = float(txn.get("amount", 0))
+
+        engineered = {
+            "amount":       amount,
+            "has_note":     int(bool(txn.get("has_note", False))),
+            "note_len":     int(txn.get("note_len", 0)),
+            "vpa_len":      len(vpa),
+            "round_amount": int(amount % 100 == 0),
+            "odd_hour":     int(bool(txn.get("odd_hour", False))),
+            "suspicious_note": int(any(kw in vpa.lower() for kw in [
+                "prize", "winner", "lottery", "reward", "free",
+                "lucky", "gift", "offer", "win", "cash"
+            ])),
+            # TODO: add agent07_vpa_whitelist.json check here
+            # to cap fraud_score at 0.2 for whitelisted VPA domains
+            "tx_velocity_24h": float(txn.get("tx_velocity_24h", 0)),
+            "new_payee":    int(bool(txn.get("new_payee", False))),
+            "high_amount":  int(amount > 10000),
+            "low_amount":   int(amount < 100),
+        }
+
+        # Build row in exact column order from feature_cols pkl
+        row = np.array([[engineered.get(c, 0) for c in cols]])
+        row_scaled = sc.transform(row)
+        proba = clf.predict_proba(row_scaled)[0]
+        # Robustly find the fraud class index (class 1 = FRAUD_confirmed)
+        classes = list(clf.classes_)
+        scam_idx = classes.index(1) if 1 in classes else (1 if len(classes) > 1 else 0)
+        raw_prob = float(proba[scam_idx])
+        # Confidence gate: suppress predictions near 0.5 (model is uncertain)
+        if abs(raw_prob - 0.5) < 0.12:
             return 0.0
-        return prob
+        return raw_prob
     except Exception as e:
         logger.debug("Agent 7 predict error: %s", e)
         return -1.0
@@ -176,99 +312,33 @@ def _normalize_brand(s: str) -> str:
     DIGIT_SUBS = str.maketrans("01345", "oieas")
     return normalize_homoglyphs(s.lower().translate(DIGIT_SUBS))
 
-def _extract_label(s: str) -> str:
-    """Reduce a domain/URL/free-form string to its bare registrable label
-    (e.g. 'hdfcbank.com' / 'https://hdfcbank.com/login' -> 'hdfcbank').
-    Falls back to the raw lowercased, alnum-only string when it doesn't
-    look like a real domain (tldextract finds no registrable label)."""
-    raw = (s or "").strip().lower()
-    if "://" in raw:
-        raw = raw.split("://", 1)[1]
-    raw = raw.split("/")[0].split("@")[-1]
-    try:
-        import tldextract
-        ext = tldextract.extract(raw)
-        if ext.domain:
-            return ext.domain
-    except Exception:
-        pass
-    return re.sub(r"[^a-z0-9]", "", raw)
-
-# Brand token -> (official_domain, display_name), built once from the
-# whitelist pickle. Comparing against the short brand TOKEN (e.g. "hdfcbank")
-# instead of the full domain string (e.g. "hdfcbank.com") is what makes
-# edit-distance/containment checks meaningful — comparing full domains
-# (including TLD) made every real-world lookalike distance too large to
-# ever match, which was the root cause of the v1 false negatives.
-_BRAND_TOKENS_CACHE = None
-_BRAND_TOKENS_SOURCE_ID = None
-
-def _get_brand_tokens(whitelist: dict) -> dict:
-    global _BRAND_TOKENS_CACHE, _BRAND_TOKENS_SOURCE_ID
-    if _BRAND_TOKENS_CACHE is not None and _BRAND_TOKENS_SOURCE_ID == id(whitelist):
-        return _BRAND_TOKENS_CACHE
-    tokens = {}
-    for official_domain, display_name in whitelist.items():
-        label = _extract_label(official_domain)
-        if label and label not in tokens:
-            tokens[label] = (official_domain, display_name)
-        short = display_name.lower().split()[0]
-        short_norm = _normalize_brand(short)
-        if short_norm and short_norm not in tokens:
-            tokens[short_norm] = (official_domain, display_name)
-    _BRAND_TOKENS_CACHE = tokens
-    _BRAND_TOKENS_SOURCE_ID = id(whitelist)
-    return tokens
-
-# Re-tuned for the label-based comparison above (short brand tokens, not
-# full domain+TLD strings). 2 tolerates a single homoglyph/typo swap
-# (e.g. "sbl"->"sbi", "paytrn"->"paytm" folds to distance 2 via rn->m)
-# without over-matching short, unrelated brand tokens.
-BRAND_EDIT_DISTANCE_THRESHOLD = 2
-
 def agent8_check_brand(domain: str) -> tuple:
     if not is_agent_healthy("agent8"):
         return False, None, None
     models = get_models()
     whitelist = models.get("agent8_whitelist")
-    if whitelist is not None and isinstance(whitelist, dict):
+    config = models.get("agent8_config")
+    if whitelist is not None and config is not None:
         try:
-            input_label = _extract_label(domain)
-            norm_input = _normalize_brand(input_label)
-            if input_label:
-                tokens = _get_brand_tokens(whitelist)
-                # A) Exact match to a known brand token -> brand identified, distance 0
-                if input_label in tokens:
+            norm = _normalize_brand(domain)
+            threshold = config.get("suspicious_threshold", config.get("threshold", 2)) if isinstance(config, dict) else 2
+            brands = whitelist if isinstance(whitelist, dict) else {}
+            official = brands.get("domains", brands) if isinstance(brands, dict) else whitelist
+            for brand in official:
+                d = lev_distance(norm, _normalize_brand(brand))
+                if d <= threshold:
                     record_agent_success("agent8")
-                    _, display_name = tokens[input_label]
-                    return True, display_name, 0
-                # B) fuzzy match / containment across all brand tokens
-                for brand_token, (official_domain, display_name) in tokens.items():
-                    norm_brand = _normalize_brand(brand_token)
-                    d = lev_distance(norm_input, norm_brand)
-                    # B1) fuzzy match: small edit distance from a known brand token
-                    # (catches homoglyph/typo swaps like "sbl"/"paytrn").
-                    if 0 < d <= BRAND_EDIT_DISTANCE_THRESHOLD:
-                        record_agent_success("agent8")
-                        return True, display_name, d
-                    # B2) containment: brand token embedded with extra content
-                    # (catches "hdfcbank-secure" via full token, or
-                    #  "hdfc-secure-login" via short token).
-                    if len(input_label) > len(brand_token) and brand_token in norm_input:
-                        record_agent_success("agent8")
-                        extra = len(input_label) - len(brand_token)
-                        return True, display_name, min(extra, 2)
-            record_agent_success("agent8")
+                    return True, brand, d
         except Exception as e:
             logger.debug("Agent 8 error: %s", e)
             record_agent_error("agent8")
     brand_patterns = [
-        # NOTE: hdfc/sbi/icici/axis/kotak/paytm are intentionally NOT listed
-        # here anymore — they're now handled by the whitelist-token logic
-        # above, which correctly distinguishes a short legitimate variant
-        # ("hdfc.com") from a lookalike ("hdfcbank-secure"). A blunt \bhdfc\b
-        # substring match would re-flag "hdfc.com" as impersonation (the
-        # word boundary at the dot still matches), undoing that fix.
+        (r"\bhdfc\b", "HDFC Bank"),
+        (r"\bsbi\b", "SBI"),
+        (r"\bicici\b", "ICICI Bank"),
+        (r"\baxis(?:\s*|-)*bank\b", "Axis Bank"),
+        (r"\bkotak\b", "Kotak Mahindra"),
+        (r"\bpaytm\b", "Paytm"),
         (r"\bgoogle(?:\s*|-)*(?:pay|login|account|verify)\b", "Google"),
         (r"\bgpay\b", "Google Pay"),
         (r"\bphonepe\b", "PhonePe"),
@@ -283,6 +353,7 @@ def agent8_check_brand(domain: str) -> tuple:
         (r"\bup(?:i|i\s*)payment\b", "UPI Payment"),
         (r"\baadhaar\b", "Aadhaar"),
         (r"\bkyc\b", "KYC"),
+        (r"\buidai\b", "UIDAI"),
     ]
     try:
         lower = domain.lower()
@@ -332,24 +403,46 @@ def agent12_transcribe(audio_bytes: bytes) -> dict:
     return {"transcript": "", "confidence": 0.0, "language": ""}
 
 def agent13_predict_transcript(transcript: str) -> float:
-    low = transcript.lower()
-    call_scam_signals = [
-        r"(officer|inspector|cbi|ed|narcotics|police)",
-        r"(your\s+son|your\s+daughter|your\s+relative|family\s+member).{0,30}(accident|arrest|hospital|trouble)",
-        r"(otp|bank\s+detail|account\s+detail|debit\s+card|cvv|pin|password)",
-        r"(send\s+money|transfer\s+money|pay\s+now|payment\s+now|deposit\s+money)",
-        r"(immediately|right\s+now|asap|don.t\s+delay|hurry|urgent|time\s+is\s+running)",
-        r"(legal\s+action|case\s+filed|warrant|arrest|summons|notice\s+from\s+court)",
-        r"(your\s+aadhaar|your\s+pan|your\s+account|your\s+card).{0,20}(block|suspend|freeze|deactivat)",
-        r"(prize|lottery|won|winner|gift|cashback|refund).{0,30}(fee|charge|tax|processing)",
-    ]
-    score = 0
-    for pat in call_scam_signals:
-        if re.search(pat, low):
-            score = min(100, score + 25)
-    if score > 0:
-        return score / 100.0
-    return -1.0
+    """
+    Returns a 0.0–1.0 scam score for the ensemble.
+    SCAM=1.0, SUSPICIOUS=0.5, SAFE=0.0
+    Ensemble weight: 0.15 (applied by the caller/ensemble scorer).
+    Falls back to -1.0 (agent skip) if model is not loaded.
+    """
+    if not _AGENT13_AVAILABLE or _agent13_predict is None:
+        # Graceful skip — ensemble ignores -1.0 scores
+        return -1.0
+    try:
+        result = _agent13_predict(transcript)
+        if not result.get("model_loaded", False):
+            return -1.0
+        label = result.get("label", "SAFE").upper()
+        confidence = float(result.get("confidence", 0.0))
+        if label == "SCAM":
+            return confidence
+        elif label == "SUSPICIOUS":
+            return confidence * 0.5
+        else:
+            return 0.0
+    except Exception as e:
+        logger.debug("Agent 13 predict error: %s", e)
+        return -1.0
+
+
+def agent13_predict_transcript_full(transcript: str) -> dict:
+    """
+    Returns the full dict from the Agent 13 DistilBERT classifier.
+    Keys: label, confidence, agent, model, model_loaded
+    """
+    if not _AGENT13_AVAILABLE or _agent13_predict is None:
+        return {"label": "SAFE", "confidence": 0.0, "agent": "agent13",
+                "model": "not_loaded", "model_loaded": False}
+    try:
+        return _agent13_predict(transcript)
+    except Exception as e:
+        logger.debug("Agent 13 full predict error: %s", e)
+        return {"label": "SAFE", "confidence": 0.0, "agent": "agent13",
+                "model": "error", "model_loaded": False, "error": str(e)}
 
 _BUILTIN_RULES = [
     # Digital arrest / legal threat scams (all lowercase — searched against text.lower())
@@ -474,3 +567,135 @@ def agent14_score_text(text: str) -> dict:
     except Exception as e:
         logger.debug("Agent 14 error: %s", e)
         return {"score": 0, "severity": "SAFE", "triggered": [], "regex_safe": False}
+
+
+# ─── Defensive-phrase patterns that indicate a legitimate banking message ────
+_DEFENSIVE_PHRASES = re.compile(
+    r"do\s+not\s+share|never\s+share|don['\u2019]t\s+share"
+    r"|no\s+one\s+from\s+(the\s+)?bank|bank\s+will\s+never\s+ask"
+    r"|official\s+bank\s+support|call\s+official|beware\s+of\s+fraud",
+    re.IGNORECASE,
+)
+
+
+def ensemble_predict_text(msg: str) -> dict:
+    """
+    Pure-function mirror of the /api/v1/analyze-text code path.
+
+    Runs Agent 14 (regex) + Agent 1 (TF-IDF) + Agent 2 (DistilBERT,
+    extended uncertainty gate 0.35-0.85) + Agent 15 (ensemble scorer),
+    then applies a post-ensemble defensive-phrase soft-downgrade.
+
+    Returns:
+        {
+          "final_label": "SCAM" | "SUSPICIOUS" | "SAFE",
+          "final_score": float,   # 0.0-1.0  (scam_score / 100)
+          "raw_score":   int,     # 0-100 scam_score from Agent 15
+          "per_agent": {
+              "agent1":  float | None,
+              "agent2":  float | None,
+              "agent14": {"score": int, "severity": str, "triggered": list},
+              "agent15": int,
+          },
+          "defensive_phrase_gate": bool,
+        }
+    """
+    from app.preprocessing.text_normalizer import normalize
+    from agents.agent15_ensemble import compute as _a15_compute
+
+    text = normalize(msg)
+
+    # ── Agent 14: regex rule engine ──────────────────────────────────────────
+    regex_result    = agent14_score_text(text)
+    regex_score     = regex_result["score"]
+    regex_severity  = regex_result["severity"]
+    regex_triggered = regex_result["triggered"]
+    regex_high      = regex_severity == "HIGH"
+    regex_safe      = regex_result.get("regex_safe", False)
+
+    # ── Agent 1: TF-IDF + LogReg (uses agent1_predict_text which handles
+    #    the FeatureUnion dict and scipy.sparse.hstack correctly) ────────────
+    raw_a1 = agent1_predict_text(text)   # returns float in [0,1] or -1.0
+    agent1_prob = raw_a1 if raw_a1 >= 0 else None
+
+    # ── Agent 2: DistilBERT (extended gate 0.35-0.85) ────────────────────────
+    # The gate is wider than the router's 0.35-0.65 so that high-scoring but
+    # potentially wrong Agent 1 predictions (e.g. OTP / debit alerts that share
+    # banking vocabulary with scams) are still checked semantically.
+    agent2_prob   = None
+    agent2_label  = None        # full SCAM/SUSPICIOUS/SAFE label from gate
+    agent2_invoked = False
+    if agent1_prob is not None and 0.35 <= agent1_prob <= 0.85:
+        if _AGENT2_AVAILABLE and _agent2_predict is not None:
+            try:
+                # Capture full dict so we can use the gated label for decisions
+                a2_full = agent2_predict_text_full(text)
+                if a2_full.get("model_loaded", False):
+                    agent2_label  = a2_full.get("label", "SAFE").upper()
+                    # Convert label to float using the clamped mapping
+                    a2_raw = agent2_predict_text(text)
+                    if a2_raw >= 0:
+                        agent2_prob    = a2_raw
+                        agent2_invoked = True
+            except Exception as _e:
+                logger.warning("ensemble_predict_text: Agent 2 error: %s", _e)
+
+    # ── Fuse into a single text_prob ─────────────────────────────────────────
+    # When Agent 2 runs: weighted blend that reduces Agent 1 dominance.
+    # Weights: Agent1=0.55, Agent2=0.45.
+    if agent2_invoked and agent2_prob is not None and agent1_prob is not None:
+        blended_text_prob = agent1_prob * 0.55 + agent2_prob * 0.45
+    else:
+        blended_text_prob = agent1_prob if agent1_prob is not None else -1.0
+
+    signals = {
+        "text_prob":       blended_text_prob,
+        "blacklist_hit":   False,
+        "brand_flag":      False,
+        "upi_rule_score":  0,
+        "upi_xgb_prob":    -1,
+        "deepfake_prob":   -1,
+        "malware_prob":    -1,
+        "call_fraud_prob": -1,
+        "regex_score":     regex_score,
+        "regex_high":      regex_high,
+        "regex_triggered": regex_triggered,
+        "regex_safe":      regex_safe,
+        "url_risk_boost":  0,
+    }
+    result     = _a15_compute(signals, scan_type="text")
+    raw_score  = result["scam_score"]
+    verdict_15 = result["verdict"]
+
+    # ── Post-ensemble: defensive-phrase soft-downgrade ───────────────────────
+    # Messages containing explicit safety disclaimers ("do not share", etc.)
+    # are capped at SUSPICIOUS when Agent 2 confirms they are not SCAM.
+    # Uses the gated label (not the float) so it is immune to float-mapping changes.
+    defensive_gate_applied = False
+    if _DEFENSIVE_PHRASES.search(text):
+        # Agent 2 verdict: treat SAFE or SUSPICIOUS as "not a scam"
+        a2_not_scam = True   # default: trust the defensive phrase when Agent 2 unavailable
+        if agent2_invoked and agent2_label is not None:
+            a2_not_scam = agent2_label != "SCAM"
+        if a2_not_scam and raw_score > 60:
+            raw_score  = 58
+            verdict_15 = "suspicious"
+            defensive_gate_applied = True
+
+    _LABEL_MAP = {"low_risk": "SAFE", "suspicious": "SUSPICIOUS", "high_risk": "SCAM"}
+    final_label = _LABEL_MAP.get(verdict_15, "SUSPICIOUS")
+    final_score = round(raw_score / 100.0, 4)
+
+    return {
+        "final_label": final_label,
+        "final_score": final_score,
+        "raw_score":   raw_score,
+        "per_agent": {
+            "agent1":  round(agent1_prob, 4) if agent1_prob is not None else None,
+            "agent2":  round(agent2_prob, 4) if agent2_prob is not None else None,
+            "agent14": {"score": regex_score, "severity": regex_severity,
+                        "triggered": regex_triggered},
+            "agent15": raw_score,
+        },
+        "defensive_phrase_gate": defensive_gate_applied,
+    }
