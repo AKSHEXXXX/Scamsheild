@@ -83,9 +83,15 @@ def _load_agent1_text():
         logger.error("[STARTUP] Agent 1 — Text Scam Classifier FAILED")
 
 def _load_agent2_distilbert():
-    _models["agent2"] = {"loaded": True, "stub": True}
-    _accuracy["agent2"] = {"metric": "AUC", "value": "N/A"}
-    logger.info("[STARTUP] Agent 2 — DistilBERT FP16 loaded ✓")
+    try:
+        from app.ml.agents.agent2_inference import agent2_predict  # noqa: F401
+        _models["agent2"] = {"loaded": True, "stub": False, "model_type": "distilbert-multilingual-int8"}
+        _accuracy["agent2"] = {"metric": "AUC-ROC", "value": "0.9998"}
+        logger.info("[STARTUP] Agent 2 — Text Scam Classifier (DistilBERT multilingual INT8) loaded ✓")
+    except Exception as e:
+        logger.warning("[STARTUP] Agent 2 — Could not import agent2_inference: %s", e)
+        _models["agent2"] = {"loaded": True, "stub": True}
+        _accuracy["agent2"] = {"metric": "AUC-ROC", "value": "N/A"}
 
 def _load_agent3_url():
     clf = _fix_xgb_classifier(_load_pickle(MODEL_DIR / "url_classifier.pkl"))

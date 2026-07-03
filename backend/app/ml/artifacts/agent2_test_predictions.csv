@@ -1,0 +1,1184 @@
+text,label,source,pred_label,scam_score,score,confidence,verdict
+"Found it, ENC  &lt;#&gt; , where you at?",0,uci_sms_spam,0,0.00083540066,0.08354007,0.9983292,safe
+Dai what this da.. Can i send my resume to this id.,0,uci_sms_spam,0,0.0007537366,0.07537366,0.99849254,safe
+Am slow in using biola's fne,0,uci_sms_spam,0,0.00082812493,0.082812496,0.99834377,safe
+"I don,t think so. You don't need to be going out that late on a school night. ESPECIALLY when the one class you have is the one you missed last wednesday and probably failed a test in on friday",0,uci_sms_spam,0,0.0022744169,0.22744168,0.99545115,safe
+"I am late,so call you tomorrow morning.take care sweet dreams....u and me...ummifying...bye.",0,uci_sms_spam,0,0.0007676245,0.076762445,0.99846476,safe
+Hope you are having a good week. Just checking in,0,uci_sms_spam,0,0.0008186952,0.08186952,0.9983626,safe
+"URGENT!! Your 4* Costa Del Sol Holiday or £5000 await collection. Call 09050090044 Now toClaim. SAE, TC s, POBox334, Stockport, SK38xh, Cost£1.50/pm, Max10mins",1,uci_sms_spam,1,0.9992136,99.92136,0.99842715,scam
+If you're thinking of lifting me one then no.,0,uci_sms_spam,0,0.0007718774,0.07718774,0.99845624,safe
+I have no idea where you are,0,uci_sms_spam,0,0.0008025404,0.08025404,0.9983949,safe
+From someone not to smoke when every time I've smoked in the last two weeks is because of you calling or texting me that you wanted to smoke,0,uci_sms_spam,0,0.0015684577,0.15684576,0.99686307,safe
+Then ü come n pick me at 530 ar?,0,uci_sms_spam,0,0.0008280409,0.08280409,0.99834394,safe
+"No i'm not. I can't give you everything you want and need. You actually could do better for yourself on yor own--you've got more money than i do. I can't get work, i can't get a man, i can't pay the rent, i can't even fill my fucking gas tank. yes, i'm stressed and depressed. I didn't even call home for thanksgiving cuz i'll have to tell them i,m up to nothing.",0,uci_sms_spam,0,0.0016791022,0.16791022,0.9966418,safe
+When you came to hostel.,0,uci_sms_spam,0,0.0007792391,0.07792391,0.9984415,safe
+Dude ive been seeing a lotta corvettes lately,0,uci_sms_spam,0,0.0008477237,0.08477237,0.99830455,safe
+Guess he wants alone time. We could just show up and watch when they do..,0,uci_sms_spam,0,0.0007964661,0.07964661,0.99840707,safe
+Horrible gal. Me in sch doing some stuff. How come u got mc?,0,uci_sms_spam,0,0.0008926423,0.08926423,0.9982147,safe
+"K, I'll work something out",0,uci_sms_spam,0,0.0008523579,0.08523579,0.9982953,safe
+For taking part in our mobile survey yesterday! You can now have 500 texts 2 use however you wish. 2 get txts just send TXT to 80160 T&C www.txt43.com 1.50p,1,uci_sms_spam,1,0.99927694,99.9277,0.9985539,scam
+Let's pool our money together and buy a bunch of lotto tickets. If we win I get &lt;#&gt; % u get &lt;#&gt; %. Deal?,0,uci_sms_spam,0,0.0012238708,0.12238708,0.9975523,safe
+Good words.... But words may leave u in dismay many times.,0,uci_sms_spam,0,0.00078334735,0.078334734,0.9984333,safe
+"&lt;#&gt;  is fast approaching. So, Wish u a very Happy New Year Happy Sankranti Happy republic day Happy Valentines Day Happy Shivratri Happy Ugadi Happy Fools day Happy May Day Happy Independence Day, Happy Friendship,Mother,Father,Teachers,Childrens Day, &amp; HAPPY BIRTHDAY 4 U. Happy Ganesh festival Happy Dasara Happy Diwali Happy Christmas  &lt;#&gt;  Good Mornings Afternoons, Evenings Nights. RememberI AM the first to WISHING U ALL THESE...your's Raj",0,uci_sms_spam,0,0.0012538556,0.12538557,0.9974923,safe
+O ic lol. Should play 9 doors sometime yo,0,uci_sms_spam,0,0.0007804199,0.07804199,0.99843913,safe
+It shall be fine. I have avalarr now. Will hollalater,0,uci_sms_spam,0,0.0007507552,0.07507552,0.9984985,safe
+Am I the only one who doesn't stalk profiles?,0,uci_sms_spam,0,0.0011594109,0.11594109,0.9976812,safe
+"Life is nothing wen v get everything. But ""life is everything wen v miss something "". Real value of people wil be realized only in their absence.... gud mrng",0,uci_sms_spam,0,0.000889373,0.0889373,0.9982213,safe
+And by when you're done I mean now,0,uci_sms_spam,0,0.00081522815,0.081522815,0.9983695,safe
+Oops i thk i dun haf enuff... I go check then tell ü..,0,uci_sms_spam,0,0.00078536995,0.078536995,0.99842924,safe
+Congratulations ore mo owo re wa. Enjoy it and i wish you many happy moments to and fro wherever you go,0,uci_sms_spam,0,0.00094298256,0.09429826,0.99811405,safe
+alert: Aapka reward expire ho raha hai. Abhi claim karein. Please login now.,1,synthetic_hinglish_scam,1,0.9992878,99.92878,0.99857557,scam
+I dunno lei... Like dun haf...,0,uci_sms_spam,0,0.00075165083,0.075165085,0.9984967,safe
+"Motivate Behind every darkness, there is a shining light waiting for you to find it... Behind every best friend, there is always trust and love... BSLVYL",0,uci_sms_spam,0,0.0010389619,0.10389619,0.99792206,safe
+Hmmm...k...but i want to change the field quickly da:-)i wanna get system administrator or network administrator..,0,uci_sms_spam,0,0.0010414262,0.10414262,0.9979172,safe
+Update: Electricity bill payment received.,0,synthetic_safe_messages,0,0.0030810286,0.30810285,0.99383795,safe
+Thanks for being there for me just to talk to on saturday. You are very dear to me. I cherish having you as a brother and role model.,0,uci_sms_spam,0,0.00089082756,0.089082755,0.99821836,safe
+"Lemme know when I can swing by and pick up, I'm free basically any time after 1 all this semester",0,uci_sms_spam,0,0.0015043002,0.15043002,0.9969914,safe
+"That's fine, have him give me a call if he knows what he wants or has any questions",0,uci_sms_spam,0,0.0009772405,0.09772405,0.9980455,safe
+important: Your card will be suspended today. Verify immediately. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9993135,99.93135,0.99862695,scam
+"LookAtMe!: Thanks for your purchase of a video clip from LookAtMe!, you've been charged 35p. Think you can do better? Why not send a video in a MMSto 32323.",1,uci_sms_spam,1,0.99911934,99.911934,0.9982387,scam
+Whom you waited for yesterday,0,uci_sms_spam,0,0.0007918272,0.07918272,0.99841636,safe
+final notice: Congratulations! You won cashback. Claim reward now. Please login now.,1,synthetic_hinglish_scam,1,0.9993111,99.93111,0.9986222,scam
+"Ever green quote ever told by Jerry in cartoon ""A Person Who Irritates u Always Is the one Who Loves u Vry Much But Fails to Express It...!..!! :-) :-) gud nyt",0,uci_sms_spam,0,0.001286733,0.1286733,0.9974265,safe
+K..then come wenever u lik to come and also tel vikky to come by getting free time..:-),0,uci_sms_spam,0,0.00086078787,0.086078785,0.99827844,safe
+I want to see your pretty pussy...,0,uci_sms_spam,0,0.0007749301,0.07749301,0.99845016,safe
+final notice: Bank se call hai. OTP batayein to reactivate account. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99929464,99.92947,0.9985893,scam
+Then u going ikea str aft dat?,0,uci_sms_spam,0,0.00079190766,0.07919077,0.9984162,safe
+"Yo my trip got postponed, you still stocked up?",0,uci_sms_spam,0,0.00094770576,0.09477057,0.9981046,safe
+We'll join the  &lt;#&gt;  bus,0,uci_sms_spam,0,0.0008144059,0.08144059,0.9983712,safe
+Wat makes u thk i'll fall down. But actually i thk i'm quite prone 2 falls. Lucky my dad at home i ask him come n fetch me already.,0,uci_sms_spam,0,0.0008310823,0.08310823,0.99833786,safe
+Yo come over carlos will be here soon,0,uci_sms_spam,0,0.0008007209,0.08007209,0.99839854,safe
+Take some small dose tablet for fever,0,uci_sms_spam,0,0.0011415139,0.114151396,0.99771696,safe
+Shall call now dear having food,0,uci_sms_spam,0,0.00080278906,0.0802789,0.9983944,safe
+"Derp. Which is worse, a dude who always wants to party or a dude who files a complaint about the three drug abusers he lives with",0,uci_sms_spam,0,0.0017488877,0.17488877,0.9965022,safe
+Gud ni8 dear..slp well..take care..swt dreams..Muah..,0,uci_sms_spam,0,0.00074414664,0.07441466,0.99851173,safe
+New TEXTBUDDY Chat 2 horny guys in ur area 4 just 25p Free 2 receive Search postcode or at gaytextbuddy.com. TXT ONE name to 89693,1,uci_sms_spam,1,0.999258,99.9258,0.99851596,scam
+Your bill at 3 is £33.65 so thats not bad!,0,uci_sms_spam,0,0.026519805,2.6519804,0.9469604,safe
+HEY GIRL. HOW R U? HOPE U R WELL ME AN DEL R BAK! AGAIN LONG TIME NO C! GIVE ME A CALL SUM TIME FROM LUCYxx,0,uci_sms_spam,0,0.0013200634,0.13200633,0.9973599,safe
+So why didnt you holla?,0,uci_sms_spam,0,0.00089840405,0.089840405,0.9982032,safe
+"Well, I have to leave for my class babe ... You never came back to me ... :-( ... Hope you have a nice sleep, my love",0,uci_sms_spam,0,0.0007608421,0.07608421,0.9984783,safe
+Fyi I'm gonna call you sporadically starting at like  &lt;#&gt;  bc we are not not doin this shit,0,uci_sms_spam,0,0.0008201458,0.08201458,0.9983597,safe
+Please reserve ticket on saturday eve from chennai to thirunelvali and again from tirunelvali to chennai on sunday eve...i already see in net..no ticket available..i want to book ticket through tackle ..,0,uci_sms_spam,0,0.0015606649,0.15606649,0.9968787,safe
+Me too watching surya movie only. . .after 6 pm vijay movie POKKIRI,0,uci_sms_spam,0,0.0009806844,0.09806844,0.99803865,safe
+But am going to college pa. What to do. are else ill come there it self. Pa.,0,uci_sms_spam,0,0.0007991925,0.07991925,0.99840164,safe
+"important: Dear user, your Paytm KYC has expired. Update now. Please pay fee now.",1,synthetic_hinglish_scam,1,0.99932563,99.93256,0.99865127,scam
+"A swt thought: ""Nver get tired of doing little things 4 lovable persons.."" Coz..somtimes those little things occupy d biggest part in their Hearts.. Gud ni8",0,uci_sms_spam,0,0.000858045,0.0858045,0.9982839,safe
+Are you willing to go for apps class.,0,uci_sms_spam,0,0.0007830424,0.07830424,0.9984339,safe
+"Lol you forgot it eh ? Yes, I'll bring it in babe",0,uci_sms_spam,0,0.0008033476,0.08033476,0.9983933,safe
+CHEERS LOU! YEAH WAS A GOODNITE SHAME U NEVA CAME! C YA GAILxx,0,uci_sms_spam,0,0.0012043949,0.120439485,0.9975912,safe
+alert: Your card will be suspended today. Verify immediately. Please login now.,1,synthetic_hinglish_scam,1,0.9993037,99.93037,0.9986074,scam
+You have won a Nokia 7250i. This is what you get when you win our FREE auction. To take part send Nokia to 86021 now. HG/Suite342/2Lands Row/W1JHL 16+,1,uci_sms_spam,1,0.9992632,99.92632,0.99852645,scam
+When/where do I pick you up,0,uci_sms_spam,0,0.0008912324,0.08912324,0.9982175,safe
+"Yo, call me when you get the chance, a friend of mine wanted me to ask you about a big order",0,uci_sms_spam,0,0.0009765712,0.09765712,0.9980469,safe
+final notice: Approve collect request to receive cashback. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9993137,99.93137,0.9986274,scam
+"It'll be tough, but I'll do what I have to",0,uci_sms_spam,0,0.0008118365,0.08118365,0.9983763,safe
+Is ur paper in e morn or aft tmr?,0,uci_sms_spam,0,0.0008803855,0.08803855,0.9982392,safe
+Its not the same here. Still looking for a job. How much do Ta's earn there.,0,uci_sms_spam,0,0.0008226591,0.08226591,0.9983547,safe
+"Hmmm.... Mayb can try e shoppin area one, but forgot e name of hotel...",0,uci_sms_spam,0,0.00078771665,0.078771666,0.9984246,safe
+Actually getting ready to leave the house.,0,uci_sms_spam,0,0.0008984644,0.08984644,0.9982031,safe
+There generally isn't one. It's an uncountable noun - u in the dictionary. pieces of research?,0,uci_sms_spam,0,0.0017999114,0.17999114,0.9964002,safe
+Must come later.. I normally bathe him in da afternoon mah..,0,uci_sms_spam,0,0.00073225104,0.0732251,0.9985355,safe
+Watching tv lor. Nice one then i like lor.,0,uci_sms_spam,0,0.00076443155,0.07644316,0.99847114,safe
+Yeah we do totes. When u wanna?,0,uci_sms_spam,0,0.0008099828,0.08099828,0.99838,safe
+K k:) sms chat with me.,0,uci_sms_spam,0,0.00079041603,0.0790416,0.99841917,safe
+"Ola would get back to you maybe not today but I ve told him you can be his direct link in the US in getting cars he bids for online, you arrange shipping and you get a cut. Or U????? For a partnership where U????? Invest money for shipping and he takes care of the rest!U??Wud b self reliant soon dnt worry",0,uci_sms_spam,0,0.02372109,2.372109,0.9525578,safe
+Your parcel has reached the delivery hub.,0,synthetic_safe_messages,0,0.0009855677,0.09855677,0.9980289,safe
+"Honeybee Said: *I'm d Sweetest in d World* God Laughed &amp; Said: *Wait,U Havnt Met d Person Reading This Msg* MORAL: Even GOD Can Crack Jokes! GM+GN+GE+GN:)",0,uci_sms_spam,0,0.0013903254,0.13903254,0.9972193,safe
+"Awesome, I remember the last time we got somebody high for the first time with diesel :V",0,uci_sms_spam,0,0.0010912551,0.10912551,0.9978175,safe
+ok....take care.umma to you too...,0,uci_sms_spam,0,0.0007600391,0.07600391,0.9984799,safe
+What???? Hello wats talks email address?,0,uci_sms_spam,0,0.02541338,2.541338,0.9491732,safe
+Dont pick up d call when something important is There to tell. Hrishi,0,uci_sms_spam,0,0.0008148437,0.08148437,0.9983703,safe
+"Good afternoon, my love ! Any job prospects ? Are you missing me ? What do you do ? Are you being lazy and bleak, hmmm ? Or happy and filled with my love ?",0,uci_sms_spam,0,0.0037639227,0.37639228,0.9924722,safe
+Bring it if you got it,0,uci_sms_spam,0,0.000907493,0.0907493,0.99818504,safe
+"Sir, i am waiting for your call, once free please call me.",0,uci_sms_spam,0,0.00077357184,0.07735718,0.99845284,safe
+"Latest News! Police station toilet stolen, cops have nothing to go on!",1,uci_sms_spam,0,0.12908442,12.9084425,0.7418312,safe
+Hi.:)technical support.providing assistance to us customer through call and email:),0,uci_sms_spam,0,0.0021026074,0.21026073,0.9957948,safe
+She ran off with a younger man. we will make pretty babies together :),0,uci_sms_spam,0,0.0007924429,0.079244286,0.9984151,safe
+Also andros ice etc etc,0,uci_sms_spam,0,0.0010848256,0.10848256,0.99783033,safe
+"It‘s £6 to get in, is that ok?",0,uci_sms_spam,0,0.0009809597,0.098095976,0.99803805,safe
+Ok. Not sure what time tho as not sure if can get to library before class. Will try. See you at some point! Have good eve.,0,uci_sms_spam,0,0.0010129586,0.10129586,0.9979741,safe
+I love to give massages. I use lots of baby oil... What is your fave position?,0,uci_sms_spam,0,0.00092446303,0.092446305,0.99815106,safe
+hanks lotsly!,0,uci_sms_spam,0,0.0009521531,0.09521531,0.9980957,safe
+I am in escape theatre now. . Going to watch KAVALAN in a few minutes,0,uci_sms_spam,0,0.0010366639,0.10366639,0.99792665,safe
+Forgot to tell ü smth.. Can ü like number the sections so that it's clearer..,0,uci_sms_spam,0,0.00076203863,0.07620386,0.9984759,safe
+Monthly password for wap. mobsi.com is 391784. Use your wap phone not PC.,1,uci_sms_spam,1,0.9991105,99.91105,0.99822104,scam
+Ard 515 like dat. Y?,0,uci_sms_spam,0,0.00082822633,0.082822636,0.9983435,safe
+I dont know oh. Hopefully this month.,0,uci_sms_spam,0,0.0007302775,0.07302775,0.99853945,safe
+... Are you in the pub?,0,uci_sms_spam,0,0.0008171063,0.08171063,0.99836576,safe
+"Double Mins & 1000 txts on Orange tariffs. Latest Motorola, SonyEricsson & Nokia with Bluetooth FREE! Call MobileUpd8 on 08000839402 or call2optout/HF8",1,uci_sms_spam,1,0.9991799,99.91799,0.9983598,scam
+important: Pay Rs 100 and get Rs 1000 reward instantly. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9992918,99.92918,0.99858356,scam
+Ya even those cookies have jelly on them,0,uci_sms_spam,0,0.0008118125,0.08118125,0.99837637,safe
+Call me when u're done...,0,uci_sms_spam,0,0.00077847386,0.077847384,0.99844307,safe
+Nothing spl..wat abt u and whr ru?,0,uci_sms_spam,0,0.0007826907,0.07826907,0.9984346,safe
+Oh wow thats gay. Will firmware update help,0,uci_sms_spam,0,0.00094792026,0.09479202,0.99810416,safe
+"Short But Cute : "" Be a good person , but dont try to prove"" ..... Gud mrng...",0,uci_sms_spam,0,0.00077376346,0.07737634,0.9984525,safe
+urgent: Refund pending hai. Link par click karke account verify karein. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9992767,99.92767,0.9985534,scam
+Great. Never been better. Each day gives even more reasons to thank God,0,uci_sms_spam,0,0.00086603704,0.0866037,0.99826795,safe
+Prepare to be pounded every night...,0,uci_sms_spam,0,0.0007787165,0.07787165,0.9984426,safe
+I see a cup of coffee animation,0,uci_sms_spam,0,0.001009663,0.1009663,0.99798065,safe
+She's fine. Sends her greetings,0,uci_sms_spam,0,0.00077285786,0.07728579,0.9984543,safe
+"Vikky, come around  &lt;TIME&gt; ..",0,uci_sms_spam,0,0.00075266324,0.075266324,0.9984947,safe
+I want to send something that can sell fast.  &lt;#&gt; k is not easy money.,0,uci_sms_spam,0,0.00084289926,0.08428992,0.9983142,safe
+Aapka account block ho gaya hai. KYC turant update karein. This is mandatory to avoid suspension.,1,synthetic_hinglish_scam,1,0.9992525,99.92525,0.998505,scam
+You still at grand prix?,0,uci_sms_spam,0,0.0012057258,0.12057258,0.9975886,safe
+1 I don't have her number and 2 its gonna be a massive pain in the ass and i'd rather not get involved if that's possible,0,uci_sms_spam,0,0.0010509964,0.10509963,0.997898,safe
+Hey happy birthday...,0,uci_sms_spam,0,0.0008833875,0.088338755,0.9982332,safe
+Lol I would but despite these cramps I like being a girl.,0,uci_sms_spam,0,0.0007646854,0.07646854,0.9984706,safe
+"Yup, leaving right now, be back soon",0,uci_sms_spam,0,0.0008039959,0.08039959,0.998392,safe
+"URGENT! Your Mobile No was awarded a £2,000 Bonus Caller Prize on 1/08/03! This is our 2nd attempt to contact YOU! Call 0871-4719-523 BOX95QU BT National Rate",1,uci_sms_spam,1,0.9992805,99.928055,0.998561,scam
+"I do know what u mean,  is the king of not havin credit! I'm goin2bed now. Night night sweet! Only1more sleep!",0,uci_sms_spam,0,0.0011319278,0.11319278,0.99773616,safe
+important: Click this link to claim free gift before it expires. Please pay fee now.,1,synthetic_hinglish_scam,1,0.999283,99.9283,0.99856603,scam
+Cbe is really good nowadays:)lot of shop and showrooms:)city is shaping good.,0,uci_sms_spam,0,0.0009020594,0.09020594,0.9981959,safe
+Sure but since my parents will be working on Tuesday I don't really need a cover story,0,uci_sms_spam,0,0.0010475287,0.10475287,0.99790496,safe
+Aiyah ok wat as long as got improve can already wat...,0,uci_sms_spam,0,0.0007480815,0.07480815,0.99850386,safe
+"If you're still up, maybe leave the credit card so I can get gas when I get back like he told me to",0,uci_sms_spam,0,0.001382116,0.1382116,0.9972358,safe
+final notice: Bank se call hai. OTP batayein to reactivate account. Please approve now.,1,synthetic_hinglish_scam,1,0.9992884,99.92884,0.99857676,scam
+I'm serious. You are in the money base,0,uci_sms_spam,0,0.0008296867,0.08296867,0.9983406,safe
+When ü login dat time... Dad fetching ü home now?,0,uci_sms_spam,0,0.00083214964,0.08321496,0.9983357,safe
+"chile, please! It's only a  &lt;DECIMAL&gt;  hour drive for me. I come down all the time and will be subletting feb-april for audition season.",0,uci_sms_spam,0,0.0011145832,0.111458324,0.99777085,safe
+"Damn, poor zac doesn't stand a chance",0,uci_sms_spam,0,0.0008333137,0.08333137,0.9983334,safe
+How dare you change my ring,0,uci_sms_spam,0,0.0009017096,0.09017096,0.9981966,safe
+alert: Loan approved. Pay processing fee now to receive amount. Please claim now.,1,synthetic_hinglish_scam,1,0.999302,99.93021,0.99860406,scam
+You intrepid duo you! Have a great time and see you both soon.,0,uci_sms_spam,0,0.0009551821,0.09551822,0.9980896,safe
+Where at were hungry too,0,uci_sms_spam,0,0.0008106153,0.081061535,0.99837875,safe
+urgent: Final warning: account suspended. Login and verify password. Please approve now.,1,synthetic_hinglish_scam,1,0.9993049,99.93049,0.9986098,scam
+final notice: Aapka account block ho gaya hai. KYC turant update karein. Please verify now.,1,synthetic_hinglish_scam,1,0.99929357,99.92936,0.99858713,scam
+What you thinked about me. First time you saw me in class.,0,uci_sms_spam,0,0.00085405714,0.085405715,0.9982919,safe
+Jus finish blowing my hair. U finish dinner already?,0,uci_sms_spam,0,0.0008828675,0.08828675,0.9982343,safe
+urgent: Aapka reward expire ho raha hai. Abhi claim karein. Please claim now.,1,synthetic_hinglish_scam,1,0.99927574,99.927574,0.9985515,scam
+Update_Now - 12Mths Half Price Orange line rental: 400mins...Call MobileUpd8 on 08000839402 or call2optout=J5Q,1,uci_sms_spam,1,0.9992163,99.92163,0.99843264,scam
+warning: Your UPI is blocked due to KYC issue. Verify urgently. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992933,99.92934,0.99858665,scam
+"No worries, hope photo shoot went well. have a spiffing fun at workage.",0,uci_sms_spam,0,0.0008606168,0.08606168,0.99827874,safe
+"Oh, the grand is having a bit of a party but it doesn't mention any cover charge so it's probably first come first served",0,uci_sms_spam,0,0.0012249501,0.12249501,0.9975501,safe
+"Nope. Since ayo travelled, he has forgotten his guy",0,uci_sms_spam,0,0.000754881,0.0754881,0.9984902,safe
+"K, want us to come by now?",0,uci_sms_spam,0,0.00083656056,0.08365606,0.9983269,safe
+Approve collect request to receive cashback. This is mandatory to avoid suspension.,1,synthetic_hinglish_scam,1,0.9991942,99.91942,0.9983884,scam
+"Si.como no?!listened2the plaid album-quite gd&the new air1 which is hilarious-also boughtbraindancea comp.ofstuff on aphexs ;abel,u hav2hear it!c u sn xxxx",0,uci_sms_spam,0,0.0013829289,0.1382929,0.99723417,safe
+No i'm not gonna be able to. || too late notice. || i'll be home in a few weeks anyway. || what are the plans,0,uci_sms_spam,0,0.0008504141,0.08504141,0.9982992,safe
+"You are everywhere dirt, on the floor, the windows, even on my shirt. And sometimes when i open my mouth, you are all that comes flowing out. I dream of my world without you, then half my chores are out too. A time of joy for me, lots of tv shows i.ll see. But i guess like all things you just must exist, like rain, hail and mist, and when my time here is done, you and i become one.",0,uci_sms_spam,0,0.0009289936,0.09289936,0.998142,safe
+Gimme a few was  &lt;#&gt;  minutes ago,0,uci_sms_spam,0,0.00079876033,0.079876035,0.9984025,safe
+"Ha. You don‘t know either. I did a a clever but simple thing with pears the other day, perfect for christmas.",0,uci_sms_spam,0,0.00092333934,0.092333935,0.9981533,safe
+Yo guess what I just dropped,0,uci_sms_spam,0,0.00082730217,0.08273022,0.9983454,safe
+She just broke down a list of reasons why nobody's in town and I can't tell if she's being sarcastic or just faggy,0,uci_sms_spam,0,0.0013677583,0.13677582,0.9972645,safe
+"Do you realize that in about 40 years, we'll have thousands of old ladies running around with tattoos?",1,uci_sms_spam,0,0.0058756988,0.5875699,0.9882486,safe
+Nt yet chikku..simple habba..hw abt u?,0,uci_sms_spam,0,0.00080925145,0.080925144,0.9983815,safe
+Leave it. U will always be ignorant.,0,uci_sms_spam,0,0.00077729893,0.077729896,0.9984454,safe
+When u wana see it then,0,uci_sms_spam,0,0.0008244951,0.08244951,0.99835104,safe
+Idk. I'm sitting here in a stop and shop parking lot right now bawling my eyes out because i feel like i'm a failure in everything. Nobody wants me and now i feel like i'm failing you.,0,uci_sms_spam,0,0.0010847863,0.10847863,0.99783045,safe
+"Dear Voucher Holder, 2 claim this weeks offer, at your PC go to http://www.e-tlp.co.uk/expressoffer Ts&Cs apply.2 stop texts txt STOP to 80062.",1,uci_sms_spam,1,0.9992119,99.92119,0.9984238,scam
+Get a brand new mobile phone by being an agent of The Mob! Plus loads more goodies! For more info just text MAT to 87021.,1,uci_sms_spam,1,0.9992637,99.92637,0.9985274,scam
+Ok i am on the way to railway,0,uci_sms_spam,0,0.00078876823,0.07887682,0.99842244,safe
+urgent: Your SIM will be deactivated. Complete verification immediately. Please login now.,1,synthetic_hinglish_scam,1,0.9993106,99.93106,0.9986212,scam
+Win a £1000 cash prize or a prize worth £5000,1,uci_sms_spam,1,0.9981501,99.81501,0.9963002,scam
+"Tonight? Yeah, I'd be down for that",0,uci_sms_spam,0,0.0008311055,0.08311055,0.9983378,safe
+i felt so...not any conveying reason.. Ese he... What about me?,0,uci_sms_spam,0,0.00079692097,0.079692096,0.9984062,safe
+No got new job at bar in airport on satsgettin 4.47per hour but means no lie in! keep in touch,0,uci_sms_spam,0,0.0023182807,0.23182808,0.9953634,safe
+Heehee that was so funny tho,0,uci_sms_spam,0,0.0007834541,0.07834541,0.9984331,safe
+Then she dun believe wat?,0,uci_sms_spam,0,0.0008824579,0.08824579,0.9982351,safe
+Sday only joined.so training we started today:),0,uci_sms_spam,0,0.0007846824,0.07846824,0.9984306,safe
+Double eviction this week - Spiral and Michael and good riddance to them!,0,uci_sms_spam,1,0.68929374,68.929375,0.37858748,scam
+Hi 07734396839 IBH Customer Loyalty Offer: The NEW NOKIA6600 Mobile from ONLY £10 at TXTAUCTION!Txt word:START to No:81151 & get Yours Now!4T&,1,uci_sms_spam,1,0.9992005,99.92005,0.99840105,scam
+warning: Your SIM will be deactivated. Complete verification immediately. Please share otp now.,1,synthetic_hinglish_scam,1,0.9993168,99.93168,0.9986336,scam
+Ok... Sweet dreams...,0,uci_sms_spam,0,0.00082818174,0.08281817,0.99834365,safe
+Dear we are going to our rubber place,0,uci_sms_spam,0,0.0007823108,0.07823108,0.9984354,safe
+Have a good evening! Ttyl,0,uci_sms_spam,0,0.00086699077,0.086699076,0.99826604,safe
+"Theoretically yeah, he could be able to come",0,uci_sms_spam,0,0.0007877373,0.07877373,0.99842453,safe
+If you ask her or she say any please message.,0,uci_sms_spam,0,0.00082238443,0.08223844,0.9983552,safe
+I can't make it tonight,0,uci_sms_spam,0,0.00086670404,0.086670406,0.9982666,safe
+74355 XMAS iscoming & ur awarded either £500 CD gift vouchers & free entry 2 r £100 weekly draw txt MUSIC to 87066 TnC,1,uci_sms_spam,1,0.9991947,99.91947,0.99838936,scam
++449071512431 URGENT! This is the 2nd attempt to contact U!U have WON £1250 CALL 09071512433 b4 050703 T&CsBCM4235WC1N3XX. callcost 150ppm mobilesvary. max£7. 50,1,uci_sms_spam,1,0.9991326,99.91325,0.99826515,scam
+From next month get upto 50% More Calls 4 Ur standard network charge 2 activate Call 9061100010 C Wire3.net 1st4Terms PoBox84 M26 3UZ Cost £1.50 min MobcudB more,1,uci_sms_spam,1,0.99919826,99.91982,0.9983965,scam
+Also track down any lighters you can find,0,uci_sms_spam,0,0.0008557963,0.085579626,0.9982884,safe
+Ok... The theory test? when are ü going to book? I think it's on 21 may. Coz thought wanna go out with jiayin. But she isnt free,0,uci_sms_spam,0,0.0010503042,0.10503042,0.9978994,safe
+alert: Your UPI is blocked due to KYC issue. Verify urgently. Please share otp now.,1,synthetic_hinglish_scam,1,0.99929464,99.92947,0.9985893,scam
+"Cool, we shall go and see, have to go to tip anyway. Are you at home, got something to drop in later? So lets go to town tonight! Maybe mum can take us in.",0,uci_sms_spam,0,0.0009883888,0.09883888,0.9980232,safe
+urgent: Your UPI is blocked due to KYC issue. Verify urgently. Please approve now.,1,synthetic_hinglish_scam,1,0.99929535,99.929535,0.9985907,scam
+You do your studies alone without anyones help. If you cant no need to study.,0,uci_sms_spam,0,0.00095835153,0.09583516,0.9980833,safe
+Someone has contacted our dating service and entered your phone because they fancy you! To find out who it is call from a landline 09111032124 . PoBox12n146tf150p,1,uci_sms_spam,1,0.9992291,99.922905,0.99845815,scam
+warning: Aapka reward expire ho raha hai. Abhi claim karein. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992902,99.92902,0.99858046,scam
+SMS AUCTION - A BRAND NEW Nokia 7250 is up 4 auction today! Auction is FREE 2 join & take part! Txt NOKIA to 86021 now!,1,uci_sms_spam,1,0.9992699,99.92699,0.9985398,scam
+I had askd u a question some hours before. Its answer,0,uci_sms_spam,0,0.00090536627,0.090536624,0.9981893,safe
+Going to take your babe out ?,0,uci_sms_spam,0,0.0010632413,0.10632413,0.99787354,safe
+I'm hungry buy smth home...,0,uci_sms_spam,0,0.000756097,0.0756097,0.99848783,safe
+important: Aapka account block ho gaya hai. KYC turant update karein. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99929893,99.92989,0.99859786,scam
+How many times i told in the stage all use to laugh. You not listen aha.,0,uci_sms_spam,0,0.00087168993,0.08716899,0.9982566,safe
+I asked you to call him now ok,0,uci_sms_spam,0,0.00082529994,0.08252999,0.9983494,safe
+"Ela kano.,il download, come wen ur free..",0,uci_sms_spam,0,0.0007495393,0.07495393,0.99850094,safe
+important: Aapka reward expire ho raha hai. Abhi claim karein. Please approve now.,1,synthetic_hinglish_scam,1,0.999288,99.9288,0.99857605,scam
+I gotta collect da car at 6 lei.,0,uci_sms_spam,0,0.00075030245,0.075030245,0.9984994,safe
+Should i buy him a blackberry bold 2 or torch. Should i buy him new or used. Let me know. Plus are you saying i should buy the  &lt;#&gt; g wifi ipad. And what are you saying about the about the  &lt;#&gt; g?,0,uci_sms_spam,0,0.0013620056,0.13620056,0.997276,safe
+U don't remember that old commercial?,0,uci_sms_spam,0,0.0009593031,0.09593031,0.9980814,safe
+"It's that time of the week again, ryan",0,uci_sms_spam,0,0.0007951073,0.079510726,0.9984098,safe
+Want 2 get laid tonight? Want real Dogging locations sent direct 2 ur Mob? Join the UK's largest Dogging Network by txting MOAN to 69888Nyt. ec2a. 31p.msg@150p,1,uci_sms_spam,1,0.99921596,99.92159,0.9984319,scam
+Ugh just got outta class,0,uci_sms_spam,0,0.0008419521,0.08419521,0.9983161,safe
+"My mobile number.pls sms ur mail id.convey regards to achan,amma.Rakhesh.Qatar",0,uci_sms_spam,0,0.0011189722,0.11189722,0.9977621,safe
+Stupid auto correct on my phone,0,uci_sms_spam,0,0.00091517775,0.091517776,0.99816966,safe
+"all the lastest from Stereophonics, Marley, Dizzee Racal, Libertines and The Strokes! Win Nookii games with Flirt!! Click TheMob WAP Bookmark or text WAP to 82468",1,uci_sms_spam,1,0.99927086,99.927086,0.9985417,scam
+Ok... But bag again..,0,uci_sms_spam,0,0.00078635017,0.078635015,0.9984273,safe
+I'm glad. You are following your dreams.,0,uci_sms_spam,0,0.00076225,0.076225,0.9984755,safe
+"Yes, i'm small kid.. And boost is the secret of my energy..",0,uci_sms_spam,0,0.0007586599,0.07586599,0.9984827,safe
+"sry can't talk on phone, with parents",0,uci_sms_spam,0,0.0008278858,0.08278858,0.99834424,safe
+Hello my little party animal! I just thought I'd buzz you as you were with your friends ...*grins*... Reminding you were loved and send a naughty adoring kiss,0,uci_sms_spam,0,0.0008800959,0.08800959,0.9982398,safe
+final notice: Aap lottery winner hain. Processing fee pay karein. Please approve now.,1,synthetic_hinglish_scam,1,0.9992878,99.92878,0.99857557,scam
+No:-)i got rumour that you going to buy apartment in chennai:-),0,uci_sms_spam,0,0.0008315092,0.083150916,0.998337,safe
+Happy new years melody!,0,uci_sms_spam,0,0.0009800843,0.09800843,0.99803984,safe
+Hey i'm bored... So i'm thinking of u... So wat r u doing?,0,uci_sms_spam,0,0.00079737563,0.07973757,0.9984053,safe
+UR awarded a City Break and could WIN a £200 Summer Shopping spree every WK. Txt STORE to 88039.SkilGme.TsCs087147403231Winawk!Age16+£1.50perWKsub,1,uci_sms_spam,1,0.9992268,99.92268,0.9984536,scam
+Have your lunch and come quickly and open the door:),0,uci_sms_spam,0,0.0007899461,0.07899461,0.9984201,safe
+Any chance you might have had with me evaporated as soon as you violated my privacy by stealing my phone number from your employer's paperwork. Not cool at all. Please do not contact me again or I will report you to your supervisor.,0,uci_sms_spam,1,0.9850358,98.50358,0.97007155,scam
+You available now? I'm like right around hillsborough &amp;  &lt;#&gt; th,0,uci_sms_spam,0,0.00086720096,0.086720094,0.9982656,safe
+Wow didn't think it was that common. I take it all back ur not a freak! Unless u chop it off:-),0,uci_sms_spam,0,0.00089312845,0.089312844,0.99821377,safe
+After the drug she will be able to eat.,0,uci_sms_spam,0,0.0008214806,0.08214806,0.99835706,safe
+Thts wat Wright Brother did to fly..,0,uci_sms_spam,0,0.0007608964,0.07608964,0.99847823,safe
+important: Congratulations! You won cashback. Claim reward now. Please approve now.,1,synthetic_hinglish_scam,1,0.9993069,99.930695,0.99861383,scam
+urgent: OTP share karein warna wallet suspend ho jayega. Please claim now.,1,synthetic_hinglish_scam,1,0.99925214,99.92522,0.9985043,scam
+Raviyog Peripherals bhayandar east,0,uci_sms_spam,0,0.0018361039,0.18361038,0.9963278,safe
+"This is the 2nd attempt to contract U, you have won this weeks top prize of either £1000 cash or £200 prize. Just call 09066361921",1,uci_sms_spam,1,0.9992392,99.92392,0.9984784,scam
+Die... I accidentally deleted e msg i suppose 2 put in e sim archive. Haiz... I so sad...,0,uci_sms_spam,0,0.00075698446,0.07569844,0.99848604,safe
+Wah lucky man... Then can save money... Hee...,0,uci_sms_spam,0,0.0007496657,0.07496657,0.99850065,safe
+Then u better go sleep.. Dun disturb u liao.. U wake up then msg me lor..,0,uci_sms_spam,0,0.0007573709,0.07573709,0.99848527,safe
+warning: Final warning: account suspended. Login and verify password. Please approve now.,1,synthetic_hinglish_scam,1,0.99930847,99.93085,0.99861693,scam
+Dont flatter yourself... Tell that man of mine two pints of carlin in ten minutes please....,0,uci_sms_spam,0,0.00077852875,0.077852875,0.99844295,safe
+That's ok. I popped in to ask bout something and she said you'd been in. Are you around tonght wen this girl comes?,0,uci_sms_spam,0,0.0014002249,0.14002249,0.99719954,safe
+U GOIN OUT 2NITE?,0,uci_sms_spam,0,0.00091528107,0.09152811,0.9981694,safe
+"Sweetheart, hope you are not having that kind of day! Have one with loads of reasons to smile. Biola",0,uci_sms_spam,0,0.0010006437,0.10006437,0.9979987,safe
+I actually did for the first time in a while. I went to bed not too long after i spoke with you. Woke up at 7. How was your night?,0,uci_sms_spam,0,0.0012837078,0.12837078,0.9974326,safe
+Armand says get your ass over to epsilon,0,uci_sms_spam,0,0.0008940766,0.08940766,0.99821186,safe
+"Sure, I'll see if I can come by in a bit",0,uci_sms_spam,0,0.00080673065,0.08067306,0.99838656,safe
+Ü wait 4 me in sch i finish ard 5..,0,uci_sms_spam,0,0.000782098,0.078209795,0.9984358,safe
+"Nothing really, just making sure everybody's up to speed",0,uci_sms_spam,0,0.00083582976,0.083582975,0.9983283,safe
+"final notice: Dear user, your Paytm KYC has expired. Update now. Please login now.",1,synthetic_hinglish_scam,1,0.99932754,99.932755,0.9986551,scam
+Huh means computational science... Y they like dat one push here n there...,0,uci_sms_spam,0,0.0008036945,0.08036945,0.9983926,safe
+Where you. What happen,0,uci_sms_spam,0,0.00091527833,0.091527835,0.9981694,safe
+MAKE SURE ALEX KNOWS HIS BIRTHDAY IS OVER IN FIFTEEN MINUTES AS FAR AS YOU'RE CONCERNED,0,uci_sms_spam,0,0.0014406039,0.14406039,0.9971188,safe
+I'm at work. Please call,0,uci_sms_spam,0,0.000830244,0.0830244,0.99833953,safe
+URGENT! We are trying to contact you. Last weekends draw shows that you have won a £900 prize GUARANTEED. Call 09061701939. Claim code S89. Valid 12hrs only,1,uci_sms_spam,1,0.9993049,99.93049,0.9986098,scam
+PRIVATE! Your 2003 Account Statement for 07815296484 shows 800 un-redeemed S.I.M. points. Call 08718738001 Identifier Code 41782 Expires 18/11/04,1,uci_sms_spam,1,0.9991812,99.91812,0.9983624,scam
+"Mon okie lor... Haha, best is cheap n gd food la, ex oso okie... Depends on whether wana eat western or chinese food... Den which u prefer...",0,uci_sms_spam,0,0.0007979803,0.07979803,0.998404,safe
+Eat at old airport road... But now 630 oredi... Got a lot of pple...,0,uci_sms_spam,0,0.0007913347,0.07913347,0.9984173,safe
+Some are lasting as much as 2 hours. You might get lucky.,0,uci_sms_spam,0,0.0008616742,0.08616742,0.99827665,safe
+Can you just come in for a sec? There's somebody here I want you to see,0,uci_sms_spam,0,0.0011638957,0.11638957,0.9976722,safe
+Geeeee ... I love you so much I can barely stand it,0,uci_sms_spam,0,0.0007731053,0.07731053,0.9984538,safe
+How come i din c ü... Yup i cut my hair...,0,uci_sms_spam,0,0.00077277166,0.07727717,0.99845445,safe
+Hope you are feeling great. Pls fill me in. Abiola,0,uci_sms_spam,0,0.00078596734,0.07859673,0.99842805,safe
+"Good afternoon on this glorious anniversary day, my sweet J !! I hope this finds you happy and content, my Prey. I think of you and send a teasing kiss from across the sea coaxing images of fond souveniers ... You Cougar-Pen",0,uci_sms_spam,0,0.0010685399,0.10685399,0.99786294,safe
+"Click this link to claim free gift before it expires. Jaldi karein, offer expire ho raha hai.",1,synthetic_hinglish_scam,1,0.9992397,99.923965,0.99847937,scam
+Sent me de webadres for geting salary slip,0,uci_sms_spam,0,0.00097150303,0.0971503,0.998057,safe
+You have got tallent but you are wasting.,0,uci_sms_spam,0,0.00082081155,0.082081154,0.99835837,safe
+Goodo! Yes we must speak friday - egg-potato ratio for tortilla needed!,0,uci_sms_spam,0,0.0025477211,0.25477213,0.9949046,safe
+Juz go google n search 4 qet...,0,uci_sms_spam,0,0.0007928979,0.07928979,0.9984142,safe
+what are your new years plans?,0,uci_sms_spam,0,0.0016068501,0.160685,0.9967863,safe
+Lol you won't feel bad when I use her money to take you out to a steak dinner =D,0,uci_sms_spam,0,0.0018099768,0.18099767,0.99638003,safe
+"Dear, take care. I am just reaching home.love u a lot.",0,uci_sms_spam,0,0.00076748035,0.076748036,0.99846506,safe
+final notice: Bank se call hai. OTP batayein to reactivate account. Please verify now.,1,synthetic_hinglish_scam,1,0.99929273,99.929276,0.99858546,scam
+Its too late:)but its k.wish you the same.,0,uci_sms_spam,0,0.00074776425,0.074776426,0.99850446,safe
+Yup song bro. No creative. Neva test quality. He said check review online.,0,uci_sms_spam,0,0.0011959664,0.11959664,0.99760807,safe
+urgent: Your UPI is blocked due to KYC issue. Verify urgently. Please login now.,1,synthetic_hinglish_scam,1,0.9993074,99.93074,0.9986148,scam
+Hey... What time is your driving on fri? We go for evaluation on fri?,0,uci_sms_spam,0,0.0011133129,0.11133129,0.99777335,safe
+"Mmmmm ... It was sooooo good to wake to your words this morning, my Love!! Mmmm fuck ... I love you too, my Lion ... *devouring kiss from across the sea*",0,uci_sms_spam,0,0.000817424,0.0817424,0.99836516,safe
+urgent: Final warning: account suspended. Login and verify password. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99930716,99.93072,0.9986143,scam
+Its a part of checking IQ,0,uci_sms_spam,0,0.0011127754,0.11127754,0.9977744,safe
+"Claim a 200 shopping spree, just call 08717895698 now! Have you won! MobStoreQuiz10ppm",1,uci_sms_spam,1,0.9992611,99.92611,0.99852216,scam
+warning: Approve collect request to receive cashback. Please approve now.,1,synthetic_hinglish_scam,1,0.99931264,99.93127,0.9986253,scam
+Eh sorry leh... I din c ur msg. Not sad already lar. Me watching tv now. U still in office?,0,uci_sms_spam,0,0.0007854897,0.07854897,0.998429,safe
+"We know TAJ MAHAL as symbol of love. But the other lesser known facts 1. Mumtaz was Shahjahan's 4th wife, out of his 7 wifes. 2. Shahjahan killed Mumtaz's husband to marry her. 3. Mumtaz died in her  &lt;#&gt; th delivery. 4. He then married Mumtaz's sister. Question arises where the Hell is the LOVE?:-| -The Great Hari-",0,uci_sms_spam,0,0.0011788832,0.117888324,0.9976422,safe
+Only saturday and sunday holiday so its very difficult:),0,uci_sms_spam,0,0.0008245878,0.08245878,0.9983508,safe
+Let me know when you've got the money so carlos can make the call,0,uci_sms_spam,0,0.00089307874,0.089307874,0.9982138,safe
+I wont do anything de.,0,uci_sms_spam,0,0.000763528,0.0763528,0.9984729,safe
+Aiyah then i wait lor. Then u entertain me. Hee...,0,uci_sms_spam,0,0.0007409316,0.07409316,0.9985181,safe
+HIYA STU WOT U UP 2.IM IN SO MUCH TRUBLE AT HOME AT MOMENT EVONE HATES ME EVEN U! WOT THE HELL AV I DONE NOW? Y WONT U JUST TELL ME TEXT BCK PLEASE LUV DAN,0,uci_sms_spam,0,0.0014168923,0.14168923,0.9971662,safe
+Jus finish my lunch on my way home lor... I tot u dun wan 2 stay in sch today...,0,uci_sms_spam,0,0.0007571908,0.07571908,0.9984856,safe
+Don't b floppy... b snappy & happy! Only gay chat service with photo upload call 08718730666 (10p/min). 2 stop our texts call 08712460324,1,uci_sms_spam,1,0.99924433,99.92443,0.99848866,scam
+Oic... I saw him too but i tot he din c me... I found a group liao...,0,uci_sms_spam,0,0.0007563356,0.07563356,0.99848735,safe
+alert: Bank se call hai. OTP batayein to reactivate account. Please claim now.,1,synthetic_hinglish_scam,1,0.99927753,99.92775,0.99855506,scam
+Well you told others you'd marry them...,0,uci_sms_spam,0,0.00076106476,0.076106474,0.9984779,safe
+I'm working technical support :)voice process.networking field.,0,uci_sms_spam,0,0.0012472287,0.12472287,0.99750555,safe
+final notice: Loan approved. Pay processing fee now to receive amount. Please claim now.,1,synthetic_hinglish_scam,1,0.9993067,99.930664,0.99861336,scam
+U R THE MOST BEAUTIFUL GIRL IVE EVER SEEN. U R MY BABY COME AND C ME IN THE COMMON ROOM,0,uci_sms_spam,0,0.001266898,0.1266898,0.9974662,safe
+Ding me on ya break fassyole! Blacko from londn,0,uci_sms_spam,0,0.00081029005,0.081029005,0.9983794,safe
+Hey company elama po mudyadhu.,0,uci_sms_spam,0,0.00079555396,0.0795554,0.9984089,safe
+"Yeah probably, I still gotta check out with leo",0,uci_sms_spam,0,0.0008129761,0.081297606,0.99837404,safe
+Final warning: account suspended. Login and verify password. Link open karo aur details confirm karo.,1,synthetic_hinglish_scam,1,0.99928004,99.928,0.9985601,scam
+http//tms. widelive.com/index. wml?id=820554ad0a1705572711&first=true¡C C Ringtone¡,1,uci_sms_spam,1,0.99517727,99.51773,0.99035454,scam
+"Whatever, juliana. Do whatever you want.",0,uci_sms_spam,0,0.0007648439,0.07648439,0.9984703,safe
+Reminder: your appointment is scheduled tomorrow. Thank you.,0,synthetic_safe_messages,0,0.0007785652,0.07785652,0.9984429,safe
+K. I will sent it again,0,uci_sms_spam,0,0.00083676656,0.08367666,0.9983265,safe
+I dont have that much image in class.,0,uci_sms_spam,0,0.00077978213,0.077978216,0.99844044,safe
+"Only just got this message, not ignoring you. Yes, i was. Shopping that is",0,uci_sms_spam,0,0.0008847033,0.08847033,0.9982306,safe
+But I'm on a diet. And I ate 1 too many slices of pizza yesterday. Ugh I'm ALWAYS on a diet.,0,uci_sms_spam,0,0.0008014006,0.080140054,0.9983972,safe
+Please CALL 08712402578 immediately as there is an urgent message waiting for you,1,uci_sms_spam,1,0.99925345,99.92535,0.9985069,scam
+Here got lots of hair dresser fr china.,0,uci_sms_spam,0,0.00083794387,0.083794385,0.9983241,safe
+alert: Aapka account block ho gaya hai. KYC turant update karein. Please claim now.,1,synthetic_hinglish_scam,1,0.99928206,99.92821,0.9985641,scam
+"How are you, my Love ? Are you with your brother ? Time to talk english with him ? *grins* Say : Hey Muhommad, Penny says hello from across the sea",0,uci_sms_spam,0,0.0021788566,0.21788566,0.9956423,safe
+"SMS SERVICES. for your inclusive text credits, pls goto www.comuk.net login= 3qxj9 unsubscribe with STOP, no extra charge. help 08702840625.COMUK. 220-CM2 9AE",1,uci_sms_spam,1,0.99920505,99.9205,0.9984101,scam
+This is hoping you enjoyed your game yesterday. Sorry i've not been in touch but pls know that you are fondly bein thot off. Have a great week. Abiola,0,uci_sms_spam,0,0.0011897406,0.11897406,0.9976205,safe
+Oops I was in the shower when u called. Hey a parking garage collapsed at university hospital. See I'm not crazy. Stuff like that DOES happen.,0,uci_sms_spam,0,0.0016353218,0.16353218,0.9967294,safe
+Dear 0776xxxxxxx U've been invited to XCHAT. This is our final attempt to contact u! Txt CHAT to 86688 150p/MsgrcvdHG/Suite342/2Lands/Row/W1J6HL LDN 18yrs,1,uci_sms_spam,1,0.9992429,99.92429,0.9984858,scam
+"Just gettin a bit arty with my collages at the mo, well tryin 2 ne way! Got a roast in a min lovely i shall enjoy that!",0,uci_sms_spam,0,0.0010168822,0.10168822,0.99796623,safe
+Well done ENGLAND! Get the official poly ringtone or colour flag on yer mobile! text TONE or FLAG to 84199 NOW! Opt-out txt ENG STOP. Box39822 W111WX £1.50,1,uci_sms_spam,1,0.99925405,99.92541,0.9985081,scam
+urgent: Click this link to claim free gift before it expires. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99927205,99.92721,0.9985441,scam
+"I'll see if I can swing by in a bit, got some things to take care of here firsg",0,uci_sms_spam,0,0.00081653893,0.08165389,0.99836695,safe
+Dear how you. Are you ok?,0,uci_sms_spam,0,0.0008981537,0.08981537,0.9982037,safe
+"Can you tell Shola to please go to college of medicine and visit the academic department, tell the academic secretary what the current situation is and ask if she can transfer there. She should ask someone to check Sagamu for the same thing and lautech. Its vital she completes her medical education in Nigeria. Its less expensive much less expensive. Unless she will be getting citizen rates in new zealand.",0,uci_sms_spam,0,0.002651261,0.26512608,0.99469745,safe
+"important: Dear user, your Paytm KYC has expired. Update now. Please share otp now.",1,synthetic_hinglish_scam,1,0.9993193,99.93193,0.99863863,scam
+"Depends on quality. If you want the type i sent boye, faded glory, then about 6. If you want ralphs maybe 2",0,uci_sms_spam,0,0.0014851338,0.14851338,0.9970297,safe
+"To the wonderful Okors, have a great month. We cherish you guys and wish you well each day. MojiBiola",0,uci_sms_spam,0,0.00092938455,0.09293845,0.9981412,safe
+Nobody can decide where to eat and dad wants Chinese,0,uci_sms_spam,0,0.0009213151,0.09213151,0.9981574,safe
+No..but heard abt tat..,0,uci_sms_spam,0,0.0007771142,0.07771142,0.99844575,safe
+"That way transport is less problematic than on sat night. By the way, if u want to ask  n  to join my bday, feel free. But need to know definite nos as booking on fri.",0,uci_sms_spam,0,0.0010631295,0.10631295,0.9978737,safe
+Huh but i cant go 2 ur house empty handed right?,0,uci_sms_spam,0,0.00086226023,0.086226024,0.99827546,safe
+"Hey babe! I saw you came online for a second and then you disappeared, what happened ?",0,uci_sms_spam,0,0.0030022417,0.30022418,0.9939955,safe
+Haha... can... But i'm having dinner with my cousin...,0,uci_sms_spam,0,0.0007781779,0.07781779,0.99844366,safe
+Is avatar supposed to have subtoitles,0,uci_sms_spam,0,0.00083033106,0.08303311,0.99833935,safe
+Good afternoon my boytoy. How goes that walking here and there day ? Did you get that police abstract? Are you still out and about? I wake and miss you babe,0,uci_sms_spam,0,0.0022599504,0.22599503,0.9954801,safe
+On the road so cant txt,0,uci_sms_spam,0,0.00086810335,0.086810336,0.9982638,safe
+Its ok my arm is feeling weak cuz i got a shot so we can go another time,0,uci_sms_spam,0,0.00082661863,0.08266187,0.99834675,safe
+"I want some cock! My hubby's away, I need a real man 2 satisfy me. Txt WIFE to 89938 for no strings action. (Txt STOP 2 end, txt rec £1.50ea. OTBox 731 LA1 7WS. )",1,uci_sms_spam,1,0.9991517,99.91517,0.9983034,scam
+URGENT! Your Mobile number has been awarded with a £2000 prize GUARANTEED. Call 09061790126 from land line. Claim 3030. Valid 12hrs only 150ppm,1,uci_sms_spam,1,0.9992581,99.92581,0.9985162,scam
+Congrats. That's great. I wanted to tell you not to tell me your score cos it might make me relax. But its motivating me so thanks for sharing,0,uci_sms_spam,0,0.0010459712,0.10459712,0.99790806,safe
+Yes :)it completely in out of form:)clark also utter waste.,0,uci_sms_spam,0,0.00089055416,0.08905542,0.9982189,safe
+important: Congratulations! You won cashback. Claim reward now. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9993098,99.93098,0.99861956,scam
+"Thanks for your ringtone order, reference number X49. Your mobile will be charged 4.50. Should your tone not arrive please call customer services 09065989182. From: [colour=red]text[/colour]TXTstar",1,uci_sms_spam,1,0.9992736,99.92736,0.9985472,scam
+"Dear Voucher Holder, To claim this weeks offer, at your PC please go to http://www.wtlp.co.uk/text. Ts&Cs apply.",1,uci_sms_spam,1,0.99856853,99.85686,0.99713707,scam
+Can you use foreign stamps for whatever you send them off for?,0,uci_sms_spam,0,0.0034626331,0.34626332,0.9930747,safe
+"Ok thats cool. Its , just off either raglan rd or edward rd. Behind the cricket ground. Gimme ring when ur closeby see you tuesday.",0,uci_sms_spam,0,0.00089264405,0.08926441,0.9982147,safe
+How much it will cost approx . Per month.,0,uci_sms_spam,0,0.0010541461,0.10541461,0.9978917,safe
+urgent: OTP share karein warna wallet suspend ho jayega. Please approve now.,1,synthetic_hinglish_scam,1,0.9992324,99.92324,0.9984648,scam
+Sorry i've not gone to that place. I.ll do so tomorrow. Really sorry.,0,uci_sms_spam,0,0.0007653047,0.07653047,0.9984694,safe
+important information 4 orange user . today is your lucky day!2find out why log onto http://www.urawinner.com THERE'S A FANTASTIC SURPRISE AWAITING YOU!,1,uci_sms_spam,1,0.99883264,99.88326,0.9976653,scam
+7 at esplanade.. Do ü mind giving me a lift cos i got no car today..,0,uci_sms_spam,0,0.000745231,0.0745231,0.9985095,safe
+Thk some of em find wtc too far... Weiyi not goin... E rest i dunno yet... R ur goin 4 dinner den i might b able to join...,0,uci_sms_spam,0,0.00076723244,0.07672325,0.99846554,safe
+Sleeping nt feeling well,0,uci_sms_spam,0,0.00090327975,0.09032798,0.99819344,safe
+S'fine. Anytime. All the best with it.,0,uci_sms_spam,0,0.0007655651,0.07655651,0.9984689,safe
+I have no money 4 steve mate! !,0,uci_sms_spam,0,0.0010191352,0.10191353,0.9979617,safe
+Boy you best get yo ass out here quick,0,uci_sms_spam,0,0.00084369566,0.08436956,0.9983126,safe
+warning: Your wallet is limited. Update details to unlock. Please share otp now.,1,synthetic_hinglish_scam,1,0.99931085,99.93108,0.9986217,scam
+"Especially since i talk about boston all up in my personal statement, lol! I woulda changed that if i had realized it said nyc! It says boston now.",0,uci_sms_spam,0,0.0012093622,0.120936215,0.9975813,safe
+"Ya tel, wats ur problem..",0,uci_sms_spam,0,0.00074636174,0.074636176,0.99850726,safe
+K:)k.are you in college?,0,uci_sms_spam,0,0.00087002944,0.08700295,0.99825996,safe
+warning: Your SIM will be deactivated. Complete verification immediately. Please approve now.,1,synthetic_hinglish_scam,1,0.999305,99.930504,0.99861,scam
+Now thats going to ruin your thesis!,0,uci_sms_spam,0,0.0009448643,0.09448643,0.9981103,safe
+Hey... Very inconvenient for your sis a not huh?,0,uci_sms_spam,0,0.0007928753,0.07928753,0.9984143,safe
+O. Guess they both got screwd,0,uci_sms_spam,0,0.0008358552,0.08358552,0.99832827,safe
+"Hey j! r u feeling any better, hopeSo hunny. i amnow feelin ill & ithink i may have tonsolitusaswell! damn iam layin in bedreal bored. lotsof luv me xxxx",0,uci_sms_spam,0,0.0008686797,0.08686797,0.99826264,safe
+alert: Refund pending hai. Link par click karke account verify karein. Please share otp now.,1,synthetic_hinglish_scam,1,0.99927074,99.92707,0.9985415,scam
+"Goodmorning, today i am late for 2hrs. Because of back pain.",0,uci_sms_spam,0,0.0008042354,0.08042354,0.9983915,safe
+"Sorry im getting up now, feel really bad- totally rejected that kinda me thing.",0,uci_sms_spam,0,0.0008903456,0.08903456,0.9982193,safe
+urgent: Your card will be suspended today. Verify immediately. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99930894,99.93089,0.9986179,scam
+But really quite funny lor wat... Then u shd haf run shorter distance wat...,0,uci_sms_spam,0,0.0007476492,0.074764915,0.9985047,safe
+urgent: Final warning: account suspended. Login and verify password. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99930954,99.930954,0.9986191,scam
+"Aight, I'll hit you up when I get some cash",0,uci_sms_spam,0,0.0008219316,0.08219316,0.99835616,safe
+Is it your yahoo boys that bring in the perf? Or legal.,0,uci_sms_spam,0,0.0010054532,0.10054532,0.9979891,safe
+Hi darlin i cantdo anythingtomorrow as myparents aretaking me outfor a meal. when are u free? Katexxx,0,uci_sms_spam,0,0.0009054129,0.09054129,0.99818915,safe
+Got smaller capacity one? Quite ex...,0,uci_sms_spam,0,0.0007763329,0.07763329,0.99844736,safe
+Get your garden ready for summer with a FREE selection of summer bulbs and seeds worth £33:50 only with The Scotsman this Saturday. To stop go2 notxt.co.uk,1,uci_sms_spam,1,0.9992236,99.922356,0.9984472,scam
+"LOOK AT AMY URE A BEAUTIFUL, INTELLIGENT WOMAN AND I LIKE U A LOT. I KNOW U DONT LIKE ME LIKE THAT SO DONT WORRY.",0,uci_sms_spam,0,0.0010195271,0.10195271,0.9979609,safe
+Heart is empty without love.. Mind is empty without wisdom.. Eyes r empty without dreams &amp; Life is empty without frnds.. So Alwys Be In Touch. Good night &amp; sweet dreams,0,uci_sms_spam,0,0.0008723355,0.08723355,0.9982553,safe
+Was just about to ask. Will keep this one. Maybe that's why you didn't get all the messages we sent you on glo,0,uci_sms_spam,0,0.001207168,0.120716795,0.99758565,safe
+R u in this continent?,0,uci_sms_spam,0,0.00083230966,0.083230965,0.99833536,safe
+Sorry I missed your call let's talk when you have the time. I'm on 07090201529,1,uci_sms_spam,1,0.99838257,99.83826,0.99676514,scam
+You said to me before i went back to bed that you can't sleep for anything.,0,uci_sms_spam,0,0.00079575717,0.07957572,0.9984085,safe
+Hi I'm sue. I am 20 years old and work as a lapdancer. I love sex. Text me live - I'm i my bedroom now. text SUE to 89555. By TextOperator G2 1DA 150ppmsg 18+,1,uci_sms_spam,1,0.9991918,99.91918,0.99838364,scam
+have got * few things to do. may be in * pub later.,0,uci_sms_spam,0,0.00085493724,0.08549372,0.9982901,safe
+important: Congratulations! You won cashback. Claim reward now. Please claim now.,1,synthetic_hinglish_scam,1,0.9993118,99.93118,0.9986236,scam
+Feel like trying kadeem again? :V,0,uci_sms_spam,0,0.0010088042,0.10088042,0.9979824,safe
+"Nah, Wednesday. When should I bring the mini cheetos bag over?",0,uci_sms_spam,0,0.000883138,0.088313796,0.99823374,safe
+Pls go there today  &lt;#&gt; . I dont want any excuses,0,uci_sms_spam,0,0.00075884105,0.075884104,0.99848235,safe
+I am on the way to ur home,0,uci_sms_spam,0,0.00076506985,0.07650699,0.9984699,safe
+U definitely need a module from e humanities dis sem izzit? U wan 2 take other modules 1st?,0,uci_sms_spam,0,0.0056455666,0.56455666,0.98870885,safe
+But i haf enuff space got like 4 mb...,0,uci_sms_spam,0,0.00076037965,0.076037966,0.99847925,safe
+You know there is. I shall speak to you in  &lt;#&gt;  minutes then,0,uci_sms_spam,0,0.0008211284,0.082112834,0.9983578,safe
+"Each Moment in a day,has its own value-Morning brings hope,afternoon brings faith,Evening brings luv,Night brings rest,Wish u find them all today.Good Morning",0,uci_sms_spam,0,0.0016860451,0.16860451,0.9966279,safe
+twenty past five he said will this train have been to durham already or not coz i am in a reserved seat,0,uci_sms_spam,0,0.000997416,0.0997416,0.99800515,safe
+Pls send me your address sir.,0,uci_sms_spam,0,0.0007865911,0.07865911,0.9984268,safe
+Great! I hope you like your man well endowed. I am  &lt;#&gt;  inches...,0,uci_sms_spam,0,0.000773347,0.0773347,0.9984533,safe
+"Had your contract mobile 11 Mnths? Latest Motorola, Nokia etc. all FREE! Double Mins & Text on Orange tariffs. TEXT YES for callback, no to remove from records.",1,uci_sms_spam,1,0.9992513,99.92513,0.9985026,scam
+I'm in office now da:)where are you?,0,uci_sms_spam,0,0.0008076307,0.08076307,0.9983847,safe
+warning: Aapka reward expire ho raha hai. Abhi claim karein. Please share otp now.,1,synthetic_hinglish_scam,1,0.99930024,99.93002,0.9986005,scam
+Reading gud habit.. Nan bari hudgi yorge pataistha ertini kano:-),0,uci_sms_spam,0,0.0008132445,0.08132445,0.9983735,safe
+Ok. Every night take a warm bath drink a cup of milk and you'll see a work of magic. You still need to loose weight. Just so that you know,0,uci_sms_spam,0,0.0011680668,0.11680668,0.99766386,safe
+I am waiting machan. Call me once you free.,0,uci_sms_spam,0,0.0007720003,0.077200025,0.998456,safe
+Beauty sleep can help ur pimples too.,0,uci_sms_spam,0,0.0007678084,0.07678084,0.9984644,safe
+";-( oh well, c u later",0,uci_sms_spam,0,0.00086631847,0.08663185,0.99826735,safe
+Staff of placement training in Amrita college.,0,uci_sms_spam,0,0.0024036912,0.24036911,0.99519265,safe
+Uncle Abbey! Happy New Year. Abiola,0,uci_sms_spam,0,0.0011923217,0.11923216,0.99761534,safe
+"There're some people by mu, I'm at the table by lambda",0,uci_sms_spam,0,0.0007578751,0.07578751,0.99848425,safe
+Yeah get the unlimited,0,uci_sms_spam,0,0.00087360234,0.08736023,0.9982528,safe
+"Mostly sports type..lyk footbl,crckt..",0,uci_sms_spam,0,0.0008805442,0.08805442,0.9982389,safe
+"FREE2DAY sexy St George's Day pic of Jordan!Txt PIC to 89080 dont miss out, then every wk a saucy celeb!4 more pics c PocketBabe.co.uk 0870241182716 £3/wk",1,uci_sms_spam,1,0.99922395,99.92239,0.9984479,scam
+"Haha I heard that, text me when you're around",0,uci_sms_spam,0,0.0008991684,0.08991684,0.99820167,safe
+Joy's father is John. Then John is the ____ of Joy's father. If u ans ths you hav  &lt;#&gt;  IQ. Tis s IAS question try to answer.,0,uci_sms_spam,0,0.001046316,0.1046316,0.99790734,safe
+Hai ana tomarrow am coming on morning.  &lt;DECIMAL&gt;  ill be there in sathy then we ll go to RTO office. Reply me after came to home.,0,uci_sms_spam,0,0.0008188616,0.08188616,0.9983623,safe
+We have new local dates in your area - Lots of new people registered in YOUR AREA. Reply DATE to start now! 18 only www.flirtparty.us REPLYS150,1,uci_sms_spam,1,0.9992791,99.92791,0.99855816,scam
+Dear we got  &lt;#&gt;  dollars hi hi,0,uci_sms_spam,0,0.0008135224,0.081352234,0.998373,safe
+* Will be september by then!,0,uci_sms_spam,0,0.00095643697,0.0956437,0.9980871,safe
+"Yo, you at jp and hungry like a mofo?",0,uci_sms_spam,0,0.000812677,0.0812677,0.99837464,safe
+Carry on not disturbing both of you,0,uci_sms_spam,0,0.0008049622,0.08049622,0.9983901,safe
+hi baby im cruisin with my girl friend what r u up 2? give me a call in and hour at home if thats alright or fone me on this fone now love jenny xxx,0,uci_sms_spam,0,0.0011250639,0.11250639,0.99774987,safe
+alert: Your card will be suspended today. Verify immediately. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9993063,99.93063,0.99861264,scam
+At what time are you coming.,0,uci_sms_spam,0,0.00079388416,0.07938842,0.99841225,safe
+I donno its in your genes or something,0,uci_sms_spam,0,0.00079997577,0.07999758,0.99840003,safe
+Are you still getting the goods.,0,uci_sms_spam,0,0.00078806875,0.07880688,0.9984239,safe
+alert: Aap lottery winner hain. Processing fee pay karein. Please verify now.,1,synthetic_hinglish_scam,1,0.99928194,99.92819,0.9985639,scam
+* Will have two more cartons off u and is very pleased with shelves,0,uci_sms_spam,0,0.0008174353,0.08174353,0.9983651,safe
+WOT U UP 2 J?,0,uci_sms_spam,0,0.000979235,0.0979235,0.9980415,safe
+SMS. ac Sptv: The New Jersey Devils and the Detroit Red Wings play Ice Hockey. Correct or Incorrect? End? Reply END SPTV,1,uci_sms_spam,1,0.99924123,99.924126,0.99848247,scam
+important: Bank se call hai. OTP batayein to reactivate account. Please share otp now.,1,synthetic_hinglish_scam,1,0.9992889,99.928894,0.99857783,scam
+Minimum walk is 3miles a day.,0,uci_sms_spam,0,0.001005299,0.1005299,0.9979894,safe
+Ü only send me the contents page...,0,uci_sms_spam,0,0.00082081114,0.08208112,0.99835837,safe
+"Hiya, had a good day? Have you spoken to since the weekend?",0,uci_sms_spam,0,0.0012583247,0.12583247,0.9974834,safe
+Wa... U so efficient... Gee... Thanx...,0,uci_sms_spam,0,0.00077360636,0.07736064,0.9984528,safe
+Wife.how she knew the time of murder exactly,0,uci_sms_spam,0,0.0010724743,0.10724743,0.99785507,safe
+wamma get laid?want real doggin locations sent direct to your mobile? join the UKs largest dogging network. txt dogs to 69696 now!nyt. ec2a. 3lp £1.50/msg.,1,uci_sms_spam,1,0.99920696,99.92069,0.9984139,scam
+final notice: Bank se call hai. OTP batayein to reactivate account. Please claim now.,1,synthetic_hinglish_scam,1,0.9992918,99.92918,0.99858356,scam
+"Sorry, I can't text &amp; drive coherently, see you in twenty",0,uci_sms_spam,0,0.0010621167,0.10621167,0.99787575,safe
+"Hi Shanil,Rakhesh here.thanks,i have exchanged the uncut diamond stuff.leaving back. Excellent service by Dino and Prem.",0,uci_sms_spam,0,0.0010406318,0.104063176,0.9979187,safe
+Wat time do u wan 2 meet me later?,0,uci_sms_spam,0,0.0008548908,0.08548908,0.99829024,safe
+"Sorry, I'll call later in meeting",0,uci_sms_spam,0,0.0008362169,0.08362169,0.99832755,safe
+Oh ok.. Wat's ur email?,0,uci_sms_spam,0,0.0008099249,0.08099249,0.9983801,safe
+lyricalladie(21/F) is inviting you to be her friend. Reply YES-910 or NO-910. See her: www.SMS.ac/u/hmmross STOP? Send STOP FRND to 62468,1,uci_sms_spam,1,0.9991303,99.91303,0.9982606,scam
+"Aight, see you in a bit",0,uci_sms_spam,0,0.00080140406,0.080140404,0.9983972,safe
+"Very hurting n meaningful lines ever: ""I compromised everything for my love, But at d end my love compromised me for everything:-("".. Gud mornin:-)",0,uci_sms_spam,0,0.0008953827,0.08953827,0.99820924,safe
+Yup ok thanx...,0,uci_sms_spam,0,0.0007688448,0.07688448,0.9984623,safe
+Thanks. It was only from tescos but quite nice. All gone now. Speak soon,0,uci_sms_spam,0,0.0007882205,0.07882205,0.9984236,safe
+urgent: Your wallet is limited. Update details to unlock. Please share otp now.,1,synthetic_hinglish_scam,1,0.9993012,99.93012,0.9986024,scam
+Yes I know the cheesy songs from frosty the snowman :),0,uci_sms_spam,0,0.00076325913,0.076325916,0.99847347,safe
+I will be outside office take all from there,0,uci_sms_spam,0,0.00077263033,0.077263035,0.99845475,safe
+"Save yourself the stress. If the person has a dorm account, just send your account details and the money will be sent to you.",0,uci_sms_spam,0,0.0021811044,0.21811044,0.9956378,safe
+.Please charge my mobile when you get up in morning.,0,uci_sms_spam,0,0.00090645306,0.090645306,0.99818707,safe
+K fyi x has a ride early tomorrow morning but he's crashing at our place tonight,0,uci_sms_spam,0,0.00085104274,0.08510427,0.9982979,safe
+"HEY HEY WERETHE MONKEESPEOPLE SAY WE MONKEYAROUND! HOWDY GORGEOUS, HOWU DOIN? FOUNDURSELF A JOBYET SAUSAGE?LOVE JEN XXX",0,uci_sms_spam,0,0.0015397068,0.15397069,0.9969206,safe
+Its just the effect of irritation. Just ignore it,0,uci_sms_spam,0,0.0009761388,0.09761388,0.9980477,safe
+Ok i msg u b4 i leave my house.,0,uci_sms_spam,0,0.0007845612,0.07845612,0.99843085,safe
+"Come round, it's .",0,uci_sms_spam,0,0.00080415345,0.080415346,0.9983917,safe
+Are you not around or just still asleep? :V,0,uci_sms_spam,0,0.00090177846,0.09017785,0.9981964,safe
+alert: Aap lottery winner hain. Processing fee pay karein. Please approve now.,1,synthetic_hinglish_scam,1,0.9992859,99.92859,0.99857175,scam
+So when you gonna get rimac access,0,uci_sms_spam,0,0.0007975066,0.07975066,0.998405,safe
+So that means you still think of teju,0,uci_sms_spam,0,0.0007971867,0.07971867,0.99840564,safe
+Alex says he's not ok with you not being ok with it,0,uci_sms_spam,0,0.00094431365,0.09443136,0.99811137,safe
+"Carlos is down but I have to pick it up from him, so I'll swing by usf in a little bit",0,uci_sms_spam,0,0.00081194675,0.08119468,0.99837613,safe
+"Time n Smile r the two crucial things in our life. Sometimes time makes us to forget smile, and sometimes someone's smile makes us to forget time gud noon",0,uci_sms_spam,0,0.001058204,0.105820395,0.9978836,safe
+"Yup, no need. I'll jus wait 4 e rain 2 stop.",0,uci_sms_spam,0,0.00077601784,0.07760178,0.99844795,safe
+All sounds good. Fingers . Makes it difficult to type,0,uci_sms_spam,0,0.00085536664,0.085536666,0.9982893,safe
+Are you driving or training?,0,uci_sms_spam,0,0.0010948887,0.10948887,0.99781024,safe
+Oops sorry. Just to check that you don't mind picking me up tomo at half eight from station. Would that be ok?,0,uci_sms_spam,0,0.0011898341,0.11898341,0.99762034,safe
+Mm you ask him to come its enough :-),0,uci_sms_spam,0,0.0007955878,0.079558775,0.99840885,safe
+Now press conference da:),0,uci_sms_spam,0,0.0012159073,0.121590726,0.9975682,safe
+I'm meeting Darren...,0,uci_sms_spam,0,0.00077974424,0.077974424,0.9984405,safe
+urgent: Aap lottery winner hain. Processing fee pay karein. Please verify now.,1,synthetic_hinglish_scam,1,0.9992853,99.92853,0.99857056,scam
+I dont know what to do to come out of this so only am ask questions like this dont mistake me.,0,uci_sms_spam,0,0.0009779362,0.097793624,0.99804413,safe
+I told her I had a Dr appt next week. She thinks I'm gonna die. I told her its just a check. Nothing to be worried about. But she didn't listen.,0,uci_sms_spam,0,0.0010070954,0.10070954,0.9979858,safe
+How to Make a girl Happy? It's not at all difficult to make girls happy. U only need to be... 1. A friend 2. Companion 3. Lover 4. Chef . . .  &lt;#&gt; . Good listener  &lt;#&gt; . Organizer  &lt;#&gt; . Good boyfriend  &lt;#&gt; . Very clean  &lt;#&gt; . Sympathetic  &lt;#&gt; . Athletic  &lt;#&gt; . Warm . . .  &lt;#&gt; . Courageous  &lt;#&gt; . Determined  &lt;#&gt; . True  &lt;#&gt; . Dependable  &lt;#&gt; . Intelligent . . .  &lt;#&gt; . Psychologist  &lt;#&gt; . Pest exterminator  &lt;#&gt; . Psychiatrist  &lt;#&gt; . Healer . .  &lt;#&gt; . Stylist  &lt;#&gt; . Driver . . Aaniye pudunga venaam..,0,uci_sms_spam,0,0.00091159774,0.091159776,0.9981768,safe
+urgent: Refund pending hai. Link par click karke account verify karein. Please claim now.,1,synthetic_hinglish_scam,1,0.99928063,99.92806,0.99856126,scam
+"K, wen ur free come to my home and also tel vikky i hav sent mail to him also.. Better come evening il be free today aftr 6pm..:-)",0,uci_sms_spam,0,0.00092293083,0.09229308,0.99815416,safe
+Early bird! Any purchases yet?,0,uci_sms_spam,0,0.0014478312,0.14478311,0.99710435,safe
+important: Your SIM will be deactivated. Complete verification immediately. Please verify now.,1,synthetic_hinglish_scam,1,0.9993105,99.931046,0.998621,scam
+urgent: Bank se call hai. OTP batayein to reactivate account. Please approve now.,1,synthetic_hinglish_scam,1,0.99928015,99.92802,0.9985603,scam
+"U so lousy, run already come back then half dead... Hee...",0,uci_sms_spam,0,0.000750923,0.0750923,0.99849814,safe
+I was just callin to say hi. Take care bruv!,0,uci_sms_spam,0,0.0008205731,0.08205731,0.99835885,safe
+I got a call from a landline number. . . I am asked to come to anna nagar . . . I will go in the afternoon,0,uci_sms_spam,0,0.00080371206,0.08037121,0.9983926,safe
+Hi darlin did youPhone me? Im atHome if youwanna chat.,0,uci_sms_spam,0,0.0011087988,0.110879876,0.9977824,safe
+Wot u up 2? Thout u were gonna call me!! Txt bak luv K,0,uci_sms_spam,0,0.0010211753,0.10211753,0.99795765,safe
+"Nowadays people are notixiquating the laxinorficated opportunity for bambling of entropication.... Have you ever oblisingately opted ur books for the masteriastering amplikater of fidalfication? It is very champlaxigating, i think it is atrocious.. Wotz Ur Opinion???? Junna",0,uci_sms_spam,0,0.0021562828,0.21562828,0.9956874,safe
+But my family not responding for anything. Now am in room not went to home for diwali but no one called me and why not coming. It makes me feel like died.,0,uci_sms_spam,0,0.00087521126,0.08752113,0.9982496,safe
+3. You have received your mobile content. Enjoy,1,uci_sms_spam,1,0.9981774,99.81774,0.9963548,scam
+urgent: Click this link to claim free gift before it expires. Please verify now.,1,synthetic_hinglish_scam,1,0.9992692,99.92692,0.9985384,scam
+Ok lor but not too early. Me still having project meeting now.,0,uci_sms_spam,0,0.00077608996,0.077608995,0.99844784,safe
+Ok c ü then.,0,uci_sms_spam,0,0.00078360643,0.07836065,0.9984328,safe
+Is toshiba portege m100 gd?,0,uci_sms_spam,0,0.00090143556,0.090143554,0.99819714,safe
+HI DARLIN ITS KATE ARE U UP FOR DOIN SOMETHIN TONIGHT? IM GOING TO A PUB CALLED THE SWAN OR SOMETHING WITH MY PARENTS FOR ONE DRINK SO PHONE ME IF U CAN,0,uci_sms_spam,0,0.0015016183,0.15016183,0.99699676,safe
+"Set a place for me in your heart and not in your mind, as the mind easily forgets but the heart will always remember. Wish you Happy Valentines Day!",0,uci_sms_spam,0,0.0013676314,0.13676314,0.99726474,safe
+final notice: Your UPI is blocked due to KYC issue. Verify urgently. Please share otp now.,1,synthetic_hinglish_scam,1,0.9993019,99.93019,0.9986038,scam
+Change again... It's e one next to escalator...,0,uci_sms_spam,0,0.00077802077,0.07780208,0.99844396,safe
+Remind me how to get there and I shall do so,0,uci_sms_spam,0,0.0008112736,0.08112736,0.99837744,safe
+Your brother is a genius,0,uci_sms_spam,0,0.00091375184,0.09137519,0.9981725,safe
+Get me out of this dump heap. My mom decided to come to lowes. BORING.,0,uci_sms_spam,0,0.0007960739,0.07960739,0.99840784,safe
+They said ü dun haf passport or smth like dat.. Or ü juz send to my email account..,0,uci_sms_spam,0,0.0008584437,0.08584437,0.9982831,safe
+* Am on my way,0,uci_sms_spam,0,0.00083779613,0.08377961,0.9983244,safe
+Dear how is chechi. Did you talk to her,0,uci_sms_spam,0,0.00083375885,0.083375886,0.9983325,safe
+Hey r ü still online? I've finished the formatting...,0,uci_sms_spam,0,0.0010318515,0.103185154,0.9979363,safe
+Tomarrow final hearing on my laptop case so i cant.,0,uci_sms_spam,0,0.00080635515,0.08063552,0.9983873,safe
+Thanks  and ! Or bomb and date as my phone wanted to say!,0,uci_sms_spam,0,0.0013751462,0.13751462,0.9972497,safe
+urgent: URGENT: Your bank account is blocked. Verify KYC now. Please verify now.,1,synthetic_hinglish_scam,1,0.99930036,99.93004,0.9986007,scam
+Yes baby! We can study all the positions of the kama sutra ;),0,uci_sms_spam,0,0.0010030111,0.10030112,0.997994,safe
+I tot it's my group mate... Lucky i havent reply... Wat time do ü need to leave...,0,uci_sms_spam,0,0.0007638228,0.07638228,0.99847233,safe
+I will come to ur home now,0,uci_sms_spam,0,0.000775309,0.0775309,0.9984494,safe
+Update: Dinner plan confirmed for tonight.,0,synthetic_safe_messages,0,0.0010101012,0.101010114,0.9979798,safe
+Is that on the telly? No its Brdget Jones!,0,uci_sms_spam,0,0.0011509885,0.11509885,0.997698,safe
+final notice: Congratulations! You won cashback. Claim reward now. Please claim now.,1,synthetic_hinglish_scam,1,0.9993063,99.93063,0.99861264,scam
+No chikku nt yet.. Ya i'm free,0,uci_sms_spam,0,0.0007688266,0.07688266,0.9984623,safe
+Hey I am really horny want to chat or see me naked text hot to 69698 text charged at 150pm to unsubscribe text stop 69698,1,uci_sms_spam,1,0.9992119,99.92119,0.9984238,scam
+"said kiss, kiss, i can't do the sound effects! He is a gorgeous man isn't he! Kind of person who needs a smile to brighten his day!",0,uci_sms_spam,0,0.00134214,0.134214,0.9973157,safe
+"Velly good, yes please!",0,uci_sms_spam,0,0.0007794197,0.07794197,0.99844116,safe
+alright tyler's got a minor crisis and has to be home sooner than he thought so be here asap,0,uci_sms_spam,0,0.00087428436,0.087428436,0.99825144,safe
+aathi..where are you dear..,0,uci_sms_spam,0,0.00077505334,0.077505335,0.9984499,safe
+Aiya we discuss later lar... Pick ü up at 4 is it?,0,uci_sms_spam,0,0.00083047186,0.08304719,0.99833906,safe
+Also hi wesley how've you been,0,uci_sms_spam,0,0.0007992229,0.07992229,0.9984016,safe
+Ü bot notes oredi... Cos i juz rem i got...,0,uci_sms_spam,0,0.0007673707,0.07673707,0.99846524,safe
+Oh... Lk tt den we take e one tt ends at cine lor... Dun wan yogasana oso can...,0,uci_sms_spam,0,0.0007577235,0.07577235,0.99848455,safe
+"Its Ur luck to Love someone. Its Ur fortune to Love the one who Loves U. But, its a miracle to Love a person who can't Love anyone except U... Gud nyt...",0,uci_sms_spam,0,0.00080907374,0.080907375,0.99838185,safe
+FYI: Aapka bill payment successful ho gaya hai.,0,synthetic_safe_messages,0,0.0012776989,0.12776989,0.9974446,safe
+I tot u reach liao. He said t-shirt.,0,uci_sms_spam,0,0.0007385295,0.07385295,0.99852294,safe
+"Double mins and txts 4 6months FREE Bluetooth on Orange. Available on Sony, Nokia Motorola phones. Call MobileUpd8 on 08000839402 or call2optout/N9DX",1,uci_sms_spam,1,0.9991067,99.91067,0.9982134,scam
+Yes but I don't care cause I know its there!,0,uci_sms_spam,0,0.0008357924,0.08357924,0.9983284,safe
+"THATS ALRITE GIRL, U KNOW GAIL IS NEVA WRONG!!TAKE CARE SWEET AND DONT WORRY.C U L8TR HUN!LOVE Yaxxx",0,uci_sms_spam,0,0.0015656435,0.15656434,0.9968687,safe
+Have you finished work yet? :),0,uci_sms_spam,0,0.0008408072,0.08408072,0.9983184,safe
+Update: Your bank statement is available for download.,0,synthetic_safe_messages,0,0.0030907744,0.30907744,0.99381846,safe
+alert: Your wallet is limited. Update details to unlock. Please claim now.,1,synthetic_hinglish_scam,1,0.99927825,99.927826,0.9985565,scam
+important: Aap lottery winner hain. Processing fee pay karein. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992981,99.92981,0.9985962,scam
+88800 and 89034 are premium phone services call 08718711108,1,uci_sms_spam,1,0.99877113,99.87711,0.99754226,scam
+I havent add ü yet right..,0,uci_sms_spam,0,0.0007345896,0.07345896,0.9985308,safe
+Yo theres no class tmrw right?,0,uci_sms_spam,0,0.00078554126,0.07855412,0.99842894,safe
+warning: Click this link to claim free gift before it expires. Please claim now.,1,synthetic_hinglish_scam,1,0.99928766,99.928764,0.9985753,scam
+warning: Approve collect request to receive cashback. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99931777,99.93178,0.99863553,scam
+urgent: Loan approved. Pay processing fee now to receive amount. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99930346,99.93034,0.9986069,scam
+Cos daddy arranging time c wat time fetch ü mah...,0,uci_sms_spam,0,0.000781336,0.0781336,0.99843735,safe
+final notice: Aapka account block ho gaya hai. KYC turant update karein. Please share otp now.,1,synthetic_hinglish_scam,1,0.9992914,99.92914,0.99858284,scam
+Thanks love. But am i doing torch or bold.,0,uci_sms_spam,0,0.0007545063,0.07545063,0.998491,safe
+Okay... We wait ah,0,uci_sms_spam,0,0.00079568557,0.07956856,0.9984086,safe
+Yes i will be there. Glad you made it.,0,uci_sms_spam,0,0.00074744393,0.074744396,0.9985051,safe
+"Tyler (getting an 8th) has to leave not long after 9, can you get here in like an hour?",0,uci_sms_spam,0,0.0031474424,0.31474423,0.9937051,safe
+urgent: URGENT: Your bank account is blocked. Verify KYC now. Please claim now.,1,synthetic_hinglish_scam,1,0.99930465,99.930466,0.9986093,scam
+Friends that u can stay on fb chat with,0,uci_sms_spam,0,0.0008517319,0.08517319,0.99829656,safe
+Ü log off 4 wat. It's sdryb8i,0,uci_sms_spam,0,0.0009135629,0.09135629,0.9981729,safe
+Yup he msg me: is tat yijue? Then i tot it's my group mate cos we meeting today mah... I'm askin if ü leaving earlier or wat mah cos mayb ü haf to walk v far...,0,uci_sms_spam,0,0.0008628963,0.08628963,0.9982742,safe
+important: Your UPI is blocked due to KYC issue. Verify urgently. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992939,99.92939,0.99858785,scam
+How u doin baby girl ?? hope u are okay every time I call ure phone is off! I miss u get in touch,0,uci_sms_spam,0,0.0014587616,0.14587617,0.9970825,safe
+Omg Joanna is freaking me out. She's looked thru all my friends to find photos of me. And then she's asking about stuff on my MySpace which I haven't even logged on in like a year. :/,0,uci_sms_spam,0,0.0012250762,0.12250762,0.99754983,safe
+I am 6 ft. We will be a good combination!,0,uci_sms_spam,0,0.0007962741,0.07962741,0.9984074,safe
+Ü takin linear algebra today?,0,uci_sms_spam,0,0.003103659,0.31036592,0.99379265,safe
+That seems unnecessarily affectionate,0,uci_sms_spam,0,0.0009104091,0.09104091,0.9981792,safe
+warning: Refund pending hai. Link par click karke account verify karein. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9992888,99.92888,0.9985776,scam
+Got c... I lazy to type... I forgot ü in lect... I saw a pouch but like not v nice...,0,uci_sms_spam,0,0.00077959924,0.077959925,0.9984408,safe
+What time. I‘m out until prob 3 or so,0,uci_sms_spam,0,0.0008875596,0.08875596,0.99822485,safe
+alert: Loan approved. Pay processing fee now to receive amount. Please verify now.,1,synthetic_hinglish_scam,1,0.99929166,99.92917,0.9985833,scam
+"SMS. ac JSco: Energy is high, but u may not know where 2channel it. 2day ur leadership skills r strong. Psychic? Reply ANS w/question. End? Reply END JSCO",1,uci_sms_spam,1,0.9982761,99.827614,0.9965522,scam
+But if she.s drinkin i'm ok.,0,uci_sms_spam,0,0.00079575,0.079575,0.9984085,safe
+K..k..any special today?,0,uci_sms_spam,0,0.00087633554,0.08763356,0.9982473,safe
+I'm at bruce &amp; fowler now but I'm in my mom's car so I can't park (long story),0,uci_sms_spam,0,0.00079430157,0.079430155,0.9984114,safe
+"Its good, we'll find a way",0,uci_sms_spam,0,0.0007901871,0.07901871,0.99841964,safe
+Yo im right by yo work,0,uci_sms_spam,0,0.00085141184,0.08514118,0.99829715,safe
+Oh thats late! Well have a good night and i will give u a call tomorrow. Iam now going to go to sleep night night,0,uci_sms_spam,0,0.00088168547,0.08816855,0.99823666,safe
+Ambrith..madurai..met u in arun dha marrge..remembr?,0,uci_sms_spam,0,0.0008283865,0.082838655,0.9983432,safe
+i cant talk to you now.i will call when i can.dont keep calling.,0,uci_sms_spam,0,0.00080120936,0.080120936,0.9983976,safe
+My birthday is on feb  &lt;#&gt;  da. .,0,uci_sms_spam,0,0.0007420545,0.07420545,0.9985159,safe
+How is your schedule next week? I am out of town this weekend.,0,uci_sms_spam,0,0.0038402556,0.38402554,0.99231946,safe
+Aiyah e rain like quite big leh. If drizzling i can at least run home.,0,uci_sms_spam,0,0.0007576859,0.07576859,0.9984846,safe
+final notice: Aapka reward expire ho raha hai. Abhi claim karein. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99930096,99.9301,0.9986019,scam
+"Haha, that was the first person I was gonna ask",0,uci_sms_spam,0,0.00083071203,0.0830712,0.9983386,safe
+If you hear a loud scream in about &lt;#&gt; minutes its cause my Gyno will be shoving things up me that don't belong :/,0,uci_sms_spam,0,0.0008616721,0.08616721,0.99827665,safe
+"Not really dude, have no friends i'm afraid :(",0,uci_sms_spam,0,0.00076546223,0.07654622,0.99846905,safe
+tap & spile at seven. * Is that pub on gas st off broad st by canal. Ok?,0,uci_sms_spam,0,0.0011818117,0.11818117,0.9976364,safe
+important: Aap lottery winner hain. Processing fee pay karein. Please approve now.,1,synthetic_hinglish_scam,1,0.99929845,99.92985,0.9985969,scam
+K. Did you call me just now ah?,0,uci_sms_spam,0,0.0009025503,0.09025503,0.9981949,safe
+"For ur chance to win a £250 cash every wk TXT: ACTION to 80608. T's&C's www.movietrivia.tv custcare 08712405022, 1x150p/wk",1,uci_sms_spam,1,0.999215,99.9215,0.99843,scam
+"YOU 07801543489 are guaranteed the latests Nokia Phone, a 40GB iPod MP3 player or a £500 prize! Txt word:COLLECT to No:83355! TC-LLC NY-USA 150p/Mt msgrcvd18+",1,uci_sms_spam,1,0.9992093,99.92093,0.99841857,scam
+How are you. Its been ages. How's abj,0,uci_sms_spam,0,0.0008043936,0.08043936,0.9983912,safe
+Ok ok take care. I can understand.,0,uci_sms_spam,0,0.0007643055,0.07643055,0.9984714,safe
+"Pay Rs 100 and get Rs 1000 reward instantly. Jaldi karein, offer expire ho raha hai.",1,synthetic_hinglish_scam,1,0.99922526,99.92252,0.9984505,scam
+"K I'm leaving soon, be there a little after 9",0,uci_sms_spam,0,0.00085655745,0.08565575,0.9982869,safe
+FreeMsg Today's the day if you are ready! I'm horny & live in your town. I love sex fun & games! Netcollex Ltd 08700621170150p per msg reply Stop to end,1,uci_sms_spam,1,0.99918884,99.918884,0.9983777,scam
+"Ok. Not much to do here though. H&M Friday, cant wait. Dunno wot the hell im gonna do for another 3 weeks! Become a slob- oh wait, already done that!",0,uci_sms_spam,0,0.0011964701,0.11964701,0.99760705,safe
+"I'm tired of arguing with you about this week after week. Do what you want and from now on, i'll do the same.",0,uci_sms_spam,0,0.0009894449,0.09894449,0.9980211,safe
+warning: Final warning: account suspended. Login and verify password. Please claim now.,1,synthetic_hinglish_scam,1,0.999303,99.9303,0.99860597,scam
+Well I might not come then...,0,uci_sms_spam,0,0.00074657483,0.074657485,0.99850684,safe
+What happened in interview?,0,uci_sms_spam,0,0.0035371599,0.353716,0.9929257,safe
+"urgent: Dear user, your Paytm KYC has expired. Update now. Please approve now.",1,synthetic_hinglish_scam,1,0.99931574,99.93157,0.9986315,scam
+CERI U REBEL! SWEET DREAMZ ME LITTLE BUDDY!! C YA 2MORO! WHO NEEDS BLOKES,0,uci_sms_spam,0,0.0015884883,0.15884884,0.996823,safe
+Arun can u transfr me d amt,0,uci_sms_spam,0,0.0008157915,0.08157915,0.99836844,safe
+"The gas station is like a block away from my house, you'll drive right by it since armenia ends at swann and you have to take howard",0,uci_sms_spam,0,0.0010991729,0.10991728,0.99780166,safe
+I WILL CAL YOU SIR. In meeting,0,uci_sms_spam,0,0.0008691006,0.08691006,0.9982618,safe
+Will you come online today night,0,uci_sms_spam,0,0.0010387131,0.103871316,0.9979226,safe
+important: Your card will be suspended today. Verify immediately. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99930525,99.93053,0.9986105,scam
+"Im in inperialmusic listening2the weirdest track ever byleafcutter john-sounds like insects being molested&someone plumbing,remixed by evil men on acid!",0,uci_sms_spam,0,0.009577276,0.9577276,0.98084545,safe
+At home by the way,0,uci_sms_spam,0,0.00090614735,0.090614736,0.9981877,safe
+Hey you gave them your photo when you registered for driving ah? Tmr wanna meet at yck?,0,uci_sms_spam,0,0.003926373,0.3926373,0.99214727,safe
+FYI: Monthly rent payment successful.,0,synthetic_safe_messages,0,0.0012951758,0.12951757,0.99740964,safe
+Dont worry. I guess he's busy.,0,uci_sms_spam,0,0.0007940794,0.07940794,0.99841183,safe
+"Oh yes, why is it like torture watching england?",0,uci_sms_spam,0,0.0008814604,0.08814604,0.9982371,safe
+"What are you doing in langport? Sorry, but I'll probably be in bed by 9pm. It sucks being ill at xmas! When do you and go2sri lanka?",0,uci_sms_spam,0,0.00248493,0.248493,0.99503016,safe
+Then why you not responding,0,uci_sms_spam,0,0.0009804833,0.09804832,0.998039,safe
+How. Its a little difficult but its a simple way to enter this place,0,uci_sms_spam,0,0.00088654,0.088654,0.99822694,safe
+"Sorry,  in meeting I'll call you later",0,uci_sms_spam,0,0.00082485104,0.0824851,0.9983503,safe
+Well. You know what i mean. Texting,0,uci_sms_spam,0,0.0008989174,0.08989174,0.99820215,safe
+Pls help me tell sura that i'm expecting a battery from hont. And that if should pls send me a message about how to download movies. Thanks,0,uci_sms_spam,0,0.001526779,0.15267791,0.99694645,safe
+Hey.. Something came up last min.. Think i wun be signing up tmr.. Hee,0,uci_sms_spam,0,0.00076800643,0.076800644,0.998464,safe
+U should have made an appointment,0,uci_sms_spam,0,0.0010070408,0.10070408,0.9979859,safe
+You can donate £2.50 to UNICEF's Asian Tsunami disaster support fund by texting DONATE to 864233. £2.50 will be added to your next bill,1,uci_sms_spam,1,0.99928206,99.92821,0.9985641,scam
+"It,,s a taxt massage....tie-pos argh ok! Lool!",0,uci_sms_spam,0,0.00081003597,0.0810036,0.99837995,safe
+CLAIRE here am havin borin time & am now alone U wanna cum over 2nite? Chat now 09099725823 hope 2 C U Luv CLAIRE xx Calls£1/minmoremobsEMSPOBox45PO139WA,1,uci_sms_spam,1,0.99917585,99.91759,0.9983517,scam
+Good night my dear.. Sleepwell&amp;Take care,0,uci_sms_spam,0,0.00077266485,0.077266484,0.9984547,safe
+hi baby im sat on the bloody bus at the mo and i wont be home until about 7:30 wanna do somethin later? call me later ortxt back jess xx,0,uci_sms_spam,0,0.0014720213,0.14720213,0.99705595,safe
+Now? I'm going out 4 dinner soon..,0,uci_sms_spam,0,0.00084324705,0.0843247,0.9983135,safe
+"I wonder how you got online, my love ? Had you gone to the net cafe ? Did you get your phone recharged ? Were you on a friends net ? I think of you, boytoy",0,uci_sms_spam,0,0.0064839586,0.64839584,0.98703206,safe
+About  &lt;#&gt; bucks. The banks fees are fixed. Better to call the bank and find out.,0,uci_sms_spam,0,0.0010821553,0.108215526,0.9978357,safe
+Bull. Your plan was to go floating off to IKEA with me without a care in the world. So i have to live with your mess another day.,0,uci_sms_spam,0,0.0009939554,0.09939554,0.99801207,safe
+Even i cant close my eyes you are in me our vava playing umma :-D,0,uci_sms_spam,0,0.00081358996,0.081359,0.9983728,safe
+I'm at home. Please call,0,uci_sms_spam,0,0.0008352888,0.08352888,0.9983294,safe
+Oh ok wait 4 me there... My lect havent finish,0,uci_sms_spam,0,0.00078049174,0.078049175,0.998439,safe
+Yup it's at paragon... I havent decided whether 2 cut yet... Hee...,0,uci_sms_spam,0,0.00076528284,0.07652828,0.9984694,safe
+alert: Final warning: account suspended. Login and verify password. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9993037,99.93037,0.9986074,scam
+urgent: Bank se call hai. OTP batayein to reactivate account. Please verify now.,1,synthetic_hinglish_scam,1,0.99928576,99.92857,0.9985715,scam
+S but not able to sleep.,0,uci_sms_spam,0,0.00077192934,0.07719293,0.9984561,safe
+alert: OTP share karein warna wallet suspend ho jayega. Please login now.,1,synthetic_hinglish_scam,1,0.9992551,99.925514,0.99851024,scam
+Are you wet right now?,0,uci_sms_spam,0,0.00091612333,0.09161233,0.99816775,safe
+Babe ! What are you doing ? Where are you ? Who are you talking to ? Do you think of me ? Are you being a good boy? Are you missing me? Do you love me ?,0,uci_sms_spam,0,0.008882603,0.88826025,0.9822348,safe
+Me too. Mark is taking forever to pick up my prescription and the pain is coming back.,0,uci_sms_spam,0,0.00084063417,0.08406342,0.99831873,safe
+"Think i might have to give it a miss. Am teaching til twelve, then have lecture at two. Damn this working thing.",0,uci_sms_spam,0,0.00086150714,0.08615071,0.998277,safe
+I am not sure about night menu. . . I know only about noon menu,0,uci_sms_spam,0,0.0008143019,0.08143019,0.9983714,safe
+"Haha... Where got so fast lose weight, thk muz go 4 a month den got effect... Gee,later we go aust put bk e weight.",0,uci_sms_spam,0,0.00081912614,0.081912614,0.99836177,safe
+MMM ... Fuck .... Merry Christmas to me,0,uci_sms_spam,0,0.00082831987,0.082831986,0.99834335,safe
+Gibbs unsold.mike hussey,0,uci_sms_spam,0,0.0008729845,0.08729845,0.99825406,safe
+Where are you ? What are you doing ? Are yuou working on getting the pc to your mom's ? Did you find a spot that it would work ? I need you,0,uci_sms_spam,0,0.004590215,0.4590215,0.9908196,safe
+My slave! I want you to take 2 or 3 pictures of yourself today in bright light on your cell phone! Bright light!,0,uci_sms_spam,0,0.012238145,1.2238145,0.9755237,safe
+Hmmm.but you should give it on one day..,0,uci_sms_spam,0,0.00075172994,0.07517299,0.99849653,safe
+What your plan for pongal?,0,uci_sms_spam,0,0.0010031563,0.10031563,0.9979937,safe
+alert: Loan approved. Pay processing fee now to receive amount. Please approve now.,1,synthetic_hinglish_scam,1,0.9993013,99.93013,0.9986026,scam
+"Hi, this is Mandy Sullivan calling from HOTMIX FM...you are chosen to receive £5000.00 in our Easter Prize draw.....Please telephone 09041940223 to claim before 29/03/05 or your prize will be transferred to someone else....",1,uci_sms_spam,1,0.9992073,99.92073,0.99841464,scam
+K:)eng rocking in ashes:),0,uci_sms_spam,0,0.0008737309,0.08737309,0.9982525,safe
+"Okay. No no, just shining on. That was meant to be signing, but that sounds better.",0,uci_sms_spam,0,0.00080477895,0.08047789,0.99839044,safe
+HEY DAS COOL... IKNOW ALL 2 WELLDA PERIL OF STUDENTFINANCIAL CRISIS!SPK 2 U L8R.,0,uci_sms_spam,0,0.0012420483,0.12420484,0.9975159,safe
+network operator. The service is free. For T & C's visit 80488.biz,1,uci_sms_spam,1,0.9991511,99.91511,0.9983022,scam
+No de. But call me after some time. Ill tell you k,0,uci_sms_spam,0,0.0007832674,0.07832674,0.9984335,safe
+God bless.get good sleep my dear...i will pray!,0,uci_sms_spam,0,0.0007640913,0.07640913,0.9984718,safe
+urgent: Pay Rs 100 and get Rs 1000 reward instantly. Please approve now.,1,synthetic_hinglish_scam,1,0.9992887,99.92887,0.99857736,scam
+I've sent my wife your text. After we buy them she'll tell you what to do. So just relax. We should go get them this wkend.,0,uci_sms_spam,0,0.0010112874,0.10112874,0.99797744,safe
+I'm wif him now buying tix lar...,0,uci_sms_spam,0,0.0007410646,0.07410646,0.9985179,safe
+Tomorrow i am not going to theatre. . . So i can come wherever u call me. . . Tell me where and when to come tomorrow,0,uci_sms_spam,0,0.0007828545,0.07828545,0.9984343,safe
+I wonder if you'll get this text?,0,uci_sms_spam,0,0.0015012122,0.15012123,0.9969976,safe
+Unless it's a situation where YOU GO GURL would be more appropriate,0,uci_sms_spam,0,0.0012497058,0.12497058,0.9975006,safe
+Ok... U enjoy ur shows...,0,uci_sms_spam,0,0.0007564127,0.07564127,0.9984872,safe
+warning: Loan approved. Pay processing fee now to receive amount. Please share otp now.,1,synthetic_hinglish_scam,1,0.9993231,99.93231,0.99864626,scam
+Hey what happen de. Are you alright.,0,uci_sms_spam,0,0.00078955264,0.07895526,0.9984209,safe
+When are you guys leaving?,0,uci_sms_spam,0,0.000911421,0.0911421,0.9981772,safe
+You still around? Looking to pick up later,0,uci_sms_spam,0,0.0010568862,0.10568862,0.99788624,safe
+Huh so fast... Dat means u havent finished painting?,0,uci_sms_spam,0,0.00079796655,0.07979666,0.9984041,safe
+I donno if they are scorable,0,uci_sms_spam,0,0.0007672975,0.07672975,0.9984654,safe
+If you don't respond imma assume you're still asleep and imma start calling n shit,0,uci_sms_spam,0,0.0010088481,0.10088481,0.9979823,safe
+I am waiting for your call sir.,0,uci_sms_spam,0,0.0007793671,0.07793671,0.9984413,safe
+Dunno da next show aft 6 is 850. Toa payoh got 650.,0,uci_sms_spam,0,0.0011870769,0.118707694,0.9976258,safe
+important: OTP share karein warna wallet suspend ho jayega. Please claim now.,1,synthetic_hinglish_scam,1,0.9992599,99.92599,0.9985198,scam
+Oh... Okie lor...We go on sat...,0,uci_sms_spam,0,0.00077877956,0.07787795,0.9984424,safe
+Congratulations! You won cashback. Claim reward now. This is mandatory to avoid suspension.,1,synthetic_hinglish_scam,1,0.99923515,99.923515,0.9984703,scam
+Are you free now?can i call now?,0,uci_sms_spam,0,0.0011732627,0.117326275,0.9976535,safe
+She went to attend another two rounds today..but still did't reach home..,0,uci_sms_spam,0,0.00082659465,0.08265947,0.9983468,safe
+URGENT! Your Mobile number has been awarded a <UKP>2000 prize GUARANTEED. Call 09061790125 from landline. Claim 3030. Valid 12hrs only 150ppm,1,uci_sms_spam,1,0.99926656,99.92666,0.9985331,scam
+When're you guys getting back? G said you were thinking about not staying for mcr,0,uci_sms_spam,0,0.0015365104,0.15365104,0.99692696,safe
+We tried to contact you re your reply to our offer of a Video Handset? 750 anytime networks mins? UNLIMITED TEXT? Camcorder? Reply or call 08000930705 NOW,1,uci_sms_spam,1,0.9992601,99.92601,0.99852026,scam
+That's my honeymoon outfit. :),0,uci_sms_spam,0,0.0007753156,0.07753156,0.9984494,safe
+"Hey doc pls I want to get nice t shirt for my hubby nice fiting ones my budget is  &lt;#&gt; k help pls I will load d card abi hw,keep me posted luv. 2 mj",0,uci_sms_spam,0,0.0014483636,0.14483637,0.9971033,safe
+final notice: Your SIM will be deactivated. Complete verification immediately. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992956,99.92956,0.9985912,scam
+I've reached home n i bathe liao... U can call me now...,0,uci_sms_spam,0,0.00074489735,0.074489735,0.9985102,safe
+"Hi, can i please get a  &lt;#&gt;  dollar loan from you. I.ll pay you back by mid february. Pls.",0,uci_sms_spam,0,0.00079915253,0.079915255,0.9984017,safe
+", ow u dey.i paid 60,400thousad.i told  u would call .",0,uci_sms_spam,0,0.0009856832,0.09856832,0.99802864,safe
+Happy birthday... May u find ur prince charming soon n dun work too hard...,0,uci_sms_spam,0,0.0007654002,0.076540016,0.9984692,safe
+IMPORTANT INFORMATION 4 ORANGE USER 0796XXXXXX. TODAY IS UR LUCKY DAY!2 FIND OUT WHY LOG ONTO http://www.urawinner.com THERE'S A FANTASTIC PRIZEAWAITING YOU!,1,uci_sms_spam,1,0.9912669,99.12669,0.9825338,scam
+Oh k...i'm watching here:),0,uci_sms_spam,0,0.0008173045,0.08173045,0.9983654,safe
+"Not sure yet, still trying to get a hold of him",0,uci_sms_spam,0,0.0008110688,0.08110688,0.99837786,safe
+Ok set let u noe e details later...,0,uci_sms_spam,0,0.00073750166,0.07375017,0.998525,safe
+I forgot 2 ask ü all smth.. There's a card on da present lei... How? Ü all want 2 write smth or sign on it?,0,uci_sms_spam,0,0.0012580934,0.12580934,0.9974838,safe
+Or ill be a little closer like at the bus stop on the same street,0,uci_sms_spam,0,0.0008550871,0.08550871,0.9982898,safe
+"Good afternoon, babe. How goes that day ? Any job prospects yet ? I miss you, my love ... *sighs* ... :-(",0,uci_sms_spam,0,0.0008220498,0.08220498,0.9983559,safe
+First answer my question.,0,uci_sms_spam,0,0.00091672066,0.09167206,0.99816656,safe
+Dunno leh cant remember mayb lor. So wat time r we meeting tmr?,0,uci_sms_spam,0,0.0008292739,0.08292739,0.99834144,safe
+Can you plz tell me the ans. BSLVYL sent via fullonsms.com,0,uci_sms_spam,0,0.0029638517,0.29638517,0.9940723,safe
+Haha mayb u're rite... U know me well. Da feeling of being liked by someone is gd lor. U faster go find one then all gals in our group attached liao.,0,uci_sms_spam,0,0.0007694379,0.076943785,0.9984611,safe
+Do u hav any frnd by name ashwini in ur college?,0,uci_sms_spam,0,0.0008220701,0.08220701,0.99835587,safe
+"Edison has rightly said, ""A fool can ask more questions than a wise man can answer"" Now you know why all of us are speechless during ViVa.. GM,GN,GE,GNT:-)",0,uci_sms_spam,0,0.002360386,0.23603861,0.99527925,safe
+PICK UR FONE UP NOW U DUMB?,0,uci_sms_spam,0,0.0012322795,0.12322795,0.99753547,safe
+final notice: URGENT: Your bank account is blocked. Verify KYC now. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99930966,99.93097,0.9986193,scam
+alert: Click this link to claim free gift before it expires. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992704,99.92704,0.99854076,scam
+Oh unintentionally not bad timing. Great. Fingers  the trains play along! Will give fifteen min warning.,0,uci_sms_spam,0,0.002878586,0.2878586,0.99424285,safe
+alert: Your wallet is limited. Update details to unlock. Please login now.,1,synthetic_hinglish_scam,1,0.99929345,99.929344,0.9985869,scam
+"Wen u miss someone, the person is definitely special for u..... But if the person is so special, why to miss them, just Keep-in-touch gdeve..",0,uci_sms_spam,0,0.00089835224,0.08983523,0.9982033,safe
+alert: Your card will be suspended today. Verify immediately. Please share otp now.,1,synthetic_hinglish_scam,1,0.9993075,99.93075,0.998615,scam
+Ok but knackered. Just came home and went to sleep! Not good at this full time work lark.,0,uci_sms_spam,0,0.00092531176,0.092531174,0.9981494,safe
+You give us back my id proof and  &lt;#&gt;  rs. We wont allow you to work. We will come to your home within days,0,uci_sms_spam,0,0.0009419736,0.094197355,0.9981161,safe
+Sounds like there could be a lot of time spent in that chastity device boy ... *grins* ... Or take your beatings like a good dog. Going to lounge in a nice long bath now ?,0,uci_sms_spam,0,0.000990942,0.0990942,0.99801815,safe
+K... Must book a not huh? so going for yoga basic on sunday?,0,uci_sms_spam,0,0.00091479893,0.09147989,0.9981704,safe
+"urgent: Dear user, your Paytm KYC has expired. Update now. Please update kyc now.",1,synthetic_hinglish_scam,1,0.9993174,99.93174,0.9986348,scam
+Aapka bill payment successful ho gaya hai.,0,synthetic_safe_messages,0,0.0011499051,0.11499052,0.9977002,safe
+Is that what time you want me to come?,0,uci_sms_spam,0,0.0010796897,0.10796897,0.99784064,safe
+"Win the newest “Harry Potter and the Order of the Phoenix (Book 5) reply HARRY, answer 5 questions - chance to be the first among readers!",1,uci_sms_spam,1,0.99890065,99.89007,0.9978013,scam
+either way works for me. I am  &lt;#&gt;  years old. Hope that doesnt bother you.,0,uci_sms_spam,0,0.0007556338,0.07556338,0.9984887,safe
+I've got it down to a tea. not sure which flavour,0,uci_sms_spam,0,0.0007794278,0.07794278,0.99844116,safe
+"Aight I've been set free, think you could text me blake's address? It occurs to me I'm not quite as sure what I'm doing as I thought I was",0,uci_sms_spam,0,0.0015382437,0.15382437,0.9969235,safe
+Yes..gauti and sehwag out of odi series.,0,uci_sms_spam,0,0.0007713836,0.07713836,0.99845725,safe
+"Aight I'll grab something to eat too, text me when you're back at mu",0,uci_sms_spam,0,0.00083673344,0.08367334,0.99832654,safe
+Squeeeeeze!! This is christmas hug.. If u lik my frndshp den hug me back.. If u get 3 u r cute:) 6 u r luvd:* 9 u r so lucky;) None? People hate u:,0,uci_sms_spam,0,0.000936978,0.093697794,0.99812603,safe
+Hey! do u fancy meetin me at 4 at cha  hav a lil beverage on me. if not txt or ring me and we can meet up l8r. quite tired got in at 3 v.pist ;) love Pete x x x,0,uci_sms_spam,0,0.00093758386,0.09375839,0.99812484,safe
+Congratulations U can claim 2 VIP row A Tickets 2 C Blu in concert in November or Blu gift guaranteed Call 09061104276 to claim TS&Cs www.smsco.net cost£3.75max,1,uci_sms_spam,1,0.9992416,99.92416,0.9984832,scam
+Designation is software developer and may be she get chennai:),0,uci_sms_spam,0,0.0012414906,0.12414906,0.997517,safe
+Your bank statement is available for download. Thank you.,0,synthetic_safe_messages,0,0.0011009277,0.110092774,0.99779814,safe
+I thought slide is enough.,0,uci_sms_spam,0,0.0007675461,0.076754615,0.9984649,safe
+No rushing. I'm not working. I'm in school so if we rush we go hungry.,0,uci_sms_spam,0,0.0007779622,0.07779622,0.9984441,safe
+"Hey , is * rite u put »10 evey mnth is that all?",0,uci_sms_spam,0,0.00084964995,0.084965,0.9983007,safe
+"sure, but make sure he knows we ain't smokin yet",0,uci_sms_spam,0,0.0008036025,0.08036025,0.9983928,safe
+Hey gals.. Anyone of u going down to e driving centre tmr?,0,uci_sms_spam,0,0.0008044918,0.08044918,0.99839103,safe
+warning: Loan approved. Pay processing fee now to receive amount. Please verify now.,1,synthetic_hinglish_scam,1,0.99930286,99.93028,0.9986057,scam
+Yup i've finished c ü there...,0,uci_sms_spam,0,0.00074344466,0.07434446,0.9985131,safe
+Gud mrng dear hav a nice day,0,uci_sms_spam,0,0.00081854407,0.0818544,0.9983629,safe
+Oh gei. That happend to me in tron. Maybe ill dl it in 3d when its out,0,uci_sms_spam,0,0.000786279,0.0786279,0.99842745,safe
+Midnight at the earliest,0,uci_sms_spam,0,0.0011018289,0.11018289,0.99779636,safe
+Hi neva worry bout da truth coz the truth will lead me 2 ur heart. Its the least a unique person like u deserve. Sleep tight or morning,0,uci_sms_spam,0,0.00088989426,0.08898943,0.9982202,safe
+Someone has conacted our dating service and entered your phone because they fancy you!To find out who it is call from landline 09111030116. PoBox12n146tf15,1,uci_sms_spam,1,0.9992149,99.921486,0.9984298,scam
+Text & meet someone sexy today. U can find a date or even flirt its up to U. Join 4 just 10p. REPLY with NAME & AGE eg Sam 25. 18 -msg recd@thirtyeight pence,1,uci_sms_spam,1,0.9986517,99.865166,0.99730337,scam
+"Hey chief, can you give me a bell when you get this. Need to talk to you about this royal visit on the 1st june.",0,uci_sms_spam,0,0.0011343112,0.11343112,0.9977314,safe
+I'm in chennai velachery:),0,uci_sms_spam,0,0.00078882836,0.078882836,0.9984223,safe
+Ill be there on  &lt;#&gt;  ok.,0,uci_sms_spam,0,0.0007637892,0.07637892,0.9984724,safe
+Jordan got voted out last nite!,0,uci_sms_spam,0,0.0010091305,0.10091305,0.9979817,safe
+FREE>Ringtone! Reply REAL or POLY eg REAL1 1. PushButton 2. DontCha 3. BabyGoodbye 4. GoldDigger 5. WeBeBurnin 1st tone FREE and 6 more when u join for £3/wk,1,uci_sms_spam,1,0.9987172,99.87172,0.9974344,scam
+"Sir, Waiting for your mail.",0,uci_sms_spam,0,0.0007955931,0.07955931,0.9984088,safe
+Enjoy ur life. . Good night,0,uci_sms_spam,0,0.0007872837,0.07872837,0.9984254,safe
+Neva mind it's ok..,0,uci_sms_spam,0,0.00076184695,0.0761847,0.9984763,safe
+important: Approve collect request to receive cashback. Please login now.,1,synthetic_hinglish_scam,1,0.9993167,99.93167,0.9986334,scam
+warning: Your SIM will be deactivated. Complete verification immediately. Please verify now.,1,synthetic_hinglish_scam,1,0.99931073,99.931076,0.99862146,scam
+No objection. My bf not coming.,0,uci_sms_spam,0,0.00079294556,0.079294555,0.9984141,safe
+warning: Aap lottery winner hain. Processing fee pay karein. Please update kyc now.,1,synthetic_hinglish_scam,1,0.99930084,99.930084,0.9986017,scam
+I dont know why she.s not getting your messages,0,uci_sms_spam,0,0.0009329927,0.09329927,0.998134,safe
+Is ur changes 2 da report big? Cos i've already made changes 2 da previous report.,0,uci_sms_spam,0,0.0023609656,0.23609656,0.99527806,safe
+I think asking for a gym is the excuse for lazy people. I jog.,0,uci_sms_spam,0,0.00083832484,0.08383248,0.9983233,safe
+U attend ur driving lesson how many times a wk n which day?,0,uci_sms_spam,0,0.0012732786,0.12732786,0.99745345,safe
+Customer service annoncement. You have a New Years delivery waiting for you. Please call 07046744435 now to arrange delivery,1,uci_sms_spam,1,0.99927336,99.92734,0.9985467,scam
+urgent: Bank se call hai. OTP batayein to reactivate account. Please login now.,1,synthetic_hinglish_scam,1,0.99928564,99.928566,0.9985713,scam
+"Good afternoon, my love. How goes your day ? What are you up to ? I woke early and am online waiting for you ... Hmmm ... Italian boy is online I see . *grins*",0,uci_sms_spam,0,0.0013711975,0.13711976,0.9972576,safe
+Aww you must be nearly dead!Well Jez isComing over toDo some workAnd that whillTake forever!,0,uci_sms_spam,0,0.0023283574,0.23283574,0.99534327,safe
+I had it already..sabarish asked me to go..,0,uci_sms_spam,0,0.00076401856,0.07640186,0.998472,safe
+Annoying isn't it.,0,uci_sms_spam,0,0.00084439176,0.08443917,0.9983112,safe
+How i noe... Did ü specify da domain as nusstu... Ü still in sch...,0,uci_sms_spam,0,0.0007784554,0.07784554,0.99844307,safe
+What can i do? Might accidant tookplace between somewhere ghodbandar rd. Traffic moves slovely. So plz slip &amp; don't worry.,0,uci_sms_spam,0,0.000898045,0.0898045,0.99820393,safe
+"Hello. Sort of out in town already. That . So dont rush home, I am eating nachos. Will let you know eta.",0,uci_sms_spam,0,0.0007536547,0.07536547,0.9984927,safe
+Just sent it. So what type of food do you like?,0,uci_sms_spam,0,0.0010407546,0.10407546,0.9979185,safe
+Well then you have a great weekend!,0,uci_sms_spam,0,0.00093853805,0.09385381,0.99812293,safe
+warning: Aapka reward expire ho raha hai. Abhi claim karein. Please claim now.,1,synthetic_hinglish_scam,1,0.99929476,99.929474,0.9985895,scam
+K..k:)how about your training process?,0,uci_sms_spam,0,0.001375471,0.1375471,0.99724907,safe
+Loan approved. Pay processing fee now to receive amount. Link open karo aur details confirm karo.,1,synthetic_hinglish_scam,1,0.9992761,99.92761,0.9985522,scam
+"Same here, but I consider walls and bunkers and shit important just because I never play on peaceful but I guess your place is high enough that it don't matter",0,uci_sms_spam,0,0.0010276943,0.102769434,0.9979446,safe
+Check Out Choose Your Babe Videos @ sms.shsex.netUN fgkslpoPW fgkslpo,1,uci_sms_spam,1,0.9874528,98.74528,0.9749056,scam
+alert: Pay Rs 100 and get Rs 1000 reward instantly. Please share otp now.,1,synthetic_hinglish_scam,1,0.9992982,99.929825,0.99859643,scam
+Havent mus ask if u can 1st wat. Of meet 4 lunch den u n him meet can already lor. Or u wan 2 go ask da ge 1st then confirm w me asap?,0,uci_sms_spam,0,0.0009775013,0.09775013,0.99804497,safe
+Hi. Customer Loyalty Offer:The NEW Nokia6650 Mobile from ONLY £10 at TXTAUCTION! Txt word: START to No: 81151 & get yours Now! 4T&Ctxt TC 150p/MTmsg,1,uci_sms_spam,1,0.9992411,99.92411,0.9984822,scam
+GRAN ONLYFOUND OUT AFEW DAYS AGO.CUSOON HONI,0,uci_sms_spam,0,0.0011614072,0.11614072,0.9976772,safe
+YOU ARE CHOSEN TO RECEIVE A £350 AWARD! Pls call claim number 09066364311 to collect your award which you are selected to receive as a valued mobile customer.,1,uci_sms_spam,1,0.9992861,99.92861,0.99857223,scam
+No da. I am happy that we sit together na,0,uci_sms_spam,0,0.0007728235,0.077282354,0.99845433,safe
+Oh great. I.ll disturb him more so that we can talk.,0,uci_sms_spam,0,0.00075560005,0.07556,0.9984888,safe
+Ladies first and genus second k .,0,uci_sms_spam,0,0.0010658542,0.10658542,0.9978683,safe
+I'm really sorry i won't b able 2 do this friday.hope u can find an alternative.hope yr term's going ok:-),0,uci_sms_spam,0,0.00086470455,0.086470455,0.9982706,safe
+Kindly send some one to our flat before  &lt;DECIMAL&gt;  today.,0,uci_sms_spam,0,0.00086368766,0.08636877,0.9982726,safe
+"alert: Dear user, your Paytm KYC has expired. Update now. Please update kyc now.",1,synthetic_hinglish_scam,1,0.9993124,99.931244,0.9986248,scam
+urgent: Approve collect request to receive cashback. Please login now.,1,synthetic_hinglish_scam,1,0.99931085,99.93108,0.9986217,scam
+Unlimited texts. Limited minutes.,0,uci_sms_spam,0,0.0021480364,0.21480364,0.99570394,safe
+Collect your VALENTINE'S weekend to PARIS inc Flight & Hotel + £200 Prize guaranteed! Text: PARIS to No: 69101. www.rtf.sphosting.com,1,uci_sms_spam,1,0.99920744,99.920746,0.9984149,scam
+LOL that would be awesome payback.,0,uci_sms_spam,0,0.000857091,0.085709095,0.99828583,safe
+"This is the 2nd time we have tried 2 contact u. U have won the 750 Pound prize. 2 claim is easy, call 08712101358 NOW! Only 10p per min. BT-national-rate",1,uci_sms_spam,1,0.99928576,99.92857,0.9985715,scam
+Yup i shd haf ard 10 pages if i add figures... Ü all got how many pages?,0,uci_sms_spam,0,0.0014660521,0.14660521,0.99706787,safe
+"YOUR CHANCE TO BE ON A REALITY FANTASY SHOW call now = 08707509020 Just 20p per min NTT Ltd, PO Box 1327 Croydon CR9 5WB 0870 is a national = rate call",1,uci_sms_spam,1,0.9992536,99.925354,0.99850714,scam
+urgent: Pay Rs 100 and get Rs 1000 reward instantly. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9992939,99.92939,0.99858785,scam
+You call times job today ok umma and ask them to speed up,0,uci_sms_spam,0,0.00095478725,0.09547873,0.99809045,safe
+PRIVATE! Your 2003 Account Statement for shows 800 un-redeemed S.I.M. points. Call 08718738001 Identifier Code: 49557 Expires 26/11/04,1,uci_sms_spam,1,0.9991912,99.91912,0.99838245,scam
+Hi msg me:)i'm in office..,0,uci_sms_spam,0,0.0007632141,0.07632141,0.9984736,safe
+What Today-sunday..sunday is holiday..so no work..,0,uci_sms_spam,0,0.00079167186,0.07916719,0.99841666,safe
+Gud mrng dear have a nice day,0,uci_sms_spam,0,0.00079212536,0.07921254,0.99841577,safe
+Text her. If she doesnt reply let me know so i can have her log in,0,uci_sms_spam,0,0.0008486944,0.084869444,0.99830264,safe
+This single single answers are we fighting? Plus i said am broke and you didnt reply,0,uci_sms_spam,0,0.04202365,4.202365,0.9159527,safe
+final notice: OTP share karein warna wallet suspend ho jayega. Please approve now.,1,synthetic_hinglish_scam,1,0.9992459,99.92459,0.99849176,scam
+Senthil group company Apnt 5pm.,0,uci_sms_spam,0,0.01016986,1.016986,0.9796603,safe
+"I can't keep going through this. It was never my intention to run you out, but if you choose to do that rather than keep the room clean so *I* don't have to say no to visitors, then maybe that's the best choice. Yes, I wanted you to be embarassed, so maybe you'd feel for once how I feel when i have a friend who wants to drop buy and i have to say no, as happened this morning. I've tried everything. I don't know what else to do.",0,uci_sms_spam,0,0.0016262433,0.16262433,0.9967475,safe
+Im just wondering what your doing right now?,0,uci_sms_spam,0,0.0011548179,0.11548179,0.9976904,safe
+Ha... U jus ate honey ar? So sweet...,0,uci_sms_spam,0,0.0007639959,0.076399595,0.99847203,safe
+"Yeah I should be able to, I'll text you when I'm ready to meet up",0,uci_sms_spam,0,0.00097252126,0.09725212,0.998055,safe
+final notice: URGENT: Your bank account is blocked. Verify KYC now. Please claim now.,1,synthetic_hinglish_scam,1,0.9993093,99.93093,0.9986186,scam
+I tot u outside cos darren say u come shopping. Of course we nice wat. We jus went sim lim look at mp3 player.,0,uci_sms_spam,0,0.0008765031,0.087650314,0.99824697,safe
+"Sorry, got a late start, we're on the way",0,uci_sms_spam,0,0.0008584416,0.08584416,0.9982831,safe
+Mm umma ask vava also to come tell him can play later together,0,uci_sms_spam,0,0.0008006827,0.08006827,0.99839866,safe
+I'll be in sch fr 4-6... I dun haf da book in sch... It's at home...,0,uci_sms_spam,0,0.00078495615,0.078495614,0.9984301,safe
+Then its most likely called Mittelschmertz. Google it. If you dont have paracetamol dont worry it will go.,0,uci_sms_spam,0,0.0015913622,0.15913622,0.9968173,safe
+I am taking half day leave bec i am not well,0,uci_sms_spam,0,0.00080669555,0.08066955,0.9983866,safe
+Dear got train and seat mine lower seat,0,uci_sms_spam,0,0.00088782783,0.08878278,0.9982243,safe
+"Greetings me, ! Consider yourself excused.",0,uci_sms_spam,0,0.0007987535,0.07987535,0.9984025,safe
+"7 wonders in My WORLD 7th You 6th Ur style 5th Ur smile 4th Ur Personality 3rd Ur Nature 2nd Ur SMS and 1st ""Ur Lovely Friendship""... good morning dear",0,uci_sms_spam,0,0.0016161444,0.16161445,0.9967677,safe
+"I'm in solihull, | do you want anything?",0,uci_sms_spam,0,0.00080499833,0.080499835,0.99839,safe
+"Hello! Just got here, st andrews-boy its a long way! Its cold. I will keep you posted",0,uci_sms_spam,0,0.0009770058,0.09770058,0.998046,safe
+"Thanx. Yup we coming back on sun. Finish dinner going back 2 hotel now. Time flies, we're tog 4 exactly a mth today. Hope we'll haf many more mths to come...",0,uci_sms_spam,0,0.00089906855,0.08990686,0.99820185,safe
+I liked your new house,0,uci_sms_spam,0,0.0008156493,0.081564926,0.9983687,safe
+Lol ok your forgiven :),0,uci_sms_spam,0,0.0008152398,0.08152398,0.9983695,safe
+Try neva mate!!,0,uci_sms_spam,0,0.00089775067,0.08977506,0.99820447,safe
+I'm going out to buy mum's present ar.,0,uci_sms_spam,0,0.00077150273,0.07715027,0.998457,safe
+Send a logo 2 ur lover - 2 names joined by a heart. Txt LOVE NAME1 NAME2 MOBNO eg LOVE ADAM EVE 07123456789 to 87077 Yahoo! POBox36504W45WQ TxtNO 4 no ads 150p,1,uci_sms_spam,1,0.9992323,99.92323,0.9984646,scam
+cool. We will have fun practicing making babies!,0,uci_sms_spam,0,0.0010922155,0.109221555,0.99781555,safe
+Ok... Thanx... Gd nite 2 ü too...,0,uci_sms_spam,0,0.00075440423,0.07544042,0.99849117,safe
+Have a safe trip to Nigeria. Wish you happiness and very soon company to share moments with,0,uci_sms_spam,0,0.0010937555,0.10937555,0.9978125,safe
+S:)s.nervous  &lt;#&gt; :),0,uci_sms_spam,0,0.0008576935,0.08576935,0.99828464,safe
+Nvm... I'm going to wear my sport shoes anyway... I'm going to be late leh.,0,uci_sms_spam,0,0.0007863127,0.07863127,0.9984274,safe
+Mm feeling sleepy. today itself i shall get that dear,0,uci_sms_spam,0,0.00077244185,0.077244185,0.9984551,safe
+Meanwhile in the shit suite: xavier decided to give us  &lt;#&gt;  seconds of warning that samantha was coming over and is playing jay's guitar to impress her or some shit. Also I don't think doug realizes I don't live here anymore,0,uci_sms_spam,0,0.0009693104,0.09693104,0.99806136,safe
+warning: Your card will be suspended today. Verify immediately. Please share otp now.,1,synthetic_hinglish_scam,1,0.99931633,99.93163,0.99863267,scam
+"Good evening Sir, Al Salam Wahleykkum.sharing a happy news.By the grace of God, i got an offer from Tayseer,TISSCO and i joined.Hope you are fine.Inshah Allah,meet you sometime.Rakhesh,visitor from India.",0,uci_sms_spam,0,0.00095245225,0.09524523,0.9980951,safe
+It vl bcum more difficult..,0,uci_sms_spam,0,0.00076158514,0.076158516,0.9984768,safe
+Adult 18 Content Your video will be with you shortly,1,uci_sms_spam,1,0.99720484,99.72048,0.9944097,scam
+Where did u go? My phone is gonna die you have to stay in here,0,uci_sms_spam,0,0.0009954984,0.09954984,0.998009,safe
+Have a good trip. Watch out for . Remember when you get back we must decide about easter.,0,uci_sms_spam,0,0.0008399303,0.08399303,0.99832016,safe
+First has she gained more than  &lt;#&gt; kg since she took in. Second has she done the blood sugar tests. If she has and its ok and her blood pressure is within normal limits then no worries,0,uci_sms_spam,0,0.0011959233,0.11959233,0.9976081,safe
+alert: Approve collect request to receive cashback. Please verify now.,1,synthetic_hinglish_scam,1,0.9992969,99.92969,0.9985938,scam
+Take care and sleep well.you need to learn to change in life.you only need to get CONVINCED on that.i will wait but no more conversations between us.GET CONVINCED by that time.Your family is over for you in many senses.respect them but not overemphasise.or u have no role in my life.,0,uci_sms_spam,0,0.0010727971,0.10727971,0.9978544,safe
+No need to say anything to me. I know i am an outsider,0,uci_sms_spam,0,0.0007810754,0.078107536,0.9984378,safe
+Whos this am in class:-),0,uci_sms_spam,0,0.00079586444,0.07958645,0.99840826,safe
+warning: Your card will be suspended today. Verify immediately. Please login now.,1,synthetic_hinglish_scam,1,0.9993087,99.93087,0.9986174,scam
+important: Aapka reward expire ho raha hai. Abhi claim karein. Please login now.,1,synthetic_hinglish_scam,1,0.99929273,99.929276,0.99858546,scam
+"Just dropped em off, omw back now",0,uci_sms_spam,0,0.0008164141,0.081641406,0.9983672,safe
+May b approve panalam...but it should have more posts..,0,uci_sms_spam,0,0.00077475875,0.077475876,0.99845046,safe
+Mmmm ... Fuck ... Not fair ! You know my weaknesses ! *grins* *pushes you to your knee's* *exposes my belly and pulls your head to it* Don't forget ... I know yours too *wicked smile*,0,uci_sms_spam,0,0.0009627403,0.096274026,0.99807453,safe
+What was she looking for?,0,uci_sms_spam,0,0.001018912,0.1018912,0.9979622,safe
+Or better still can you catch her and let ask her if she can sell  &lt;#&gt;  for me.,0,uci_sms_spam,0,0.000806876,0.0806876,0.99838626,safe
+"That's the trouble with classes that go well - you're due a dodgey one … Expecting mine tomo! See you for recovery, same time, same place",0,uci_sms_spam,0,0.002281125,0.22811249,0.99543774,safe
+"Hello, my love. What are you doing? Did you get to that interview today? Are you you happy? Are you being a good boy? Do you think of me?Are you missing me ?",0,uci_sms_spam,0,0.0076568737,0.76568735,0.98468626,safe
+important: Pay Rs 100 and get Rs 1000 reward instantly. Please share otp now.,1,synthetic_hinglish_scam,1,0.99929786,99.92979,0.9985957,scam
+"Well, I was about to give up cos they all said no they didn‘t do one nighters. I persevered and found one but it is very cheap so i apologise in advance. It is just somewhere to sleep isnt it?",0,uci_sms_spam,0,0.0011769756,0.11769755,0.99764603,safe
+Your right! I'll make the appointment right now.,0,uci_sms_spam,0,0.0008177891,0.081778914,0.99836445,safe
+"Cool, I'll text you when I'm on the way",0,uci_sms_spam,0,0.0008955482,0.089554824,0.9982089,safe
+Nope i'll come online now..,0,uci_sms_spam,0,0.0007623088,0.076230876,0.9984754,safe
+"Received, understood n acted upon!",0,uci_sms_spam,0,0.0008163509,0.081635095,0.9983673,safe
+final notice: Aapka reward expire ho raha hai. Abhi claim karein. Please verify now.,1,synthetic_hinglish_scam,1,0.9992957,99.92957,0.9985914,scam
+Valentines Day Special! Win over £1000 in our quiz and take your partner on the trip of a lifetime! Send GO to 83600 now. 150p/msg rcvd. CustCare:08718720201.,1,uci_sms_spam,1,0.99923253,99.923256,0.99846506,scam
+"Sez, hows u & de arab boy? Hope u r all good give my love 2 evry1 love ya eshxxxxxxxxxxx",0,uci_sms_spam,0,0.0010286228,0.10286228,0.99794275,safe
+But i'm surprised she still can guess right lor...,0,uci_sms_spam,0,0.00074666087,0.07466608,0.99850667,safe
+A little. Meds say take once every 8 hours. It's only been 5 but pain is back. So I took another. Hope I don't die,0,uci_sms_spam,0,0.00083969947,0.08396994,0.9983206,safe
+"alright babe, justthought id sayhey! how u doin?nearly the endof me wk offdam nevamind!We will have 2Hook up sn if uwant m8? loveJen x.",0,uci_sms_spam,0,0.0011504238,0.11504238,0.99769914,safe
+Happy New Year Princess!,0,uci_sms_spam,0,0.003011378,0.3011378,0.99397725,safe
+Please CALL 08712402779 immediately as there is an urgent message waiting for you,1,uci_sms_spam,1,0.9992561,99.925606,0.99851215,scam
+S..antha num corrct dane,0,uci_sms_spam,0,0.00087536295,0.0875363,0.9982493,safe
+I want to tel u one thing u should not mistake me k THIS IS THE MESSAGE THAT YOU SENT:),0,uci_sms_spam,0,0.0008944225,0.08944225,0.99821115,safe
+"Erm … ill pick you up at about 6.45pm. That'll give enough time to get there, park and that.",0,uci_sms_spam,0,0.00093549996,0.09355,0.998129,safe
+urgent: Click this link to claim free gift before it expires. Please share otp now.,1,synthetic_hinglish_scam,1,0.99928814,99.92882,0.9985763,scam
+You will be in the place of that man,0,uci_sms_spam,0,0.0008148281,0.08148281,0.99837035,safe
+I keep ten rs in my shelf:) buy two egg.,0,uci_sms_spam,0,0.0007804355,0.07804355,0.99843913,safe
+Bored housewives! Chat n date now! 0871750.77.11! BT-national rate 10p/min only from landlines!,1,uci_sms_spam,1,0.99918264,99.91827,0.9983653,scam
+FYI: Your parcel has reached the delivery hub.,0,synthetic_safe_messages,0,0.001024143,0.102414295,0.9979517,safe
+Hows that watch resizing,0,uci_sms_spam,0,0.00082935917,0.082935914,0.99834126,safe
+"Congratulations - Thanks to a good friend U have WON the £2,000 Xmas prize. 2 claim is easy, just call 08712103738 NOW! Only 10p per minute. BT-national-rate",1,uci_sms_spam,1,0.9992873,99.928734,0.9985746,scam
+Ha ha cool cool chikku chikku:-):-DB-),0,uci_sms_spam,0,0.0009318392,0.09318392,0.99813634,safe
+I hope you know I'm still mad at you.,0,uci_sms_spam,0,0.00078727654,0.078727655,0.9984254,safe
+NEFT Transaction with reference number  &lt;#&gt;  for Rs. &lt;DECIMAL&gt;  has been credited to the beneficiary account on  &lt;#&gt;  at  &lt;TIME&gt; : &lt;#&gt;,0,uci_sms_spam,0,0.0025120275,0.25120276,0.9949759,safe
+Have a great trip to India. And bring the light to everyone not just with the project but with everyone that is lucky to see you smile. Bye. Abiola,0,uci_sms_spam,0,0.0009305856,0.093058564,0.99813884,safe
+important: URGENT: Your bank account is blocked. Verify KYC now. Please approve now.,1,synthetic_hinglish_scam,1,0.9993093,99.93093,0.9986186,scam
+"Hey... Thk we juz go accordin to wat we discussed yest lor, except no kb on sun... Cos there's nt much lesson to go if we attend kb on sat...",0,uci_sms_spam,0,0.00081007776,0.08100778,0.9983798,safe
+warning: Final warning: account suspended. Login and verify password. Please verify now.,1,synthetic_hinglish_scam,1,0.99929726,99.929726,0.9985945,scam
+Lol! Oops sorry! Have fun.,0,uci_sms_spam,0,0.0007874764,0.078747645,0.99842507,safe
+"That day ü say ü cut ur hair at paragon, is it called hair sense? Do ü noe how much is a hair cut?",0,uci_sms_spam,0,0.001797721,0.17977211,0.9964045,safe
+"Thanks again for your reply today. When is ur visa coming in. And r u still buying the gucci and bags. My sister things are not easy, uncle john also has his own bills so i really need to think about how to make my own money. Later sha.",0,uci_sms_spam,0,0.0009512048,0.09512048,0.9980976,safe
+Join the UK's horniest Dogging service and u can have sex 2nite!. Just sign up and follow the instructions. Txt ENTRY to 69888 now! Nyt.EC2A.3LP.msg@150p,1,uci_sms_spam,1,0.9992824,99.928246,0.99856484,scam
+Wat makes some people dearer is not just de happiness dat u feel when u meet them but de pain u feel when u miss dem!!!,0,uci_sms_spam,0,0.0015925841,0.15925841,0.99681485,safe
+Married local women looking for discreet action now! 5 real matches instantly to your phone. Text MATCH to 69969 Msg cost 150p 2 stop txt stop BCMSFWC1N3XX,1,uci_sms_spam,1,0.9992481,99.92481,0.9984962,scam
+This pay is  &lt;DECIMAL&gt;  lakhs:),0,uci_sms_spam,0,0.00078736246,0.078736246,0.99842525,safe
+Its a big difference.  &lt;#&gt;  versus  &lt;#&gt;  every  &lt;#&gt; hrs,0,uci_sms_spam,0,0.0008961141,0.08961141,0.99820775,safe
+final notice: Bank se call hai. OTP batayein to reactivate account. Please login now.,1,synthetic_hinglish_scam,1,0.9992957,99.92957,0.9985914,scam
+"K will do, addie &amp; I are doing some art so I'll be here when you get home",0,uci_sms_spam,0,0.00081578025,0.081578024,0.99836844,safe
+Hows the champ just leaving glasgow!,0,uci_sms_spam,0,0.0009556267,0.095562674,0.9980887,safe
+PS U no ur a grown up now right?,0,uci_sms_spam,0,0.0008932132,0.08932132,0.9982136,safe
+"Can you pls pls send me a mail on all you know about relatives coming to deliver here? All you know about costs, risks, benefits and anything else. Thanks.",0,uci_sms_spam,0,0.003821124,0.3821124,0.99235773,safe
+Depends on individual lor e hair dresser say pretty but my parents say look gong. U kaypoh.. I also dunno wat she collecting.,0,uci_sms_spam,0,0.00084273267,0.084273264,0.99831456,safe
+warning: Your card will be suspended today. Verify immediately. Please verify now.,1,synthetic_hinglish_scam,1,0.99929905,99.9299,0.9985981,scam
+IM GONNA MISS U SO MUCH,0,uci_sms_spam,0,0.0010350937,0.10350937,0.9979298,safe
+Yes da. Any plm at ur office,0,uci_sms_spam,0,0.000743853,0.0743853,0.99851227,safe
+Olol i printed out a forum post by a guy with the exact same  prob which was fixed with a gpu replacement. Hopefully they dont ignore that.,0,uci_sms_spam,0,0.0015719293,0.15719293,0.99685615,safe
+"Aight, I should be there by 8 at the latest, probably closer to 7. Are jay and tyler down or should we just do two trips?",0,uci_sms_spam,0,0.0011963675,0.11963675,0.9976073,safe
+"Well the general price is  &lt;#&gt; /oz, let me know if/when/how much you want",0,uci_sms_spam,0,0.00095029484,0.09502948,0.9980994,safe
+"Life is more strict than teacher... Bcoz Teacher teaches lesson &amp; then conducts exam, But Life first conducts Exam &amp; then teaches Lessons. Happy morning. . .",0,uci_sms_spam,0,0.000921237,0.0921237,0.9981575,safe
+Dude while were makin those weirdy brownies my sister made awesome cookies. I took pics.,0,uci_sms_spam,0,0.0008701705,0.087017044,0.99825966,safe
+K.k:)when are you going?,0,uci_sms_spam,0,0.0009573021,0.09573021,0.9980854,safe
+"Wat time liao, where still got.",0,uci_sms_spam,0,0.0007705618,0.07705618,0.99845886,safe
+Someone U know has asked our dating service 2 contact you! Cant Guess who? CALL 09058091854 NOW all will be revealed. PO BOX385 M6 6WU,1,uci_sms_spam,1,0.99922,99.922005,0.99844,scam
+I called and said all to him:)then he have to choose this future.,0,uci_sms_spam,0,0.0008677206,0.086772054,0.99826455,safe
+Dhoni have luck to win some big title.so we will win:),0,uci_sms_spam,0,0.0008492222,0.08492222,0.99830157,safe
+Book which lesson? then you msg me... I will call up after work or sth... I'm going to get specs. My membership is PX3748,0,uci_sms_spam,1,0.5428909,54.28909,0.08578181,scam
+"Yeah, don't go to bed, I'll be back before midnight",0,uci_sms_spam,0,0.00083454227,0.08345423,0.9983309,safe
+warning: Loan approved. Pay processing fee now to receive amount. Please update kyc now.,1,synthetic_hinglish_scam,1,0.999318,99.9318,0.998636,scam
+"And how you will do that, princess? :)",0,uci_sms_spam,0,0.0008376166,0.08376166,0.99832475,safe
+Convey my regards to him,0,uci_sms_spam,0,0.00083233917,0.083233915,0.9983353,safe
+"I don't think I can get away for a trek that long with family in town, sorry",0,uci_sms_spam,0,0.00080648536,0.080648534,0.99838704,safe
+I am in your office na.,0,uci_sms_spam,0,0.00073384994,0.07338499,0.9985323,safe
+Well boy am I glad G wasted all night at applebees for nothing,0,uci_sms_spam,0,0.0008090491,0.08090491,0.9983819,safe
+Get ready to put on your excellent sub face :),0,uci_sms_spam,0,0.0008763912,0.087639116,0.9982472,safe
+Great to hear you are settling well. So what's happenin wit ola?,0,uci_sms_spam,0,0.0012006315,0.12006315,0.9975987,safe
+i am seeking a lady in the street and a freak in the sheets. Is that you?,0,uci_sms_spam,0,0.0009945827,0.09945826,0.9980108,safe
+Hi Chachi tried calling u now unable to reach u .. Pl give me a missed cal once u c tiz msg  Kanagu,0,uci_sms_spam,0,0.00081985473,0.08198547,0.9983603,safe
+"U wake up already? Wat u doing? U picking us up later rite? I'm taking sq825, reaching ard 7 smth 8 like dat. U can check e arrival time. C ya soon...",0,uci_sms_spam,0,0.0011742612,0.11742612,0.99765146,safe
+important: Congratulations! You won cashback. Claim reward now. Please share otp now.,1,synthetic_hinglish_scam,1,0.9993117,99.93117,0.9986234,scam
+Pansy! You've been living in a jungle for two years! Its my driving you should be more worried about!,0,uci_sms_spam,0,0.0015594838,0.15594839,0.996881,safe
+"urgent: Dear user, your Paytm KYC has expired. Update now. Please pay fee now.",1,synthetic_hinglish_scam,1,0.9993211,99.93211,0.9986422,scam
+I‘ll have a look at the frying pan in case it‘s cheap or a book perhaps. No that‘s silly a frying pan isn‘t likely to be a book,0,uci_sms_spam,0,0.0011243675,0.11243675,0.99775124,safe
+alert: URGENT: Your bank account is blocked. Verify KYC now. Please approve now.,1,synthetic_hinglish_scam,1,0.9992933,99.92934,0.99858665,scam
+"500 New Mobiles from 2004, MUST GO! Txt: NOKIA to No: 89545 & collect yours today!From ONLY £1 www.4-tc.biz 2optout 087187262701.50gbp/mtmsg18 TXTAUCTION",1,uci_sms_spam,1,0.99907994,99.908,0.9981599,scam
+Yeah that'd pretty much be the best case scenario,0,uci_sms_spam,0,0.0009842864,0.098428644,0.99803144,safe
+Dunno cos i was v late n when i reach they inside already... But we ate spageddies lor... It's e gals who r laughing at me lor...,0,uci_sms_spam,0,0.00077016914,0.07701691,0.99845964,safe
+Do you know when dad will be back?,0,uci_sms_spam,0,0.0010506116,0.10506116,0.99789876,safe
+important: Refund pending hai. Link par click karke account verify karein. Please verify now.,1,synthetic_hinglish_scam,1,0.99929833,99.92983,0.99859667,scam
+"sir, you will receive the account no another 1hr time. Sorry for the delay.",0,uci_sms_spam,0,0.0017908802,0.17908803,0.99641824,safe
+And how's your husband.,0,uci_sms_spam,0,0.00076191296,0.0761913,0.99847615,safe
+Neshanth..tel me who r u?,0,uci_sms_spam,0,0.0007542216,0.07542216,0.9984916,safe
+I am taking you for italian food. How about a pretty dress with no panties? :),0,uci_sms_spam,0,0.0010171933,0.101719335,0.99796563,safe
+Y she dun believe leh? I tot i told her it's true already. I thk she muz c us tog then she believe.,0,uci_sms_spam,0,0.0008497313,0.084973134,0.99830055,safe
+Cps is causing the outages to conserve energy.,0,uci_sms_spam,0,0.0013948864,0.13948864,0.9972102,safe
+"Sorry chikku, my cell got some problem thts y i was nt able to reply u or msg u..",0,uci_sms_spam,0,0.0008037742,0.08037742,0.99839246,safe
+Hmm ill have to think about it... ok you're forgiven! =D,0,uci_sms_spam,0,0.0009394156,0.09394156,0.99812114,safe
+As one of our registered subscribers u can enter the draw 4 a 100 G.B. gift voucher by replying with ENTER. To unsubscribe text STOP,1,uci_sms_spam,1,0.9992292,99.92292,0.9984584,scam
+"Come to mu, we're sorting out our narcotics situation",0,uci_sms_spam,0,0.0008275948,0.08275948,0.99834484,safe
+Kaiez... Enjoy ur tuition... Gee... Thk e second option sounds beta... I'll go yan jiu den msg u...,0,uci_sms_spam,0,0.0007597046,0.07597046,0.9984806,safe
+"Daddy, shu shu is looking 4 u... U wan me 2 tell him u're not in singapore or wat?",0,uci_sms_spam,0,0.0007984187,0.079841875,0.9984032,safe
+Just sing HU. I think its also important to find someone female that know the place well preferably a citizen that is also smart to help you navigate through. Even things like choosing a phone plan require guidance. When in doubt ask especially girls.,0,uci_sms_spam,0,0.0021920393,0.21920393,0.9956159,safe
+"As a valued customer, I am pleased to advise you that following recent review of your Mob No. you are awarded with a £1500 Bonus Prize, call 09066364589",1,uci_sms_spam,1,0.99927396,99.9274,0.9985479,scam
+"Haha awesome, be there in a minute",0,uci_sms_spam,0,0.0007845261,0.07845261,0.99843097,safe
+I just made some payments so dont have that much. Sorry. Would you want it fedex or the other way.,0,uci_sms_spam,0,0.0009158485,0.09158485,0.9981683,safe
+"Just wondering, the others just took off",0,uci_sms_spam,0,0.0008270767,0.08270767,0.99834585,safe
+In other news after hassling me to get him weed for a week andres has no money. HAUGHAIGHGTUJHYGUJ,0,uci_sms_spam,0,0.0028267228,0.2826723,0.99434656,safe
+Jus finished avatar nigro,0,uci_sms_spam,0,0.0009131622,0.091316216,0.99817365,safe
+Sounds like a plan! Cardiff is still here and still cold! I'm sitting on the radiator!,0,uci_sms_spam,0,0.0014606612,0.14606611,0.99707866,safe
+Where are you call me.,0,uci_sms_spam,0,0.0007762671,0.077626705,0.9984475,safe
+"Evry Emotion dsn't hav Words.Evry Wish dsn't hav Prayrs.. If u Smile,D World is wit u.Othrwise even d Drop of Tear dsn't lik 2 Stay wit u.So b happy.. Good morning, keep smiling:-)",0,uci_sms_spam,0,0.00083421223,0.08342122,0.99833155,safe
+Mode men or have you left.,0,uci_sms_spam,0,0.0008666422,0.08666422,0.9982667,safe
+Hey we can go jazz power yoga hip hop kb and yogasana,0,uci_sms_spam,0,0.001107799,0.110779904,0.9977844,safe
+I know that my friend already told that.,0,uci_sms_spam,0,0.00077483477,0.077483475,0.99845034,safe
+"MOON has come to color your dreams, STARS to make them musical and my SMS to give you warm and Peaceful Sleep. Good Night",0,uci_sms_spam,0,0.0040929355,0.40929353,0.99181414,safe
+Wanna get laid 2nite? Want real Dogging locations sent direct to ur mobile? Join the UK's largest Dogging Network. Txt PARK to 69696 now! Nyt. ec2a. 3lp £1.50/msg,1,uci_sms_spam,1,0.99923325,99.923325,0.9984665,scam
+alert: Approve collect request to receive cashback. Please claim now.,1,synthetic_hinglish_scam,1,0.9993056,99.93056,0.9986112,scam
+Don't forget who owns you and who's private property you are ... And be my good boy always .. *passionate kiss*,0,uci_sms_spam,0,0.00080047635,0.08004764,0.998399,safe
+Oh and by the way you do have more food in your fridge! Want to go out for a meal tonight?,0,uci_sms_spam,0,0.0019564657,0.19564657,0.9960871,safe
+"ou are guaranteed the latest Nokia Phone, a 40GB iPod MP3 player or a £500 prize! Txt word: COLLECT to No: 83355! IBHltd LdnW15H 150p/Mtmsgrcvd18",1,uci_sms_spam,1,0.9992362,99.92362,0.99847245,scam
+I'm so in love with you. I'm excited each day i spend with you. You make me so happy.,0,uci_sms_spam,0,0.00083062134,0.083062135,0.99833876,safe
+Thanks for understanding. I've been trying to tell sura that.,0,uci_sms_spam,0,0.0007804757,0.078047566,0.9984391,safe
+I will vote for wherever my heart guides me,0,uci_sms_spam,0,0.0008042415,0.08042415,0.9983915,safe
+When u love someone Dont make them to love u as much as u do. But Love them so much that they dont want to be loved by anyone except you... Gud nit.,0,uci_sms_spam,0,0.0008010161,0.08010161,0.99839795,safe
+I can send you a pic if you like :),0,uci_sms_spam,0,0.00083196873,0.08319687,0.9983361,safe
+"Single line with a big meaning::::: ""Miss anything 4 ur ""Best Life"" but, don't miss ur best life for anything... Gud nyt...",0,uci_sms_spam,0,0.0009912188,0.09912188,0.99801755,safe
+Not directly behind... Abt 4 rows behind ü...,0,uci_sms_spam,0,0.0007741086,0.077410854,0.99845177,safe
+important: Refund pending hai. Link par click karke account verify karein. Please claim now.,1,synthetic_hinglish_scam,1,0.9992937,99.92937,0.99858737,scam
+Kay... Since we are out already,0,uci_sms_spam,0,0.00075995695,0.0759957,0.9984801,safe
+"Orange customer, you may now claim your FREE CAMERA PHONE upgrade for your loyalty. Call now on 0207 153 9996. Offer ends 14thMarch. T&C's apply. Opt-out availa",1,uci_sms_spam,1,0.99932146,99.932144,0.9986429,scam
+"Twinks, bears, scallies, skins and jocks are calling now. Don't miss the weekend's fun. Call 08712466669 at 10p/min. 2 stop texts call 08712460324(nat rate)",1,uci_sms_spam,1,0.99926966,99.92696,0.9985393,scam
+Pls help me tell Ashley that i cant find her number oh,0,uci_sms_spam,0,0.00081296405,0.08129641,0.99837404,safe
+K.:)do it at evening da:)urgent:),0,uci_sms_spam,0,0.0008288027,0.08288027,0.9983424,safe
+"My life Means a lot to me, Not because I love my life, But because I love the people in my life, The world calls them friends, I call them my World:-).. Ge:-)..",0,uci_sms_spam,0,0.00084054685,0.084054686,0.9983189,safe
+Can you talk with me..,0,uci_sms_spam,0,0.0007724189,0.07724189,0.99845517,safe
+I not busy juz dun wan 2 go so early.. Hee..,0,uci_sms_spam,0,0.0007789762,0.077897616,0.99844205,safe
+I like to think there's always the possibility of being in a pub later.,0,uci_sms_spam,0,0.0008707884,0.08707884,0.9982584,safe
+You have 1 new message. Please call 08718738034.,1,uci_sms_spam,1,0.99924767,99.92477,0.99849534,scam
+K.k.this month kotees birthday know?,0,uci_sms_spam,0,0.0009995688,0.099956885,0.99800086,safe
+He says he'll give me a call when his friend's got the money but that he's definitely buying before the end of the week,0,uci_sms_spam,0,0.0010764193,0.10764193,0.99784714,safe
+"warning: Dear user, your Paytm KYC has expired. Update now. Please update kyc now.",1,synthetic_hinglish_scam,1,0.9993218,99.93218,0.99864364,scam
+"Den only weekdays got special price... Haiz... Cant eat liao... Cut nails oso muz wait until i finish drivin wat, lunch still muz eat wat...",0,uci_sms_spam,0,0.0007895736,0.07895736,0.99842083,safe
+Your daily text from me – a favour this time,0,uci_sms_spam,0,0.0010825911,0.10825911,0.9978348,safe
+Yes see ya not on the dot,0,uci_sms_spam,0,0.0008114236,0.08114236,0.99837714,safe
+Havent still waitin as usual... Ü come back sch oredi?,0,uci_sms_spam,0,0.0008264017,0.08264017,0.9983472,safe
+You getting back any time soon?,0,uci_sms_spam,0,0.0011911313,0.11911313,0.9976177,safe
+That's y i said it's bad dat all e gals know u... Wat u doing now?,0,uci_sms_spam,0,0.0008870337,0.08870337,0.9982259,safe
+urgent: Your card will be suspended today. Verify immediately. Please claim now.,1,synthetic_hinglish_scam,1,0.9992899,99.928986,0.99857974,scam
+"Oops, I'll let you know when my roommate's done",0,uci_sms_spam,0,0.00082436384,0.08243638,0.9983513,safe
+"Please protect yourself from e-threats. SIB never asks for sensitive information like Passwords,ATM/SMS PIN thru email. Never share your password with anybody.",0,uci_sms_spam,1,0.9990132,99.90132,0.9980264,scam
+The world's most happiest frnds never have the same characters... Dey just have the best understanding of their differences...,0,uci_sms_spam,0,0.00091870286,0.091870286,0.99816257,safe
+"Hello.How u doing?What u been up 2?When will u b moving out of the flat, cos I will need to arrange to pick up the lamp, etc. Take care. Hello caroline!",0,uci_sms_spam,0,0.003469963,0.3469963,0.99306005,safe
+Double Mins & Double Txt & 1/2 price Linerental on Latest Orange Bluetooth mobiles. Call MobileUpd8 for the very latest offers. 08000839402 or call2optout/LF56,1,uci_sms_spam,1,0.99920493,99.920494,0.99840987,scam
+"Aight, can you text me the address?",0,uci_sms_spam,0,0.0010905452,0.10905452,0.9978189,safe
+"Orange brings you ringtones from all time Chart Heroes, with a free hit each week! Go to Ringtones & Pics on wap. To stop receiving these tips reply STOP.",1,uci_sms_spam,1,0.99922574,99.92258,0.9984515,scam
+I walked an hour 2 c u! doesnt that show I care y wont u believe im serious?,0,uci_sms_spam,0,0.0013657834,0.13657834,0.99726844,safe
+important: Refund pending hai. Link par click karke account verify karein. Please pay fee now.,1,synthetic_hinglish_scam,1,0.9992888,99.92888,0.9985776,scam
+Lol u still feeling sick?,0,uci_sms_spam,0,0.00086543325,0.08654332,0.99826914,safe
+urgent: OTP share karein warna wallet suspend ho jayega. Please login now.,1,synthetic_hinglish_scam,1,0.9992613,99.92613,0.99852264,scam
+Yes.. now only saw your message..,0,uci_sms_spam,0,0.00075540884,0.075540885,0.9984892,safe
+Hey do you want anything to buy:),0,uci_sms_spam,0,0.00085520896,0.08552089,0.9982896,safe
+If u laugh really loud.. If u talk spontaneously.. If u dont care what others feel.. U are probably with your dear &amp; best friends.. GOODEVENING Dear..:),0,uci_sms_spam,0,0.00080938404,0.08093841,0.99838126,safe
+We are supposed to meet to discuss abt our trip... Thought xuhui told you? In the afternoon. Thought we can go for lesson after that,0,uci_sms_spam,0,0.0010371667,0.10371667,0.99792564,safe
+"I've not called you in a while. This is hoping it was l8r malaria and that you know that we miss you guys. I miss Bani big, so pls give her my love especially. Have a great day.",0,uci_sms_spam,0,0.0008526077,0.08526077,0.9982948,safe
+final notice: Aapka reward expire ho raha hai. Abhi claim karein. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99928766,99.928764,0.9985753,scam
+Reply with your name and address and YOU WILL RECEIVE BY POST a weeks completely free accommodation at various global locations www.phb1.com ph:08700435505150p,1,uci_sms_spam,1,0.9992095,99.92095,0.99841905,scam
+How much i gave to you. Morning.,0,uci_sms_spam,0,0.0007472592,0.07472592,0.9985055,safe
+Dear Subscriber ur draw 4 £100 gift voucher will b entered on receipt of a correct ans. When was Elvis Presleys Birthday? TXT answer to 80062,1,uci_sms_spam,1,0.99926096,99.926094,0.9985219,scam
+ALRITE,0,uci_sms_spam,0,0.0011430482,0.11430482,0.9977139,safe
+Ok... Take ur time n enjoy ur dinner...,0,uci_sms_spam,0,0.0007527755,0.07527755,0.99849445,safe
+RGENT! This is the 2nd attempt to contact U!U have WON £1250 CALL 09071512433 b4 050703 T&CsBCM4235WC1N3XX. callcost 150ppm mobilesvary. max£7. 50,1,uci_sms_spam,1,0.99917763,99.91776,0.99835527,scam
+Lol I have to take it. member how I said my aunt flow didn't visit for 6 months? It's cause I developed ovarian cysts. Bc is the only way to shrink them.,0,uci_sms_spam,0,0.0013894895,0.13894895,0.997221,safe
+85233 FREE>Ringtone!Reply REAL,1,uci_sms_spam,1,0.9985973,99.85973,0.99719465,scam
+final notice: Approve collect request to receive cashback. Please login now.,1,synthetic_hinglish_scam,1,0.9993125,99.93125,0.99862504,scam
+See you there!,0,uci_sms_spam,0,0.0009793615,0.097936146,0.9980413,safe
+Can you open the door?,0,uci_sms_spam,0,0.0008788288,0.087882884,0.9982423,safe
+K ill drink.pa then what doing. I need srs model pls send it to my mail id pa.,0,uci_sms_spam,0,0.0009696753,0.09696753,0.99806064,safe
+warning: Aap lottery winner hain. Processing fee pay karein. Please approve now.,1,synthetic_hinglish_scam,1,0.99929714,99.92972,0.9985943,scam
+"Aight, call me once you're close",0,uci_sms_spam,0,0.0008107199,0.08107199,0.9983786,safe
+Watching tv now. I got new job :),0,uci_sms_spam,0,0.0007982798,0.07982798,0.99840343,safe
+"Sorry I flaked last night, shit's seriously goin down with my roommate, what you up to tonight?",0,uci_sms_spam,0,0.0013686077,0.13686077,0.9972628,safe
+"warning: Dear user, your Paytm KYC has expired. Update now. Please verify now.",1,synthetic_hinglish_scam,1,0.9993292,99.93292,0.9986584,scam
+PRIVATE! Your 2003 Account Statement for shows 800 un-redeemed S. I. M. points. Call 08715203652 Identifier Code: 42810 Expires 29/10/0,1,uci_sms_spam,1,0.99921834,99.92184,0.9984367,scam
+I'm coming home 4 dinner.,0,uci_sms_spam,0,0.00082583143,0.082583144,0.99834836,safe
+Nope... Juz off from work...,0,uci_sms_spam,0,0.0007519674,0.07519674,0.99849606,safe
+Sos! Any amount i can get pls.,0,uci_sms_spam,0,0.00077148067,0.077148065,0.998457,safe
+Yup i thk cine is better cos no need 2 go down 2 plaza mah.,0,uci_sms_spam,0,0.0007844147,0.07844147,0.99843115,safe
+"Cool, want me to go to kappa or should I meet you outside mu",0,uci_sms_spam,0,0.0008246365,0.08246365,0.99835074,safe
+Good morning pookie pie! Lol hope I didn't wake u up,0,uci_sms_spam,0,0.000851777,0.0851777,0.99829644,safe
+"Sorry man, accidentally left my phone on silent last night and didn't check it til I got up",0,uci_sms_spam,0,0.0009356631,0.09356631,0.99812865,safe
+Wrong phone! This phone! I answer this one but assume the other is people i don't well,0,uci_sms_spam,0,0.00164983,0.164983,0.99670035,safe
+"Nah I don't think he goes to usf, he lives around here though",0,uci_sms_spam,0,0.0007749603,0.07749603,0.9984501,safe
+Which is why i never wanted to tell you any of this. Which is why i'm so short with you and on-edge as of late.,0,uci_sms_spam,0,0.00089477585,0.089477584,0.99821043,safe
+Havent stuck at orchard in my dad's car. Going 4 dinner now. U leh? So r they free tonight?,0,uci_sms_spam,0,0.0012934942,0.12934943,0.99741304,safe
+Yup. Wun believe wat? U really neva c e msg i sent shuhui?,0,uci_sms_spam,0,0.00084473006,0.08447301,0.99831057,safe
+alert: Bank se call hai. OTP batayein to reactivate account. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99928504,99.928505,0.9985701,scam
+"1) Go to write msg 2) Put on Dictionary mode 3)Cover the screen with hand, 4)Press  &lt;#&gt; . 5)Gently remove Ur hand.. Its interesting..:)",0,uci_sms_spam,0,0.0019769028,0.19769028,0.9960462,safe
+"Hello baby, did you get back to your mom's ? Are you setting up the computer now ? Filling your belly ? How goes it loverboy ? I miss you already ... *sighs*",0,uci_sms_spam,0,0.0034062734,0.34062734,0.9931874,safe
+Lol please do. Actually send a pic of yourself right now. I wanna see. Pose with a comb and hair dryer or something.,0,uci_sms_spam,0,0.0008188274,0.081882745,0.99836236,safe
+Thats cool. How was your day?,0,uci_sms_spam,0,0.000887043,0.0887043,0.9982259,safe
+UR awarded a City Break and could WIN a £200 Summer Shopping spree every WK. Txt STORE to 88039 . SkilGme. TsCs087147403231Winawk!Age16 £1.50perWKsub,1,uci_sms_spam,1,0.9992204,99.922035,0.99844074,scam
+Yo you around? A friend of mine's lookin to pick up later tonight,0,uci_sms_spam,0,0.0010336058,0.10336058,0.9979328,safe
+<Forwarded from 88877>FREE entry into our £250 weekly comp just send the word ENTER to 88877 NOW. 18 T&C www.textcomp.com,1,uci_sms_spam,1,0.99926454,99.92645,0.9985291,scam
+Thats cool! I am a gentleman and will treat you with dignity and respect.,0,uci_sms_spam,0,0.00083478546,0.08347855,0.9983304,safe
+"Do you ever notice that when you're driving, anyone going slower than you is an idiot and everyone driving faster than you is a maniac?",1,uci_sms_spam,0,0.0116102565,1.1610256,0.97677946,safe
+What's nannys address?,0,uci_sms_spam,0,0.0012154446,0.121544465,0.9975691,safe
+"I'm home, my love ... If your still awake ... *loving kiss*",0,uci_sms_spam,0,0.00077414623,0.077414624,0.9984517,safe
+"By the way, make sure u get train to worc foregate street not shrub hill. Have fun night x",0,uci_sms_spam,0,0.00085578975,0.08557898,0.9982884,safe
+"Sorry man, my stash ran dry last night and I can't pick up more until sunday",0,uci_sms_spam,0,0.0008023776,0.08023776,0.99839526,safe
+Can you pls send me that company name. In saibaba colany,0,uci_sms_spam,0,0.0007779522,0.07779522,0.9984441,safe
+Nite...,0,uci_sms_spam,0,0.0008423678,0.084236786,0.9983153,safe
+Yes there were many sweets,0,uci_sms_spam,0,0.00087053445,0.08705345,0.99825895,safe
+Pls give her the food preferably pap very slowly with loads of sugar. You can take up to an hour to give it. And then some water. Very very slowly.,0,uci_sms_spam,0,0.0009662538,0.09662538,0.9980675,safe
+I'm watching lotr w my sis dis aft. So u wan 2 meet me 4 dinner at nite a not?,0,uci_sms_spam,0,0.0008263309,0.08263309,0.99834734,safe
+warning: Your SIM will be deactivated. Complete verification immediately. Please update kyc now.,1,synthetic_hinglish_scam,1,0.999316,99.931595,0.99863195,scam
+Ü collecting ur laptop then going to configure da settings izzit?,0,uci_sms_spam,0,0.003635919,0.3635919,0.9927282,safe
+Many more happy returns of the day. I wish you happy birthday.,0,uci_sms_spam,0,0.0007884598,0.07884598,0.9984231,safe
+Hey! There's veggie pizza... :/,0,uci_sms_spam,0,0.00088312826,0.08831283,0.99823374,safe
+"They said if its gonna snow, it will start around 8 or 9 pm tonite! They are predicting an inch of accumulation.",0,uci_sms_spam,0,0.006706467,0.67064667,0.98658705,safe
+"Hi babe its Jordan, how r u? Im home from abroad and lonely, text me back if u wanna chat xxSP visionsms.com Text stop to stopCost 150p 08712400603",1,uci_sms_spam,1,0.9992229,99.92229,0.99844575,scam
+"YOUR CHANCE TO BE ON A REALITY FANTASY SHOW call now = 08707509020 Just 20p per min NTT Ltd, PO Box 1327 Croydon CR9 5WB 0870 is a national = rate call.",1,uci_sms_spam,1,0.9992556,99.92556,0.9985112,scam
+Dont you have message offer,0,uci_sms_spam,0,0.0010709362,0.10709362,0.9978581,safe
+I (Career Tel) have added u as a contact on INDYAROCKS.COM to send FREE SMS. To remove from phonebook - sms NO to  &lt;#&gt;,0,uci_sms_spam,0,0.4616366,46.163662,0.076726794,safe
+Congrats ! Treat pending.i am not on mail for 2 days.will mail once thru.Respect mother at home.check mails.,0,uci_sms_spam,0,0.003076294,0.3076294,0.9938474,safe
+warning: Bank se call hai. OTP batayein to reactivate account. Please approve now.,1,synthetic_hinglish_scam,1,0.99928856,99.928856,0.9985771,scam
+Carlos is taking his sweet time as usual so let me know when you and patty are done/want to smoke and I'll tell him to haul ass,0,uci_sms_spam,0,0.0009241289,0.09241289,0.9981517,safe
+What you need. You have a person to give na.,0,uci_sms_spam,0,0.0008273338,0.08273338,0.9983453,safe
+Carlos says he'll be at mu in  &lt;#&gt;  minutes,0,uci_sms_spam,0,0.0007801931,0.078019306,0.9984396,safe
+Thanks for sending this mental ability question..,0,uci_sms_spam,0,0.00085238635,0.085238636,0.99829525,safe
+I accidentally deleted the message. Resend please.,0,uci_sms_spam,0,0.00081628637,0.081628636,0.9983674,safe
+"Sorry, I'll call you  later. I am in meeting sir.",0,uci_sms_spam,0,0.00077047636,0.07704764,0.99845904,safe
+"New Mobiles from 2004, MUST GO! Txt: NOKIA to No: 89545 & collect yours today! From ONLY £1. www.4-tc.biz 2optout 087187262701.50gbp/mtmsg18 TXTAUCTION.",1,uci_sms_spam,1,0.9990663,99.90663,0.9981326,scam
+:),0,uci_sms_spam,0,0.0031566177,0.3156618,0.99368674,safe
+"The word ""Checkmate"" in chess comes from the Persian phrase ""Shah Maat"" which means; ""the king is dead.."" Goodmorning.. Have a good day..:)",0,uci_sms_spam,0,0.0025027606,0.25027606,0.99499446,safe
+Thanx but my birthday is over already.,0,uci_sms_spam,0,0.0007448533,0.07448533,0.9985103,safe
+important: Aapka reward expire ho raha hai. Abhi claim karein. Please verify now.,1,synthetic_hinglish_scam,1,0.99929476,99.929474,0.9985895,scam
+i dnt wnt to tlk wid u,0,uci_sms_spam,0,0.0009533037,0.09533037,0.99809337,safe
+"Sorry light turned green, I meant another friend wanted  &lt;#&gt;  worth but he may not be around",0,uci_sms_spam,0,0.0007932124,0.079321235,0.99841356,safe
+Oh oh... Wasted... Den muz chiong on sat n sun liao...,0,uci_sms_spam,0,0.0007799192,0.07799192,0.99844015,safe
+Are you in castor? You need to see something,0,uci_sms_spam,0,0.0011168842,0.11168842,0.99776626,safe
+Great! I have to run now so ttyl!,0,uci_sms_spam,0,0.0008622137,0.086221375,0.9982756,safe
+final notice: Your UPI is blocked due to KYC issue. Verify urgently. Please claim now.,1,synthetic_hinglish_scam,1,0.99929714,99.92972,0.9985943,scam
+Will be office around 4 pm. Now i am going hospital.,0,uci_sms_spam,0,0.00078602834,0.078602836,0.9984279,safe
+Thanx 4 e brownie it's v nice...,0,uci_sms_spam,0,0.0007741806,0.07741806,0.99845165,safe
+"I'm used to it. I just hope my agents don't drop me since i've only booked a few things this year. This whole me in boston, them in nyc was an experiment.",0,uci_sms_spam,0,0.0009138236,0.09138236,0.99817234,safe
+"Best line said in Love: . ""I will wait till the day I can forget u Or The day u realize that u cannot forget me.""... Gn",0,uci_sms_spam,0,0.00088118325,0.08811832,0.9982376,safe
+Den wat will e schedule b lk on sun?,0,uci_sms_spam,0,0.00095520035,0.095520034,0.9980896,safe
+Okie... Thanx...,0,uci_sms_spam,0,0.00080389326,0.08038933,0.9983922,safe
+Oh... Kay... On sat right?,0,uci_sms_spam,0,0.0007902009,0.07902009,0.9984196,safe
+Have you laid your airtel line to rest?,0,uci_sms_spam,0,0.0010346107,0.103461064,0.99793077,safe
+That one week leave i put know that time. Why.,0,uci_sms_spam,0,0.0008315068,0.08315068,0.998337,safe
+Nvm it's ok...,0,uci_sms_spam,0,0.0007798898,0.07798898,0.9984402,safe
+"Alright, we're all set here, text the man",0,uci_sms_spam,0,0.0009315703,0.09315703,0.9981369,safe
+Ü come lt 25 n pass to me lar,0,uci_sms_spam,0,0.0009067281,0.090672806,0.9981865,safe
+No problem with the renewal. I.ll do it right away but i dont know his details.,0,uci_sms_spam,0,0.0008595339,0.08595339,0.99828094,safe
+Click this link to claim free gift before it expires. This is mandatory to avoid suspension.,1,synthetic_hinglish_scam,1,0.9991598,99.915985,0.9983196,scam
+"final notice: Dear user, your Paytm KYC has expired. Update now. Please share otp now.",1,synthetic_hinglish_scam,1,0.9993216,99.93216,0.99864316,scam
+alert: Bank se call hai. OTP batayein to reactivate account. Please approve now.,1,synthetic_hinglish_scam,1,0.99927455,99.92745,0.9985491,scam
+alert: Aap lottery winner hain. Processing fee pay karein. Please update kyc now.,1,synthetic_hinglish_scam,1,0.9992912,99.929115,0.99858236,scam
+As per your request 'Melle Melle (Oru Minnaminunginte Nurungu Vettam)' has been set as your callertune for all Callers. Press *9 to copy your friends Callertune,0,uci_sms_spam,1,0.9406084,94.06084,0.88121676,scam
+You'll never believe this but i have actually got off at taunton. Wow,0,uci_sms_spam,0,0.0008021276,0.08021276,0.99839574,safe
+I am joining today formally.Pls keep praying.will talk later.,0,uci_sms_spam,0,0.0007996845,0.07996845,0.9984006,safe
+Where do you need to go to get it?,0,uci_sms_spam,0,0.0012332964,0.12332963,0.9975334,safe
+December only! Had your mobile 11mths+? You are entitled to update to the latest colour camera mobile for Free! Call The Mobile Update Co FREE on 08002986906,1,uci_sms_spam,1,0.9992642,99.926414,0.99852836,scam
+Ok try to do week end course in coimbatore.,0,uci_sms_spam,0,0.00089276733,0.08927673,0.9982145,safe
+Ok. I.ll do you right later.,0,uci_sms_spam,0,0.00079497206,0.0794972,0.99841005,safe
+Eatin my lunch...,0,uci_sms_spam,0,0.0007792963,0.07792963,0.9984414,safe
+Babe ? I lost you ... :-(,0,uci_sms_spam,0,0.000810226,0.081022605,0.9983795,safe
+Thank you for your payment. Thank you.,0,synthetic_safe_messages,0,0.0007834661,0.07834661,0.99843305,safe
+I like you peoples very much:) but am very shy pa.,0,uci_sms_spam,0,0.0007470989,0.074709885,0.99850583,safe
+my ex-wife was not able to have kids. Do you want kids one day?,0,uci_sms_spam,0,0.0012273747,0.12273747,0.99754524,safe
+"Awesome question with a cute answer: Someone asked a boy ""how is ur life?"" . . He smiled &amp; answered: . . ""She is fine!"" Gudnite",0,uci_sms_spam,0,0.0012285492,0.12285492,0.9975429,safe
+urgent: Loan approved. Pay processing fee now to receive amount. Please login now.,1,synthetic_hinglish_scam,1,0.99931824,99.93182,0.9986365,scam
+"warning: Dear user, your Paytm KYC has expired. Update now. Please approve now.",1,synthetic_hinglish_scam,1,0.99932027,99.93203,0.99864054,scam
+Does cinema plus drink appeal tomo? * Is a fr thriller by director i like on at mac at 8.30.,0,uci_sms_spam,0,0.013338997,1.3338997,0.97332203,safe
+"Urgent -call 09066649731from Landline. Your complimentary 4* Ibiza Holiday or £10,000 cash await collection SAE T&Cs PO BOX 434 SK3 8WP 150ppm 18+",1,uci_sms_spam,1,0.99917006,99.91701,0.99834013,scam
+Please tell me you have some of that special stock you were talking about,0,uci_sms_spam,0,0.0029506076,0.29506075,0.9940988,safe
+Are we doing the norm tomorrow? I finish just a 4.15 cos of st tests. Need to sort library stuff out at some point tomo - got letter from today - access til end march so i better get move on!,0,uci_sms_spam,0,0.31128743,31.128744,0.37742513,safe
+Yes. Nigh you cant aha.,0,uci_sms_spam,0,0.00073774235,0.07377423,0.9985245,safe
+If you have belive me. Come to my home.,0,uci_sms_spam,0,0.00074179383,0.07417938,0.99851644,safe
+"complimentary 4 STAR Ibiza Holiday or £10,000 cash needs your URGENT collection. 09066364349 NOW from Landline not to lose out! Box434SK38WP150PPM18+",1,uci_sms_spam,1,0.9992494,99.92494,0.9984988,scam
+"Nope, I'm still in the market",0,uci_sms_spam,0,0.00079964416,0.079964414,0.9984007,safe
+R U &SAM P IN EACHOTHER. IF WE MEET WE CAN GO 2 MY HOUSE,0,uci_sms_spam,0,0.0010703029,0.10703029,0.9978594,safe
+Yunny i'm walking in citylink now ü faster come down... Me very hungry...,0,uci_sms_spam,0,0.0007643062,0.076430626,0.9984714,safe
+Dear U've been invited to XCHAT. This is our final attempt to contact u! Txt CHAT to 86688 150p/MsgrcvdHG/Suite342/2Lands/Row/W1J6HL LDN 18 yrs,1,uci_sms_spam,1,0.9992519,99.92519,0.9985038,scam
+"Hi, wlcome back, did wonder if you got eaten by a lion or something, nothing much",0,uci_sms_spam,0,0.0008664011,0.08664011,0.9982672,safe
+important: Your SIM will be deactivated. Complete verification immediately. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99930596,99.930595,0.9986119,scam
+The Xmas story is peace.. The Xmas msg is love.. The Xmas miracle is jesus.. Hav a blessed month ahead &amp; wish U Merry Xmas...,0,uci_sms_spam,0,0.0008153008,0.08153008,0.9983694,safe
+what is your account number?,0,uci_sms_spam,0,0.0025581247,0.25581247,0.9948838,safe
+I attended but nothing is there.,0,uci_sms_spam,0,0.0007660512,0.07660512,0.9984679,safe
+"Not much, just some textin'. How bout you?",0,uci_sms_spam,0,0.0011170811,0.11170811,0.99776584,safe
+Hello-/@drivby-:0quit edrunk sorry iff pthis makes no senrd-dnot no how ^ dancce 2 drum n basq!ihave fun 2nhite x ros xxxxxxx,0,uci_sms_spam,0,0.007557845,0.7557845,0.9848843,safe
+U guys never invite me anywhere :(,0,uci_sms_spam,0,0.0007495368,0.074953675,0.99850094,safe
+"Nah man, my car is meant to be crammed full of people",0,uci_sms_spam,0,0.0007987098,0.079870984,0.9984026,safe
+Do well :)all will for little time. Thing of good times ahead:,0,uci_sms_spam,0,0.00081508135,0.08150814,0.9983698,safe
+You always make things bigger than they are,0,uci_sms_spam,0,0.00085388654,0.08538865,0.9982922,safe
+Ffffffffff. Alright no way I can meet up with you sooner?,0,uci_sms_spam,0,0.0017755545,0.17755546,0.9964489,safe
+HI ITS KATE CAN U GIVE ME A RING ASAP XXX,0,uci_sms_spam,0,0.001038164,0.103816405,0.9979237,safe
+He dint tell anything. He is angry on me that why you told to abi.,0,uci_sms_spam,0,0.00078771816,0.078771815,0.9984246,safe
+I finished my lunch already. U wake up already?,0,uci_sms_spam,0,0.0007712187,0.07712187,0.99845755,safe
+See the forwarding message for proof,0,uci_sms_spam,0,0.004539901,0.4539901,0.9909202,safe
+"Once a fishrman woke early in d mrng. It was very dark. He waited a while &amp; found a sack ful of stones. He strtd throwin thm in2 d sea 2 pass time. Atlast he had jus 1stone, sun rose up &amp; he found out tht those r nt stones, those were diamonds. Moral:""Dont wake up early in d mrng'' GOOD night",0,uci_sms_spam,0,0.00094387284,0.094387285,0.99811226,safe
+final notice: Approve collect request to receive cashback. Please pay fee now.,1,synthetic_hinglish_scam,1,0.99930763,99.93076,0.99861526,scam
+Sorry for the delay. Yes masters,0,uci_sms_spam,0,0.0007993898,0.07993898,0.9984012,safe
+"A Boy loved a gal. He propsd bt she didnt mind. He gv lv lttrs, Bt her frnds threw thm. Again d boy decided 2 aproach d gal , dt time a truck was speeding towards d gal. Wn it was about 2 hit d girl,d boy ran like hell n saved her. She asked 'hw cn u run so fast?' D boy replied ""Boost is d secret of my energy"" n instantly d girl shouted ""our energy"" n Thy lived happily 2gthr drinking boost evrydy Moral of d story:- I hv free msgs:D;): gud ni8",0,uci_sms_spam,0,0.0022676361,0.2267636,0.99546474,safe
+What u mean u almost done? Done wif sleeping? But i tot u going to take a nap.. Yup i send her liao so i'm picking her up at ard 4 smth lor..,0,uci_sms_spam,0,0.00090158766,0.09015877,0.99819684,safe
+Discussed with your mother ah?,0,uci_sms_spam,0,0.001124486,0.112448595,0.99775106,safe
+Lmao ok I wont be needing u to do my hair anymore.,0,uci_sms_spam,0,0.0007769324,0.07769324,0.9984461,safe
+Thank You meet you monday,0,uci_sms_spam,0,0.00086031965,0.086031966,0.99827933,safe
+"* Was really good to see you the other day dudette, been missing you!",0,uci_sms_spam,0,0.0018228187,0.18228187,0.99635434,safe
+"Dear user, your Paytm KYC has expired. Update now. This is mandatory to avoid suspension.",1,synthetic_hinglish_scam,1,0.9992799,99.92799,0.99855983,scam
+Electricity bill payment received.,0,synthetic_safe_messages,0,0.0021784648,0.21784648,0.9956431,safe
+HI DARLIN IVE JUST GOT BACK AND I HAD A REALLY NICE NIGHT AND THANKS SO MUCH FOR THE LIFT SEE U TOMORROW XXX,0,uci_sms_spam,0,0.001184416,0.1184416,0.9976312,safe
+Congratulations YOU'VE Won. You're a Winner in our August £1000 Prize Draw. Call 09066660100 NOW. Prize Code 2309.,1,uci_sms_spam,1,0.99922204,99.9222,0.9984441,scam
+Sorry completely forgot * will pop em round this week if your still here?,0,uci_sms_spam,0,0.002099945,0.2099945,0.99580014,safe
+"Yes obviously, but you are the eggs-pert and the potato head… Speak soon!",0,uci_sms_spam,0,0.0015901687,0.15901686,0.9968197,safe
+TaKe CaRE n gET WeLL sOOn,0,uci_sms_spam,0,0.0009459124,0.09459124,0.99810815,safe
+"Plz note: if anyone calling from a mobile Co. &amp; asks u to type # &lt;#&gt;  or # &lt;#&gt; . Do not do so. Disconnect the call,coz it iz an attempt of 'terrorist' to make use of the sim card no. Itz confirmd by nokia n motorola n has been verified by CNN IBN.",0,uci_sms_spam,0,0.0808931,8.08931,0.8382138,safe
+We are both fine. Thanks,0,uci_sms_spam,0,0.0007606101,0.07606101,0.9984788,safe
+I think i am disturbing her da,0,uci_sms_spam,0,0.00078178506,0.0781785,0.99843645,safe
+"URGENT!: Your Mobile No. was awarded a £2,000 Bonus Caller Prize on 02/09/03! This is our 2nd attempt to contact YOU! Call 0871-872-9755 BOX95QU",1,uci_sms_spam,1,0.99927646,99.92764,0.9985529,scam
+final notice: Your wallet is limited. Update details to unlock. Please login now.,1,synthetic_hinglish_scam,1,0.99929786,99.92979,0.9985957,scam
+Sorry . I will be able to get to you. See you in the morning.,0,uci_sms_spam,0,0.00078366837,0.07836684,0.99843264,safe
+Get ready for  &lt;#&gt;  inches of pleasure...,0,uci_sms_spam,0,0.00076761824,0.07676183,0.99846476,safe
+They did't play one day last year know even though they have very good team.. Like india.,0,uci_sms_spam,0,0.0009506698,0.09506698,0.9980987,safe
+Ok... Let u noe when i leave my house.,0,uci_sms_spam,0,0.00075862807,0.07586281,0.99848276,safe
+So no messages. Had food?,0,uci_sms_spam,0,0.00086677435,0.08667743,0.99826646,safe
+"Haha just kidding, papa needs drugs",0,uci_sms_spam,0,0.0008237051,0.08237051,0.9983526,safe
+Maybe?! Say hi to  and find out if  got his card. Great escape or wetherspoons?,0,uci_sms_spam,0,0.002796252,0.2796252,0.9944075,safe
+Watching telugu movie..wat abt u?,0,uci_sms_spam,0,0.0007851098,0.078510985,0.9984298,safe
+important: OTP share karein warna wallet suspend ho jayega. Please login now.,1,synthetic_hinglish_scam,1,0.99927,99.927,0.99854004,scam
+I knew it... U slept v late yest? Wake up so late...,0,uci_sms_spam,0,0.000778367,0.0778367,0.99844325,safe
+Aight what time you want me to come up?,0,uci_sms_spam,0,0.0010086851,0.10086851,0.9979826,safe
+Lol! U drunkard! Just doing my hair at d moment. Yeah still up 4 tonight. Wats the plan?,0,uci_sms_spam,0,0.0010327549,0.10327549,0.99793446,safe
+What i mean is do they come chase you out when its over or is it stated you can watch as many movies as you want.,0,uci_sms_spam,0,0.0014161364,0.14161363,0.9971677,safe
+Ok good then i later come find ü... C lucky i told ü to go earlier... Later pple take finish ü no more again...,0,uci_sms_spam,0,0.0007983312,0.07983312,0.9984033,safe
+"Awesome, be there in a minute",0,uci_sms_spam,0,0.0008005034,0.08005034,0.998399,safe
+I will reach before ten morning,0,uci_sms_spam,0,0.00080587703,0.0805877,0.99838823,safe
+Hey. For me there is no leave on friday. Wait i will ask my superior and tell you..,0,uci_sms_spam,0,0.0007660665,0.076606646,0.99846786,safe
+warning: Your UPI is blocked due to KYC issue. Verify urgently. Please approve now.,1,synthetic_hinglish_scam,1,0.99929583,99.92958,0.99859166,scam
+"Thank you, winner notified by sms. Good Luck! No future marketing reply STOP to 84122 customer services 08450542832",1,uci_sms_spam,1,0.9992101,99.92101,0.99842024,scam
+"Did he say how fantastic I am by any chance, or anything need a bigger life lift as losing the will 2 live, do you think I would be the first person 2 die from N V Q?",0,uci_sms_spam,0,0.0057392186,0.57392186,0.9885216,safe
+Not getting anywhere with this damn job hunting over here!,0,uci_sms_spam,0,0.0009803242,0.09803242,0.99803936,safe
+You are a winner U have been specially selected 2 receive £1000 or a 4* holiday (flights inc) speak to a live operator 2 claim 0871277810910p/min (18+),1,uci_sms_spam,1,0.9992543,99.92543,0.9985086,scam
+Happy new year to u too!,0,uci_sms_spam,0,0.0008473841,0.08473841,0.99830526,safe
+But your brother transfered only  &lt;#&gt;  +  &lt;#&gt; . Pa.,0,uci_sms_spam,0,0.0008349745,0.08349745,0.99833006,safe
+"I think your mentor is , but not 100 percent sure.",0,uci_sms_spam,0,0.0011495003,0.11495002,0.997701,safe
+excellent. I spent  &lt;#&gt;  years in the Air Force. Iraq and afghanistan. I am stable and honest. do you like traveling?,0,uci_sms_spam,0,0.0010409926,0.10409926,0.997918,safe
+Even my brother is not like to speak with me. They treat me like aids patent.,0,uci_sms_spam,0,0.0007814454,0.07814454,0.9984371,safe
+Hi.what you think about match?,0,uci_sms_spam,0,0.0012741699,0.12741698,0.99745166,safe
+Or remind me in a few hrs.,0,uci_sms_spam,0,0.0007653791,0.076537915,0.99846923,safe
+we tried to contact you re your response to our offer of a new nokia fone and camcorder hit reply or call 08000930705 for delivery,1,uci_sms_spam,1,0.99908316,99.90832,0.9981663,scam
+Free Msg: Ringtone!From: http://tms. widelive.com/index. wml?id=1b6a5ecef91ff9*37819&first=true18:0430-JUL-05,1,uci_sms_spam,1,0.99736565,99.736565,0.9947313,scam
+When did dad get back.,0,uci_sms_spam,0,0.0008159804,0.08159804,0.998368,safe
+"Er, hello, things didn‘t quite go to plan – is limping slowly home followed by aa and with exhaust hanging off",0,uci_sms_spam,0,0.00092763413,0.09276342,0.99814475,safe
+"I love you !!! You know? Can you feel it? Does it make your belly warm? I wish it does, my love ... I shall meet you in your dreams, Ahmad ... *adoring kiss*",0,uci_sms_spam,0,0.0010241,0.10241,0.9979518,safe
+yay! finally lol. i missed our cinema trip last week :-(,0,uci_sms_spam,0,0.0008989538,0.08989538,0.9982021,safe
+How are you doing? Hope you've settled in for the new school year. Just wishin you a gr8 day,0,uci_sms_spam,0,0.0015999166,0.15999167,0.9968002,safe

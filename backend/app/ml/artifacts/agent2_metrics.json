@@ -1,0 +1,59 @@
+{
+  "agent_id": "agent_02",
+  "agent_name": "DistilBERT Scam Classifier",
+  "backend_destination": "backend/ml/agents/agent_02_distilbert/",
+  "base_model": "distilbert-base-multilingual-cased",
+  "model_dir": "agent_02_distilbert_model",
+  "task": "binary classification: scam vs safe",
+  "max_length": 128,
+  "fp16_used": false,
+  "created_at_utc": "2026-06-25T10:02:19.119237Z",
+  "dataset_rows": 5914,
+  "train_rows": 4257,
+  "validation_rows": 474,
+  "test_rows": 1183,
+  "class_counts": {
+    "safe": 4588,
+    "scam": 1326
+  },
+  "data_sources": {
+    "uci_sms_spam": 5158,
+    "synthetic_hinglish_scam": 684,
+    "synthetic_safe_messages": 72
+  },
+  "training_params": {
+    "epochs": 5,
+    "batch_size": 32,
+    "learning_rate": 2e-05,
+    "warmup_fraction": 0.1,
+    "max_length": 128
+  },
+  "metrics": {
+    "accuracy": 0.9932375316990701,
+    "precision": 0.9812734082397003,
+    "recall": 0.9886792452830189,
+    "f1": 0.9849624060150376,
+    "auc_roc": 0.9997615817815595,
+    "pr_auc": 0.9991986606888358
+  },
+  "confusion_matrix": [
+    [
+      913,
+      5
+    ],
+    [
+      3,
+      262
+    ]
+  ],
+  "classification_report_text": "              precision    recall  f1-score   support\n\n        safe       1.00      0.99      1.00       918\n        scam       0.98      0.99      0.98       265\n\n    accuracy                           0.99      1183\n   macro avg       0.99      0.99      0.99      1183\nweighted avg       0.99      0.99      0.99      1183\n",
+  "target_f1": 0.95,
+  "target_auc_roc": 0.97,
+  "target_met": true,
+  "required_files": [
+    "agent_02_distilbert_model/",
+    "agent_02_metrics.json",
+    "agent_02_test_predictions.csv",
+    "agent_02_inference.py"
+  ]
+}
