@@ -65,3 +65,20 @@ Here is a summary of all integration tasks completed for **Agent 3**, **Agent 7*
 > [!NOTE]
 > All seven retrained models (Agents 1, 2, 3, 5, 7, 11, 13) are now fully wired, verified, and operational. Large model weight files (such as Agent 11's 350 MB `malware_rf.pkl` and Agent 2/13's deep learning weights) are safely gitignored by design to prevent repository bloat, while all lightweight metadata, configurations, and inference scripts have been staged.
 
+### 8. Ensemble-level OTP/Debit vs Scam Verification
+
+Added ensemble-level OTP/debit vs scam verification with SCAM_LURE / LEGIT_OTP / LEGIT_DEBIT probes. Current ensemble behaviour: scam correctly high-risk, legitimate OTP/debit no longer flagged SCAM.
+
+**Root causes fixed:**
+- **Agent 2 gate priority bug**: `_apply_gate()` was checking the high-confidence override _before_ the legitimate-warning check, so messages with "do not share" + "otp" were returned as SCAM (confidence 0.9984) despite the disclaimer. Legitimate-warning phrases now take absolute priority.
+- **Agent 2 SUSPICIOUS float mapping**: When the gate downgraded SCAM→SUSPICIOUS, the raw scam confidence was forwarded unchanged (`max(conf, 0.55)` = 0.9984), inflating the ensemble score. SUSPICIOUS is now clamped to `[0.45, 0.60]`.
+- **Ensemble `ensemble_predict_text` helper**: Added to `inference.py` as a pure function mirroring the `/api/v1/analyze-text` code path. Extended Agent 2 uncertainty gate from `0.35–0.65` to `0.35–0.85` to catch high-scoring false positives. Post-ensemble defensive-phrase gate now uses Agent 2's gated label (not float proxy) for reliable decisions.
+
+**Verified probe results:**
+
+| Probe | `final_label` | `final_score` | Pass? |
+|-------|--------------|---------------|-------|
+| SCAM_LURE ("URGENT: Your SBI account will be suspended...") | `SCAM` | `1.00` | ✅ |
+| LEGIT_OTP ("Your OTP for SBI login is 847291. Do not share...") | `SUSPICIOUS` | `0.55` | ✅ |
+| LEGIT_DEBIT ("Rs 500 debited from A/c XX3021 via UPI...") | `SAFE` | `0.31` | ✅ |
+

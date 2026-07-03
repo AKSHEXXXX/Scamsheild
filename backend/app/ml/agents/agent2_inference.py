@@ -77,25 +77,35 @@ def _apply_gate(raw_label: str, confidence: float, text: str) -> str:
     """
     Apply the co-occurrence safety gate to reduce false positives.
     Only downgrades SCAM — never upgrades SAFE → SCAM.
+
+    Priority (highest first):
+    1. Explicit legitimate-warning phrases  → cap at SUSPICIOUS
+    2. High-confidence + strong solicitation → SCAM
+    3. Co-occurrence dimension count        → SCAM (>=2) or SUSPICIOUS (<2)
     """
     if raw_label != _SCAM:
         return raw_label
 
     t = text.lower()
-    dims = _dim_count(t)
 
-    # Legitimate warning override
+    # ── Priority 1: explicit defensive disclaimers always win ────────────────
+    # Messages that contain "do not share", "never share", etc. are definitively
+    # NOT asking the user to hand over credentials — cap at SUSPICIOUS.
     if any(w in t for w in _LEGIT_WARNINGS):
         return _SUSP
 
-    # High-confidence override: model is very sure AND a strong solicitation is present
+    # ── Priority 2: high-confidence model + strong credential solicitation ───
+    # Only applied when no legitimate warning is present.
     if confidence > 0.95 and any(k in t for k in _STRONG_CRED):
         return _SCAM
 
+    # ── Priority 3: co-occurrence gate ──────────────────────────────────────
+    dims = _dim_count(t)
     if dims >= 2:
         return _SCAM
     # 0 or 1 dimension → downgrade
     return _SUSP
+
 
 
 # ---------------------------------------------------------------------------
