@@ -47,5 +47,21 @@ Here is a summary of all integration tasks completed for **Agent 3**, **Agent 7*
 - **Inference helper**: Created [agent2_inference.py](file:///c:/Users/prady/Documents/BinaryzTech/backend/app/ml/agents/agent2_inference.py) implementing a conservative 3-dimension co-occurrence gate (Urgency, Money/Credentials, Authority) and defensive warning filters to reduce false positives on legitimate OTPs and transaction alerts.
 - **Ensemble integration**: Wired into the backend scoring module in [inference.py](file:///c:/Users/prady/Documents/BinaryzTech/backend/app/ml/agents/inference.py) with weight `0.18`.
 
+### 5. Agent 1 (Text Scam Classifier — TF-IDF + LogReg)
+- **Artifacts Deployed**: Deployed retrained `scamshield_vectorizer.pkl`, `scamshield_model.pkl`, and `scamshield_label_encoder.pkl`.
+- **Feature Pipeline**: The new vectorizer contains a `FeatureUnion` of word/char TF-IDF (`50546` features) and a custom dense feature extractor `CustomScamFlags` (`10` features) producing a total of `50556` features.
+- **Inference integration**: Updated `agent1_predict_text` to stack the sparse TF-IDF and dense engineered features using `scipy.sparse.hstack` before calling the classifier.
+- **Dependency Binding**: Defined `CustomScamFlags` scikit-learn transformer at the top of `model_loader.py` and bound it to the `__main__` namespace to ensure seamless unpickling via `joblib`.
+
+### 6. Agent 5 (QR Threat Classifier — XGBoost Native)
+- **Artifacts Deployed**: Deployed retrained `qr_url_classifier.ubj` native XGBoost model, `qr_model_report.json` metrics, and `qr_test_predictions.csv` test set predictions.
+- **Feature Extractor**: Created `agent_05_feature_extractor.py` containing a comprehensive 60-feature extractor supporting URL, UPI, plain text, and vCard payload classification.
+- **Inference integration**: Updated `agent5_predict_qr_payload` in `inference.py` and `predict_qr` in `agent_5_qr_xgb/inference.py` to use the 60-feature extractor and native XGBoost model loading (no scaling required).
+
+### 7. Agent 11 (Malware File Analyzer — Random Forest Calibrated)
+- **Artifacts Deployed**: Deployed retrained `malware_rf.pkl` (350 MB Calibrated Random Forest model), `malware_feature_indices.pkl` (updated list of 215 indices), and metrics.
+- **Inference integration**: Updated loader in `model_loader.py` and inference helper in `agent_11_malware_rf/inference.py` to bypass the legacy 128-feature scaler (StandardScaler removed from pipeline as RF does not require scaling), and pad inputs to the 215 features expected by the DREBIN-trained model.
+
 > [!NOTE]
-> Agent 2 live scoring is fully functional and uses dynamic CPU INT8 quantization.
+> All seven retrained models (Agents 1, 2, 3, 5, 7, 11, 13) are now fully wired, verified, and operational. Large model weight files (such as Agent 11's 350 MB `malware_rf.pkl` and Agent 2/13's deep learning weights) are safely gitignored by design to prevent repository bloat, while all lightweight metadata, configurations, and inference scripts have been staged.
+

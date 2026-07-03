@@ -1,48 +1,139 @@
 {
-  "model": "XGBoost QR Threat Classifier",
-  "agent": "Agent 5",
-  "auc": 0.9863,
-  "n_train": 16000,
-  "n_test": 4000,
-  "raw_label_distribution": {
-    "0": 100700,
-    "1": 100700
+  "agent_id": "agent_05",
+  "agent_name": "QR Threat Classifier",
+  "backend_destination": "backend/ml/agents/agent_05_qr_classifier/",
+  "model_type": "XGBClassifier",
+  "model_file": "agent_05_xgboost_model.ubj",
+  "feature_extractor_file": "agent_05_feature_extractor.py",
+  "test_predictions_file": "agent_05_test_predictions.csv",
+  "dataset_rows": 50000,
+  "train_rows": 40000,
+  "test_rows": 10000,
+  "class_counts": {
+    "benign": 25000,
+    "malicious": 25000
   },
-  "sample_label_distribution": {
-    "1": 10000,
-    "0": 10000
+  "data_sources": {
+    "phishtank_online_valid": 25000,
+    "tranco_top_domains": 25000
   },
-  "feature_label_distribution": {
-    "1": 10000,
-    "0": 10000
+  "xgboost_params": {
+    "n_estimators": 400,
+    "max_depth": 5,
+    "learning_rate": 0.05,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "eval_metric": "logloss",
+    "tree_method": "hist",
+    "random_state": 42,
+    "n_jobs": -1,
+    "scale_pos_weight": 1.0
   },
-  "decode_rate_by_class": {
-    "0": 0.9479,
-    "1": 0.9434
+  "cv": {
+    "n_splits": 5,
+    "f1_scores": [
+      0.9942196531791907,
+      0.9934624088508927,
+      0.993330816660375,
+      0.9938419002136484,
+      0.9940902803973344
+    ],
+    "mean_f1": 0.9937890118602881,
+    "std_f1": 0.00034514467165258996
   },
-  "features": [
-    "IsURL",
-    "IsUPI",
-    "IsTel",
-    "PayloadLen",
-    "HasSuspiciousKeyword",
-    "IsHTTPS",
-    "HasIP",
-    "URLLen",
-    "NumDots",
-    "NumSlash",
-    "NumDash",
-    "NumAt",
-    "NumEquals",
-    "NumQMark",
-    "NumAmpersand",
-    "NumDigits",
-    "SubdomainCount",
-    "Decodable"
+  "selected_threshold": 0.565,
+  "metrics": {
+    "f1": 0.9947749196141479,
+    "precision": 0.9995961227786753,
+    "recall": 0.99,
+    "accuracy": 0.9948,
+    "roc_auc": 0.9975599399999999,
+    "pr_auc": 0.9982791037792279
+  },
+  "confusion_matrix": [
+    [
+      4998,
+      2
+    ],
+    [
+      50,
+      4950
+    ]
   ],
-  "artifacts": [
-    "qr_classifier.pkl",
-    "qr_scaler.pkl",
-    "qr_feature_cols.pkl"
+  "classification_report_text": "              precision    recall  f1-score   support\n\n      benign       0.99      1.00      0.99      5000\n   malicious       1.00      0.99      0.99      5000\n\n    accuracy                           0.99     10000\n   macro avg       0.99      0.99      0.99     10000\nweighted avg       0.99      0.99      0.99     10000\n",
+  "target_f1": 0.94,
+  "target_met": true,
+  "feature_order": [
+    "payload_len",
+    "payload_entropy",
+    "payload_digit_count",
+    "payload_alpha_count",
+    "payload_special_count",
+    "payload_space_count",
+    "payload_non_ascii_count",
+    "payload_type_url",
+    "payload_type_upi",
+    "payload_type_plain_text",
+    "payload_type_vcard",
+    "payload_type_phone",
+    "payload_type_email",
+    "qr_version_estimate",
+    "qr_error_correction_level_num",
+    "url_len",
+    "url_domain_len",
+    "url_tld_len",
+    "url_subdomain_count",
+    "url_path_len",
+    "url_query_len",
+    "url_num_query_params",
+    "url_has_https",
+    "url_has_ip",
+    "url_num_dots",
+    "url_num_hyphens",
+    "url_num_digits",
+    "url_num_at",
+    "url_num_question",
+    "url_num_ampersand",
+    "url_num_equals",
+    "url_num_percent",
+    "url_is_shortened",
+    "url_suspicious_token_count",
+    "url_suspicious_token_density",
+    "url_brand_mentioned",
+    "url_brand_domain_mismatch",
+    "url_punycode",
+    "url_port_present",
+    "upi_present",
+    "upi_vpa_present",
+    "upi_vpa_handle_known",
+    "upi_vpa_handle_unknown",
+    "upi_amount_present",
+    "upi_amount_value",
+    "upi_amount_high",
+    "upi_payee_name_present",
+    "upi_transaction_note_suspicious",
+    "upi_collect_like",
+    "upi_param_count",
+    "text_scam_keyword_count",
+    "text_scam_keyword_density",
+    "text_urgency_score",
+    "text_contains_otp",
+    "text_contains_phone",
+    "text_contains_email",
+    "text_contains_currency",
+    "vcard_field_count",
+    "brand_name_count",
+    "short_url_count"
+  ],
+  "acceptance_criteria": {
+    "colab_free_tier": true,
+    "f1_at_least_0_94": true,
+    "extractor_handles_url_upi_plaintext_vcard": true,
+    "predict_returns_verdict_score_confidence_triggered_features": true
+  },
+  "limitations": [
+    "Fallback examples are for pipeline validation only.",
+    "Use real QRishing, PhishTank, and app feedback data for production acceptance.",
+    "Replace UPI handle allowlist with verified production allowlist."
   ]
 }
