@@ -8,7 +8,7 @@ from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, 
 from app.database import supabase
 from app.helpers import get_config_dict, persist_scan
 from schemas.scan_result import verdict_label as _verdict_label
-from agents.agent1_text_tfidf import predict as agent1_predict
+from app.ml.agents.inference import agent1_predict_text
 from agents.agent15_ensemble import compute
 from app.ml.model_loader import get_models
 from schemas.scan_result import SignalsBlock
@@ -78,11 +78,9 @@ async def analyze_text(body: AnalyzeTextIn,
 
     models = get_models()
     text_tfidf_prob = None
-    if "agent1" in models:
-        try:
-            text_tfidf_prob = agent1_predict(text, models["agent1"])
-        except Exception as e:
-            logger.warning("Agent 1 predict error: %s", e)
+    raw_a1 = agent1_predict_text(text)
+    if raw_a1 >= 0:
+        text_tfidf_prob = raw_a1
 
     text_distilbert_prob = None
     agent2_invoked = False
