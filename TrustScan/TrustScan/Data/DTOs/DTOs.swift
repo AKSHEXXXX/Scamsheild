@@ -50,10 +50,12 @@ struct ScanOutDTO: Decodable {
   // Image-specific stable fields
   let extracted_text: String?
   let meta: ScanMetaDTO?
+  // Agent signals (backend exposes these — used for degradation detection)
+  let signals: AgentSignalsDTO?
+  let confidence: Double?
 
   func toDomain() -> AnalysisResult {
     let resultFindings = findings?.map { f in
-      // Backend spec uses "message" field; "description" kept as fallback
       Finding(
         type: f.type ?? "unknown",
         value: f.value ?? "",
@@ -67,7 +69,6 @@ struct ScanOutDTO: Decodable {
     }
 
     // Map backend verdict strings → domain enum
-    // Backend: low_risk → safe, suspicious → suspicious, high_risk → scam
     let threatVerdict: ThreatVerdict
     switch verdict?.lowercased() {
     case "low_risk", "safe":   threatVerdict = .safe
@@ -75,9 +76,32 @@ struct ScanOutDTO: Decodable {
     default:                   threatVerdict = .suspicious
     }
 
-    let extractedUrls = flagged_urls?.compactMap { $0.url }.filter { !$0.isEmpty } ?? []
+    // Normalise flagged_urls — works for both plain string arrays and {url:} objects.
+    // Also extracts URLs embedded in extracted_text (fixes QR endpoint missing flagged_urls).
+    var extractedUrls = flagged_urls?.compactMap { $0.url }.filter { !$0.isEmpty } ?? []
 
-    return AnalysisResult(
+    // Fallback: scrape URLs from extracted_text if the backend returned none
+    // (observed on /check-qr where flagged_urls is always empty)
+    if extractedUrls.isEmpty, let rawText = extracted_text, !rawText.isEmpty {
+      let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+      let matches = detector?.matches(in: rawText, range: NSRange(rawText.startIndex..., in: rawText))
+      let scraped = matches?.compactMap { $0.url?.absoluteString } ?? []
+      extractedUrls = scraped
+    }
+
+    // Detect Agent 1 degradation: signals object returned but tfidf_prob is nil
+    // This means a text scan was attempted but the primary ML model silently failed.
+    let backendDegraded: Bool
+    if let sig = signals {
+      backendDegraded = sig.text_tfidf_prob == nil
+      if backendDegraded {
+        print("[ScamShield] ⚠️ Agent 1 (TF-IDF) returned null — backend model may be offline. Score may be underestimated.")
+      }
+    } else {
+      backendDegraded = false
+    }
+
+    var result = AnalysisResult(
       id: UUID(uuidString: scan_id ?? "") ?? UUID(),
       backendScanId: scan_id?.isEmpty == false ? scan_id : nil,
       verdict: threatVerdict,
@@ -92,12 +116,14 @@ struct ScanOutDTO: Decodable {
       meta: resultMeta,
       analysisTimestamp: Date()
     )
+    result.backendDegraded = backendDegraded
+    return result
   }
 }
 
 struct FlaggedUrlDTO: Decodable {
   let url: String
-  
+
   init(from decoder: Decoder) throws {
     if let container = try? decoder.singleValueContainer(), let stringValue = try? container.decode(String.self) {
       self.url = stringValue
@@ -107,7 +133,7 @@ struct FlaggedUrlDTO: Decodable {
       self.url = ""
     }
   }
-  
+
   enum CodingKeys: String, CodingKey {
     case url
   }
@@ -125,6 +151,16 @@ struct ScanMetaDTO: Decodable {
   let ocr_method: String?
   let ocr_confidence: Double?
   let ocr_fallback: Bool?
+}
+
+// Agent signals — backend exposes these in the response
+// Used client-side to detect when models are offline/degraded
+struct AgentSignalsDTO: Decodable {
+  let text_tfidf_prob: Double?       // nil = Agent 1 offline
+  let text_distilbert_prob: Double?  // nil = Agent 2 offline
+  let regex_score: Int?
+  let regex_severity: String?
+  let regex_triggered: [String]?
 }
 
 // MARK: - Config DTO

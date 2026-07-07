@@ -52,22 +52,36 @@ struct AnalysisResultView: View {
         }
 
         // Icon + Verdict title
+        // Uses effectiveVerdict which escalates when client-side signals override backend
         HStack(spacing: SpacingTokens.small) {
-          Image(systemName: result.verdict.iconName)
+          Image(systemName: result.effectiveVerdict.iconName)
             .font(.system(size: 40, weight: .semibold))
-            .foregroundStyle(result.verdict.tintColor)
+            .foregroundStyle(result.effectiveVerdict.tintColor)
             .accessibilityHidden(true)
           VStack(alignment: .leading, spacing: 2) {
-            Text(result.verdict.displayTitle)
-              .font(.system(size: 22, weight: .bold, design: .rounded))
-              .foregroundStyle(result.verdict.tintColor)
+            HStack(spacing: 6) {
+              Text(result.effectiveVerdict.displayTitle)
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundStyle(result.effectiveVerdict.tintColor)
+              // Badge shown when client overrides backend verdict
+              if result.effectiveVerdict != result.verdict {
+                Text("On-device")
+                  .font(.system(size: 10, weight: .bold))
+                  .foregroundStyle(.white)
+                  .padding(.horizontal, 6)
+                  .padding(.vertical, 2)
+                  .background(ColorTokens.dng)
+                  .clipShape(Capsule())
+                  .accessibilityLabel("On-device detection overrode server result")
+              }
+            }
             if let signal = result.topSignal {
               Text(signal.replacingOccurrences(of: "_", with: " ").capitalized)
                 .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(result.verdict.tintColor)
+                .foregroundStyle(result.effectiveVerdict.tintColor)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
-                .background(result.verdict.tintColor.opacity(0.12))
+                .background(result.effectiveVerdict.tintColor.opacity(0.12))
                 .clipShape(Capsule())
             }
           }
@@ -81,7 +95,7 @@ struct AnalysisResultView: View {
             .trim(from: 0, to: CGFloat(animatedScore) / 100.0)
             .stroke(
               AngularGradient(
-                gradient: Gradient(colors: [result.verdict.tintColor.opacity(0.5), result.verdict.tintColor]),
+                gradient: Gradient(colors: [result.effectiveVerdict.tintColor.opacity(0.5), result.effectiveVerdict.tintColor]),
                 center: .center,
                 startAngle: .degrees(-90),
                 endAngle: .degrees(270)
@@ -89,7 +103,7 @@ struct AnalysisResultView: View {
               style: StrokeStyle(lineWidth: 16, lineCap: .round)
             )
             .rotationEffect(.degrees(-90))
-            .shadow(color: result.verdict.tintColor.opacity(0.4), radius: 10)
+            .shadow(color: result.effectiveVerdict.tintColor.opacity(0.4), radius: 10)
           VStack(spacing: 4) {
             Text("Risk Score")
               .font(TypographyTokens.caption)
@@ -97,7 +111,7 @@ struct AnalysisResultView: View {
               .textCase(.uppercase)
             Text("\(Int(animatedScore))%")
               .font(.system(size: 48, weight: .bold, design: .rounded))
-              .foregroundStyle(result.verdict.tintColor)
+              .foregroundStyle(result.effectiveVerdict.tintColor)
               .contentTransition(.numericText())
           }
         }
@@ -141,6 +155,7 @@ struct AnalysisResultView: View {
           .padding(.vertical, SpacingTokens.xSmall)
 
         // Contextual summary — below the gauge and chips
+        // Uses effectiveVerdict-aware summary which incorporates client-side overrides
         Text(result.contextualSummary)
           .font(TypographyTokens.body)
           .foregroundStyle(ColorTokens.ik)
@@ -153,7 +168,22 @@ struct AnalysisResultView: View {
           .fill(ColorTokens.sfm)
           .shadow(color: Color.black.opacity(0.04), radius: 12, x: 0, y: 6)
       )
-      
+
+      // Backend degraded warning — shown when primary text model was offline
+      if result.backendDegraded {
+        AgentDegradedWarning()
+      }
+
+      // Client-side override warning — shown when backend likely missed a scam
+      if result.clientDetectedMiss {
+        ClientOverrideWarningCard(signals: result.clientSignals)
+      }
+
+      // Borderline score warning — shown when result is near threshold boundary
+      if result.isBorderlineScore && !result.clientDetectedMiss && !result.backendDegraded {
+        BorderlineScoreWarning(score: result.score)
+      }
+
       // Flagged URLs
       if !result.flaggedUrls.isEmpty {
         VStack(alignment: .leading, spacing: SpacingTokens.medium) {
@@ -161,7 +191,7 @@ struct AnalysisResultView: View {
             .font(TypographyTokens.sectionTitle)
             .foregroundStyle(ColorTokens.ik)
             .padding(.horizontal, 4)
-          
+
           ForEach(result.flaggedUrls, id: \.self) { url in
             HStack(spacing: 12) {
               ZStack {
@@ -173,13 +203,13 @@ struct AnalysisResultView: View {
                   .font(.system(size: 14, weight: .bold))
                   .accessibilityHidden(true)
               }
-              
+
               Text(url)
                 .font(.system(.subheadline, design: .monospaced))
                 .foregroundStyle(ColorTokens.ik)
                 .lineLimit(1)
                 .truncationMode(.middle)
-              
+
               Spacer()
             }
             .padding(12)
@@ -201,7 +231,7 @@ struct AnalysisResultView: View {
             .font(TypographyTokens.sectionTitle)
             .foregroundStyle(ColorTokens.ik)
             .padding(.horizontal, 4)
-          
+
           VStack(spacing: SpacingTokens.small) {
             ForEach(result.findings, id: \.self) { finding in
               Button {
@@ -213,7 +243,7 @@ struct AnalysisResultView: View {
                     .foregroundStyle(severityColor(finding.severity))
                     .padding(.top, 2)
                     .accessibilityHidden(true)
-                  
+
                   VStack(alignment: .leading, spacing: 4) {
                     HStack {
                       Text(finding.type.capitalized.replacingOccurrences(of: "_", with: " "))
@@ -229,7 +259,7 @@ struct AnalysisResultView: View {
                         .foregroundStyle(severityColor(finding.severity))
                         .clipShape(Capsule())
                     }
-                    
+
                     Text(finding.description)
                       .font(TypographyTokens.caption)
                       .foregroundStyle(ColorTokens.st)

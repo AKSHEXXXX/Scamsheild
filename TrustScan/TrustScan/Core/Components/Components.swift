@@ -203,6 +203,118 @@ struct EmptyStateView: View {
   }
 }
 
+// MARK: - Agent Degraded Warning
+// Shown when the backend's primary text model (Agent 1 TF-IDF) was offline during the scan.
+// Score may be lower than actual risk — on-device signals are the safety net.
+struct AgentDegradedWarning: View {
+  var body: some View {
+    HStack(alignment: .top, spacing: SpacingTokens.small) {
+      Image(systemName: "cpu.fill")
+        .foregroundStyle(ColorTokens.sus)
+        .font(.system(size: 14, weight: .semibold))
+        .padding(.top, 1)
+      Text("Server AI model was offline during this scan — the score may underestimate risk. On-device analysis has been applied as a safety net. Consider rescanning later.")
+        .font(TypographyTokens.caption)
+        .foregroundStyle(ColorTokens.ik)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+    .padding(SpacingTokens.medium)
+    .background(
+      RoundedRectangle(cornerRadius: 14, style: .continuous)
+        .fill(ColorTokens.sus.opacity(0.1))
+    )
+    .accessibilityLabel("Server AI model was offline. This scan result may underestimate risk.")
+  }
+}
+
+// MARK: - Borderline Score Warning
+// Shown when the backend score is near a verdict threshold boundary.
+struct BorderlineScoreWarning: View {
+  let score: Int
+
+  var body: some View {
+    HStack(spacing: SpacingTokens.small) {
+      Image(systemName: "exclamationmark.triangle.fill")
+        .foregroundStyle(ColorTokens.sus)
+        .font(.system(size: 14, weight: .semibold))
+      Text("Borderline result (\(score)%) — this scan is near the detection threshold. Consider rescanning with a clearer image or additional context.")
+        .font(TypographyTokens.caption)
+        .foregroundStyle(ColorTokens.ik)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+    .padding(SpacingTokens.medium)
+    .background(
+      RoundedRectangle(cornerRadius: 14, style: .continuous)
+        .fill(ColorTokens.sus.opacity(0.1))
+    )
+    .accessibilityLabel("Borderline result. The score of \(score) percent is near the detection threshold.")
+  }
+}
+
+// MARK: - Client Override Warning
+// Shown when client-side pattern matching detects scam signals the backend missed.
+struct ClientOverrideWarningCard: View {
+  let signals: ClientScamSignals
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: SpacingTokens.small) {
+      HStack(spacing: SpacingTokens.small) {
+        Image(systemName: "shield.slash.fill")
+          .foregroundStyle(ColorTokens.dng)
+          .font(.system(size: 16, weight: .bold))
+        Text("On-device analysis flagged this message")
+          .font(.system(size: 14, weight: .bold))
+          .foregroundStyle(ColorTokens.dng)
+      }
+
+      Text("The server returned a low risk score, but \(signals.triggeredCount) local scam pattern\(signals.triggeredCount == 1 ? "" : "s") were detected. The analysis may be incomplete. Do not share personal information or transfer money.")
+        .font(TypographyTokens.caption)
+        .foregroundStyle(ColorTokens.ik)
+        .fixedSize(horizontal: false, vertical: true)
+
+      // Show which dimensions fired
+      let activeLabels = activeDimensionLabels(signals)
+      if !activeLabels.isEmpty {
+        ScrollView(.horizontal, showsIndicators: false) {
+          HStack(spacing: 6) {
+            ForEach(activeLabels, id: \.self) { label in
+              Text(label)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(ColorTokens.dng)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(ColorTokens.dng.opacity(0.12))
+                .clipShape(Capsule())
+            }
+          }
+        }
+      }
+    }
+    .padding(SpacingTokens.medium)
+    .background(
+      RoundedRectangle(cornerRadius: 14, style: .continuous)
+        .fill(ColorTokens.dng.opacity(0.08))
+        .overlay(
+          RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .stroke(ColorTokens.dng.opacity(0.25), lineWidth: 1)
+        )
+    )
+    .accessibilityLabel("On-device analysis detected \(signals.triggeredCount) scam patterns.")
+  }
+
+  private func activeDimensionLabels(_ s: ClientScamSignals) -> [String] {
+    var labels: [String] = []
+    if s.policeImpersonation { labels.append("🚨 Authority Impersonation") }
+    if s.urgency             { labels.append("⏰ Urgency") }
+    if s.financialRequest    { labels.append("💰 Financial Request") }
+    if s.otpRequest          { labels.append("🔑 OTP Request") }
+    if s.threatLanguage      { labels.append("⚠️ Threat Language") }
+    if s.hindiScamPatterns   { labels.append("🗣️ Regional Scam Pattern") }
+    if s.homoglyphUrl        { labels.append("🔗 Spoofed Brand URL") }
+    return labels
+  }
+}
+
 struct InlineErrorView: View {
   let error: AppError
   let onRetry: (() -> Void)?

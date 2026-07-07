@@ -23,19 +23,19 @@ struct SubmitAnalysisUseCase {
       let result = try await analysisRepository.analyze(text: text)
       let sourceString = "On-device (confidence: \(Int(confidence * 100))%)"
       return (result, sourceString)
-      
+
     case .fallbackRequired(let reason):
       let resized = image.resized(toMaxDimension: 1024)
       guard let data = resized.jpegData(compressionQuality: 0.75) else {
         throw AppError.invalidImage
       }
-      
+
       let payload = PreparedImagePayload(
         data: data,
         mimeType: "image/jpeg",
         fileName: fileName
       )
-      
+
       let result = try await analysisRepository.analyze(image: payload, fallbackReason: reason)
       return (result, "Enhanced scan (server)")
     }
@@ -49,6 +49,17 @@ struct SubmitAnalysisUseCase {
   func analyzeText(_ text: String) async throws -> (AnalysisResult, String) {
     let result = try await analysisRepository.analyze(text: text)
     return (result, "Text Scan")
+  }
+
+  // MARK: - Client-side pre-flight check
+  // Logs a warning when the client detects obvious scam patterns before the API call.
+  // Used to detect backend model degradation in production logs.
+  func preflightScamCheck(_ text: String) -> Bool {
+    let signals = ClientScamSignals.analyse(text: text, flaggedUrls: [])
+    if signals.isSuspectedMiss {
+      print("[ScamShield] ⚠️ Preflight: \(signals.triggeredCount) scam dimensions detected client-side before API call.")
+    }
+    return signals.isSuspectedMiss
   }
 }
 
@@ -81,14 +92,14 @@ actor OCRService {
 
     private let confidenceThreshold: Float = 0.6
     private let minimumTextLength = 20
-    
+
     func extractQRCode(from image: UIImage) async -> String? {
         guard let cgImage = image.cgImage else { return nil }
-        
+
         let request = VNDetectBarcodesRequest()
         let orientation = CGImagePropertyOrientation(image.imageOrientation)
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
-        
+
         do {
             try handler.perform([request])
             if let observations = request.results,
@@ -99,7 +110,7 @@ actor OCRService {
         } catch {
             print("QR detection error: \(error)")
         }
-        
+
         return nil
     }
 
@@ -116,10 +127,10 @@ actor OCRService {
 
         let orientation = CGImagePropertyOrientation(image.imageOrientation)
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
-        
+
         do {
             try handler.perform([request])
-            
+
             guard let observations = request.results,
                   !observations.isEmpty else {
                 return .fallbackRequired(reason: "Vision request failed or no text")
@@ -142,7 +153,7 @@ actor OCRService {
                 confidence: avgConfidence,
                 source: .onDevice
             )
-            
+
         } catch {
             return .fallbackRequired(reason: "Vision handler threw error: \(error.localizedDescription)")
         }

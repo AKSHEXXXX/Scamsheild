@@ -16,6 +16,8 @@ final class SubmissionViewModel: ObservableObject {
   @Published var ocrSource: String = ""
   @Published var showDailyLimitAlert = false
   @Published var dailyLimitResetTime: String = ""
+  // True when client-side pattern matching detects a likely backend miss
+  @Published var clientOverrideActive = false
   private let fetchConfigurationUseCase: FetchConfigurationUseCase
   private let submitAnalysisUseCase: SubmitAnalysisUseCase
   private let submitFeedbackUseCase: SubmitFeedbackUseCase
@@ -93,6 +95,7 @@ final class SubmissionViewModel: ObservableObject {
     }
 
     state = .loading(message: "Analyzing your image…")
+    clientOverrideActive = false
 
     do {
       guard let uiImage = UIImage(data: selectedImageData) else {
@@ -105,6 +108,8 @@ final class SubmissionViewModel: ObservableObject {
       )
 
       ocrSource = sourceString
+      // Check if client-side signals override the backend verdict
+      clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
 
       do {
@@ -127,12 +132,18 @@ final class SubmissionViewModel: ObservableObject {
   }
 
   func analyzeQR(payload: String) async {
+    guard !payload.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+      state = .error(.unexpected(message: "The QR code appears to be empty. Please try scanning a different QR code."))
+      return
+    }
     state = .loading(message: "Checking QR Code…")
+    clientOverrideActive = false
 
     do {
       let (result, sourceString) = try await submitAnalysisUseCase.analyzeQR(payload: payload)
 
       ocrSource = sourceString
+      clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
 
       do {
@@ -158,6 +169,7 @@ final class SubmissionViewModel: ObservableObject {
   func resetFlow() {
     selectedImageData = nil
     ocrSource = ""
+    clientOverrideActive = false
     state = .idle
   }
 
@@ -185,14 +197,14 @@ final class SubmissionViewModel: ObservableObject {
       return
     }
     let fileURL = groupURL.appendingPathComponent(filename)
-    
+
     do {
       let data = try Data(contentsOf: fileURL)
       self.selectedImageData = data
-      
+
       // Clean up the temporary shared file
       try? FileManager.default.removeItem(at: fileURL)
-      
+
       // Auto-trigger analysis
       Task {
         await self.analyzeSelectedImage()
@@ -209,15 +221,19 @@ final class SubmissionViewModel: ObservableObject {
   }
 
   func analyzeText(_ text: String) async {
+    guard text.trimmingCharacters(in: .whitespacesAndNewlines).count >= 10 else {
+      state = .error(.unexpected(message: "Please enter at least 10 characters of text to analyze."))
+      return
+    }
     state = .loading(message: "Analyzing text…")
+    clientOverrideActive = false
+    // Preflight: log if obvious scam patterns are detected before API call
+    _ = submitAnalysisUseCase.preflightScamCheck(text)
     do {
-      // Create a temporary SubmissionUseCase for text?
-      // Since SubmitAnalysisUseCase only takes UIImage, we can bypass it and use repo directly
-      // However, we don't have access to repo directly in ViewModel, but we can inject it or add to AppEnvironment.
-      // Wait, we can just add an analyzeText method to SubmitAnalysisUseCase!
       let (result, sourceString) = try await submitAnalysisUseCase.analyzeText(text)
-      
+
       ocrSource = sourceString
+      clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
 
       try? await saveHistoryEntryUseCase(result: result, thumbnailData: nil)
