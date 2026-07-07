@@ -3,6 +3,7 @@ import logging
 from typing import Literal, Optional
 from urllib.parse import urlparse as _urlparse
 from fastapi import APIRouter, Header
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from app.auth import require_user
 from app.helpers import persist_scan
@@ -28,6 +29,14 @@ async def analyze_url(body: AnalyzeURLIn,
                       x_device_id: Optional[str] = Header(None)):
     user_id = require_user(authorization)
     url = body.url
+
+    # ponytail: upi:// scheme belongs in QR/UPI pipeline, not URL ML (F-10)
+    if url.lower().startswith("upi://"):
+        return JSONResponse(
+            status_code=422,
+            content={"detail": "UPI deep-link detected. Use /api/v1/check-qr to analyze UPI payloads.",
+                     "code": "USE_QR_ENDPOINT"}
+        )
 
     from app.ml.agents.inference import agent14_score_text
     regex_result = agent14_score_text(url)
