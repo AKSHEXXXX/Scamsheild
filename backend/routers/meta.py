@@ -34,26 +34,21 @@ def get_config():
         logger.warning("get_config_dict failed (is migration applied?): %s", e)
         cfg = {"scan_credit_cap": 50, "ad_frequency": 10,
                "sensitivity_threshold": 70, "config_version": "1"}
-    cfg["features"] = {
-        "text_analysis": True,
-        "url_analysis": True,
-        "image_analysis": True,
-        "qr_scanning": True,
+    # ponytail: score_thresholds and agent counts removed — they let attackers A/B test
+    # scam templates against known detection boundaries via unauthenticated polling.
+    return {
+        "scan_credit_cap": cfg.get("scan_credit_cap", 50),
+        "ad_frequency": cfg.get("ad_frequency", 10),
+        "sensitivity_threshold": cfg.get("sensitivity_threshold", 70),
+        "config_version": cfg.get("config_version", "1"),
+        "features": {
+            "text_analysis": True,
+            "url_analysis": True,
+            "image_analysis": True,
+            "qr_scanning": True,
+        },
+        "model_version": "2.1.0",
     }
-    cfg["model_version"] = "2.1.0"
-    th = cfg.get("sensitivity_threshold", 70)
-    cfg["score_thresholds"] = {
-        "low_risk": th // 2 - 1,
-        "suspicious": th - 1,
-        "high_risk": th,
-    }
-    from app.ml.model_loader import get_agent_status
-    statuses = get_agent_status()
-    ready = sum(1 for v in statuses.values() if v.get("status") == "READY")
-    beta = sum(1 for v in statuses.values() if v.get("status") == "BETA")
-    not_ready = sum(1 for v in statuses.values() if v.get("status") == "NOT_READY")
-    cfg["agents"] = {"total": 15, "ready": ready, "beta": beta, "not_ready": not_ready}
-    return cfg
 
 @router.get("/api/v1/agents")
 def list_agents():
