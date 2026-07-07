@@ -1,6 +1,6 @@
 {
   "text": {
-    "text_prob": 0.65,
+    "text_prob": 0.75,
     "url_prob": 0.10,
     "blacklist_hit_flat": 20,
     "brand_flag": 0.10,
@@ -13,7 +13,7 @@
   },
   "url": {
     "text_prob": 0.10,
-    "url_prob": 0.60,
+    "url_prob": 0.55,
     "blacklist_hit_flat": 20,
     "brand_flag": 0.20,
     "upi_rule_score": 0.05,
@@ -25,11 +25,11 @@
   },
   "qr": {
     "text_prob": 0.10,
-    "url_prob": 0.35,
+    "url_prob": 0.30,
     "blacklist_hit_flat": 20,
     "brand_flag": 0.15,
-    "upi_rule_score": 0.15,
-    "upi_xgb_prob": 0.0,
+    "upi_rule_score": 0.10,
+    "upi_xgb_prob": 0.05,
     "deepfake_prob": 0.0,
     "malware_prob": 0.0,
     "call_fraud_prob": 0.0,
@@ -40,24 +40,24 @@
     "url_prob": 0.05,
     "blacklist_hit_flat": 0,
     "brand_flag": 0.05,
-    "upi_rule_score": 0.80,
-    "upi_xgb_prob": 0.0,
+    "upi_rule_score": 0.50,
+    "upi_xgb_prob": 0.30,
     "deepfake_prob": 0.0,
     "malware_prob": 0.0,
     "call_fraud_prob": 0.0,
-    "regex_score": 0.10
+    "regex_score": 0.05
   },
   "image": {
-    "text_prob": 0.20,
+    "text_prob": 0.10,
     "url_prob": 0.05,
     "blacklist_hit_flat": 0,
     "brand_flag": 0.05,
     "upi_rule_score": 0.05,
     "upi_xgb_prob": 0.0,
-    "deepfake_prob": 0.05,
-    "malware_prob": 0.35,
+    "deepfake_prob": 0.60,
+    "malware_prob": 0.15,
     "call_fraud_prob": 0.0,
-    "regex_score": 0.25
+    "regex_score": 0.05
   },
   "audio": {
     "text_prob": 0.40,
@@ -69,6 +69,6 @@
     "deepfake_prob": 0.0,
     "malware_prob": 0.0,
     "call_fraud_prob": 0.40,
-    "regex_score": 0.10
+    "regex_score": 0.05
   }
 }
