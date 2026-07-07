@@ -11,7 +11,16 @@ from app.data_intel.dashboard_queries import _db as mongo_db
 router = APIRouter(tags=["admin"])
 logger = logging.getLogger("scamshield.admin")
 
-VALID_CHANNELS = {"text", "url", "upi", "qr", "image", "file", "audio", "message", "screenshot"}
+VALID_CHANNELS = {
+    "text", "sms", "whatsapp", "email",
+    "url", "link",
+    "upi", "payment",
+    "qr", "qrcode",
+    "image", "screenshot",
+    "file", "document",
+    "audio", "voice",
+    "message", "messages",
+}
 VALID_VERDICTS = {"high_risk", "suspicious", "low_risk"}
 VALID_AGENT_IDS = {f"agent{i}" for i in range(1, 16)}
 
