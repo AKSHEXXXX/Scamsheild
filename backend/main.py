@@ -24,6 +24,20 @@ _blacklist_refresh_task = None
 _retraining_task = None
 BLACKLIST_REFRESH_INTERVAL_SECONDS = 7 * 24 * 3600  # weekly
 
+# Endpoints that require auth — checked at header level before body is parsed
+# ponytail: prevents unauthenticated DoS (C2 Red Team audit)
+_AUTH_REQUIRED_PREFIXES = (
+    "/api/v1/analyze-text",
+    "/api/v1/sandbox-image",
+    "/api/v1/check-qr",
+    "/api/v1/analyze-url",
+    "/api/v1/check-url",
+    "/api/v1/feedback",
+    "/api/v1/delete-account",
+    "/api/v1/report",
+)
+_MAX_BODY_BYTES = 2_000_000  # 2 MB hard cap
+
 
 async def _run_anomaly_monitor():
     await asyncio.sleep(30)
@@ -46,10 +60,6 @@ async def _run_anomaly_monitor():
 
 
 async def _run_blacklist_refresh():
-    """Weekly pull from OpenPhish / URLhaus / PhishTank into Agent 4's
-    blacklist (SCA-137). Runs in-process (not a subprocess) so the merged
-    domain set is hot-swapped into the live agent immediately via
-    model_loader.reload_agent4_blacklist(), with no redeploy required."""
     await asyncio.sleep(120)
     while True:
         try:
@@ -63,8 +73,6 @@ async def _run_blacklist_refresh():
 
 
 async def _start_retraining_listener():
-    """Background asyncio task for retraining trigger (SCA-46).
-    Waits for MongoDB to be connected first."""
     await asyncio.sleep(30)
     from jobs.retraining_trigger import watch
     await watch()
@@ -108,11 +116,35 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
     allow_credentials=_allow_credentials,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization", "X-Device-Id"],
 )
 
 app.add_middleware(RateLimitMiddleware)
+
+
+@app.middleware("http")
+async def auth_and_size_guard(request: Request, call_next):
+    """Check Authorization header and body size BEFORE FastAPI parses the body.
+    Prevents unauthenticated large-body DoS (Red Team C2)."""
+    path = request.url.path
+    if any(path.startswith(p) for p in _AUTH_REQUIRED_PREFIXES):
+        auth = request.headers.get("Authorization", "")
+        if not auth.startswith("Bearer "):
+            return JSONResponse(status_code=401,
+                                content={"detail": "Authorization header required"})
+        cl = request.headers.get("content-length")
+        if cl and int(cl) > _MAX_BODY_BYTES:
+            return JSONResponse(status_code=413,
+                                content={"detail": "Request body too large (max 2 MB)"})
+    response = await call_next(request)
+    # Security headers (H2 Red Team audit)
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    return response
+
 
 from routers.meta import router as meta_router
 from routers.text import router as text_router
