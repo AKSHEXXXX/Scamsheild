@@ -327,33 +327,37 @@ def agent8_check_brand(domain: str) -> tuple:
             for brand in official:
                 d = lev_distance(norm, _normalize_brand(brand))
                 if d <= threshold:
+                    # Suppress exact-match: domain IS the brand (F-12 hdfc.com false positive)
+                    if d == 0:
+                        record_agent_success("agent8")
+                        return False, None, None
                     record_agent_success("agent8")
                     return True, brand, d
         except Exception as e:
             logger.debug("Agent 8 error: %s", e)
             record_agent_error("agent8")
     brand_patterns = [
-        (r"\bhdfc\b", "HDFC Bank"),
-        (r"\bsbi\b", "SBI"),
-        (r"\bicici\b", "ICICI Bank"),
-        (r"\baxis(?:\s*|-)*bank\b", "Axis Bank"),
-        (r"\bkotak\b", "Kotak Mahindra"),
-        (r"\bpaytm\b", "Paytm"),
-        (r"\bgoogle(?:\s*|-)*(?:pay|login|account|verify)\b", "Google"),
-        (r"\bgpay\b", "Google Pay"),
-        (r"\bphonepe\b", "PhonePe"),
-        (r"\bamazon(?:\s*|-)*(?:pay|login|in|com|prime|account|order)\b", "Amazon"),
-        (r"\bflipkart\b", "Flipkart"),
-        (r"\bwhatsapp\b", "WhatsApp"),
-        (r"\btelegram\b", "Telegram"),
-        (r"\bnetflix\b", "Netflix"),
-        (r"\bpaypal\b", "PayPal"),
-        (r"\bvisa\b", "Visa"),
-        (r"\bmastercard\b", "Mastercard"),
-        (r"\bup(?:i|i\s*)payment\b", "UPI Payment"),
-        (r"\baadhaar\b", "Aadhaar"),
-        (r"\bkyc\b", "KYC"),
-        (r"\buidai\b", "UIDAI"),
+        (r"hdfc", "HDFC Bank"),
+        (r"sbi", "SBI"),
+        (r"icici", "ICICI Bank"),
+        (r"axis(?:\s*|-)*bank", "Axis Bank"),
+        (r"kotak", "Kotak Mahindra"),
+        (r"paytm", "Paytm"),
+        (r"google(?:\s*|-)*(?:pay|login|account|verify)", "Google"),
+        (r"gpay", "Google Pay"),
+        (r"phonepe", "PhonePe"),
+        (r"amazon(?:\s*|-)*(?:pay|login|in|com|prime|account|order)", "Amazon"),
+        (r"flipkart", "Flipkart"),
+        (r"whatsapp", "WhatsApp"),
+        (r"telegram", "Telegram"),
+        (r"netflix", "Netflix"),
+        (r"paypal", "PayPal"),
+        (r"visa", "Visa"),
+        (r"mastercard", "Mastercard"),
+        (r"up(?:i|i\s*)payment", "UPI Payment"),
+        (r"aadhaar", "Aadhaar"),
+        (r"kyc", "KYC"),
+        (r"uidai", "UIDAI"),
     ]
     try:
         lower = domain.lower()
@@ -446,58 +450,58 @@ def agent13_predict_transcript_full(transcript: str) -> dict:
 
 _BUILTIN_RULES = [
     # Digital arrest / legal threat scams (all lowercase — searched against text.lower())
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(cyber\s?cell|cyber\s?crime|digital\s?arrest)\b", "severity": "HIGH"},
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(aadha?ar.{0,30}(freeze|block|suspend|illegal|fraud|crime|misuse|link))\b", "severity": "HIGH"},
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(pan.{0,30}(freeze|block|suspend|illegal|fraud|crime|misuse|money.?launder))\b", "severity": "HIGH"},
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(warrant.{0,20}(arrest|jail|custody|issue))\b", "severity": "HIGH"},
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(arrest.{0,20}(pay|fine|avoid|warrant|jail|custody))\b", "severity": "HIGH"},
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(legal.?action.{0,20}(immediate|within|24|urgent)).{0,30}(pay|fine|fee|penalty|arrest)\b", "severity": "HIGH"},
-    {"name": "DIGITAL_ARREST",   "pattern": r"\b(notice.{0,15}(appear|court|police|arrest)).{0,30}(pay|fine|fee|call|contact)\b", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(cyber\s?cell|cyber\s?crime|digital\s?arrest)", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(aadha?ar.{0,30}(freeze|block|suspend|illegal|fraud|crime|misuse|link))", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(pan.{0,30}(freeze|block|suspend|illegal|fraud|crime|misuse|money.?launder))", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(warrant.{0,20}(arrest|jail|custody|issue))", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(arrest.{0,20}(pay|fine|avoid|warrant|jail|custody))", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(legal.?action.{0,20}(immediate|within|24|urgent)).{0,30}(pay|fine|fee|penalty|arrest)", "severity": "HIGH"},
+    {"name": "DIGITAL_ARREST",   "pattern": r"(notice.{0,15}(appear|court|police|arrest)).{0,30}(pay|fine|fee|call|contact)", "severity": "HIGH"},
 
     # UPI double-money / lottery / prize scams (all lowercase)
-    {"name": "UPI_DOUBLE_MONEY", "pattern": r"\b(congratulations|you.?(ve|have)\s?(won|been.?selected)|lucky.?winner|prize.?winner).{0,30}(lakh|crore|rupees?|rs|prize|lottery|draw|jackpot)\b", "severity": "HIGH"},
-    {"name": "UPI_DOUBLE_MONEY", "pattern": r"\b(double|triple).{0,20}(your.?)?money\b", "severity": "HIGH"},
-    {"name": "UPI_DOUBLE_MONEY", "pattern": r"\b(send|pay|transfer|deposit).{0,20}(registration|processing|handling|service).{0,20}(fee|charge|amount)\b", "severity": "HIGH"},
-    {"name": "UPI_DOUBLE_MONEY", "pattern": r"\b(cashback|refund|bonus|reward).{0,30}(claim|send|pay|deposit|credit|transfer)\b", "severity": "HIGH"},
-    {"name": "UPI_DOUBLE_MONEY", "pattern": r"\b(lucky.?draw|cash.?prize|winning).{0,30}(registration|processing|fee|deposit|pay)\b", "severity": "HIGH"},
+    {"name": "UPI_DOUBLE_MONEY", "pattern": r"(congratulations|you.?(ve|have)\s?(won|been.?selected)|lucky.?winner|prize.?winner).{0,30}(lakh|crore|rupees?|rs|prize|lottery|draw|jackpot)", "severity": "HIGH"},
+    {"name": "UPI_DOUBLE_MONEY", "pattern": r"(double|triple).{0,20}(your.?)?money", "severity": "HIGH"},
+    {"name": "UPI_DOUBLE_MONEY", "pattern": r"(send|pay|transfer|deposit).{0,20}(registration|processing|handling|service).{0,20}(fee|charge|amount)", "severity": "HIGH"},
+    {"name": "UPI_DOUBLE_MONEY", "pattern": r"(cashback|refund|bonus|reward).{0,30}(claim|send|pay|deposit|credit|transfer)", "severity": "HIGH"},
+    {"name": "UPI_DOUBLE_MONEY", "pattern": r"(lucky.?draw|cash.?prize|winning).{0,30}(registration|processing|fee|deposit|pay)", "severity": "HIGH"},
 
     # Fake job scams (all lowercase)
-    {"name": "FAKE_JOB",         "pattern": r"\b(work.?from.?home|wfh|online.?job|home.?based|data.?entry).{0,60}(fee|deposit|registration|charge|pay|invest)\b", "severity": "HIGH"},
-    {"name": "FAKE_JOB",         "pattern": r"\b(part.?time|freelance|remote.?job).{0,60}(fee|deposit|registration|charge|pay|invest)\b", "severity": "HIGH"},
-    {"name": "FAKE_JOB",         "pattern": r"\b(registration.{0,10}(fee|charge|amount)|joining.{0,10}(fee|deposit)|register.{0,10}(fee|charge|amount)).{0,30}(job|work|position|earning|income|salary)\b", "severity": "HIGH"},
-    {"name": "FAKE_JOB",         "pattern": r"\b(earn|make|daily|monthly|weekly).{0,30}(salary|income|money|cash|payout|earning).{0,60}(fee|deposit|registration|charge|register)\b", "severity": "HIGH"},
-    {"name": "FAKE_JOB",         "pattern": r"\b(registration|joining|register).{0,20}(fee|charge|deposit|amount).{0,30}(job|work|position|earn|income)\b", "severity": "HIGH"},
-    {"name": "FAKE_JOB",         "pattern": r"\b(work from home|part.?time job|earn per hour|liking videos|youtube task|registration fee)\b", "severity": "HIGH"},
+    {"name": "FAKE_JOB",         "pattern": r"(work.?from.?home|wfh|online.?job|home.?based|data.?entry).{0,60}(fee|deposit|registration|charge|pay|invest)", "severity": "HIGH"},
+    {"name": "FAKE_JOB",         "pattern": r"(part.?time|freelance|remote.?job).{0,60}(fee|deposit|registration|charge|pay|invest)", "severity": "HIGH"},
+    {"name": "FAKE_JOB",         "pattern": r"(registration.{0,10}(fee|charge|amount)|joining.{0,10}(fee|deposit)|register.{0,10}(fee|charge|amount)).{0,30}(job|work|position|earning|income|salary)", "severity": "HIGH"},
+    {"name": "FAKE_JOB",         "pattern": r"(earn|make|daily|monthly|weekly).{0,30}(salary|income|money|cash|payout|earning).{0,60}(fee|deposit|registration|charge|register)", "severity": "HIGH"},
+    {"name": "FAKE_JOB",         "pattern": r"(registration|joining|register).{0,20}(fee|charge|deposit|amount).{0,30}(job|work|position|earn|income)", "severity": "HIGH"},
+    {"name": "FAKE_JOB",         "pattern": r"(work from home|part.?time job|earn per hour|liking videos|youtube task|registration fee)", "severity": "HIGH"},
 
     # OTP safety warning (benign — reduces suspicion)
-    {"name": "otp_safety_warning", "pattern": r"\b(otp|one.?time.?pin).{0,50}(do not share|never share|don.?t share|is your|valid for)\b", "severity": "NONE"},
+    {"name": "otp_safety_warning", "pattern": r"(otp|one.?time.?pin).{0,50}(do not share|never share|don.?t share|is your|valid for)", "severity": "NONE"},
 
     # OTP solicitation (scam — increases suspicion)
-    {"name": "otp_solicitation",  "pattern": r"\b(share.{0,10}otp|send.{0,10}otp|enter.{0,10}otp|otp.{0,10}will be sent|request.{0,10}otp)\b", "severity": "HIGH"},
+    {"name": "otp_solicitation",  "pattern": r"(share.{0,10}otp|send.{0,10}otp|enter.{0,10}otp|otp.{0,10}will be sent|request.{0,10}otp)", "severity": "HIGH"},
 
     # Parcel / customs scams
-    {"name": "PARCEL_SCAM",      "pattern": r"\b(parcel.*held|customs.*fee|release.*package|delivery.*pending.*pay|clearance fee)\b", "severity": "HIGH"},
+    {"name": "PARCEL_SCAM",      "pattern": r"(parcel.*held|customs.*fee|release.*package|delivery.*pending.*pay|clearance fee)", "severity": "HIGH"},
 
     # Crypto / investment scams
-    {"name": "CRYPTO_SCAM",      "pattern": r"\b(guaranteed.*return|300%|500%|crypto.*invest|send.*bitcoin|send.*btc)\b", "severity": "HIGH"},
+    {"name": "CRYPTO_SCAM",      "pattern": r"(guaranteed.*return|300%|500%|crypto.*invest|send.*bitcoin|send.*btc)", "severity": "HIGH"},
 
     # Emergency transfer scams
-    {"name": "EMERGENCY_SCAM",   "pattern": r"\b(stuck at airport|hospital.*send money|lost.*wallet.*transfer|nephew.*urgently)\b", "severity": "HIGH"},
+    {"name": "EMERGENCY_SCAM",   "pattern": r"(stuck at airport|hospital.*send money|lost.*wallet.*transfer|nephew.*urgently)", "severity": "HIGH"},
 
     # Utility threat scams
-    {"name": "UTILITY_SCAM",     "pattern": r"\b(electricity.*disconnect|gas.*cut|connection.*cut.*tonight|bill.*pending.*call)\b", "severity": "HIGH"},
+    {"name": "UTILITY_SCAM",     "pattern": r"(electricity.*disconnect|gas.*cut|connection.*cut.*tonight|bill.*pending.*call)", "severity": "HIGH"},
 
     # Social engineering without scam keywords (F-05-1)
-    {"name": "SOCIAL_ENGINEERING", "pattern": r"\b(unusual login|suspicious activity|confirm identity|verify your account|security alert|account accessed|new device login|unrecognized device)\b", "severity": "HIGH"},
+    {"name": "SOCIAL_ENGINEERING", "pattern": r"(unusual login|suspicious activity|confirm identity|verify your account|security alert|account accessed|new device login|unrecognized device)", "severity": "HIGH"},
 
     # Synonym substitution: account freeze/block without OTP (F-05-3)
-    {"name": "SYNONYM_SUBSTITUTION", "pattern": r"\b(unauthorized.{0,20}(withdrawal|transaction|access|attempt)|account.{0,10}(freeze|restricted|limited|hold|suspended)|confirm.{0,15}(details|identity|information))\b", "severity": "HIGH"},
+    {"name": "SYNONYM_SUBSTITUTION", "pattern": r"(unauthorized.{0,20}(withdrawal|transaction|access|attempt)|account.{0,10}(freeze|restricted|limited|hold|suspended)|confirm.{0,15}(details|identity|information))", "severity": "HIGH"},
 
     # Fake payment proof (F-05-4): "I sent money, check screenshot, ship now"
-    {"name": "FAKE_PAYMENT",     "pattern": r"\b(sent.{0,20}(rupees?|rs|amount|money|payment|phonepe|gpay|paytm)).{0,30}(screenshot|screenshot|ss|proof).{0,40}(ship|dispatch|send|deliver|do not wait|bank delay|bank takes time)\b", "severity": "HIGH"},
+    {"name": "FAKE_PAYMENT",     "pattern": r"(sent.{0,20}(rupees?|rs|amount|money|payment|phonepe|gpay|paytm)).{0,30}(screenshot|screenshot|ss|proof).{0,40}(ship|dispatch|send|deliver|do not wait|bank delay|bank takes time)", "severity": "HIGH"},
 
     # Character-spaced text reassembly (F-05-2): normalized by spacing
-    {"name": "SPACED_EVASION",   "pattern": r"\b(s.h.a.r.e|s.e.n.d|o.t.p|k.y.c|a.c.c.o.u.n.t|f.r.e.e.z.e|b.l.o.c.k|s.c.a.m|f.r.a.u.d|p.a.y)\b", "severity": "HIGH"},
+    {"name": "SPACED_EVASION",   "pattern": r"(s.h.a.r.e|s.e.n.d|o.t.p|k.y.c|a.c.c.o.u.n.t|f.r.e.e.z.e|b.l.o.c.k|s.c.a.m|f.r.a.u.d|p.a.y)", "severity": "HIGH"},
 ]
 
 def _looks_like_gibberish(text: str) -> bool:
@@ -571,7 +575,7 @@ def agent14_score_text(text: str) -> dict:
 
 # ─── Defensive-phrase patterns that indicate a legitimate banking message ────
 _DEFENSIVE_PHRASES = re.compile(
-    r"do\s+not\s+share|never\s+share|don['\u2019]t\s+share"
+    r"do\s+not\s+share|never\s+share|don['’]t\s+share"
     r"|no\s+one\s+from\s+(the\s+)?bank|bank\s+will\s+never\s+ask"
     r"|official\s+bank\s+support|call\s+official|beware\s+of\s+fraud",
     re.IGNORECASE,
