@@ -203,6 +203,8 @@ def agent5_predict_qr_payload(payload: str) -> float:
             from app.ml.agents.agent_5_qr_xgb.agent_05_feature_extractor import extract_features
             feats = extract_features(payload)
             row = np.array([[feats.get(c, 0.0) for c in cols]], dtype=np.float32)
+            if not hasattr(clf, "n_classes_"):
+                clf.n_classes_ = len(clf.classes_) if hasattr(clf, "classes_") else 2
             proba = clf.predict_proba(row)[0]
         else:
             # Old fallback 13-feature model
