@@ -30,7 +30,7 @@ class PosthogClient:
             logger.warning("POSTHOG_PROJECT_TOKEN is not set — analytics disabled")
             return
         self._client = Posthog(
-            api_key=self._api_key,
+            self._api_key,
             host=self._host,
             enable_exception_autocapture=True,
         )
