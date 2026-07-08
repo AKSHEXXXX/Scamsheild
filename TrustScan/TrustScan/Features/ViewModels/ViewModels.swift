@@ -123,8 +123,7 @@ final class SubmissionViewModel: ObservableObject {
           "type": "image",
           "scan_duration": duration,
           "result": result.verdict.rawValue,
-          "threat_score": result.threatScore,
-          "confidence_score": result.confidenceScore
+          "threat_score": result.score
       ])
 
       do {
@@ -173,8 +172,7 @@ final class SubmissionViewModel: ObservableObject {
           "type": "qr",
           "scan_duration": duration,
           "result": result.verdict.rawValue,
-          "threat_score": result.threatScore,
-          "confidence_score": result.confidenceScore
+          "threat_score": result.score
       ])
 
       do {
@@ -280,8 +278,7 @@ final class SubmissionViewModel: ObservableObject {
           "type": "text",
           "scan_duration": duration,
           "result": result.verdict.rawValue,
-          "threat_score": result.threatScore,
-          "confidence_score": result.confidenceScore
+          "threat_score": result.score
       ])
 
       try? await saveHistoryEntryUseCase(result: result, thumbnailData: nil)

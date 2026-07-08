@@ -48,6 +48,7 @@ final class AuthViewModel: NSObject, ObservableObject {
       
       if let user = authService.currentUser {
           AnalyticsManager.shared.identify(userId: user.id)
+          AnalyticsManager.shared.reloadFeatureFlags()
           AnalyticsManager.shared.capture(event: "login", properties: ["method": "password"])
       }
       
@@ -84,6 +85,7 @@ final class AuthViewModel: NSObject, ObservableObject {
       if authService.isAuthenticated {
         if let user = authService.currentUser {
             AnalyticsManager.shared.identify(userId: user.id)
+            AnalyticsManager.shared.reloadFeatureFlags()
             AnalyticsManager.shared.capture(event: "signup", properties: ["method": "password"])
         }
           
@@ -140,6 +142,7 @@ final class AuthViewModel: NSObject, ObservableObject {
         try? await self.authService.handleOAuthCallback(url: callbackURL)
         if self.authService.isAuthenticated, let user = self.authService.currentUser {
             AnalyticsManager.shared.identify(userId: user.id)
+            AnalyticsManager.shared.reloadFeatureFlags()
             AnalyticsManager.shared.capture(event: "login", properties: ["method": provider])
         }
       }

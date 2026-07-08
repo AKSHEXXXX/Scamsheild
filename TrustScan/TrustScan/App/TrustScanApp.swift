@@ -37,13 +37,14 @@ struct TrustScanApp: App {
 
           default:
             // Supabase OAuth callback
-            Task {
-              try? await environment.authService.handleOAuthCallback(url: url)
-              if environment.authService.isAuthenticated, let user = environment.authService.currentUser {
-                  AnalyticsManager.shared.identify(userId: user.id)
-                  AnalyticsManager.shared.capture(event: "login", properties: ["method": "oauth_deeplink"])
+              Task {
+                try? await environment.authService.handleOAuthCallback(url: url)
+                if environment.authService.isAuthenticated, let user = environment.authService.currentUser {
+                    AnalyticsManager.shared.identify(userId: user.id)
+                    AnalyticsManager.shared.reloadFeatureFlags()
+                    AnalyticsManager.shared.capture(event: "login", properties: ["method": "oauth_deeplink"])
+                }
               }
-            }
           }
         }
     }

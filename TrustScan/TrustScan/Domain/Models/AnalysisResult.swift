@@ -96,7 +96,7 @@ struct ScanMeta: Codable, Hashable {
 
 struct AnalysisResult: Identifiable, Codable, Hashable {
   let id: UUID
-  let backendScanId: String? = nil   // raw scan_id string from backend; nil for local/fallback results
+  let backendScanId: String?         // raw scan_id string from backend; nil for local/fallback results
   let verdict: ThreatVerdict
   let score: Int
   let flagged: Bool

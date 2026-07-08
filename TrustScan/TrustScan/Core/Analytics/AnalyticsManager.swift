@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import PostHog
+import UIKit
 
 /// Centralized manager for all analytics tracking.
 /// Wraps the official PostHog iOS SDK to decouple the rest of the app from it,
@@ -21,16 +22,21 @@ public final class AnalyticsManager {
         }
         
         let config = PostHogConfig(apiKey: apiKey, host: host)
-        config.captureApplicationLifecycleEvents = true // automatically captures app_installed, app_updated, app_opened, app_backgrounded
+        config.captureApplicationLifecycleEvents = true
+        
+        // ── Session replay ────────────────────────────────────────────────────
+        config.sessionReplay = true
+        // Mask all text input fields by default to avoid capturing sensitive data
+        // Individual views can override with .posthogMask() / .posthogUnmask()
+        config.sessionReplayConfig.maskAllTextInputs = true
+        config.sessionReplayConfig.maskAllImages = false
+        config.sessionReplayConfig.captureNetworkTelemetry = false
         
         PostHogSDK.shared.setup(config)
         print("✅ AnalyticsManager: PostHog SDK initialized successfully.")
     }
     
     /// Associates a user with their actions. Call this after a successful login or signup.
-    /// - Parameters:
-    ///   - userId: The unique identifier for the user.
-    ///   - properties: Optional user properties (e.g., plan type, email). Do NOT send PII.
     public func identify(userId: String, properties: [String: Any]? = nil) {
         PostHogSDK.shared.identify(userId, userProperties: properties)
     }
@@ -41,22 +47,40 @@ public final class AnalyticsManager {
     }
     
     /// Captures a custom event.
-    /// - Parameters:
-    ///   - event: The name of the event.
-    ///   - properties: Optional properties associated with the event.
     public func capture(event: String, properties: [String: Any]? = nil) {
-        // Safe logging to verify we aren't passing PII accidentally
         #if DEBUG
         print("📊 AnalyticsManager - Tracked Event: \(event) | Properties: \(String(describing: properties))")
         #endif
-        
-        PostHogSDK.shared.capture(event, userProperties: nil, userPropertiesSetOnce: nil, groupProperties: nil, properties: properties)
+        PostHogSDK.shared.capture(event, properties: properties)
     }
     
     /// Tracks a screen view.
-    /// - Parameter name: The name of the screen.
     public func screen(name: String) {
         PostHogSDK.shared.screen(name)
+    }
+    
+    // ── Feature Flags ─────────────────────────────────────────────────────────
+    
+    /// Returns true if the given feature flag is enabled for the current user.
+    public func isFeatureEnabled(_ key: String) -> Bool {
+        PostHogSDK.shared.isFeatureEnabled(key)
+    }
+    
+    /// Returns the payload value for a feature flag (string, number, or JSON).
+    public func featureFlagPayload(_ key: String) -> Any? {
+        PostHogSDK.shared.getFeatureFlagPayload(key)
+    }
+    
+    /// Reloads feature flags from the PostHog server. Call this after login
+    /// to ensure flags are evaluated against the new user identity.
+    public func reloadFeatureFlags() {
+        PostHogSDK.shared.reloadFeatureFlags()
+    }
+    
+    /// Registers a reload callback so the app can react to flag changes.
+    /// The closure is called on the main thread whenever flags are refreshed.
+    public func onFeatureFlags(_ callback: @escaping () -> Void) {
+        PostHogSDK.shared.onFeatureFlags(callback)
     }
 }
 
