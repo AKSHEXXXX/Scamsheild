@@ -1,12 +1,12 @@
 import logging
 import secrets
 import string
-import posthog
-from fastapi import APIRouter, Header, HTTPException, Query
+from fastapi import APIRouter, Header, HTTPException, Query, Request
 from pydantic import BaseModel
 from app.auth import require_user, _sum_bonus_earned, _count_bonus_consumed
 from app.database import supabase
 from app.helpers import get_config_dict
+from app.analytics.posthog_client import get_posthog_client
 
 """
 ============================================================================
@@ -157,8 +157,14 @@ def invite_lookup(referral_code: str):
 
 
 @router.post("/api/v1/referral/redeem")
-def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
+def redeem_referral(request: Request,
+                     body: RedeemRequest,
+                     authorization: str = Header(None)):
     current_user_id = require_user(authorization)
+    request.state.user_id = current_user_id
+    request_id = getattr(request.state, "request_id", "")
+    posthog = get_posthog_client()
+
     code = (body.referral_code or "").strip().upper()
     if not code:
         raise HTTPException(status_code=400, detail="referral_code is required")
@@ -197,10 +203,10 @@ def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
         body=f"You earned {scans_credited} bonus scans! A new user joined using your code.",
     )
 
-    posthog.capture(
-        current_user_id,
-        "referral_redeemed",
-        properties={"scans_credited": scans_credited},
+    posthog.capture_event(
+        "referral_redeemed", current_user_id,
+        properties={"scans_credited": scans_credited, "referrer_id": referrer_id[:8]},
+        request_id=request_id, endpoint="/api/v1/referral/redeem", platform="unknown",
     )
 
     return {"bonus_scans_credited": scans_credited}

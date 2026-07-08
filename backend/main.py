@@ -7,9 +7,10 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-import posthog
 from app.config import settings
 from app.rate_limiter import RateLimitMiddleware
+from app.middleware.request_tracking import RequestTrackingMiddleware
+from app.analytics.posthog_client import setup_posthog, close_posthog
 from docs.observability.structured_logging import setup_logging
 
 from app.config import settings
@@ -83,10 +84,7 @@ async def _start_retraining_listener():
 async def lifespan(app: FastAPI):
     global _anomaly_task, _blacklist_refresh_task, _retraining_task
     logger.info("Starting background model loading and database connections...")
-    if settings.POSTHOG_PROJECT_TOKEN:
-        posthog.api_key = settings.POSTHOG_PROJECT_TOKEN
-        posthog.host = settings.POSTHOG_HOST
-        posthog.debug = settings.ENVIRONMENT != "production"
+    setup_posthog()
     from app.ml.model_loader import load_all
     asyncio.create_task(asyncio.to_thread(load_all))
     from app.database_ext import connect_databases, close_databases
@@ -102,8 +100,7 @@ async def lifespan(app: FastAPI):
     if _retraining_task:
         _retraining_task.cancel()
     close_databases()
-    if settings.POSTHOG_PROJECT_TOKEN:
-        posthog.flush()
+    close_posthog()
 
 app = FastAPI(
     title="ScamShield API",
@@ -128,6 +125,7 @@ app.add_middleware(
 )
 
 app.add_middleware(RateLimitMiddleware)
+app.add_middleware(RequestTrackingMiddleware)
 
 
 @app.middleware("http")

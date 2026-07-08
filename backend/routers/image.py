@@ -1,6 +1,7 @@
 import base64
 import os
 import logging
+import time
 from typing import Literal, Optional
 from datetime import datetime, timezone
 from fastapi import APIRouter, Header, HTTPException, File, UploadFile, Form, Request
@@ -12,6 +13,8 @@ from app.ocr import screenshot_ocr
 from app.analyzer import analyze
 from app.helpers import get_config_dict, persist_scan
 from schemas.scan_result import verdict_label as _verdict_label
+from app.analytics.posthog_client import get_posthog_client
+from app.analytics.error_tracker import track_db_error, track_external_api_error
 
 router = APIRouter(tags=["image"])
 logger = logging.getLogger("scamshield.image")
@@ -25,13 +28,11 @@ class SandboxFileIn(BaseModel):
 async def sandbox_image(request: Request,
                         authorization: str = Header(None),
                         x_device_id: Optional[str] = Header(None)):
-    """Accepts EITHER application/json (base64 image field) OR
-    multipart/form-data (a real uploaded file). Mobile clients that upload
-    a raw image file as multipart previously got a hard 422 here because
-    the route only declared a JSON Pydantic body — this branches on the
-    actual Content-Type instead of assuming one format."""
     user_id = require_user(authorization)
+    request.state.user_id = user_id
     content_type = request.headers.get("content-type", "")
+    endpoint = request.url.path
+    request_id = getattr(request.state, "request_id", "")
 
     if content_type.startswith("multipart/form-data"):
         form = await request.form()
@@ -52,7 +53,9 @@ async def sandbox_image(request: Request,
             device_id=(device_id_field if isinstance(device_id_field, str) else None) or x_device_id,
             fallback_reason=(fallback_reason_field if isinstance(fallback_reason_field, str) else None),
         )
-        return await _process_sandbox_image(body, user_id, x_device_id)
+        platform = "iOS" if "iOS" in (x_device_id or "") else "Android"
+        request.state.platform = platform
+        return await _process_sandbox_image(body, user_id, platform, x_device_id, request_id, endpoint)
 
     raw = await request.body()
     try:
@@ -77,20 +80,41 @@ async def sandbox_image(request: Request,
             "expected_fields": {"image": "required base64 string", "device_id": "optional string", "fallback_reason": "optional string"},
             "received_keys": list(payload.keys()) if isinstance(payload, dict) else None,
         })
-    return await _process_sandbox_image(body, user_id, x_device_id)
+    platform = body.device_id or x_device_id or "unknown"
+    request.state.platform = platform
+    return await _process_sandbox_image(body, user_id, platform, x_device_id, request_id, endpoint)
 
 @router.post("/api/v1/sandbox-image-upload")
-async def sandbox_image_upload(file: UploadFile = File(...),
+async def sandbox_image_upload(request: Request,
+                                file: UploadFile = File(...),
                                 authorization: str = Header(None),
                                 x_device_id: Optional[str] = Header(None)):
     user_id = require_user(authorization)
+    request.state.user_id = user_id
+    endpoint = request.url.path
+    request_id = getattr(request.state, "request_id", "")
     file_bytes = await file.read()
     image_b64 = base64.b64encode(file_bytes).decode("utf-8")
     body = SandboxImageRequest(image=image_b64, device_id=x_device_id)
-    return await _process_sandbox_image(body, user_id, x_device_id)
+    platform = x_device_id or "unknown"
+    request.state.platform = platform
+    return await _process_sandbox_image(body, user_id, platform, x_device_id, request_id, endpoint)
 
 
-async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_device_id: Optional[str]):
+async def _process_sandbox_image(
+    body: SandboxImageRequest,
+    user_id: str,
+    platform: str,
+    x_device_id: Optional[str],
+    request_id: str,
+    endpoint: str,
+):
+    t0 = time.time()
+    posthog = get_posthog_client()
+
+    posthog.capture_event("image_uploaded", user_id, properties={},
+                          request_id=request_id, endpoint=endpoint, platform=platform)
+
     try:
         config = get_config_dict()
         base_cap = config.get("scan_credit_cap", 50)
@@ -107,26 +131,52 @@ async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_devi
     effective_cap = calculate_effective_cap(user_id, base_cap)
     enforce_credit_cap(user_id, effective_cap, scan_count)
     device_id = body.device_id or x_device_id or "unknown"
+
+    ocr_t0 = time.time()
+    posthog.capture_event("ocr_started", user_id, properties={},
+                          request_id=request_id, endpoint=endpoint, platform=platform)
     ocr_output = screenshot_ocr.extract_from_base64(
         image_b64=body.image,
         fallback_reason=body.fallback_reason
     )
+    ocr_elapsed = int(round((time.time() - ocr_t0) * 1000))
+
     if not ocr_output.text.strip():
+        posthog.capture_ocr_event(
+            event="ocr_failed", user_id=user_id,
+            method=ocr_output.method, confidence=ocr_output.confidence,
+            char_count=ocr_output.char_count, fallback_used=ocr_output.fallback_used,
+            latency_ms=ocr_elapsed, request_id=request_id, endpoint=endpoint,
+            platform=platform, error_message="No text extracted from image",
+        )
         raise HTTPException(status_code=422, detail={
             "error": "Could not extract text from image",
             "code": "OCR_FAILED",
-            "suggestion": "Please try a clearer screenshot with visible text"
+            "suggestion": "Please try a clearer screenshot with visible text",
         })
+
+    posthog.capture_ocr_event(
+        event="ocr_completed", user_id=user_id,
+        method=ocr_output.method, confidence=ocr_output.confidence,
+        char_count=ocr_output.char_count, fallback_used=ocr_output.fallback_used,
+        latency_ms=ocr_elapsed, request_id=request_id, endpoint=endpoint, platform=platform,
+    )
     logger.info("OCR | device=%s | method=%s | chars=%d | conf=%.2f",
                 device_id, ocr_output.method, ocr_output.char_count, ocr_output.confidence)
+
     from app.preprocessing.text_normalizer import normalize
     from app.ml.agents.inference import agent14_score_text
 
     import re as _re
     ocr_output.text = _re.sub(r'(?<=\b\w)\s(?=\w\b)', '', ocr_output.text)
     ocr_output.text = normalize(ocr_output.text)
+
+    posthog.capture_event("analysis_started", user_id, properties={"channel": "image"},
+                          request_id=request_id, endpoint=endpoint, platform=platform)
+
     regex_result = agent14_score_text(ocr_output.text)
-    logger.info("Agent 14 regex on OCR text | score=%d severity=%s safe=%s", regex_result["score"], regex_result["severity"], regex_result.get("regex_safe", False))
+    logger.info("Agent 14 regex on OCR text | score=%d severity=%s safe=%s",
+                regex_result["score"], regex_result["severity"], regex_result.get("regex_safe", False))
     result = analyze(ocr_output.text,
                      regex_score=regex_result["score"],
                      regex_high=regex_result["severity"] == "HIGH",
@@ -144,6 +194,15 @@ async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_devi
             record_bonus_consumption(user_id, scan_id)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
+        track_db_error("persist_scan_screenshot", e, user_id, request_id, endpoint, platform)
+
+    elapsed = int(round((time.time() - t0) * 1000))
+    posthog.capture_scan_event(
+        event="analysis_completed", user_id=user_id,
+        channel="image", verdict=result["verdict"], score=result["scam_score"],
+        latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=platform,
+    )
+
     flagged_urls = [u["url"] if isinstance(u, dict) else str(u)
                     for u in result.get("flagged_urls", [])]
     return AnalyzeOut(
@@ -167,14 +226,28 @@ async def _process_sandbox_image(body: SandboxImageRequest, user_id: str, x_devi
 
 
 @router.post("/api/v1/sandbox-file")
-async def sandbox_file(body: SandboxFileIn,
+async def sandbox_file(request: Request,
+                       body: SandboxFileIn,
                        authorization: str = Header(None),
                        x_device_id: Optional[str] = Header(None)):
+    t0 = time.time()
     user_id = require_user(authorization)
+    request.state.user_id = user_id
+    request.state.platform = body.os
+    endpoint = request.url.path
+    request_id = getattr(request.state, "request_id", "")
+    posthog = get_posthog_client()
+
+    posthog.capture_event("scan_received", user_id, properties={"channel": "file"},
+                          request_id=request_id, endpoint=endpoint, platform=body.os)
     try:
         file_bytes = base64.b64decode(body.file_bytes_b64)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid base64 file data")
+
+    posthog.capture_event("analysis_started", user_id, properties={"channel": "file"},
+                          request_id=request_id, endpoint=endpoint, platform=body.os)
+
     from app.ml.agents.inference import agent11_predict_malware, agent14_score_text
     from agents.agent15_ensemble import compute_ensemble_verdict
     malware_prob = agent11_predict_malware(file_bytes)
@@ -205,6 +278,13 @@ async def sandbox_file(body: SandboxFileIn,
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
         scan_id = ""
+
+    elapsed = int(round((time.time() - t0) * 1000))
+    posthog.capture_scan_event(
+        event="analysis_completed", user_id=user_id,
+        channel="file", verdict=verdict, score=result["scam_score"],
+        latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
+    )
     return {"scan_id": scan_id, "kind": "file", "flagged": flagged, **result}
 
 

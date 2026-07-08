@@ -1,11 +1,11 @@
 import logging
-import posthog
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Request
 from app.models import FeedbackIn, FeedbackOut
 from app.auth import require_user
 from app.logging_utils import log_event, hash_id
 from app.data_intel.mongo_ops import MongoDBClient
 from app.helpers import _get_service_client
+from app.analytics.posthog_client import get_posthog_client
 
 router = APIRouter(tags=["feedback"])
 logger = logging.getLogger("scamshield.feedback")
@@ -13,9 +13,14 @@ logger = logging.getLogger("scamshield.feedback")
 VALID_LABELS = {"scam", "legit", "unsure"}
 
 @router.post("/api/v1/feedback", response_model=FeedbackOut)
-async def submit_feedback(body: FeedbackIn,
+async def submit_feedback(request: Request,
+                           body: FeedbackIn,
                            authorization: str = Header(None)):
     user_id = require_user(authorization)
+    request.state.user_id = user_id
+    endpoint = request.url.path
+    request_id = getattr(request.state, "request_id", "")
+    posthog = get_posthog_client()
     label = body.label.lower()
     if label not in VALID_LABELS:
         raise HTTPException(status_code=400, detail=f"label must be one of: {', '.join(VALID_LABELS)}")
@@ -49,12 +54,12 @@ async def submit_feedback(body: FeedbackIn,
     log_event("feedback_submitted", level="INFO",
               scan_id=body.scan_id, user_id=hash_id(user_id),
               extra={"channel": scan.get("channel", ""), "label": label})
-    posthog.capture(
-        user_id,
-        "feedback_submitted",
+    posthog.capture_event(
+        "feedback_submitted", user_id,
         properties={
             "channel": scan.get("channel", "unknown"),
             "label": label,
         },
+        request_id=request_id, endpoint=endpoint, platform="unknown",
     )
     return FeedbackOut(ok=True)

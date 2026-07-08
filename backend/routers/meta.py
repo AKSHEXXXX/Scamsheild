@@ -1,12 +1,14 @@
 import logging
 import uuid
+import time
 from datetime import datetime, timezone
 from typing import Optional
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Request
 from app.database import supabase
 from app.auth import require_user
 from app.helpers import get_config_dict
 from app.models import ReportIn, ReportOut, HistoryOut, HistoryCounts, HistoryItem
+from app.analytics.posthog_client import get_posthog_client
 
 router = APIRouter(tags=["meta"])
 logger = logging.getLogger("scamshield.meta")
@@ -34,8 +36,6 @@ def get_config():
         logger.warning("get_config_dict failed (is migration applied?): %s", e)
         cfg = {"scan_credit_cap": 50, "ad_frequency": 10,
                "sensitivity_threshold": 70, "config_version": "1"}
-    # ponytail: score_thresholds and agent counts removed — they let attackers A/B test
-    # scam templates against known detection boundaries via unauthenticated polling.
     return {
         "scan_credit_cap": cfg.get("scan_credit_cap", 50),
         "ad_frequency": cfg.get("ad_frequency", 10),
@@ -120,7 +120,6 @@ def persist_report(record: dict) -> str:
     _mongo_save_report(report_id, record)
     return report_id
 
-
 def _mongo_save_report(report_id: str, record: dict):
     try:
         from app.data_intel.mongo_ops import save_report as m_save
@@ -138,10 +137,16 @@ def _mongo_save_report(report_id: str, record: dict):
         pass
 
 @router.post("/api/v1/report")
-async def report(body: ReportIn,
+async def report(request: Request,
+                 body: ReportIn,
                  authorization: str = Header(None),
                  x_device_id: Optional[str] = Header(None)):
+    t0 = time.time()
     user_id = require_user(authorization)
+    endpoint = request.url.path
+    request_id = getattr(request.state, "request_id", "")
+    posthog = get_posthog_client()
+
     if body.report_type not in ("upi", "phone", "link", "other"):
         raise HTTPException(status_code=400, detail="Invalid report_type")
     if body.channel not in ("whatsapp", "sms", "phone_call", "email"):
@@ -159,6 +164,17 @@ async def report(body: ReportIn,
     }
     try:
         report_id = persist_report(record)
+        elapsed = int(round((time.time() - t0) * 1000))
+        posthog.capture_event(
+            "report_generated", user_id,
+            properties={
+                "report_type": body.report_type,
+                "channel": body.channel,
+                "latency_ms": elapsed,
+            },
+            request_id=request_id, endpoint=endpoint, platform=body.os,
+            processing_time_ms=elapsed,
+        )
         return ReportOut(ok=True, report_id=report_id)
     except Exception as e:
         logger.warning("Failed to insert report (RLS or migration?): %s", e)
@@ -196,7 +212,6 @@ def _mongo_get_history(user_id: str) -> tuple[list[dict], int, int]:
     except Exception:
         return [], 0, 0
 
-
 @router.get("/api/v1/history", response_model=HistoryOut)
 def get_history(authorization: str = Header(None)):
     user_id = require_user(authorization)
@@ -210,7 +225,6 @@ def get_history(authorization: str = Header(None)):
         items=mongo_items,
     )
 
-
 def _mongo_get_scan(scan_id: str, user_id: str) -> Optional[dict]:
     from app.data_intel.mongo_ops import MongoDBClient
     db = MongoDBClient.db()
@@ -223,7 +237,6 @@ def _mongo_get_scan(scan_id: str, user_id: str) -> Optional[dict]:
     except Exception:
         pass
     return None
-
 
 @router.get("/api/v1/scan/{scan_id}")
 def get_scan(scan_id: str, authorization: str = Header(None)):

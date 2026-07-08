@@ -1,10 +1,10 @@
 import logging
 import httpx
-import posthog
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Request
 from app.auth import require_user
 from app.config import settings
 from app.database import supabase
+from app.analytics.posthog_client import get_posthog_client
 
 router = APIRouter(tags=["account"])
 logger = logging.getLogger("scamshield.account")
@@ -39,8 +39,11 @@ def _delete_mongo_user_scans(user_id: str):
 
 
 @router.post("/api/v1/delete-account", status_code=204)
-async def delete_account(authorization: str = Header(None)):
+async def delete_account(request: Request,
+                         authorization: str = Header(None)):
     user_id = require_user(authorization)
+    request.state.user_id = user_id
+    request_id = getattr(request.state, "request_id", "")
     headers = {
         "Authorization": f"Bearer {settings.SUPABASE_SERVICE_KEY}",
         "apikey": settings.SUPABASE_SERVICE_KEY,
@@ -63,6 +66,8 @@ async def delete_account(authorization: str = Header(None)):
 
     _delete_mongo_user_scans(user_id)
     _delete_supabase_user_rows(user_id)
-    posthog.capture(user_id, "account_deleted")
+    posthog = get_posthog_client()
+    posthog.capture_event("account_deleted", user_id, properties={},
+                          request_id=request_id, endpoint="/api/v1/delete-account", platform="unknown")
     logger.info("Account deleted: user_id=%s", user_id)
     return None

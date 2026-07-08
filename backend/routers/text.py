@@ -1,8 +1,9 @@
 import logging
 import re
+import time
 from datetime import datetime, timezone
 from typing import Literal, Optional
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Header, Request
 from pydantic import BaseModel
 from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, record_bonus_consumption
 from app.database import supabase
@@ -11,7 +12,8 @@ from schemas.scan_result import verdict_label as _verdict_label
 from app.ml.agents.inference import agent1_predict_text
 from agents.agent15_ensemble import compute
 from app.ml.model_loader import get_models
-from schemas.scan_result import SignalsBlock
+from app.analytics.posthog_client import get_posthog_client
+from app.analytics.error_tracker import track_db_error
 
 router = APIRouter(tags=["text"])
 logger = logging.getLogger("scamshield.text")
@@ -23,17 +25,29 @@ class AnalyzeTextIn(BaseModel):
 URL_RE = re.compile(r"https?://[^\s\)\"\'\>\<\]]+")
 
 @router.post("/api/v1/analyze-text")
-async def analyze_text(body: AnalyzeTextIn,
+async def analyze_text(request: Request,
+                       body: AnalyzeTextIn,
                        authorization: str = Header(None),
                        x_device_id: Optional[str] = Header(None)):
+    t0 = time.time()
     user_id = require_user(authorization)
+    request.state.user_id = user_id
+    request.state.platform = body.os
+    endpoint = request.url.path
+    request_id = getattr(request.state, "request_id", "")
+
+    posthog = get_posthog_client()
+    posthog.capture_event("scan_received", user_id, properties={"channel": "text"},
+                          request_id=request_id, endpoint=endpoint, platform=body.os)
 
     try:
-        config = get_config_dict()
-        base_cap = config.get("scan_credit_cap", 50)
-    except Exception as e:
-        logger.warning("get_config_dict failed (is migration applied?): %s", e)
-        base_cap = 50
+        try:
+            config = get_config_dict()
+            base_cap = config.get("scan_credit_cap", 50)
+        except Exception as e:
+            logger.warning("get_config_dict failed (is migration applied?): %s", e)
+            track_db_error("get_config_dict", e, user_id, request_id, endpoint, body.os)
+            base_cap = 50
     today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
     count_result = supabase.table("scans") \
         .select("id", count="exact") \
@@ -68,6 +82,9 @@ async def analyze_text(body: AnalyzeTextIn,
             "extracted_text": text, "kind": "message", "flagged": False,
             "signals": {}, "meta": {"agents_used": [], "agent2_invoked": False},
         }
+
+    posthog.capture_event("analysis_started", user_id, properties={"channel": "text"},
+                          request_id=request_id, endpoint=endpoint, platform=body.os)
 
     from app.ml.agents.inference import agent14_score_text
     regex_result = agent14_score_text(text)
@@ -150,6 +167,21 @@ async def analyze_text(body: AnalyzeTextIn,
             record_bonus_consumption(user_id, scan_id)
     except Exception as e:
         logger.warning("Failed to persist scan (non-fatal): %s", e)
+        track_db_error("persist_scan", e, user_id, request_id, endpoint, body.os)
+
+    elapsed = int(round((time.time() - t0) * 1000))
+    posthog.capture_scan_event(
+        event="analysis_completed",
+        user_id=user_id,
+        channel="text",
+        verdict=verdict,
+        score=scam_score,
+        latency_ms=elapsed,
+        request_id=request_id,
+        endpoint=endpoint,
+        platform=body.os,
+        agents_used=agents_used,
+    )
 
     return {
         "scan_id": scan_id,
@@ -172,3 +204,19 @@ async def analyze_text(body: AnalyzeTextIn,
         },
         "meta": {"agents_used": agents_used, "agent2_invoked": agent2_invoked},
     }
+    except Exception as exc:
+        elapsed = int(round((time.time() - t0) * 1000))
+        posthog.capture_scan_event(
+            event="analysis_failed",
+            user_id=user_id,
+            channel="text",
+            verdict="error",
+            score=0,
+            latency_ms=elapsed,
+            request_id=request_id,
+            endpoint=endpoint,
+            platform=body.os,
+            error_type=type(exc).__name__,
+            error_message=str(exc),
+        )
+        raise
