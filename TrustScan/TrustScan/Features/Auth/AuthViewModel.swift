@@ -45,6 +45,12 @@ final class AuthViewModel: NSObject, ObservableObject {
 
     do {
       try await authService.signIn(email: email, password: password)
+      
+      if let user = authService.currentUser {
+          AnalyticsManager.shared.identify(userId: user.id)
+          AnalyticsManager.shared.capture(event: "login", properties: ["method": "password"])
+      }
+      
       // Existing users can't redeem a referral — clear any stale pending code
       UserDefaults.standard.removeObject(forKey: "pendingReferralCode")
     } catch let error as AppError {
@@ -76,6 +82,11 @@ final class AuthViewModel: NSObject, ObservableObject {
     do {
       try await authService.signUp(email: email, password: password)
       if authService.isAuthenticated {
+        if let user = authService.currentUser {
+            AnalyticsManager.shared.identify(userId: user.id)
+            AnalyticsManager.shared.capture(event: "signup", properties: ["method": "password"])
+        }
+          
         // Redeem any pending referral code from an invite link
         let pending = UserDefaults.standard.string(forKey: "pendingReferralCode") ?? ""
         if !pending.isEmpty {
@@ -127,6 +138,10 @@ final class AuthViewModel: NSObject, ObservableObject {
       }
       Task {
         try? await self.authService.handleOAuthCallback(url: callbackURL)
+        if self.authService.isAuthenticated, let user = self.authService.currentUser {
+            AnalyticsManager.shared.identify(userId: user.id)
+            AnalyticsManager.shared.capture(event: "login", properties: ["method": provider])
+        }
       }
     }
     

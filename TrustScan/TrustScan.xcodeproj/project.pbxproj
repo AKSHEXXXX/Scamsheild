@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13EF49F9AD3EF78933199140 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 4C004F6997F3D72B57259D89 /* PostHog */; };
 		8B1AA38D2FE02B6400B2A8E8 /* ScamShieldShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8B1AA3832FE02B6300B2A8E8 /* ScamShieldShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8B214CC82FDD4D6600431205 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 8B214CC72FDD4D6500431205 /* .env */; };
 		8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B214CC92FDD565800431205 /* BlogsView.swift */; };
@@ -15,43 +16,42 @@
 		A1B2C3D4E5F6A1B2C3D4E011 /* TrustScanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E012 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */; };
-		NEW11 /* HistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW12 /* HistoryEntry.swift */; };
-		NEW13 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW14 /* AppConfiguration.swift */; };
-		NEW15 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW16 /* AppError.swift */; };
-		NEW17 /* SubmitAnalysisUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW18 /* SubmitAnalysisUseCase.swift */; };
-		NEW19 /* HistoryUseCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW1A /* HistoryUseCases.swift */; };
-		NEW1B /* FetchConfigurationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW1C /* FetchConfigurationUseCase.swift */; };
-		NEW1D /* AnalysisRepositoryPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW1E /* AnalysisRepositoryPort.swift */; };
-		NEW1F /* HistoryRepositoryPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW20 /* HistoryRepositoryPort.swift */; };
-		NEW21 /* ConfigurationRepositoryPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW22 /* ConfigurationRepositoryPort.swift */; };
-		NEW23 /* DTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW24 /* DTOs.swift */; };
-		NEW25 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW26 /* APIClient.swift */; };
-		NEW27 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW28 /* SupabaseAuthService.swift */; };
-		NEW2B /* RemoteAnalysisRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2C /* RemoteAnalysisRepository.swift */; };
-		NEW2D /* FileHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW2E /* FileHistoryRepository.swift */; };
-		NEW2F /* RemoteConfigurationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW30 /* RemoteConfigurationRepository.swift */; };
-		NEW31 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW32 /* AuthViewModel.swift */; };
-		NEW33 /* AuthViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW34 /* AuthViews.swift */; };
-		NEW35 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW36 /* OnboardingView.swift */; };
-		SLC01 /* ScamLossCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SLC02 /* ScamLossCounterView.swift */; };
-		NEW37 /* SubmissionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW38 /* SubmissionHomeView.swift */; };
-		QRS03 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = QRS02 /* QRScannerView.swift */; };
-		NEW39 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3A /* ResultViews.swift */; };
-		NEW3B /* HistoryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3C /* HistoryViews.swift */; };
-		REF02 /* ReferralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = REF01 /* ReferralView.swift */; };
-		NEW3D /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW3E /* SettingsViews.swift */; };
-		NEW3F /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW40 /* ViewModels.swift */; };
-		NEW41 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEW42 /* RootView.swift */; };
-		NEW43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = NEW44 /* Localizable.strings */; };
-		NEWF1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF2 /* Environment.swift */; };
-		NEWF3 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF4 /* DesignTokens.swift */; };
-		NEWF5 /* UIKitBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF6 /* UIKitBridges.swift */; };
-		NEWF7 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWF8 /* NetworkMonitor.swift */; };
-		NEWF9 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFA /* Components.swift */; };
-		NEWFB /* PermissionManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFC /* PermissionManagers.swift */; };
-		NEWFD /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NEWFE /* AnalysisResult.swift */; };
-		PRIV02 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIV01 /* PrivacyInfo.xcprivacy */; };
-
+		'NEW11' = {isa = PBXBuildFile; fileRef = NEW12; };
+		'NEW13' = {isa = PBXBuildFile; fileRef = NEW14; };
+		'NEW15' = {isa = PBXBuildFile; fileRef = NEW16; };
+		'NEW17' = {isa = PBXBuildFile; fileRef = NEW18; };
+		'NEW19' = {isa = PBXBuildFile; fileRef = NEW1A; };
+		'NEW1B' = {isa = PBXBuildFile; fileRef = NEW1C; };
+		'NEW1D' = {isa = PBXBuildFile; fileRef = NEW1E; };
+		'NEW1F' = {isa = PBXBuildFile; fileRef = NEW20; };
+		'NEW21' = {isa = PBXBuildFile; fileRef = NEW22; };
+		'NEW23' = {isa = PBXBuildFile; fileRef = NEW24; };
+		'NEW25' = {isa = PBXBuildFile; fileRef = NEW26; };
+		'NEW27' = {isa = PBXBuildFile; fileRef = NEW28; };
+		'NEW2B' = {isa = PBXBuildFile; fileRef = NEW2C; };
+		'NEW2D' = {isa = PBXBuildFile; fileRef = NEW2E; };
+		'NEW2F' = {isa = PBXBuildFile; fileRef = NEW30; };
+		'NEW31' = {isa = PBXBuildFile; fileRef = NEW32; };
+		'NEW33' = {isa = PBXBuildFile; fileRef = NEW34; };
+		'NEW35' = {isa = PBXBuildFile; fileRef = NEW36; };
+		'NEW37' = {isa = PBXBuildFile; fileRef = NEW38; };
+		'NEW39' = {isa = PBXBuildFile; fileRef = NEW3A; };
+		'NEW3B' = {isa = PBXBuildFile; fileRef = NEW3C; };
+		'NEW3D' = {isa = PBXBuildFile; fileRef = NEW3E; };
+		'NEW3F' = {isa = PBXBuildFile; fileRef = NEW40; };
+		'NEW41' = {isa = PBXBuildFile; fileRef = NEW42; };
+		'NEW43' = {isa = PBXBuildFile; fileRef = NEW44; };
+		'NEWF1' = {isa = PBXBuildFile; fileRef = NEWF2; };
+		'NEWF3' = {isa = PBXBuildFile; fileRef = NEWF4; };
+		'NEWF5' = {isa = PBXBuildFile; fileRef = NEWF6; };
+		'NEWF7' = {isa = PBXBuildFile; fileRef = NEWF8; };
+		'NEWF9' = {isa = PBXBuildFile; fileRef = NEWFA; };
+		'NEWFB' = {isa = PBXBuildFile; fileRef = NEWFC; };
+		'NEWFD' = {isa = PBXBuildFile; fileRef = NEWFE; };
+		'PRIV02' = {isa = PBXBuildFile; fileRef = PRIV01; };
+		'QRS03' = {isa = PBXBuildFile; fileRef = QRS02; };
+		'REF02' = {isa = PBXBuildFile; fileRef = REF01; };
+		'SLC01' = {isa = PBXBuildFile; fileRef = SLC02; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,47 +90,46 @@
 		A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrustScan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-
-		NEW12 /* HistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
-		NEW14 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
-		NEW16 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
-		NEW18 /* SubmitAnalysisUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAnalysisUseCase.swift; sourceTree = "<group>"; };
-		NEW1A /* HistoryUseCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryUseCases.swift; sourceTree = "<group>"; };
-		NEW1C /* FetchConfigurationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchConfigurationUseCase.swift; sourceTree = "<group>"; };
-		NEW1E /* AnalysisRepositoryPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisRepositoryPort.swift; sourceTree = "<group>"; };
-		NEW20 /* HistoryRepositoryPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRepositoryPort.swift; sourceTree = "<group>"; };
-		NEW22 /* ConfigurationRepositoryPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationRepositoryPort.swift; sourceTree = "<group>"; };
-		NEW24 /* DTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOs.swift; sourceTree = "<group>"; };
-		NEW26 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		NEW28 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
-		NEW2C /* RemoteAnalysisRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAnalysisRepository.swift; sourceTree = "<group>"; };
-		NEW2E /* FileHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHistoryRepository.swift; sourceTree = "<group>"; };
-		NEW30 /* RemoteConfigurationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationRepository.swift; sourceTree = "<group>"; };
-		NEW32 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		NEW34 /* AuthViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViews.swift; sourceTree = "<group>"; };
-		NEW36 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		SLC02 /* ScamLossCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScamLossCounterView.swift; sourceTree = "<group>"; };
-		NEW38 /* SubmissionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionHomeView.swift; sourceTree = "<group>"; };
-		QRS02 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
-		NEW3A /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
-		NEW3C /* HistoryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViews.swift; sourceTree = "<group>"; };
-		REF01 /* ReferralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralView.swift; sourceTree = "<group>"; };
-		NEW3E /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
-		NEW40 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
-		NEW42 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		NEW44 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		NEWF2 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
-		NEWF4 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
-		NEWF6 /* UIKitBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBridges.swift; sourceTree = "<group>"; };
-		NEWF8 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		NEWFA /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
-		NEWFC /* PermissionManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagers.swift; sourceTree = "<group>"; };
-		NEWFE /* AnalysisResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
-		PRIV01 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = "file.xcprivacy"; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		'NEW12' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
+		'NEW14' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		'NEW16' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		'NEW18' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAnalysisUseCase.swift; sourceTree = "<group>"; };
+		'NEW1A' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryUseCases.swift; sourceTree = "<group>"; };
+		'NEW1C' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchConfigurationUseCase.swift; sourceTree = "<group>"; };
+		'NEW1E' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisRepositoryPort.swift; sourceTree = "<group>"; };
+		'NEW20' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRepositoryPort.swift; sourceTree = "<group>"; };
+		'NEW22' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationRepositoryPort.swift; sourceTree = "<group>"; };
+		'NEW24' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOs.swift; sourceTree = "<group>"; };
+		'NEW26' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		'NEW28' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		'NEW2C' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAnalysisRepository.swift; sourceTree = "<group>"; };
+		'NEW2E' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHistoryRepository.swift; sourceTree = "<group>"; };
+		'NEW30' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationRepository.swift; sourceTree = "<group>"; };
+		'NEW32' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		'NEW34' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViews.swift; sourceTree = "<group>"; };
+		'NEW36' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		'NEW38' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionHomeView.swift; sourceTree = "<group>"; };
+		'NEW3A' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
+		'NEW3C' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViews.swift; sourceTree = "<group>"; };
+		'NEW3E' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
+		'NEW40' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
+		'NEW42' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		'NEW44' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		'NEWF2' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		'NEWF4' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		'NEWF6' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBridges.swift; sourceTree = "<group>"; };
+		'NEWF8' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		'NEWFA' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		'NEWFC' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagers.swift; sourceTree = "<group>"; };
+		'NEWFE' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
+		'PRIV01' = {isa = PBXFileReference; lastKnownFileType = file.xcprivacy; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		'QRS02' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		'REF01' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralView.swift; sourceTree = "<group>"; };
+		'SLC02' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScamLossCounterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8B1AA3912FE02B6400B2A8E8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		8B1AA3912FE02B6400B2A8E8 = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -140,7 +139,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8B1AA3842FE02B6300B2A8E8 /* ScamShieldShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8B1AA3912FE02B6400B2A8E8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ScamShieldShareExtension; sourceTree = "<group>"; };
+		8B1AA3842FE02B6300B2A8E8 /* ScamShieldShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8B1AA3912FE02B6400B2A8E8, ); explicitFileTypes = {}; explicitFolders = (); path = ScamShieldShareExtension; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13EF49F9AD3EF78933199140 /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,16 +191,16 @@
 			isa = PBXGroup;
 			children = (
 				8B1AA3932FE02BA800B2A8E8 /* TrustScan.entitlements */,
-				GRP_APP /* App */,
-				GRP_CORE /* Core */,
-				GRP_DOMAIN /* Domain */,
-				GRP_DATA /* Data */,
-				GRP_FEATURES /* Features */,
-				GRP_DESIGN /* Design */,
-				NEW44 /* Localizable.strings */,
+				GRP_APP,
+				GRP_CORE,
+				GRP_DOMAIN,
+				GRP_DATA,
+				GRP_FEATURES,
+				GRP_DESIGN,
+				NEW44,
 				A1B2C3D4E5F6A1B2C3D4E023 /* Info.plist */,
 				8B214CC72FDD4D6500431205 /* .env */,
-				PRIV01 /* PrivacyInfo.xcprivacy */,
+				PRIV01,
 			);
 			path = TrustScan;
 			sourceTree = "<group>";
@@ -214,90 +214,90 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		GRP_APP /* App */ = {
+		'GRP_APP' = {
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F6A1B2C3D4E021 /* TrustScanApp.swift */,
 				A1B2C3D4E5F6A1B2C3D4E022 /* AppEnvironment.swift */,
-				NEWF2 /* Environment.swift */,
+				NEWF2,
 			);
 			path = App;
 			sourceTree = "<group>";
 		};
-		GRP_CORE /* Core */ = {
+		'GRP_CORE' = {
 			isa = PBXGroup;
 			children = (
-				NEWF4 /* DesignTokens.swift */,
-				NEWF6 /* UIKitBridges.swift */,
-				NEWF8 /* NetworkMonitor.swift */,
-				GRP_CORE_COMPONENTS /* Components */,
-				GRP_CORE_PERMISSIONS /* Permissions */,
+				NEWF4,
+				NEWF6,
+				NEWF8,
+				GRP_CORE_COMPONENTS,
+				GRP_CORE_PERMISSIONS,
 			);
 			path = Core;
 			sourceTree = "<group>";
 		};
-		GRP_CORE_COMPONENTS /* Components */ = {
+		'GRP_CORE_COMPONENTS' = {
 			isa = PBXGroup;
 			children = (
-				NEWFA /* Components.swift */,
+				NEWFA,
 			);
 			path = Components;
 			sourceTree = "<group>";
 		};
-		GRP_CORE_PERMISSIONS /* Permissions */ = {
+		'GRP_CORE_PERMISSIONS' = {
 			isa = PBXGroup;
 			children = (
-				NEWFC /* PermissionManagers.swift */,
+				NEWFC,
 			);
 			path = Permissions;
 			sourceTree = "<group>";
 		};
-		GRP_DATA /* Data */ = {
+		'GRP_DATA' = {
 			isa = PBXGroup;
 			children = (
-				GRP_DATA_DTOS /* DTOs */,
-				GRP_DATA_NETWORKING /* Networking */,
-				GRP_DATA_AUTH /* Auth */,
-				GRP_DATA_REPOSITORIES /* Repositories */,
+				GRP_DATA_DTOS,
+				GRP_DATA_NETWORKING,
+				GRP_DATA_AUTH,
+				GRP_DATA_REPOSITORIES,
 			);
 			path = Data;
 			sourceTree = "<group>";
 		};
-		GRP_DATA_AUTH /* Auth */ = {
+		'GRP_DATA_AUTH' = {
 			isa = PBXGroup;
 			children = (
-				NEW28 /* SupabaseAuthService.swift */,
+				NEW28,
 			);
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		GRP_DATA_DTOS /* DTOs */ = {
+		'GRP_DATA_DTOS' = {
 			isa = PBXGroup;
 			children = (
-				NEW24 /* DTOs.swift */,
+				NEW24,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
 		};
-		GRP_DATA_NETWORKING /* Networking */ = {
+		'GRP_DATA_NETWORKING' = {
 			isa = PBXGroup;
 			children = (
-				NEW26 /* APIClient.swift */,
+				NEW26,
 			);
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		GRP_DATA_REPOSITORIES /* Repositories */ = {
+		'GRP_DATA_REPOSITORIES' = {
 			isa = PBXGroup;
 			children = (
-				NEW2C /* RemoteAnalysisRepository.swift */,
-				NEW2E /* FileHistoryRepository.swift */,
-				NEW30 /* RemoteConfigurationRepository.swift */,
+				NEW2C,
+				NEW2E,
+				NEW30,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
 		};
-		GRP_DESIGN /* Design */ = {
+		'GRP_DESIGN' = {
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F6A1B2C3D4E024 /* Assets.xcassets */,
@@ -305,145 +305,144 @@
 			path = Design;
 			sourceTree = "<group>";
 		};
-		GRP_DOMAIN /* Domain */ = {
+		'GRP_DOMAIN' = {
 			isa = PBXGroup;
 			children = (
-				GRP_DOMAIN_MODELS /* Models */,
-				GRP_DOMAIN_USECASES /* UseCases */,
-				GRP_DOMAIN_PORTS /* Ports */,
+				GRP_DOMAIN_MODELS,
+				GRP_DOMAIN_USECASES,
+				GRP_DOMAIN_PORTS,
 			);
 			path = Domain;
 			sourceTree = "<group>";
 		};
-		GRP_DOMAIN_MODELS /* Models */ = {
+		'GRP_DOMAIN_MODELS' = {
 			isa = PBXGroup;
 			children = (
-				NEWFE /* AnalysisResult.swift */,
-
-				NEW12 /* HistoryEntry.swift */,
-				NEW14 /* AppConfiguration.swift */,
-				NEW16 /* AppError.swift */,
+				NEWFE,
+				NEW12,
+				NEW14,
+				NEW16,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		GRP_DOMAIN_PORTS /* Ports */ = {
+		'GRP_DOMAIN_PORTS' = {
 			isa = PBXGroup;
 			children = (
-				NEW1E /* AnalysisRepositoryPort.swift */,
-				NEW20 /* HistoryRepositoryPort.swift */,
-				NEW22 /* ConfigurationRepositoryPort.swift */,
+				NEW1E,
+				NEW20,
+				NEW22,
 			);
 			path = Ports;
 			sourceTree = "<group>";
 		};
-		GRP_DOMAIN_USECASES /* UseCases */ = {
+		'GRP_DOMAIN_USECASES' = {
 			isa = PBXGroup;
 			children = (
-				NEW18 /* SubmitAnalysisUseCase.swift */,
-				NEW1A /* HistoryUseCases.swift */,
-				NEW1C /* FetchConfigurationUseCase.swift */,
+				NEW18,
+				NEW1A,
+				NEW1C,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES /* Features */ = {
+		'GRP_FEATURES' = {
 			isa = PBXGroup;
 			children = (
 				8B214CCB2FDD565800431205 /* Blogs */,
 				8B214CCD2FDD565800431205 /* Profile */,
-				GRP_FEATURES_SHARED /* Shared */,
-				GRP_FEATURES_AUTH /* Auth */,
-				GRP_FEATURES_ONBOARDING /* Onboarding */,
-				GRP_FEATURES_SUBMISSION /* Submission */,
-				QRS01 /* Scanner */,
-				GRP_FEATURES_RESULTS /* Results */,
-				GRP_FEATURES_HISTORY /* History */,
-				GRP_FEATURES_REFERRAL /* Referral */,
-				GRP_FEATURES_SETTINGS /* Settings */,
-				GRP_FEATURES_VIEWMODELS /* ViewModels */,
+				GRP_FEATURES_SHARED,
+				GRP_FEATURES_AUTH,
+				GRP_FEATURES_ONBOARDING,
+				GRP_FEATURES_SUBMISSION,
+				QRS01,
+				GRP_FEATURES_RESULTS,
+				GRP_FEATURES_HISTORY,
+				GRP_FEATURES_REFERRAL,
+				GRP_FEATURES_SETTINGS,
+				GRP_FEATURES_VIEWMODELS,
 			);
 			path = Features;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_AUTH /* Auth */ = {
+		'GRP_FEATURES_AUTH' = {
 			isa = PBXGroup;
 			children = (
-				NEW32 /* AuthViewModel.swift */,
-				NEW34 /* AuthViews.swift */,
+				NEW32,
+				NEW34,
 			);
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_HISTORY /* History */ = {
+		'GRP_FEATURES_HISTORY' = {
 			isa = PBXGroup;
 			children = (
-				NEW3C /* HistoryViews.swift */,
+				NEW3C,
 			);
 			path = History;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_ONBOARDING /* Onboarding */ = {
+		'GRP_FEATURES_ONBOARDING' = {
 			isa = PBXGroup;
 			children = (
-				NEW36 /* OnboardingView.swift */,
-				SLC02 /* ScamLossCounterView.swift */,
+				NEW36,
+				SLC02,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_RESULTS /* Results */ = {
+		'GRP_FEATURES_REFERRAL' = {
 			isa = PBXGroup;
 			children = (
-				NEW3A /* ResultViews.swift */,
-			);
-			path = Results;
-			sourceTree = "<group>";
-		};
-		GRP_FEATURES_REFERRAL /* Referral */ = {
-			isa = PBXGroup;
-			children = (
-				REF01 /* ReferralView.swift */,
+				REF01,
 			);
 			path = Referral;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_SETTINGS /* Settings */ = {
+		'GRP_FEATURES_RESULTS' = {
 			isa = PBXGroup;
 			children = (
-				NEW3E /* SettingsViews.swift */,
+				NEW3A,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		'GRP_FEATURES_SETTINGS' = {
+			isa = PBXGroup;
+			children = (
+				NEW3E,
 			);
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_SHARED /* Shared */ = {
+		'GRP_FEATURES_SHARED' = {
 			isa = PBXGroup;
 			children = (
-				NEW42 /* RootView.swift */,
+				NEW42,
 			);
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_SUBMISSION /* Submission */ = {
+		'GRP_FEATURES_SUBMISSION' = {
 			isa = PBXGroup;
 			children = (
-				NEW38 /* SubmissionHomeView.swift */,
+				NEW38,
 			);
 			path = Submission;
 			sourceTree = "<group>";
 		};
-		GRP_FEATURES_VIEWMODELS /* ViewModels */ = {
+		'GRP_FEATURES_VIEWMODELS' = {
 			isa = PBXGroup;
 			children = (
-				NEW40 /* ViewModels.swift */,
+				NEW40,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		QRS01 /* Scanner */ = {
+		'QRS01' = {
 			isa = PBXGroup;
 			children = (
-				QRS02 /* QRScannerView.swift */,
+				QRS02,
 			);
 			path = Scanner;
 			sourceTree = "<group>";
@@ -489,6 +488,7 @@
 			);
 			name = TrustScan;
 			packageProductDependencies = (
+				4C004F6997F3D72B57259D89 /* PostHog */,
 			);
 			productName = TrustScan;
 			productReference = A1B2C3D4E5F6A1B2C3D4E025 /* TrustScan.app */;
@@ -522,6 +522,7 @@
 			);
 			mainGroup = A1B2C3D4E5F6A1B2C3D4E031;
 			packageReferences = (
+				ACC2490E98773E1CE26A54A8 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			productRefGroup = A1B2C3D4E5F6A1B2C3D4E033 /* Products */;
 			projectDirPath = "";
@@ -547,8 +548,8 @@
 			files = (
 				8B214CC82FDD4D6600431205 /* .env in Resources */,
 				A1B2C3D4E5F6A1B2C3D4E013 /* Assets.xcassets in Resources */,
-				NEW43 /* Localizable.strings in Resources */,
-				PRIV02 /* PrivacyInfo.xcprivacy in Resources */,
+				NEW43,
+				PRIV02,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,44 +569,43 @@
 			files = (
 				A1B2C3D4E5F6A1B2C3D4E011 /* TrustScanApp.swift in Sources */,
 				A1B2C3D4E5F6A1B2C3D4E012 /* AppEnvironment.swift in Sources */,
-				NEWF1 /* Environment.swift in Sources */,
-				NEWF3 /* DesignTokens.swift in Sources */,
-				NEWF5 /* UIKitBridges.swift in Sources */,
-				NEWF7 /* NetworkMonitor.swift in Sources */,
-				NEWF9 /* Components.swift in Sources */,
-				NEWFB /* PermissionManagers.swift in Sources */,
-				NEWFD /* AnalysisResult.swift in Sources */,
-
-				NEW11 /* HistoryEntry.swift in Sources */,
-				NEW13 /* AppConfiguration.swift in Sources */,
-				NEW15 /* AppError.swift in Sources */,
-				NEW17 /* SubmitAnalysisUseCase.swift in Sources */,
-				NEW19 /* HistoryUseCases.swift in Sources */,
-				NEW1B /* FetchConfigurationUseCase.swift in Sources */,
-				NEW1D /* AnalysisRepositoryPort.swift in Sources */,
-				NEW1F /* HistoryRepositoryPort.swift in Sources */,
-				NEW21 /* ConfigurationRepositoryPort.swift in Sources */,
-				NEW23 /* DTOs.swift in Sources */,
-				NEW25 /* APIClient.swift in Sources */,
-				NEW27 /* SupabaseAuthService.swift in Sources */,
-				NEW2B /* RemoteAnalysisRepository.swift in Sources */,
-				NEW2D /* FileHistoryRepository.swift in Sources */,
-				NEW2F /* RemoteConfigurationRepository.swift in Sources */,
-				NEW31 /* AuthViewModel.swift in Sources */,
-				NEW33 /* AuthViews.swift in Sources */,
-				NEW35 /* OnboardingView.swift in Sources */,
-				SLC01 /* ScamLossCounterView.swift in Sources */,
-				NEW37 /* SubmissionHomeView.swift in Sources */,
-				QRS03 /* QRScannerView.swift in Sources */,
+				NEWF1,
+				NEWF3,
+				NEWF5,
+				NEWF7,
+				NEWF9,
+				NEWFB,
+				NEWFD,
+				NEW11,
+				NEW13,
+				NEW15,
+				NEW17,
+				NEW19,
+				NEW1B,
+				NEW1D,
+				NEW1F,
+				NEW21,
+				NEW23,
+				NEW25,
+				NEW27,
+				NEW2B,
+				NEW2D,
+				NEW2F,
+				NEW31,
+				NEW33,
+				NEW35,
+				SLC01,
+				NEW37,
+				QRS03,
 				8B214CCE2FDD565800431205 /* BlogsView.swift in Sources */,
 				8B214CCF2FDD565800431205 /* ProfileView.swift in Sources */,
 				8B214CD02FDD565800431205 /* BlogsViewModel.swift in Sources */,
-				NEW39 /* ResultViews.swift in Sources */,
-				NEW3B /* HistoryViews.swift in Sources */,
-				REF02 /* ReferralView.swift in Sources */,
-				NEW3D /* SettingsViews.swift in Sources */,
-				NEW3F /* ViewModels.swift in Sources */,
-				NEW41 /* RootView.swift in Sources */,
+				NEW39,
+				NEW3B,
+				REF02,
+				NEW3D,
+				NEW3F,
+				NEW41,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +890,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ACC2490E98773E1CE26A54A8 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4C004F6997F3D72B57259D89 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ACC2490E98773E1CE26A54A8 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A1B2C3D4E5F6A1B2C3D4E081 /* Project object */;
 }

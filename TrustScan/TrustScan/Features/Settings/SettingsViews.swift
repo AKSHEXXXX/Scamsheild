@@ -70,6 +70,7 @@ struct SettingsView: View {
       }
     }
     .navigationTitle("Settings")
+    .trackScreen(name: "Settings")
     .task { await viewModel.refresh() }
     .alert("Delete local history?", isPresented: $isShowingClearConfirmation) {
       Button("Delete", role: .destructive) {
@@ -144,6 +145,7 @@ struct PrivacyPolicyView: View {
     .background(ColorTokens.bg.ignoresSafeArea())
     .navigationTitle("Privacy & Data")
     .navigationBarTitleDisplayMode(.inline)
+    .trackScreen(name: "PrivacyPolicy")
   }
 
   private func privacySection(id: String, title: String, icon: String, content: String) -> some View {

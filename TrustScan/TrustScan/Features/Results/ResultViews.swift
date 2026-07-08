@@ -38,6 +38,11 @@ struct AnalysisResultView: View {
         HStack {
           Spacer()
           Button {
+            AnalyticsManager.shared.capture(event: "report_shared", properties: [
+                "result": result.verdict.rawValue,
+                "threat_score": result.threatScore,
+                "confidence_score": result.confidenceScore
+            ])
             onShare()
           } label: {
             Image(systemName: "square.and.arrow.up")
@@ -295,6 +300,11 @@ struct AnalysisResultView: View {
       }
     }
     .onAppear {
+      AnalyticsManager.shared.capture(event: "report_viewed", properties: [
+          "result": result.verdict.rawValue,
+          "threat_score": result.threatScore,
+          "confidence_score": result.confidenceScore
+      ])
       withAnimation(.spring(response: 1.5, dampingFraction: 0.8, blendDuration: 0)) {
         animatedScore = Double(result.score)
       }

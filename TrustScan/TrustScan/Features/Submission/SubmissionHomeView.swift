@@ -75,6 +75,7 @@ struct SubmissionHomeView: View {
       }
       .background(ColorTokens.bg.ignoresSafeArea())
       .navigationBarHidden(true)
+      .trackScreen(name: "SubmissionHome")
       .sheet(isPresented: $viewModel.isShowingCamera) {
         CameraImagePicker { data in
           viewModel.handlePickedImage(data)

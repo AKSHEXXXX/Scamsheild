@@ -39,6 +39,10 @@ struct TrustScanApp: App {
             // Supabase OAuth callback
             Task {
               try? await environment.authService.handleOAuthCallback(url: url)
+              if environment.authService.isAuthenticated, let user = environment.authService.currentUser {
+                  AnalyticsManager.shared.identify(userId: user.id)
+                  AnalyticsManager.shared.capture(event: "login", properties: ["method": "oauth_deeplink"])
+              }
             }
           }
         }
@@ -48,6 +52,12 @@ struct TrustScanApp: App {
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
   private var protectionWindow: UIWindow?
+
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    AnalyticsManager.shared.setup()
+    AnalyticsManager.shared.capture(event: "app_opened")
+    return true
+  }
 
   func applicationDidBecomeActive(_ application: UIApplication) {
     NotificationCenter.default.addObserver(

@@ -67,6 +67,7 @@ final class SubmissionViewModel: ObservableObject {
     case .denied, .restricted:
       isShowingCameraDenied = true
     default:
+      AnalyticsManager.shared.capture(event: "camera_opened")
       isShowingCamera = true
     }
   }
@@ -84,6 +85,7 @@ final class SubmissionViewModel: ObservableObject {
       return
     }
 
+    AnalyticsManager.shared.capture(event: "image_selected")
     selectedImageData = data
     state = .idle
   }
@@ -96,6 +98,10 @@ final class SubmissionViewModel: ObservableObject {
 
     state = .loading(message: "Analyzing your image…")
     clientOverrideActive = false
+    
+    let startTime = Date()
+    AnalyticsManager.shared.capture(event: "scan_started", properties: ["type": "image"])
+    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["type": "image"])
 
     do {
       guard let uiImage = UIImage(data: selectedImageData) else {
@@ -111,6 +117,15 @@ final class SubmissionViewModel: ObservableObject {
       // Check if client-side signals override the backend verdict
       clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
+      
+      let duration = Date().timeIntervalSince(startTime)
+      AnalyticsManager.shared.capture(event: "analysis_completed", properties: [
+          "type": "image",
+          "scan_duration": duration,
+          "result": result.verdict.rawValue,
+          "threat_score": result.threatScore,
+          "confidence_score": result.confidenceScore
+      ])
 
       do {
         try await saveHistoryEntryUseCase(
@@ -124,10 +139,13 @@ final class SubmissionViewModel: ObservableObject {
     } catch AppError.dailyLimitReached(_, let resetsAt) {
       dailyLimitResetTime = resetsAt
       showDailyLimitAlert = true
+      AnalyticsManager.shared.capture(event: "api_request_failed", properties: ["error": "daily_limit_reached"])
     } catch let appError as AppError {
       state = .error(appError)
+      AnalyticsManager.shared.capture(event: "analysis_failed", properties: ["error": appError.localizedDescription])
     } catch {
       state = .error(.unexpected(message: error.localizedDescription))
+      AnalyticsManager.shared.capture(event: "analysis_failed", properties: ["error": error.localizedDescription])
     }
   }
 
@@ -138,6 +156,10 @@ final class SubmissionViewModel: ObservableObject {
     }
     state = .loading(message: "Checking QR Code…")
     clientOverrideActive = false
+    
+    let startTime = Date()
+    AnalyticsManager.shared.capture(event: "scan_started", properties: ["type": "qr"])
+    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["type": "qr"])
 
     do {
       let (result, sourceString) = try await submitAnalysisUseCase.analyzeQR(payload: payload)
@@ -145,6 +167,15 @@ final class SubmissionViewModel: ObservableObject {
       ocrSource = sourceString
       clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
+      
+      let duration = Date().timeIntervalSince(startTime)
+      AnalyticsManager.shared.capture(event: "analysis_completed", properties: [
+          "type": "qr",
+          "scan_duration": duration,
+          "result": result.verdict.rawValue,
+          "threat_score": result.threatScore,
+          "confidence_score": result.confidenceScore
+      ])
 
       do {
         // Thumbnail generation is nil for QR scan, but we can pass it
@@ -159,10 +190,13 @@ final class SubmissionViewModel: ObservableObject {
     } catch AppError.dailyLimitReached(_, let resetsAt) {
       dailyLimitResetTime = resetsAt
       showDailyLimitAlert = true
+      AnalyticsManager.shared.capture(event: "api_request_failed", properties: ["error": "daily_limit_reached"])
     } catch let appError as AppError {
       state = .error(appError)
+      AnalyticsManager.shared.capture(event: "analysis_failed", properties: ["error": appError.localizedDescription])
     } catch {
       state = .error(.unexpected(message: error.localizedDescription))
+      AnalyticsManager.shared.capture(event: "analysis_failed", properties: ["error": error.localizedDescription])
     }
   }
 
@@ -227,6 +261,11 @@ final class SubmissionViewModel: ObservableObject {
     }
     state = .loading(message: "Analyzing text…")
     clientOverrideActive = false
+    
+    let startTime = Date()
+    AnalyticsManager.shared.capture(event: "scan_started", properties: ["type": "text"])
+    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["type": "text"])
+    
     // Preflight: log if obvious scam patterns are detected before API call
     _ = submitAnalysisUseCase.preflightScamCheck(text)
     do {
@@ -235,16 +274,28 @@ final class SubmissionViewModel: ObservableObject {
       ocrSource = sourceString
       clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
+      
+      let duration = Date().timeIntervalSince(startTime)
+      AnalyticsManager.shared.capture(event: "analysis_completed", properties: [
+          "type": "text",
+          "scan_duration": duration,
+          "result": result.verdict.rawValue,
+          "threat_score": result.threatScore,
+          "confidence_score": result.confidenceScore
+      ])
 
       try? await saveHistoryEntryUseCase(result: result, thumbnailData: nil)
       await reloadHistoryAction()
     } catch AppError.dailyLimitReached(_, let resetsAt) {
       dailyLimitResetTime = resetsAt
       showDailyLimitAlert = true
+      AnalyticsManager.shared.capture(event: "api_request_failed", properties: ["error": "daily_limit_reached"])
     } catch let appError as AppError {
       state = .error(appError)
+      AnalyticsManager.shared.capture(event: "analysis_failed", properties: ["error": appError.localizedDescription])
     } catch {
       state = .error(.unexpected(message: error.localizedDescription))
+      AnalyticsManager.shared.capture(event: "analysis_failed", properties: ["error": error.localizedDescription])
     }
   }
 
@@ -354,6 +405,7 @@ final class SettingsViewModel: ObservableObject {
       try await clearHistoryUseCase()
       storedScanCount = 0
       lastOperationError = nil
+      AnalyticsManager.shared.capture(event: "settings_updated", properties: ["action": "clear_history"])
     } catch {
       lastOperationError = "Local history could not be cleared."
     }

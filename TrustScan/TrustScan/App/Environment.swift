@@ -32,4 +32,12 @@ enum APIEnvironment {
   static var backendBaseURL: String {
     env["BACKEND_URL"] ?? "https://scam-sheild-production.up.railway.app"
   }
+  
+  static var posthogAPIKey: String {
+    env["POSTHOG_API_KEY"] ?? ""
+  }
+  
+  static var posthogHost: String {
+    env["POSTHOG_HOST"] ?? "https://us.i.posthog.com"
+  }
 }

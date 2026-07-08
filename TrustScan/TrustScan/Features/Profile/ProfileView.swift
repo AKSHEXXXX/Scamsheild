@@ -154,6 +154,7 @@ struct ProfileView: View {
     }
     .background(ColorTokens.bg.ignoresSafeArea())
     .navigationTitle("Profile")
+    .trackScreen(name: "Profile")
     .task {
       await environment.historyViewModel.loadHistory(forceLoading: false)
     }

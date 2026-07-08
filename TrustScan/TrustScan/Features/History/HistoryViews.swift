@@ -74,6 +74,7 @@ struct HistoryListView: View {
     .task {
       await viewModel.loadHistory(forceLoading: true)
     }
+    .trackScreen(name: "History")
   }
 }
 

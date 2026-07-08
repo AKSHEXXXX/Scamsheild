@@ -208,6 +208,9 @@ final class SupabaseAuthService: ObservableObject {
   // MARK: - Sign Out
 
   func signOut() {
+    AnalyticsManager.shared.capture(event: "logout")
+    AnalyticsManager.shared.reset()
+    
     UserDefaults.standard.removeObject(forKey: tokenKey)
     UserDefaults.standard.removeObject(forKey: refreshTokenKey)
     UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
