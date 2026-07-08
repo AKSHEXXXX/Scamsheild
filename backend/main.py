@@ -10,8 +10,9 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.rate_limiter import RateLimitMiddleware
 from app.middleware.request_tracking import RequestTrackingMiddleware
-from app.analytics.posthog_client import setup_posthog, close_posthog
+from app.analytics.posthog_client import setup_posthog, close_posthog, get_posthog_client
 from docs.observability.structured_logging import setup_logging
+import traceback
 
 from app.config import settings
 setup_logging(use_json=settings.ENVIRONMENT == "production")
@@ -186,4 +187,39 @@ async def validation_exception_handler(request: Request, exc):
         raw_body = b""
     logger.info("422 on %s: invalid request body | content-type=%s | body=%r | errors=%s",
                 request.url.path, request.headers.get("content-type", ""), raw_body[:500], exc.errors())
+    try:
+        get_posthog_client().capture_event(
+            "api_request_failed", "unknown",
+            properties={"method": request.method, "status": "validation_error"},
+            endpoint=request.url.path,
+            http_status=422,
+            status="failure",
+            error_type="ValidationError",
+            error_message=str(exc.errors())[:300],
+        )
+    except Exception:
+        pass
     return JSONResponse(status_code=422, content={"detail": "Invalid request body"})
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    error_type = type(exc).__name__
+    error_msg = str(exc) or "Internal server error"
+    tb = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+    logger.error("500 on %s: %s: %s\n%s", request.url.path, error_type, error_msg, tb)
+    try:
+        user_id = getattr(request.state, "user_id", "unknown")
+        get_posthog_client().capture_event(
+            "api_request_failed", user_id,
+            properties={"method": request.method},
+            endpoint=request.url.path,
+            platform=getattr(request.state, "platform", "unknown"),
+            http_status=500,
+            status="failure",
+            error_type=error_type,
+            error_message=error_msg[:500],
+        )
+    except Exception:
+        pass
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
