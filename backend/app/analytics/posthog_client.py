@@ -54,7 +54,7 @@ class PosthogClient:
             return
         self._distinct_id = user_id
         try:
-            self._client.identify(user_id, properties or {})
+            self._client.set(distinct_id=user_id, properties=properties or {})
         except Exception as exc:
             logger.debug("PostHog identify failed: %s", exc)
 
@@ -116,7 +116,7 @@ class PosthogClient:
             enriched.update(properties)
 
         try:
-            self._client.capture(user_id, event, properties=enriched)
+            self._client.capture(event, distinct_id=user_id, properties=enriched)
         except Exception as exc:
             logger.debug("PostHog capture failed for event=%s: %s", event, exc)
 
