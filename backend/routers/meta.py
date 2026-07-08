@@ -15,15 +15,58 @@ logger = logging.getLogger("scamshield.meta")
 
 @router.get("/health")
 @router.get("/api/v1/health")
-def health():
-    from app.ml.model_loader import get_models_loaded_count
+def health(request: Request = None):
+    from app.ml.model_loader import get_models_loaded_count, get_agent_status, is_agent_healthy
     from app.config import settings
     from app.database_ext import MongoDBClient, RedisClient
+
+    agent_statuses = get_agent_status()
+    total_agents = len(agent_statuses)
+    healthy_count = 0
+    disabled_count = 0
+    unhealthy_agents = []
+    for aid, s in agent_statuses.items():
+        health_info = s.get("health", {})
+        if health_info.get("disabled"):
+            disabled_count += 1
+            unhealthy_agents.append(f"agent{aid}")
+        elif is_agent_healthy(f"agent{aid}"):
+            healthy_count += 1
+        else:
+            unhealthy_agents.append(f"agent{aid}")
+
+    models_loaded = get_models_loaded_count()
+    all_healthy = len(unhealthy_agents) == 0
+
+    if request:
+        posthog = get_posthog_client()
+        request_id = getattr(request.state, "request_id", "")
+        posthog.capture_event(
+            "agents_health_checked",
+            "system",
+            properties={
+                "all_healthy": all_healthy,
+                "total_agents": total_agents,
+                "healthy_count": healthy_count,
+                "disabled_count": disabled_count,
+                "unhealthy_count": len(unhealthy_agents),
+                "unhealthy_agents": ",".join(unhealthy_agents) if unhealthy_agents else "",
+                "models_loaded": models_loaded,
+                "mongodb_connected": MongoDBClient.is_connected(),
+                "redis_connected": RedisClient.is_connected(),
+            },
+            request_id=request_id,
+        )
+
     return {
         "status": "ok",
         "version": "2.1.0",
         "environment": settings.ENVIRONMENT,
-        "models_loaded": get_models_loaded_count(),
+        "models_loaded": models_loaded,
+        "all_agents_healthy": all_healthy,
+        "healthy_count": healthy_count,
+        "disabled_count": disabled_count,
+        "unhealthy_agents": unhealthy_agents,
         "mongodb_connected": MongoDBClient.is_connected(),
         "redis_connected": RedisClient.is_connected(),
     }
