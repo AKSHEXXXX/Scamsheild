@@ -1,4 +1,5 @@
 import logging
+import posthog
 from fastapi import APIRouter, Header, HTTPException
 from app.models import FeedbackIn, FeedbackOut
 from app.auth import require_user
@@ -48,4 +49,12 @@ async def submit_feedback(body: FeedbackIn,
     log_event("feedback_submitted", level="INFO",
               scan_id=body.scan_id, user_id=hash_id(user_id),
               extra={"channel": scan.get("channel", ""), "label": label})
+    posthog.capture(
+        user_id,
+        "feedback_submitted",
+        properties={
+            "channel": scan.get("channel", "unknown"),
+            "label": label,
+        },
+    )
     return FeedbackOut(ok=True)

@@ -42,6 +42,8 @@ class Settings:
     MODEL_DOWNLOAD_SECRET: str = os.getenv("MODEL_DOWNLOAD_SECRET", "")
     MODEL_DOWNLOAD_REGION: str = os.getenv("MODEL_DOWNLOAD_REGION", "auto")
     INTERNAL_API_KEY: str = os.getenv("INTERNAL_API_KEY", "")
+    POSTHOG_PROJECT_TOKEN: str = os.getenv("POSTHOG_PROJECT_TOKEN", "")
+    POSTHOG_HOST: str = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
 
     def validate(self) -> None:
         if not self.SUPABASE_URL or not self.SUPABASE_SERVICE_KEY:

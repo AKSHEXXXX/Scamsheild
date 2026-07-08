@@ -1,6 +1,7 @@
 import logging
 import secrets
 import string
+import posthog
 from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel
 from app.auth import require_user, _sum_bonus_earned, _count_bonus_consumed
@@ -194,6 +195,12 @@ def redeem_referral(body: RedeemRequest, authorization: str = Header(None)):
         kind="referral_reward",
         title="Referral Reward Earned!",
         body=f"You earned {scans_credited} bonus scans! A new user joined using your code.",
+    )
+
+    posthog.capture(
+        current_user_id,
+        "referral_redeemed",
+        properties={"scans_credited": scans_credited},
     )
 
     return {"bonus_scans_credited": scans_credited}

@@ -1,5 +1,6 @@
 import logging
 import httpx
+import posthog
 from fastapi import APIRouter, Header, HTTPException
 from app.auth import require_user
 from app.config import settings
@@ -62,5 +63,6 @@ async def delete_account(authorization: str = Header(None)):
 
     _delete_mongo_user_scans(user_id)
     _delete_supabase_user_rows(user_id)
+    posthog.capture(user_id, "account_deleted")
     logger.info("Account deleted: user_id=%s", user_id)
     return None

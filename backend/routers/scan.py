@@ -2,6 +2,7 @@ import logging
 import time
 import uuid
 from typing import Optional
+import posthog
 from fastapi import APIRouter, Header, HTTPException, Request
 from app.models import ScanRequest, UnifiedScanResult, AgentResultItem
 from app.auth import require_user
@@ -208,6 +209,30 @@ async def unified_scan(request: Request,
     log_event("scan_completed", level="INFO", scan_id=scan_id, user_id=user_id,
               channel=channel, verdict=final, score=score, agent_ids=flagged_agents,
               ip=client_ip, message=body.text or body.url)
+
+    error_agents = [r for r in agent_results if r.verdict == "ERROR"]
+    posthog.capture(
+        user_id,
+        "scan_completed",
+        properties={
+            "channel": channel,
+            "verdict": final,
+            "score": score,
+            "agent_count": len(agent_results),
+            "flagged_agent_count": len(flagged_agents),
+            "latency_ms": int(round(elapsed * 1000)),
+            "had_error": len(error_agents) > 0,
+        },
+    )
+    if error_agents:
+        posthog.capture(
+            user_id,
+            "scan_error",
+            properties={
+                "channel": channel,
+                "error_agent_count": len(error_agents),
+            },
+        )
 
     return UnifiedScanResult(
         final_verdict=final,
