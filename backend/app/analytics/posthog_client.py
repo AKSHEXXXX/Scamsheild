@@ -116,7 +116,7 @@ class PosthogClient:
             enriched.update(properties)
 
         try:
-            self._client.capture(user_id, event, enriched)
+            self._client.capture(user_id, event, properties=enriched)
         except Exception as exc:
             logger.debug("PostHog capture failed for event=%s: %s", event, exc)
 
