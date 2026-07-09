@@ -33,7 +33,7 @@ public final class AnalyticsManager {
         config.sessionReplayConfig.captureNetworkTelemetry = false
 
         // ── Surveys (NPS, feedback, feature polls) ─────────────────────────────
-        config.enableSurveysAndEarlyAccessFeatures = true
+        config.surveys = true
 
         // ── Exception autocapture (Error Tracking) ──────────────────────────────
         // Captures Mach exceptions, POSIX signals, and uncaught NSExceptions as
@@ -95,8 +95,9 @@ public final class AnalyticsManager {
     
     /// Registers a reload callback so the app can react to flag changes.
     /// The closure is called on the main thread whenever flags are refreshed.
+    /// (PostHog 3.x removed `onFeatureFlags`; use the reloadFeatureFlags callback overload.)
     public func onFeatureFlags(_ callback: @escaping () -> Void) {
-        PostHogSDK.shared.onFeatureFlags(callback)
+        PostHogSDK.shared.reloadFeatureFlags(callback)
     }
 }
 
