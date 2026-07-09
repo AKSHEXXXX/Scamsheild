@@ -35,6 +35,11 @@ public final class AnalyticsManager {
         // ── Surveys (NPS, feedback, feature polls) ─────────────────────────────
         config.enableSurveysAndEarlyAccessFeatures = true
 
+        // ── Exception autocapture (Error Tracking) ──────────────────────────────
+        // Captures Mach exceptions, POSIX signals, and uncaught NSExceptions as
+        // $exception events (fatal crashes are persisted and sent on next launch).
+        config.errorTrackingConfig.autoCapture = true
+
         PostHogSDK.shared.setup(config)
         print("✅ AnalyticsManager: PostHog SDK initialized successfully.")
     }
@@ -60,6 +65,14 @@ public final class AnalyticsManager {
     /// Tracks a screen view.
     public func screen(name: String) {
         PostHogSDK.shared.screen(name)
+    }
+    
+    // ── Exception capture (Error Tracking) ────────────────────────────────────
+    
+    /// Manually captures a thrown error as a `$exception` event. Use this inside
+    /// `catch` blocks for errors you want tracked but can recover from.
+    public func captureException(_ error: Error) {
+        PostHogSDK.shared.captureException(error)
     }
     
     // ── Feature Flags ─────────────────────────────────────────────────────────
