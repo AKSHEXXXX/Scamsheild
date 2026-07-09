@@ -31,9 +31,15 @@ async def _check_ip_reputation(ip: str) -> Optional[str]:
     return None
 
 
+_redis_down_logged = False
+
 async def _check_rate_limit(key: str, limit: int) -> tuple[bool, int]:
+    global _redis_down_logged
     r = RedisClient.client()
     if r is None:
+        if not _redis_down_logged:
+            logger.critical("Redis unavailable — rate limiting disabled; app is unprotected")
+            _redis_down_logged = True
         return True, 0
     now = int(time.time())
     now_ms = int(time.time() * 1000)
@@ -49,13 +55,17 @@ async def _check_rate_limit(key: str, limit: int) -> tuple[bool, int]:
         allowed = count <= limit
         return allowed, count
     except Exception as exc:
-        logger.warning("Rate limit check error: %s", exc)
+        logger.error("Rate limit check error: %s", exc)
         return True, 0
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         if not RedisClient.is_connected():
+            global _redis_down_logged
+            if not _redis_down_logged:
+                logger.critical("Redis unavailable — rate limiting disabled; app is unprotected")
+                _redis_down_logged = True
             return await call_next(request)
 
         client_ip = request.client.host if request.client else "unknown"

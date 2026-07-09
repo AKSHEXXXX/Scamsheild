@@ -24,28 +24,28 @@
     "regex_score": 0.05
   },
   "qr": {
-    "text_prob": 0.10,
-    "url_prob": 0.30,
+    "text_prob": 0.05,
+    "url_prob": 0.45,
     "blacklist_hit_flat": 20,
     "brand_flag": 0.15,
-    "upi_rule_score": 0.10,
+    "upi_rule_score": 0.15,
     "upi_xgb_prob": 0.05,
     "deepfake_prob": 0.0,
     "malware_prob": 0.0,
     "call_fraud_prob": 0.0,
-    "regex_score": 0.10
+    "regex_score": 0.05
   },
   "upi": {
-    "text_prob": 0.05,
+    "text_prob": 0.15,
     "url_prob": 0.05,
     "blacklist_hit_flat": 0,
     "brand_flag": 0.05,
-    "upi_rule_score": 0.50,
-    "upi_xgb_prob": 0.30,
+    "upi_rule_score": 0.45,
+    "upi_xgb_prob": 0.15,
     "deepfake_prob": 0.0,
     "malware_prob": 0.0,
     "call_fraud_prob": 0.0,
-    "regex_score": 0.05
+    "regex_score": 0.15
   },
   "image": {
     "text_prob": 0.10,

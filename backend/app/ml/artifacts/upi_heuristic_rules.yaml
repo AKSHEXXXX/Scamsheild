@@ -149,6 +149,24 @@ rules:
     weight: 10
     explanation: VPA domain not in trusted whitelist
 
+  - name: urgency_high_amount
+    field: amount
+    pattern_type: urgency_high_amount
+    min_amount: 50000
+    severity: HIGH
+    weight: 50
+    explanation: High-value transaction with urgent payment language
+    keywords:
+      - urgent
+      - immediately
+      - action required
+      - legal action
+      - pay now
+      - pay immediately
+      - send money now
+      - transfer now
+      - don't delay
+
 scoring:
   score_cap: 100
   multi_rule_boost: 10

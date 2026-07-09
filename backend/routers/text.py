@@ -9,7 +9,7 @@ from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, 
 from app.database import supabase
 from app.helpers import get_config_dict, persist_scan
 from schemas.scan_result import verdict_label as _verdict_label
-from app.ml.agents.inference import agent1_predict_text
+from app.ml.agents.inference import agent1_predict_text, agent2_predict_text, agent2_predict_text_full, _DEFENSIVE_PHRASES
 from agents.agent15_ensemble import compute
 from app.ml.model_loader import get_models
 from app.analytics.posthog_client import get_posthog_client
@@ -100,16 +100,19 @@ async def analyze_text(request: Request,
             text_tfidf_prob = raw_a1
 
         text_distilbert_prob = None
+        agent2_label = None
         agent2_invoked = False
-        if text_tfidf_prob is not None and 0.35 <= text_tfidf_prob <= 0.65:
+        if text_tfidf_prob is not None and 0.35 <= text_tfidf_prob <= 0.85:
             agent2_available = models.get("agent2") is not None
             if agent2_available:
                 try:
-                    from app.ml.agents.inference import agent2_predict_text
-                    d = agent2_predict_text(text)
-                    if d >= 0:
-                        text_distilbert_prob = d
-                        agent2_invoked = True
+                    a2_full = agent2_predict_text_full(text)
+                    if a2_full.get("model_loaded", False):
+                        agent2_label = a2_full.get("label", "SAFE").upper()
+                        d = agent2_predict_text(text)
+                        if d >= 0:
+                            text_distilbert_prob = d
+                            agent2_invoked = True
                 except Exception as e:
                     logger.warning("Agent 2 predict error: %s", e)
 
@@ -119,8 +122,12 @@ async def analyze_text(request: Request,
         url_signals_list = [extract_url_signals(u) for u in flagged_urls]
         url_risk_boost = compute_url_risk_boost(url_signals_list)
 
+        blended = text_tfidf_prob
+        if agent2_invoked and text_distilbert_prob is not None and text_tfidf_prob is not None:
+            blended = text_tfidf_prob * 0.55 + text_distilbert_prob * 0.45
+
         signals = {
-            "text_prob": text_tfidf_prob if text_tfidf_prob is not None else -1,
+            "text_prob": blended if blended is not None else -1,
             "blacklist_hit": False,
             "brand_flag": False,
             "upi_rule_score": 0,
@@ -136,8 +143,21 @@ async def analyze_text(request: Request,
         }
         result = compute(signals, scan_type="text")
 
-        scam_score = result["scam_score"]
-        verdict = result["verdict"]
+        raw_score = result["scam_score"]
+        verdict_15 = result["verdict"]
+
+        defensive_gate_applied = False
+        if _DEFENSIVE_PHRASES.search(text):
+            a2_not_scam = True
+            if agent2_invoked and agent2_label is not None:
+                a2_not_scam = agent2_label != "SCAM"
+            if a2_not_scam and raw_score > 60:
+                raw_score = 58
+                verdict_15 = "suspicious"
+                defensive_gate_applied = True
+
+        scam_score = raw_score
+        verdict = verdict_15
         confidence = result["confidence"]
 
         agents_used = ["agent14", "agent1"]

@@ -119,6 +119,14 @@ class UPIHeuristicEngine:
             threshold = float(rule.get('threshold', 10000))
             multiple = float(rule.get('multiple', 10000))
             return amount >= threshold and amount % multiple == 0
+        if pt == 'urgency_high_amount':
+            amount = _safe_float(txn.get('amount'))
+            note = _safe_lower(txn.get('note', ''))
+            min_amount = float(rule.get('min_amount', 50000))
+            urgency_keywords = rule.get('keywords', ['urgent', 'immediately', 'action required', 'legal action', 'pay now', 'pay immediately'])
+            if amount < min_amount:
+                return False
+            return any(kw in note for kw in urgency_keywords)
         return False
 
     def scan(self, txn: Dict[str,Any]) -> Dict[str,Any]:

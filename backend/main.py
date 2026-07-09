@@ -185,8 +185,10 @@ async def validation_exception_handler(request: Request, exc):
         raw_body = await request.body()
     except Exception:
         raw_body = b""
-    logger.info("422 on %s: invalid request body | content-type=%s | body=%r | errors=%s",
-                request.url.path, request.headers.get("content-type", ""), raw_body[:500], exc.errors())
+    from app.logging_utils import sanitize_pii
+    body_str = raw_body[:500].decode("utf-8", errors="replace") if raw_body else ""
+    logger.info("422 on %s: invalid request body | content-type=%s | body=%s | errors=%s",
+                request.url.path, request.headers.get("content-type", ""), sanitize_pii(body_str), exc.errors())
     try:
         get_posthog_client().capture_event(
             "api_request_failed", "unknown",

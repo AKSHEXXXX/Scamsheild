@@ -1,4 +1,5 @@
 import base64
+import hmac
 import os
 import logging
 import time
@@ -297,7 +298,7 @@ INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "")
 async def health_ocr(authorization: str = Header(None)):
     if INTERNAL_API_KEY:
         token = (authorization or "").replace("Bearer ", "")
-        if token != INTERNAL_API_KEY:
+        if not hmac.compare_digest(token, INTERNAL_API_KEY):
             raise HTTPException(status_code=403, detail="Forbidden")
     from jobs.test_ocr_health import run_health_check
     ok = run_health_check()
