@@ -8,8 +8,6 @@ from app.analytics.posthog_client import get_posthog_client
 router = APIRouter(tags=["account"])
 logger = logging.getLogger("scamshield.account")
 
-SUPABASE_ADMIN_API = f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/admin/users"
-
 
 def _validate_user_id(user_id: str) -> None:
     """Validate user_id is a valid UUID to prevent SSRF via malformed JWT claims."""
