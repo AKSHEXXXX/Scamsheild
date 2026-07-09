@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
 import com.yourapp.connectdemo.data.remote.supabaseClient
 import com.yourapp.connectdemo.data.repository.AuthRepository
 import com.yourapp.connectdemo.ui.navigation.AppNavGraph
@@ -15,6 +17,8 @@ import com.yourapp.connectdemo.util.Constants
 import com.yourapp.connectdemo.util.Constants.Routes
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,6 +40,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var authRepository: AuthRepository
 
+    @Inject
+    lateinit var analytics: AnalyticsManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,6 +56,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             ConnectDemoTheme {
                 val navController = rememberNavController()
+
+                LaunchedEffect(navController) {
+                    navController.currentBackStackEntryFlow
+                        .map { it.destination.route ?: "unknown" }
+                        .distinctUntilChanged()
+                        .collect { route ->
+                            analytics.screen(route)
+                        }
+                }
+
                 AppNavGraph(
                     navController    = navController,
                     startDestination = startDestination

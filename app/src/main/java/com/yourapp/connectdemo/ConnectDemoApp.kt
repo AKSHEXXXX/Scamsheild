@@ -1,7 +1,9 @@
 package com.yourapp.connectdemo
 
 import android.app.Application
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 /**
  * Application class — required by Hilt for dependency injection.
@@ -10,4 +12,14 @@ import dagger.hilt.android.HiltAndroidApp
  *   "Hilt components were not generated. Check that you have annotated your Application class with @HiltAndroidApp"
  */
 @HiltAndroidApp
-class ConnectDemoApp : Application()
+class ConnectDemoApp : Application() {
+
+    @Inject
+    lateinit var analytics: AnalyticsManager
+
+    override fun onCreate() {
+        super.onCreate()
+        // Trigger PostHog init so lifecycle events start capturing immediately
+        analytics.capture("app_launched")
+    }
+}

@@ -3,6 +3,7 @@ package com.yourapp.connectdemo.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yourapp.connectdemo.data.model.MessageModel
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
 import com.yourapp.connectdemo.data.repository.AuthRepository
 import com.yourapp.connectdemo.data.repository.DataRepository
 import com.yourapp.connectdemo.util.Result
@@ -28,7 +29,8 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dataRepository: DataRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val analytics: AnalyticsManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -128,9 +130,13 @@ class HomeViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true)
-                    is Result.Success -> _uiState.value = _uiState.value.copy(
-                        isLoading = false, isLoggedOut = true
-                    )
+                    is Result.Success -> {
+                        analytics.capture("logout", mapOf("platform" to "android"))
+                        analytics.reset()
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false, isLoggedOut = true
+                        )
+                    }
                     is Result.Error -> _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error     = "Sign out failed: ${result.message}"

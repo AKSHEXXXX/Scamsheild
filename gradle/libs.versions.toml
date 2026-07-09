@@ -10,6 +10,7 @@ lifecycle          = "2.8.0"
 coil               = "2.6.0"
 # ksp version must stay in sync with kotlin version — see https://github.com/google/ksp/releases
 ksp                = "1.9.23-1.0.20"
+posthog            = "3.5.0"
 
 [libraries]
 # Compose
@@ -48,6 +49,9 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 # Coil (image loading — future OCR/image features)
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+# PostHog
+posthog-android = { group = "com.posthog", name = "posthog-android", version.ref = "posthog" }
 
 [plugins]
 android-application  = { id = "com.android.application",                    version = "8.4.1" }

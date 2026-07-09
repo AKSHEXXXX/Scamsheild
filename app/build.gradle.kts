@@ -109,6 +109,9 @@ dependencies {
     // ── Coil (image loading — future OCR features) ───────────────────────────────
     implementation(libs.coil.compose)
 
+    // ── PostHog ───────────────────────────────────────────────────────────────────
+    implementation(libs.posthog.android)
+
     // ── Debug ─────────────────────────────────────────────────────────────────────
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

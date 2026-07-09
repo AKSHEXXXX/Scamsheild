@@ -3,6 +3,7 @@ package com.yourapp.connectdemo.ui.auth
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
 import com.yourapp.connectdemo.data.repository.AuthRepository
 import com.yourapp.connectdemo.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,11 +41,15 @@ data class LoginUiState(
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     application: Application,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val analytics: AnalyticsManager
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    private var hasTrackedSession = false
+    private var pendingAuthMethod: String? = null
 
     init {
         // Observe the real Supabase session state.
@@ -54,9 +59,27 @@ class LoginViewModel @Inject constructor(
             .onEach { authenticated ->
                 if (authenticated) {
                     _uiState.value = _uiState.value.copy(isSuccess = true, isLoading = false)
+                    trackLoginIfNeeded("google")
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun trackLoginIfNeeded(method: String) {
+        if (hasTrackedSession) return
+        hasTrackedSession = true
+
+        val user = authRepository.currentUser
+        if (user != null) {
+            analytics.identify(
+                user.id,
+                mapOf("email" to (user.email ?: ""), "platform" to "android")
+            )
+            analytics.capture(
+                "login_completed",
+                mapOf("platform" to "android", "method" to method)
+            )
+        }
     }
 
     fun onEmailChanged(email: String) {
@@ -88,6 +111,7 @@ class LoginViewModel @Inject constructor(
      * Navigation to Home happens via the isAuthenticated Flow observer in init{}.
      */
     fun signInWithGoogle() {
+        pendingAuthMethod = "google"
         authRepository.signInWithGoogle()
             .onEach { result ->
                 when (result) {
@@ -117,8 +141,8 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true, error = null)
                     is Result.Success -> {
-                        // Handled by isAuthenticated observer, but safe to set success here too
                         _uiState.value = _uiState.value.copy(isLoading = false, isSuccess = true)
+                        trackLoginIfNeeded("email")
                     }
                     is Result.Error   -> _uiState.value = _uiState.value.copy(isLoading = false, error = result.message)
                 }
@@ -145,6 +169,11 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true, error = null)
                     is Result.Success -> {
+                        val email = currentState.email.trim()
+                        analytics.capture(
+                            "account_created",
+                            mapOf("platform" to "android", "method" to "email")
+                        )
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             error = "Registration successful! If verification is enabled, check your email."
