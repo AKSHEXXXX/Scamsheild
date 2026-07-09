@@ -48,27 +48,30 @@ class LoginViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    private var hasTrackedSession = false
     private var pendingAuthMethod: String? = null
 
     init {
         // Observe the real Supabase session state.
         // This fires when MainActivity.onNewIntent() calls handleAuthCallback()
         // and parseFragmentAndImportSession() successfully stores the token.
+        // For Google OAuth this is the only signal that login completed.
+        // For Email sign-in we track directly in signInWithEmail() handler.
+        // On cold start with existing session, pendingAuthMethod is null → no false events.
         authRepository.isAuthenticated
             .onEach { authenticated ->
                 if (authenticated) {
                     _uiState.value = _uiState.value.copy(isSuccess = true, isLoading = false)
-                    trackLoginIfNeeded("google")
+                    val method = pendingAuthMethod
+                    if (method != null) {
+                        pendingAuthMethod = null
+                        identifyAndTrackLogin(method)
+                    }
                 }
             }
             .launchIn(viewModelScope)
     }
 
-    private fun trackLoginIfNeeded(method: String) {
-        if (hasTrackedSession) return
-        hasTrackedSession = true
-
+    private fun identifyAndTrackLogin(method: String) {
         val user = authRepository.currentUser
         if (user != null) {
             analytics.identify(
@@ -142,7 +145,7 @@ class LoginViewModel @Inject constructor(
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true, error = null)
                     is Result.Success -> {
                         _uiState.value = _uiState.value.copy(isLoading = false, isSuccess = true)
-                        trackLoginIfNeeded("email")
+                        identifyAndTrackLogin("email")
                     }
                     is Result.Error   -> _uiState.value = _uiState.value.copy(isLoading = false, error = result.message)
                 }
@@ -169,7 +172,6 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true, error = null)
                     is Result.Success -> {
-                        val email = currentState.email.trim()
                         analytics.capture(
                             "account_created",
                             mapOf("platform" to "android", "method" to "email")
