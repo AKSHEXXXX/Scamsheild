@@ -181,6 +181,7 @@ async def analyze_text(request: Request,
             endpoint=endpoint,
             platform=body.os,
             agents_used=agents_used,
+            extra_properties={"top_signal": result.get("top_signal", ""), "input_type": "text"},
         )
 
         return {
@@ -218,5 +219,6 @@ async def analyze_text(request: Request,
             platform=body.os,
             error_type=type(exc).__name__,
             error_message=str(exc),
+            extra_properties={"input_type": "text"},
         )
         raise

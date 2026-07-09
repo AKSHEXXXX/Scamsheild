@@ -201,8 +201,9 @@ async def _process_sandbox_image(
         event="analysis_completed", user_id=user_id,
         channel="image", verdict=result["verdict"], score=result["scam_score"],
         latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=platform,
+        extra_properties={"top_signal": result.get("top_signal", ""), "input_type": "image"},
     )
-
+    
     flagged_urls = [u["url"] if isinstance(u, dict) else str(u)
                     for u in result.get("flagged_urls", [])]
     return AnalyzeOut(
@@ -284,6 +285,7 @@ async def sandbox_file(request: Request,
         event="analysis_completed", user_id=user_id,
         channel="file", verdict=verdict, score=result["scam_score"],
         latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
+        extra_properties={"top_signal": result.get("top_signal", ""), "input_type": "image"},
     )
     return {"scan_id": scan_id, "kind": "file", "flagged": flagged, **result}
 

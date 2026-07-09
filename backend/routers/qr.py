@@ -214,6 +214,7 @@ async def check_qr(request: Request,
             channel="qr", verdict=verdict, score=score,
             latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
             agents_used=list(set(agents_used)),
+            extra_properties={"top_signal": top_signal, "input_type": "qr"},
         )
         return {"scan_id": scan_id, "kind": "qr", "flagged": flagged,
                 "top_signal": top_signal,
@@ -227,5 +228,6 @@ async def check_qr(request: Request,
             channel="qr", verdict="error", score=0,
             latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
             error_type=type(exc).__name__, error_message=str(exc),
+            extra_properties={"input_type": "qr"},
         )
         raise

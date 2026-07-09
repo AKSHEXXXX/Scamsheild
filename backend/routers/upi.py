@@ -84,6 +84,7 @@ async def analyze_upi(request: Request,
             channel="upi", verdict=verdict, score=result["scam_score"],
             latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
             agents_used=["agent6", "agent7", "agent1", "agent14", "agent15"],
+            extra_properties={"top_signal": result.get("top_signal", ""), "input_type": "upi"},
         )
         return {"scan_id": scan_id, "kind": "upi", "flagged": flagged, **result, "_meta": None}
     except Exception as exc:
@@ -93,5 +94,6 @@ async def analyze_upi(request: Request,
             channel="upi", verdict="error", score=0,
             latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
             error_type=type(exc).__name__, error_message=str(exc),
+            extra_properties={"input_type": "upi"},
         )
         raise

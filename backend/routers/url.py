@@ -198,6 +198,7 @@ async def analyze_url(request: Request,
             channel="url", verdict=verdict, score=score,
             latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
             agents_used=["agent3", "agent4", "agent8", "agent14", "agent15"],
+            extra_properties={"top_signal": result.get("top_signal", ""), "input_type": "url"},
         )
 
         return {"scan_id": scan_id, "kind": "url", "flagged": flagged, **result, "_meta": None}
@@ -208,5 +209,6 @@ async def analyze_url(request: Request,
             channel="url", verdict="error", score=0,
             latency_ms=elapsed, request_id=request_id, endpoint=endpoint, platform=body.os,
             error_type=type(exc).__name__, error_message=str(exc),
+            extra_properties={"input_type": "url"},
         )
         raise

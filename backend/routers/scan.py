@@ -223,6 +223,7 @@ async def unified_scan(request: Request,
         endpoint=request.url.path,
         platform=body.os or "unknown",
         agents_used=[str(r.agent_id) for r in agent_results if r.verdict not in ("ERROR",)],
+        extra_properties={"top_signal": top_reason, "input_type": channel},
     )
     if error_agents:
         posthog.capture_scan_event(
@@ -237,6 +238,7 @@ async def unified_scan(request: Request,
             platform=body.os or "unknown",
             error_type="agent_error",
             error_message=f"{len(error_agents)} agent(s) returned ERROR",
+            extra_properties={"input_type": channel},
         )
 
     return UnifiedScanResult(

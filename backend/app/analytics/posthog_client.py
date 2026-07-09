@@ -136,6 +136,7 @@ class PosthogClient:
         agents_used: Optional[list[str]] = None,
         error_type: Optional[str] = None,
         error_message: Optional[str] = None,
+        extra_properties: Optional[dict] = None,
     ) -> None:
         props: dict = {
             "channel": channel,
@@ -145,6 +146,8 @@ class PosthogClient:
         }
         if agents_used:
             props["agents_used"] = agents_used
+        if extra_properties:
+            props.update(extra_properties)
         self.capture_event(
             event=event,
             user_id=user_id,
