@@ -5,7 +5,11 @@ from app.database import supabase
 def require_user(authorization: Optional[str] = None) -> str:
     if not authorization:
         raise HTTPException(status_code=401, detail="Authorization header required")
-    token = authorization.replace("Bearer ", "")
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Authorization header must start with 'Bearer '")
+    token = authorization[7:]  # Remove "Bearer " prefix (exact 7 chars)
+    if not token:
+        raise HTTPException(status_code=401, detail="Bearer token missing")
     try:
         user = supabase.auth.get_user(token)
         return user.user.id
@@ -15,9 +19,11 @@ def require_user(authorization: Optional[str] = None) -> str:
 
 def _extract_user_from_request(request: Request) -> Optional[str]:
     auth = request.headers.get("authorization")
-    if not auth:
+    if not auth or not auth.startswith("Bearer "):
         return None
-    token = auth.replace("Bearer ", "")
+    token = auth[7:]  # Remove "Bearer " prefix
+    if not token:
+        return None
     try:
         user = supabase.auth.get_user(token)
         return user.user.id

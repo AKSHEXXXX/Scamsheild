@@ -105,17 +105,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="ScamShield API",
-    version="2.1.0",
+    version=settings.VERSION,
     lifespan=lifespan,
     docs_url=None,
     redoc_url=None,
     openapi_url=None,
 )
 
-_cors_origins = settings.CORS_ORIGINS or ["*"]
-_allow_credentials = "*" not in _cors_origins
-if not _allow_credentials:
-    logger.warning("CORS_ORIGINS contains '*' so allow_credentials is disabled for safety")
+_cors_origins = settings.CORS_ORIGINS
+if not _cors_origins:
+    raise RuntimeError("CORS_ORIGINS must be set in environment (comma-separated)")
+_allow_credentials = True
+logger.info("CORS allowed origins: %s", _cors_origins)
 
 app.add_middleware(
     CORSMiddleware,

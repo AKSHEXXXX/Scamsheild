@@ -6,7 +6,7 @@ import time
 from typing import Literal, Optional
 from datetime import datetime, timezone
 from fastapi import APIRouter, Header, HTTPException, File, UploadFile, Form, Request
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, field_validator
 from app.models import AnalyzeOut, SandboxImageRequest
 from app.database import supabase
 from app.auth import require_user, enforce_credit_cap, calculate_effective_cap, record_bonus_consumption
@@ -24,6 +24,16 @@ class SandboxFileIn(BaseModel):
     filename: str = ""
     file_bytes_b64: str
     os: Literal["iOS", "Android"]
+
+    @field_validator("file_bytes_b64")
+    @classmethod
+    def validate_base64_size(cls, v: str) -> str:
+        # Rough estimate: base64 is ~33% larger than binary
+        # 2 MB binary = ~2.66 MB base64
+        max_b64_len = 2_800_000
+        if len(v) > max_b64_len:
+            raise ValueError(f"File too large. Max base64 length: {max_b64_len} chars (~2 MB binary)")
+        return v
 
 @router.post("/api/v1/sandbox-image")
 async def sandbox_image(request: Request,

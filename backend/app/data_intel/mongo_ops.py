@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime, timezone
 from typing import Optional
 from app.database_ext import MongoDBClient
@@ -6,6 +7,22 @@ from app.database_ext import MongoDBClient
 logger = logging.getLogger("scamshield.mongo_ops")
 _warned = False
 
+_MONGO_KEY_RE = re.compile(r'^[\w\.\$]+$')
+
+def _sanitize_mongo_key(key: str) -> str:
+    """Sanitize a key for use in MongoDB query to prevent injection.
+    Only allow alphanumeric, underscore, dot, dollar sign."""
+    if not _MONGO_KEY_RE.match(key):
+        # Replace invalid chars with underscore
+        return re.sub(r'[^\w\.\$]', '_', key)
+    return key
+
+def _sanitize_mongo_value(value: str) -> str:
+    """Sanitize a string value for MongoDB query."""
+    # Remove potential MongoDB operator characters at start
+    if value.startswith('$') or value.startswith('{') or value.startswith('['):
+        return '_' + value
+    return value
 
 def _warn_once():
     global _warned
@@ -209,14 +226,19 @@ def save_feedback(scan_id: str, user_id: str, channel: str, label: str, reason: 
         _warn_once()
         return
     try:
+        safe_scan_id = _sanitize_mongo_key(scan_id)
+        safe_user_id = _sanitize_mongo_key(user_id)
+        safe_channel = _sanitize_mongo_key(channel)
+        safe_label = _sanitize_mongo_key(label)
+        safe_reason = _sanitize_mongo_value(reason[:500] if reason else "")
         db.feedback.update_one(
-            {"scan_id": scan_id, "user_id": user_id},
+            {"scan_id": safe_scan_id, "user_id": safe_user_id},
             {"$set": {
-                "scan_id": scan_id,
-                "user_id": user_id,
-                "channel": channel,
-                "label": label,
-                "reason": reason[:500] if reason else "",
+                "scan_id": safe_scan_id,
+                "user_id": safe_user_id,
+                "channel": safe_channel,
+                "label": safe_label,
+                "reason": safe_reason,
                 "created_at": datetime.now(timezone.utc),
             }},
             upsert=True,

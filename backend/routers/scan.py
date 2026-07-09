@@ -6,6 +6,7 @@ from fastapi import APIRouter, Header, HTTPException, Request
 from app.models import ScanRequest, UnifiedScanResult, AgentResultItem
 from app.auth import require_user
 from app.ml.model_loader import get_agent_status
+from app.config import settings
 from app.logging_utils import log_event, hash_id
 from app.analytics.posthog_client import get_posthog_client
 
@@ -247,5 +248,5 @@ async def unified_scan(request: Request,
         label=final.lower(),
         top_reason=top_reason,
         agent_results=agent_results,
-        meta={"deployment_id": "6fd63ed4", "latency_ms": int(round(elapsed * 1000)), "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
+        meta={"deployment_version": settings.VERSION, "latency_ms": int(round(elapsed * 1000)), "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
     )

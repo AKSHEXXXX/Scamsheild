@@ -37,6 +37,7 @@ class Settings:
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     CORS_ORIGINS: list[str] = _parse_cors_origins()
     SENSITIVITY_THRESHOLD: int = int(os.getenv("SENSITIVITY_THRESHOLD", "70"))
+    VERSION: str = os.getenv("APP_VERSION", "2.1.0")
     MODEL_DOWNLOAD_URL: str = os.getenv("MODEL_DOWNLOAD_URL", "")
     MODEL_DOWNLOAD_KEY: str = os.getenv("MODEL_DOWNLOAD_KEY", "")
     MODEL_DOWNLOAD_SECRET: str = os.getenv("MODEL_DOWNLOAD_SECRET", "")
