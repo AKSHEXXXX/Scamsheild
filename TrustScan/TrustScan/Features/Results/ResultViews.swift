@@ -303,6 +303,7 @@ struct AnalysisResultView: View {
           "result": result.verdict.rawValue,
           "threat_score": result.score
       ])
+      AnalyticsManager.shared.screen(name: "Result")
       withAnimation(.spring(response: 1.5, dampingFraction: 0.8, blendDuration: 0)) {
         animatedScore = Double(result.score)
       }

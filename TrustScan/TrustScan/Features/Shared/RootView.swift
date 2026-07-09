@@ -14,6 +14,7 @@ struct RootView: View {
     Group {
       if !authService.isAuthenticated {
         LoginView(viewModel: environment.authViewModel)
+          .trackScreen(name: "Login")
       } else if !hasCompletedOnboarding {
         OnboardingView {
           hasCompletedOnboarding = true
@@ -21,6 +22,7 @@ struct RootView: View {
             UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding_\(userId)")
           }
         }
+        .trackScreen(name: "Onboarding")
       } else {
         MainTabView(environment: environment, hasCompletedOnboarding: $hasCompletedOnboarding)
       }
@@ -48,6 +50,7 @@ struct MainTabView: View {
     TabView(selection: $selectedTab) {
       NavigationStack {
         SubmissionHomeView(viewModel: environment.submissionViewModel, historyViewModel: environment.historyViewModel)
+          .trackScreen(name: "Scan")
       }
       .tabItem {
         Label("Scan", systemImage: "shield.checkered")
@@ -56,6 +59,7 @@ struct MainTabView: View {
 
       NavigationStack {
         BlogsView()
+          .trackScreen(name: "Blogs")
       }
       .tabItem {
         Label("Blogs", systemImage: "newspaper")
@@ -67,6 +71,7 @@ struct MainTabView: View {
           viewModel: environment.historyViewModel,
           onScanRequested: { selectedTab = .scan }
         )
+        .trackScreen(name: "History")
       }
       .tabItem {
         Label("History", systemImage: "clock.arrow.circlepath")

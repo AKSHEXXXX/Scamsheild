@@ -100,8 +100,8 @@ final class SubmissionViewModel: ObservableObject {
     clientOverrideActive = false
     
     let startTime = Date()
-    AnalyticsManager.shared.capture(event: "scan_started", properties: ["type": "image"])
-    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["type": "image"])
+    AnalyticsManager.shared.capture(event: "scan_started", properties: ["channel": "image"])
+    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["channel": "image"])
 
     do {
       guard let uiImage = UIImage(data: selectedImageData) else {
@@ -114,11 +114,15 @@ final class SubmissionViewModel: ObservableObject {
       )
 
       ocrSource = sourceString
-      // Check if client-side signals override the backend verdict
       clientOverrideActive = result.clientDetectedMiss
       state = .success(result)
       
       let duration = Date().timeIntervalSince(startTime)
+      AnalyticsManager.shared.capture(event: "scan_completed", properties: [
+          "channel": "image",
+          "verdict": result.verdict.rawValue.uppercased(),
+          "duration_ms": Int(duration * 1000),
+      ])
       AnalyticsManager.shared.capture(event: "analysis_completed", properties: [
           "type": "image",
           "scan_duration": duration,
@@ -157,8 +161,8 @@ final class SubmissionViewModel: ObservableObject {
     clientOverrideActive = false
     
     let startTime = Date()
-    AnalyticsManager.shared.capture(event: "scan_started", properties: ["type": "qr"])
-    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["type": "qr"])
+    AnalyticsManager.shared.capture(event: "scan_started", properties: ["channel": "qr"])
+    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["channel": "qr"])
 
     do {
       let (result, sourceString) = try await submitAnalysisUseCase.analyzeQR(payload: payload)
@@ -168,6 +172,11 @@ final class SubmissionViewModel: ObservableObject {
       state = .success(result)
       
       let duration = Date().timeIntervalSince(startTime)
+      AnalyticsManager.shared.capture(event: "scan_completed", properties: [
+          "channel": "qr",
+          "verdict": result.verdict.rawValue.uppercased(),
+          "duration_ms": Int(duration * 1000),
+      ])
       AnalyticsManager.shared.capture(event: "analysis_completed", properties: [
           "type": "qr",
           "scan_duration": duration,
@@ -261,10 +270,9 @@ final class SubmissionViewModel: ObservableObject {
     clientOverrideActive = false
     
     let startTime = Date()
-    AnalyticsManager.shared.capture(event: "scan_started", properties: ["type": "text"])
-    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["type": "text"])
+    AnalyticsManager.shared.capture(event: "scan_started", properties: ["channel": "sms"])
+    AnalyticsManager.shared.capture(event: "analysis_started", properties: ["channel": "sms"])
     
-    // Preflight: log if obvious scam patterns are detected before API call
     _ = submitAnalysisUseCase.preflightScamCheck(text)
     do {
       let (result, sourceString) = try await submitAnalysisUseCase.analyzeText(text)
@@ -274,6 +282,11 @@ final class SubmissionViewModel: ObservableObject {
       state = .success(result)
       
       let duration = Date().timeIntervalSince(startTime)
+      AnalyticsManager.shared.capture(event: "scan_completed", properties: [
+          "channel": "sms",
+          "verdict": result.verdict.rawValue.uppercased(),
+          "duration_ms": Int(duration * 1000),
+      ])
       AnalyticsManager.shared.capture(event: "analysis_completed", properties: [
           "type": "text",
           "scan_duration": duration,
