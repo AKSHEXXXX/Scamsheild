@@ -45,6 +45,20 @@ local count = redis.call('ZCARD', key)
 return {count, limit}
 """
 
+async def _check_ip_reputation(ip: str) -> Optional[str]:
+    r = RedisClient.client()
+    if r is None:
+        return None
+    try:
+        raw = await r.get(f"ti:ip:{ip}")
+        if raw:
+            data = json.loads(raw)
+            return data.get("reputation")
+    except Exception:
+        pass
+    return None
+
+
 async def _check_rate_limit(key: str, limit: int) -> tuple[bool, int]:
     global _redis_down_logged
     r = RedisClient.client()
