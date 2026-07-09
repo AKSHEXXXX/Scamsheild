@@ -31,7 +31,10 @@ public final class AnalyticsManager {
         config.sessionReplayConfig.maskAllTextInputs = true
         config.sessionReplayConfig.maskAllImages = false
         config.sessionReplayConfig.captureNetworkTelemetry = false
-        
+
+        // ── Surveys (NPS, feedback, feature polls) ─────────────────────────────
+        config.enableSurveysAndEarlyAccessFeatures = true
+
         PostHogSDK.shared.setup(config)
         print("✅ AnalyticsManager: PostHog SDK initialized successfully.")
     }
