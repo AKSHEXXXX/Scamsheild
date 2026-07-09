@@ -43,7 +43,7 @@ def _generate_referral_code() -> str:
 
 def _ensure_referral(user_id: str) -> dict:
     result = supabase.table("referrals").select("*").eq("owner_id", user_id).maybe_single().execute()
-    if result.data:
+    if result is not None and result.data:
         return result.data
     for attempt in range(5):
         code = _generate_referral_code()
@@ -96,7 +96,7 @@ def validate_referral(referral_code: str, authorization: str = Header(None)):
         .eq("code", code) \
         .maybe_single() \
         .execute()
-    if not referral.data:
+    if referral is None or not referral.data:
         return {
             "valid": False,
             "can_redeem": False,
@@ -116,7 +116,7 @@ def validate_referral(referral_code: str, authorization: str = Header(None)):
         .eq("redeemed_by", current_user_id) \
         .maybe_single() \
         .execute()
-    if existing.data:
+    if existing is not None and existing.data:
         return {
             "valid": True,
             "can_redeem": False,
@@ -142,7 +142,7 @@ def invite_lookup(referral_code: str):
         .eq("code", code) \
         .maybe_single() \
         .execute()
-    if not referral.data:
+    if referral is None or not referral.data:
         return {
             "valid": False,
             "referral_code": code,
@@ -170,11 +170,11 @@ def redeem_referral(request: Request,
         raise HTTPException(status_code=400, detail="referral_code is required")
 
     referral = supabase.table("referrals") \
-        .select("*") \
+        .select("id,owner_id,code") \
         .eq("code", code) \
         .maybe_single() \
         .execute()
-    if not referral.data:
+    if referral is None or not referral.data:
         raise HTTPException(status_code=404, detail="Referral code not found.")
 
     referrer_id = referral.data["owner_id"]
@@ -186,7 +186,7 @@ def redeem_referral(request: Request,
         .eq("redeemed_by", current_user_id) \
         .maybe_single() \
         .execute()
-    if existing.data:
+    if existing is not None and existing.data:
         raise HTTPException(status_code=409, detail="You have already redeemed a referral code.")
 
     scans_credited = 5
@@ -221,7 +221,7 @@ def redemption_status(authorization: str = Header(None)):
         .maybe_single() \
         .execute()
 
-    if not redemption.data:
+    if redemption is None or not redemption.data:
         return {
             "has_redeemed": False,
             "redeemed_at": None,
@@ -237,7 +237,7 @@ def redemption_status(authorization: str = Header(None)):
             .eq("id", referral_id) \
             .maybe_single() \
             .execute()
-        if ref.data:
+        if ref is not None and ref.data:
             code = ref.data.get("code")
 
     return {
