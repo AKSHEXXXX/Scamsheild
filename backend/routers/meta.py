@@ -16,7 +16,7 @@ logger = logging.getLogger("scamshield.meta")
 @router.get("/health")
 @router.get("/api/v1/health")
 def health(request: Request = None):
-    from app.ml.model_loader import get_models_loaded_count, get_agent_status, is_agent_healthy
+    from app.ml.model_loader import get_models_loaded_count, get_agent_status, is_agent_healthy, _is_stub_agent
     from app.config import settings
     from app.database_ext import MongoDBClient, RedisClient
 
@@ -24,16 +24,16 @@ def health(request: Request = None):
     total_agents = len(agent_statuses)
     healthy_count = 0
     disabled_count = 0
-    unhealthy_agents = []
+    unhealthy_agents = set()
     for aid, s in agent_statuses.items():
         health_info = s.get("health", {})
         if health_info.get("disabled"):
             disabled_count += 1
-            unhealthy_agents.append(f"agent{aid}")
+            unhealthy_agents.add(f"agent{aid}")
         elif is_agent_healthy(f"agent{aid}"):
             healthy_count += 1
         else:
-            unhealthy_agents.append(f"agent{aid}")
+            unhealthy_agents.add(f"agent{aid}")
 
     models_loaded = get_models_loaded_count()
     all_healthy = len(unhealthy_agents) == 0
@@ -41,6 +41,7 @@ def health(request: Request = None):
     if request:
         posthog = get_posthog_client()
         request_id = getattr(request.state, "request_id", "")
+
         posthog.capture_event(
             "agents_health_checked",
             "system",
@@ -58,6 +59,25 @@ def health(request: Request = None):
             request_id=request_id,
         )
 
+        unhealthy_set = unhealthy_agents
+        for aid, s in agent_statuses.items():
+            agent_id = f"agent{aid}"
+            posthog.capture_event(
+                "agent_status_report",
+                "system",
+                properties={
+                    "agent_id": agent_id,
+                    "agent_name": s.get("name", ""),
+                    "healthy": agent_id not in unhealthy_set,
+                    "disabled": s.get("health", {}).get("disabled", False),
+                    "is_stub": _is_stub_agent(agent_id),
+                    "status": s.get("status", "UNKNOWN"),
+                    "status_detail": s.get("status_detail", ""),
+                    "models_loaded": models_loaded,
+                },
+                request_id=request_id,
+            )
+
     return {
         "status": "ok",
         "version": "2.1.0",
@@ -66,7 +86,7 @@ def health(request: Request = None):
         "all_agents_healthy": all_healthy,
         "healthy_count": healthy_count,
         "disabled_count": disabled_count,
-        "unhealthy_agents": unhealthy_agents,
+        "unhealthy_agents": sorted(unhealthy_agents),
         "mongodb_connected": MongoDBClient.is_connected(),
         "redis_connected": RedisClient.is_connected(),
     }
