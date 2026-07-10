@@ -37,17 +37,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onLogout: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    analytics: AnalyticsManager = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var postText by remember { mutableStateOf("") }
+
+    // Track screen view
+    LaunchedEffect(Unit) {
+        analytics.screen("Home")
+    }
 
     // Initial load
     LaunchedEffect(Unit) {

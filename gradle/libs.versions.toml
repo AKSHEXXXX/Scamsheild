@@ -10,7 +10,7 @@ lifecycle          = "2.8.0"
 coil               = "2.6.0"
 # ksp version must stay in sync with kotlin version — see https://github.com/google/ksp/releases
 ksp                = "1.9.23-1.0.20"
-posthog            = "3.5.0"
+posthog            = "3.11.0"
 
 [libraries]
 # Compose

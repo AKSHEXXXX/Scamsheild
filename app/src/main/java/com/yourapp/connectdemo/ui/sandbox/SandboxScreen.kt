@@ -5,8 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
+import javax.inject.Inject
 
 /**
  * Sandbox Feature — placeholder screen.
@@ -19,7 +22,12 @@ import androidx.compose.ui.Modifier
  * Route: Routes.SANDBOX — uncomment in Constants.kt and AppNavGraph.kt
  */
 @Composable
-fun SandboxScreen() {
+fun SandboxScreen(
+    analytics: AnalyticsManager = hiltViewModel()
+) {
+    LaunchedEffect(Unit) {
+        analytics.screen("Sandbox")
+    }
     Box(
         modifier        = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

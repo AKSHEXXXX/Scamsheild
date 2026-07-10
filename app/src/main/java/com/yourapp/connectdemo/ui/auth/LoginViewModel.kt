@@ -76,12 +76,9 @@ class LoginViewModel @Inject constructor(
         if (user != null) {
             analytics.identify(
                 user.id,
-                mapOf("email" to (user.email ?: ""), "platform" to "android")
+                mapOf("email" to (user.email ?: ""), AnalyticsManager.PROP_PLATFORM to AnalyticsManager.PLATFORM_ANDROID)
             )
-            analytics.capture(
-                "login_completed",
-                mapOf("platform" to "android", "method" to method)
-            )
+            analytics.trackLogin(method)
         }
     }
 
@@ -172,10 +169,7 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true, error = null)
                     is Result.Success -> {
-                        analytics.capture(
-                            "account_created",
-                            mapOf("platform" to "android", "method" to "email")
-                        )
+                        analytics.trackAccountCreated()
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             error = "Registration successful! If verification is enabled, check your email."

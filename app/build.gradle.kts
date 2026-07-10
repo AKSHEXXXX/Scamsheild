@@ -28,6 +28,10 @@ android {
         buildConfigField("String", "SUPABASE_URL",    "\"https://woudapmpknaqkebfxeck.supabase.co\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"sb_publishable_35kZfTKdcUopu1PPXnw21w_7XA3RWZz\"")
 
+        // PostHog Analytics
+        buildConfigField("String", "POSTHOG_API_KEY", "\"phc_knJZQWprWxJSt9GNw3ZJUzQ9SgSHLMjTk3Ku4rH8VUVm\"")
+        buildConfigField("String", "POSTHOG_HOST", "\"https://us.i.posthog.com\"")
+
         // Replace with your actual local server IP and port for the Test Connection feature.
         // Format: "http://192.168.X.X:PORT"
         // Note: network_security_config.xml allows cleartext for local IPs (required on API 28+)

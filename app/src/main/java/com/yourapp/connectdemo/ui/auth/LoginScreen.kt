@@ -52,18 +52,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.yourapp.connectdemo.core.analytics.AnalyticsManager
+import javax.inject.Inject
 
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+    analytics: AnalyticsManager = hiltViewModel() // Note: AnalyticsManager is @Singleton, hiltViewModel works
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val focusManager = LocalFocusManager.current
 
-    // Navigate when isSuccess becomes true
-    LaunchedEffect(uiState.isSuccess) {
-        if (uiState.isSuccess) onLoginSuccess()
+    // Track screen view
+    LaunchedEffect(Unit) {
+        analytics.screen("Login")
     }
 
     Scaffold { padding ->

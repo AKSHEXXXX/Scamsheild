@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
 
     // ── Supabase POST ─────────────────────────────────────────────────────────────
 
-    /**
+/**
      * Posts [content] to the database.
      *
      * FIX: The md spec called fetchMessages() synchronously inside the Success handler.
@@ -91,18 +91,45 @@ class HomeViewModel @Inject constructor(
      * This allows the current composition frame to react to postSuccess = true first.
      */
     fun postToDatabase(content: String) {
+        // Track scan started (Android equivalent: posting a message for analysis)
+        val scanId = java.util.UUID.randomUUID().toString()
+        analytics.trackScanStarted(AnalyticsManager.CHANNEL_TEXT)
+        analytics.trackAnalysisStarted(AnalyticsManager.CHANNEL_TEXT)
+
         dataRepository.postMessage(content)
             .onEach { result ->
                 when (result) {
                     is Result.Loading -> _uiState.value = _uiState.value.copy(isLoading = true)
                     is Result.Success -> {
+                        // Mock scan completion data (real scan would return verdict/score from backend)
                         _uiState.value = _uiState.value.copy(
-                            isLoading   = false,
+                            isLoading = false,
                             postSuccess = true
+                        )
+                        // Track scan completion
+                        analytics.trackScanCompleted(
+                            scanId = java.util.UUID.randomUUID().toString(),
+                            verdict = "low_risk", // TODO: get actual verdict from backend
+                            score = 10, // TODO: get actual score from backend
+                            channel = AnalyticsManager.CHANNEL_TEXT
+                        )
+                        analytics.trackAnalysisCompleted(
+                            scanId = java.util.UUID.randomUUID().toString(),
+                            verdict = "low_risk",
+                            score = 10,
+                            channel = AnalyticsManager.CHANNEL_TEXT
                         )
                         // Fetch in a separate coroutine so postSuccess = true is observed first
                         viewModelScope.launch { fetchMessages() }
                     }
+                    is Result.Error -> {
+                        _uiState.value = _uiState.value.copy(isLoading = false, error = result.message)
+                        analytics.trackAnalysisFailed(result.message, AnalyticsManager.CHANNEL_TEXT)
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
+    }
                     is Result.Error -> _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error     = result.message

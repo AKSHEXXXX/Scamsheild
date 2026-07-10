@@ -19,7 +19,8 @@ class ConnectDemoApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // Trigger PostHog init so lifecycle events start capturing immediately
-        analytics.capture("app_launched")
+        // Initialize analytics to start capturing lifecycle events
+        analytics.initialize()
+        analytics.trackAppOpened()
     }
 }
