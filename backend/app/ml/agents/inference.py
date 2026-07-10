@@ -1,12 +1,12 @@
 import re
 import logging
 import numpy as np
-from urllib.parse import urlparse
 
 logger = logging.getLogger("scamshield.ml.agents")
 
 from app.utils.text import preprocess_text
 from app.ml.model_loader import get_models
+from app.ml.url_features import extract_url_features
 
 def agent1_predict_text(text: str) -> float:
     models = get_models()
@@ -26,26 +26,6 @@ def agent1_predict_text(text: str) -> float:
 
 def agent2_predict_text(text: str) -> float:
     return -1.0
-
-def extract_url_features(url: str) -> list:
-    import tldextract
-    parsed = urlparse(url)
-    ext = tldextract.extract(url)
-    domain = f"{ext.domain}.{ext.suffix}" if ext.suffix else ext.domain
-    path = parsed.path + parsed.query
-    return {
-        "URLLength": len(url),
-        "DomainLength": len(domain),
-        "TLDLength": len(ext.suffix),
-        "NoOfSubDomain": len(ext.subdomain.split(".")) if ext.subdomain else 0,
-        "PathLength": len(path),
-        "NoOfEqualsInURL": url.count("="),
-        "NoOfQMarkInURL": url.count("?"),
-        "NoOfAmpersandInURL": url.count("&"),
-        "CharContinuationRate": sum(url.count(c * 2) for c in set(url)) / max(len(url), 1),
-        "IsHTTPS": 1 if parsed.scheme == "https" else 0,
-        "HasIPAddress": 1 if re.search(r'\d+\.\d+\.\d+\.\d+', ext.domain) else 0,
-    }
 
 def agent3_predict_url(url: str) -> float:
     models = get_models()

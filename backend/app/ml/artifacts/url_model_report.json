@@ -1,15 +1,42 @@
 {
-    "accuracy": 1.0,
-    "auc": 1.0,
-    "f1": 1.0,
+    "auc": 0.9981,
+    "accuracy": 0.9968,
+    "f1": 0.9958,
     "best_params": {
-        "subsample": 1.0,
-        "n_estimators": 200,
-        "max_depth": 8,
-        "learning_rate": 0.01,
-        "colsample_bytree": 0.9
+        "n_estimators": 400,
+        "max_depth": 5,
+        "learning_rate": 0.05,
+        "subsample": 0.9,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 2.0,
+        "min_child_weight": 5,
+        "eval_metric": "logloss",
+        "n_jobs": -1
     },
-    "num_features": 50,
-    "train_rows": 188636,
-    "test_rows": 47159
+    "num_features": 13,
+    "features": [
+        "URLLength",
+        "DomainLength",
+        "TLDLength",
+        "NoOfSubDomain",
+        "PathLength",
+        "NoOfEqualsInURL",
+        "NoOfQMarkInURL",
+        "NoOfAmpersandInURL",
+        "NoOfDigitsInURL",
+        "DigitRatioInURL",
+        "CharContinuationRate",
+        "HasIPAddress",
+        "IsHTTPS"
+    ],
+    "train_rows": 191958,
+    "test_rows": 43837,
+    "dataset": "PhiUSIIL Phishing URL Dataset (UCI ML Repository id 967)",
+    "split": "GroupShuffleSplit by registered domain (no domain shared across split)",
+    "leakage_features_removed": [
+        "TLDLegitimateProb",
+        "URLCharProb",
+        "URLSimilarityIndex"
+    ],
+    "notes": "AUC is high because PhiUSIIL's legitimate class is a biased sample (virtually all legitimate URLs are bare www. homepages with no path, over HTTPS); this is a dataset-composition artifact, NOT label leakage. The model over-flags legitimate URLs that carry a path. Trustworthy generalisation requires diversified legitimate negatives (pathful URLs, non-www domains)."
 }

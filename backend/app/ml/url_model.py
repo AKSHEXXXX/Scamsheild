@@ -5,6 +5,8 @@ import re
 import logging
 from urllib.parse import urlparse
 
+from app.ml.url_features import extract_url_features
+
 logger = logging.getLogger("scamshield.ml.url")
 
 _model = None
@@ -31,61 +33,6 @@ def _load():
     _scaler = joblib.load(os.path.join(ARTIFACT_DIR, "url_scaler.pkl"))
     _cols = joblib.load(os.path.join(ARTIFACT_DIR, "url_feature_cols.pkl"))
     logger.info("URL classifier loaded (%d features)", len(_cols))
-
-
-def extract_url_features(url: str) -> dict:
-    parsed = urlparse(url)
-    host = parsed.hostname or ""
-    path = parsed.path
-    query = parsed.query
-
-    def count_nums(s):
-        return sum(c.isdigit() for c in s)
-
-    def char_cont_rate(s):
-        if len(s) <= 1:
-            return 0.0
-        alpha = sum(c.isalpha() for c in s)
-        return round(alpha / len(s), 4)
-
-    def url_char_prob(s):
-        if not s:
-            return 0.0
-        ref_freq = {
-            'a':0.082, 'b':0.015, 'c':0.028, 'd':0.043, 'e':0.127, 'f':0.022,
-            'g':0.020, 'h':0.061, 'i':0.070, 'j':0.002, 'k':0.008, 'l':0.040,
-            'm':0.024, 'n':0.067, 'o':0.075, 'p':0.019, 'q':0.001, 'r':0.060,
-            's':0.063, 't':0.091, 'u':0.028, 'v':0.010, 'w':0.024, 'x':0.002,
-            'y':0.020, 'z':0.001,
-        }
-        total = 0.0
-        for ch in s.lower():
-            if ch in ref_freq:
-                total += ref_freq[ch]
-            elif ch.isdigit():
-                total += 0.005
-            elif ch in ".-_/:":
-                total += 0.002
-            elif ch in "?=&%#@!$'()*+,;":
-                total += 0.001
-        return round(total / len(s), 4)
-
-    parts = host.split(".")
-
-    features = {
-        "URLLength": len(url),
-        "DomainLength": len(host),
-        "TLDLength": len(parts[-1]) if len(parts) > 1 else 0,
-        "NoOfSubDomain": max(0, len(parts) - 2),
-        "NoOfEqualsInURL": url.count("="),
-        "NoOfQMarkInURL": url.count("?"),
-        "NoOfAmpersandInURL": url.count("&"),
-        "CharContinuationRate": char_cont_rate(url),
-        "URLCharProb": url_char_prob(url),
-        "TLDLegitimateProb": 0.5,
-        "IsHTTPS": 1 if url.startswith("https") else 0,
-    }
-    return features
 
 
 def predict_url_risk(url: str) -> float:
