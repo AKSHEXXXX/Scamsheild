@@ -1,6 +1,7 @@
 package com.yourapp.connectdemo.core.analytics
 
 import android.app.Application
+import android.util.Log
 import androidx.annotation.Keep
 import com.posthog.PostHog
 import com.posthog.android.PostHogAndroid
@@ -18,6 +19,8 @@ class AnalyticsManager @Inject constructor(
     // Constants matching iOS PostHog event/property names exactly
     // ──────────────────────────────────────────────────────────────────────────
     companion object {
+        private const val TAG = "ScamShieldAnalytics"
+
         const val PROP_PLATFORM = "platform"
         const val PROP_CHANNEL = "channel"
         const val PROP_VERDICT = "verdict"
@@ -50,20 +53,36 @@ class AnalyticsManager @Inject constructor(
         val host = BuildConfig.POSTHOG_HOST
 
         // No-op if the key hasn't been configured — avoids crashing the app.
-        if (apiKey.isEmpty() || apiKey.startsWith("YOUR_")) return
-
-        val config = PostHogAndroidConfig(apiKey = apiKey, host = host).apply {
-            captureScreenViews = true          // autocapture $screen on Activity changes
-            sessionReplay = true               // requires "Record user sessions" in project settings
-            errorTrackingConfig.autoCapture = true
-            debug = BuildConfig.DEBUG
-            // NOTE: native Android surveys are not yet fully supported by the SDK
-            // (per PostHog docs), so `surveys` is left at its default (false) to
-            // avoid runtime issues. iOS parity for surveys is tracked separately.
+        if (apiKey.isEmpty() || apiKey.startsWith("YOUR_")) {
+            Log.w(TAG, "PostHog NOT initialized: API key not configured")
+            return
         }
 
-        PostHogAndroid.setup(application, config)
-        initialized = true
+        try {
+            val config = PostHogAndroidConfig(apiKey = apiKey, host = host).apply {
+                captureScreenViews = true          // autocapture $screen on Activity changes
+                sessionReplay = true               // requires "Record user sessions" in project settings
+                errorTrackingConfig.autoCapture = true
+                debug = BuildConfig.DEBUG
+                // Flush immediately (every event) so data reaches PostHog within
+                // seconds — the SDK default (flushAt=20, flushIntervalSeconds=30)
+                // leaves events queued and unsent during a short test run.
+                flushAt = 1
+                flushIntervalSeconds = 5
+                // NOTE: native Android surveys are not yet fully supported by the SDK
+                // (per PostHog docs), so `surveys` is left at its default (false) to
+                // avoid runtime issues. iOS parity for surveys is tracked separately.
+            }
+
+            PostHogAndroid.setup(application, config)
+            initialized = true
+            Log.i(TAG, "PostHog initialized OK (key=${apiKey.take(8)}…, host=$host)")
+            // Self-test: proves the pipeline end-to-end on first launch.
+            PostHog.capture(event = "app_launch_diagnostic", properties = mapOf("platform" to "android"))
+            PostHog.flush()
+        } catch (e: Throwable) {
+            Log.e(TAG, "PostHog initialization FAILED", e)
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
@@ -73,29 +92,41 @@ class AnalyticsManager @Inject constructor(
 
     /** Associates a user with their actions. Call after successful login/signup. */
     fun identify(distinctId: String, properties: Map<String, Any>? = null) {
-        val props = properties?.toMutableMap() ?: mutableMapOf()
-        props[PROP_PLATFORM] = "android"
-        PostHog.identify(distinctId = distinctId, userProperties = props)
+        try {
+            val props = properties?.toMutableMap() ?: mutableMapOf()
+            props[PROP_PLATFORM] = "android"
+            PostHog.identify(distinctId = distinctId, userProperties = props)
+        } catch (e: Throwable) {
+            Log.e(TAG, "identify failed for $distinctId", e)
+        }
     }
 
     /** Resets the user's identity. Call on logout. */
     fun reset() {
-        PostHog.reset()
+        try { PostHog.reset() } catch (e: Throwable) { Log.e(TAG, "reset failed", e) }
     }
 
     /** Captures a custom event with platform property auto-added. */
     fun capture(event: String, properties: Map<String, Any>? = null) {
-        val props = properties?.toMutableMap() ?: mutableMapOf()
-        props[PROP_PLATFORM] = "android"
-        PostHog.capture(event = event, properties = props)
+        try {
+            val props = properties?.toMutableMap() ?: mutableMapOf()
+            props[PROP_PLATFORM] = "android"
+            PostHog.capture(event = event, properties = props)
+        } catch (e: Throwable) {
+            Log.e(TAG, "capture failed for $event", e)
+        }
     }
 
     /** Tracks a screen view with platform property auto-added. */
     fun screen(screenName: String, properties: Map<String, Any>? = null) {
-        val props = properties?.toMutableMap() ?: mutableMapOf()
-        props[PROP_PLATFORM] = "android"
-        props[PROP_SCREEN_NAME] = screenName
-        PostHog.screen(screenTitle = screenName, properties = props)
+        try {
+            val props = properties?.toMutableMap() ?: mutableMapOf()
+            props[PROP_PLATFORM] = "android"
+            props[PROP_SCREEN_NAME] = screenName
+            PostHog.screen(screenTitle = screenName, properties = props)
+        } catch (e: Throwable) {
+            Log.e(TAG, "screen failed for $screenName", e)
+        }
     }
 
     /** Manually captures a thrown error as a `$exception` event. */
