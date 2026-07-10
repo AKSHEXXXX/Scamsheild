@@ -1,11 +1,10 @@
 package com.yourapp.connectdemo.core.analytics
 
 import android.app.Application
-import android.content.Context
 import androidx.annotation.Keep
 import com.posthog.PostHog
-import com.posthog.PostHogConfig
-import com.posthog.PostHogInterface
+import com.posthog.android.PostHogAndroid
+import com.posthog.android.PostHogAndroidConfig
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,55 +36,58 @@ class AnalyticsManager @Inject constructor(
         const val CHANNEL_UPLOAD = "upload"
     }
 
-    private val posthog: PostHogInterface by lazy {
+    private var initialized = false
+
+    /**
+     * Initializes the PostHog Android SDK. Must be called once from Application.onCreate
+     * BEFORE any capture/identify/screen call. Uses the official 3.x API:
+     *   PostHogAndroidConfig(apiKey, host) + PostHogAndroid.setup(application, config)
+     */
+    fun initialize() {
+        if (initialized) return
+
         val apiKey = BuildConfig.POSTHOG_API_KEY
         val host = BuildConfig.POSTHOG_HOST
 
-        if (apiKey.isEmpty() || apiKey.startsWith("YOUR_")) {
-            throw IllegalStateException(
-                "PostHog API key not configured. Set POSTHOG_API_KEY in build.gradle.kts"
-            )
+        // No-op if the key hasn't been configured — avoids crashing the app.
+        if (apiKey.isEmpty() || apiKey.startsWith("YOUR_")) return
+
+        val config = PostHogAndroidConfig(apiKey = apiKey, host = host).apply {
+            captureScreenViews = true          // autocapture $screen on Activity changes
+            sessionReplay = true               // requires "Record user sessions" in project settings
+            errorTrackingConfig.autoCapture = true
+            debug = BuildConfig.DEBUG
+            // NOTE: native Android surveys are not yet fully supported by the SDK
+            // (per PostHog docs), so `surveys` is left at its default (false) to
+            // avoid runtime issues. iOS parity for surveys is tracked separately.
         }
 
-        PostHog.Builder(application, apiKey, host)
-            // ── Session Replay ─────────────────────────────────────────────────
-            .captureScreenViews(true)
-            .sessionReplay(true)
-            .sessionReplayConfig { config ->
-                config.maskAllTextInputs = true
-                config.maskAllImages = false
-            }
-            // ── Surveys (NPS, feedback, feature polls) ──────────────────────────
-            .enableSurveys(true)
-            // ── Error Tracking (autocapture crashes/ANRs) ────────────────────────
-            .errorTrackingConfig { config ->
-                config.autoCapture = true
-            }
-            // ── Feature Flags ───────────────────────────────────────────────────
-            .build()
+        PostHogAndroid.setup(application, config)
+        initialized = true
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // Public API — mirrors iOS AnalyticsManager method signatures
+    // Public API — mirrors iOS AnalyticsManager method signatures.
+    // After setup(), use the static PostHog.* helpers.
     // ──────────────────────────────────────────────────────────────────────────
 
     /** Associates a user with their actions. Call after successful login/signup. */
     fun identify(distinctId: String, properties: Map<String, Any>? = null) {
         val props = properties?.toMutableMap() ?: mutableMapOf()
         props[PROP_PLATFORM] = "android"
-        posthog.identify(distinctId, props)
+        PostHog.identify(distinctId = distinctId, userProperties = props)
     }
 
     /** Resets the user's identity. Call on logout. */
     fun reset() {
-        posthog.reset()
+        PostHog.reset()
     }
 
     /** Captures a custom event with platform property auto-added. */
     fun capture(event: String, properties: Map<String, Any>? = null) {
         val props = properties?.toMutableMap() ?: mutableMapOf()
         props[PROP_PLATFORM] = "android"
-        posthog.capture(event, props)
+        PostHog.capture(event = event, properties = props)
     }
 
     /** Tracks a screen view with platform property auto-added. */
@@ -93,12 +95,17 @@ class AnalyticsManager @Inject constructor(
         val props = properties?.toMutableMap() ?: mutableMapOf()
         props[PROP_PLATFORM] = "android"
         props[PROP_SCREEN_NAME] = screenName
-        posthog.screen(screenName, props)
+        PostHog.screen(screenTitle = screenName, properties = props)
     }
 
     /** Manually captures a thrown error as a `$exception` event. */
     fun captureException(error: Throwable) {
-        posthog.captureException(error)
+        PostHog.captureException(error)
+    }
+
+    /** Flushes queued events immediately (useful on app background / logout). */
+    fun flush() {
+        PostHog.flush()
     }
 
     // ──────────────────────────────────────────────────────────────────────────
@@ -188,14 +195,14 @@ class AnalyticsManager @Inject constructor(
     // ──────────────────────────────────────────────────────────────────────────
 
     /** Returns true if the given feature flag is enabled for the current user. */
-    fun isFeatureEnabled(key: String): Boolean = posthog.isFeatureEnabled(key)
+    fun isFeatureEnabled(key: String): Boolean = PostHog.isFeatureEnabled(key) ?: false
 
     /** Returns the payload value for a feature flag (String, Number, or JSON). */
-    fun featureFlagPayload(key: String): Any? = posthog.getFeatureFlagPayload(key)
+    fun featureFlagPayload(key: String): Any? = PostHog.getFeatureFlagPayload(key)
 
     /** Reloads feature flags from the PostHog server. */
-    fun reloadFeatureFlags() = posthog.reloadFeatureFlags()
+    fun reloadFeatureFlags() = PostHog.reloadFeatureFlags()
 
     /** Registers a callback to be invoked when feature flags are reloaded. */
-    fun onFeatureFlags(callback: () -> Unit) = posthog.reloadFeatureFlags { callback() }
+    fun onFeatureFlags(callback: () -> Unit) = PostHog.reloadFeatureFlags { callback() }
 }
