@@ -254,39 +254,45 @@ def agent7_predict_upi(txn: dict) -> float:
     if clf is None or sc is None or cols is None:
         return -1.0
     try:
-        # Derive engineered features from raw input
         vpa = str(txn.get("vpa", ""))
         amount = float(txn.get("amount", 0))
+        note = str(txn.get("note", ""))
+
+        import math
+        log_amount = math.log1p(amount)
+
+        generic_notes = {"payment", "transfer", "upi", "send", "money", "paid", "sent", "txn", "transaction", "p2p"}
+        note_lower = note.lower().strip()
+        is_generic_note = int(note_lower in generic_notes or note_lower == "")
+        is_long_vpa = int(len(vpa) > 25)
+        is_round_amount = int(amount % 100 == 0 and amount >= 100)
+        is_high_amount = int(amount > 10000)
+        odd_hour = int(bool(txn.get("odd_hour", False)))
+        tx_velocity_24h = float(txn.get("tx_velocity_24h", 0))
+        is_new_recipient = int(bool(txn.get("is_new_recipient", txn.get("new_payee", False))))
 
         engineered = {
-            "amount":       amount,
-            "has_note":     int(bool(txn.get("has_note", False))),
-            "note_len":     int(txn.get("note_len", 0)),
-            "vpa_len":      len(vpa),
-            "round_amount": int(amount % 100 == 0),
-            "odd_hour":     int(bool(txn.get("odd_hour", False))),
-            "suspicious_note": int(any(kw in vpa.lower() for kw in [
-                "prize", "winner", "lottery", "reward", "free",
-                "lucky", "gift", "offer", "win", "cash"
-            ])),
-            # TODO: add agent07_vpa_whitelist.json check here
-            # to cap fraud_score at 0.2 for whitelisted VPA domains
-            "tx_velocity_24h": float(txn.get("tx_velocity_24h", 0)),
-            "new_payee":    int(bool(txn.get("new_payee", False))),
-            "high_amount":  int(amount > 10000),
-            "low_amount":   int(amount < 100),
+            "amount":            amount,
+            "log_amount":        log_amount,
+            "has_note":          int(bool(note)),
+            "note_len":          len(note),
+            "is_generic_note":   is_generic_note,
+            "vpa_len":           len(vpa),
+            "is_long_vpa":       is_long_vpa,
+            "is_round_amount":   is_round_amount,
+            "is_high_amount":    is_high_amount,
+            "odd_hour":          odd_hour,
+            "tx_velocity_24h":   tx_velocity_24h,
+            "is_new_recipient":  is_new_recipient,
         }
 
-        # Build row in exact column order from feature_cols pkl
         row = np.array([[engineered.get(c, 0) for c in cols]])
         row_scaled = sc.transform(row)
         proba = clf.predict_proba(row_scaled)[0]
-        # Robustly find the fraud class index (class 1 = FRAUD_confirmed)
         classes = list(clf.classes_)
         scam_idx = classes.index(1) if 1 in classes else (1 if len(classes) > 1 else 0)
         raw_prob = float(proba[scam_idx])
-        # Confidence gate: suppress predictions near 0.5 (model is uncertain)
-        if abs(raw_prob - 0.5) < 0.12:
+        if raw_prob < 0.80:
             return 0.0
         return raw_prob
     except Exception as e:

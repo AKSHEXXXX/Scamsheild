@@ -167,6 +167,30 @@ rules:
       - transfer now
       - don't delay
 
+  - name: kyc_scam_note
+    field: note
+    pattern_type: regex
+    pattern: "(?i)(kyc|verify).*(account|unlock|block|suspend|update|complete|pending|required)"
+    severity: HIGH
+    weight: 50
+    explanation: KYC/verification scam language in transaction note
+
+  - name: impersonation_vpa_local
+    field: vpa
+    pattern_type: regex
+    pattern: "(?i)(support|helpdesk|security|verify|kyc|customer|service|care|official|admin)(?:@|\\.|-|_)"
+    severity: HIGH
+    weight: 55
+    explanation: VPA local part impersonates bank/customer support
+
+  - name: urgency_note
+    field: note
+    pattern_type: regex
+    pattern: "(?i)(urgent|immediately|action\\.required|pay\\.now|verify\\.now|blocked|suspended|expired|last\\.chance|final\\.notice)"
+    severity: HIGH
+    weight: 40
+    explanation: Urgent action language in transaction note
+
 scoring:
   score_cap: 100
   multi_rule_boost: 10
