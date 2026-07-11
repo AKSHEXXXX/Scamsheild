@@ -277,14 +277,18 @@ struct ClientOverrideWarningCard: View {
       if !activeLabels.isEmpty {
         ScrollView(.horizontal, showsIndicators: false) {
           HStack(spacing: 6) {
-            ForEach(activeLabels, id: \.self) { label in
-              Text(label)
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(ColorTokens.dng)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(ColorTokens.dng.opacity(0.12))
-                .clipShape(Capsule())
+            ForEach(activeLabels, id: \.1) { icon, label in
+              HStack(spacing: 4) {
+                Image(systemName: icon)
+                  .font(.system(size: 10, weight: .semibold))
+                Text(label)
+                  .font(.system(size: 11, weight: .semibold))
+              }
+              .foregroundStyle(ColorTokens.dng)
+              .padding(.horizontal, 8)
+              .padding(.vertical, 4)
+              .background(ColorTokens.dng.opacity(0.12))
+              .clipShape(Capsule())
             }
           }
         }
@@ -302,15 +306,15 @@ struct ClientOverrideWarningCard: View {
     .accessibilityLabel("On-device analysis detected \(signals.triggeredCount) scam patterns.")
   }
 
-  private func activeDimensionLabels(_ s: ClientScamSignals) -> [String] {
-    var labels: [String] = []
-    if s.policeImpersonation { labels.append("🚨 Authority Impersonation") }
-    if s.urgency             { labels.append("⏰ Urgency") }
-    if s.financialRequest    { labels.append("💰 Financial Request") }
-    if s.otpRequest          { labels.append("🔑 OTP Request") }
-    if s.threatLanguage      { labels.append("⚠️ Threat Language") }
-    if s.hindiScamPatterns   { labels.append("🗣️ Regional Scam Pattern") }
-    if s.homoglyphUrl        { labels.append("🔗 Spoofed Brand URL") }
+  private func activeDimensionLabels(_ s: ClientScamSignals) -> [(String, String)] {
+    var labels: [(String, String)] = []
+    if s.policeImpersonation { labels.append(("shield.fill", "Authority Impersonation")) }
+    if s.urgency             { labels.append(("clock.fill", "Urgency")) }
+    if s.financialRequest    { labels.append(("banknote.fill", "Financial Request")) }
+    if s.otpRequest          { labels.append(("key.fill", "OTP Request")) }
+    if s.threatLanguage      { labels.append(("exclamationmark.triangle.fill", "Threat Language")) }
+    if s.hindiScamPatterns   { labels.append(("person.wave.2.fill", "Regional Scam Pattern")) }
+    if s.homoglyphUrl        { labels.append(("link.fill", "Spoofed Brand URL")) }
     return labels
   }
 }

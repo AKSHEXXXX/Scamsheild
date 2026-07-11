@@ -64,6 +64,8 @@ struct SubmissionHomeView: View {
           }
 
           stateSection
+
+          Color.clear.frame(height: 90)
         }
         .padding(SpacingTokens.large)
       }
@@ -179,18 +181,11 @@ struct SubmissionHomeView: View {
         .font(TypographyTokens.hero)
         .foregroundStyle(ColorTokens.ik)
 
-      Text("Upload a screenshot to check for scams instantly.")
+      Text("You have \(viewModel.configuration.scanCreditCap) scans remaining.")
         .font(TypographyTokens.body)
         .foregroundStyle(ColorTokens.st)
-
-      HStack(spacing: SpacingTokens.small) {
-        Label(String(localized: "HOME_ACCOUNT_SECURED"), systemImage: "lock.shield")
-        Label("Local history", systemImage: "internaldrive")
-      }
-      .font(TypographyTokens.caption)
-      .foregroundStyle(ColorTokens.st)
     }
-    .padding(SpacingTokens.large)
+    .padding(SpacingTokens.medium)
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(
       RoundedRectangle(cornerRadius: 28, style: .continuous)
@@ -306,7 +301,7 @@ struct SubmissionHomeView: View {
             matching: .images,
             preferredItemEncoding: .automatic
           ) {
-            Label("Choose Screenshot", systemImage: "photo.badge.plus")
+            Label("Scan a screenshot", systemImage: "photo.badge.plus")
               .font(.system(size: 16, weight: .semibold))
               .frame(maxWidth: .infinity, minHeight: 52)
           }
@@ -315,13 +310,13 @@ struct SubmissionHomeView: View {
           .background(ColorTokens.acc)
           .clipShape(RoundedRectangle(cornerRadius: 12))
           .disabled(!networkMonitor.isConnected)
-          .accessibilityLabel("Choose screenshot")
+          .accessibilityLabel("Scan a screenshot")
           .accessibilityHint("Opens your photo library")
         } else {
           Button {
             viewModel.isShowingPhotoDenied = true
           } label: {
-            Label("Choose Screenshot", systemImage: "photo.badge.plus")
+            Label("Scan a screenshot", systemImage: "photo.badge.plus")
               .font(.system(size: 16, weight: .semibold))
               .frame(maxWidth: .infinity, minHeight: 52)
           }
@@ -329,7 +324,7 @@ struct SubmissionHomeView: View {
           .foregroundStyle(.white)
           .background(ColorTokens.acc)
           .clipShape(RoundedRectangle(cornerRadius: 12))
-          .accessibilityLabel("Choose screenshot")
+          .accessibilityLabel("Scan a screenshot")
         }
 
         Button {
@@ -430,7 +425,11 @@ struct SubmissionHomeView: View {
         )
       }
       .sheet(isPresented: $viewModel.isShowingShareSheet) {
-        ShareSheet(items: [shareText(for: result)])
+        if let cardImage = shareCardImage(result: result) {
+          ShareSheet(items: [cardImage, "I checked this with TrustScan — trustscan.app"])
+        } else {
+          ShareSheet(items: [shareText(for: result)])
+        }
       }
 
     case .idle, .empty:

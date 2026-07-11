@@ -1,4 +1,24 @@
 import SwiftUI
+import UIKit
+
+private func agentDisplayLabel(for signal: String?) -> String {
+  guard let signal else { return "AI Analysis" }
+  let labelMap: [String: String] = [
+    "text_tfidf_prob": "Text Analysis",
+    "text_distilbert_prob": "Text Analysis",
+    "text_prob": "Text Analysis",
+    "url_prob": "Link Analysis",
+    "qr_url_prob": "QR Analysis",
+    "upi_rule_score": "Payment Analysis",
+    "upi_xgb_prob": "Payment Analysis",
+    "brand_flag": "Brand Check",
+    "malware_prob": "Malware Analysis",
+    "regex_score": "Pattern Analysis",
+    "deepfake_prob": "Media Analysis",
+    "audio_transcript_prob": "Audio Analysis",
+  ]
+  return labelMap[signal] ?? "AI Analysis"
+}
 
 private func severityColor(_ severity: String) -> Color {
   switch severity.lowercased() {
@@ -16,6 +36,10 @@ struct AnalysisResultView: View {
 
   @State private var selectedFinding: Finding?
   @State private var feedbackState: FeedbackBarView.State = .idle
+  @State private var showFeedbackSheet = false
+  @State private var feedbackSheetDismissed = false
+  @State private var showToast = false
+  @State private var toastMessage = ""
 
   init(
     result: AnalysisResult,
@@ -47,7 +71,7 @@ struct AnalysisResultView: View {
             Image(systemName: "square.and.arrow.up")
               .font(.system(size: 15, weight: .semibold))
               .foregroundStyle(ColorTokens.acc)
-              .padding(10)
+              .frame(minWidth: 44, minHeight: 44)
               .background(ColorTokens.acc.opacity(0.1))
               .clipShape(Circle())
           }
@@ -80,7 +104,7 @@ struct AnalysisResultView: View {
               }
             }
             if let signal = result.topSignal {
-              Text(signal.replacingOccurrences(of: "_", with: " ").capitalized)
+              Text("Detected by: \(agentDisplayLabel(for: signal))")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(result.effectiveVerdict.tintColor)
                 .padding(.horizontal, 8)
@@ -117,6 +141,7 @@ struct AnalysisResultView: View {
               .font(.system(size: 48, weight: .bold, design: .rounded))
               .foregroundStyle(result.effectiveVerdict.tintColor)
               .contentTransition(.numericText())
+              .dynamicTypeSize(...DynamicTypeSize.accessibility2)
           }
         }
         .frame(width: 160, height: 160)
@@ -297,6 +322,32 @@ struct AnalysisResultView: View {
           }
         }
       }
+
+      // What to do now — only for HIGH_RISK and SUSPICIOUS
+      if result.effectiveVerdict != .safe {
+        VStack(alignment: .leading, spacing: SpacingTokens.medium) {
+          Text("What to do now")
+            .font(TypographyTokens.sectionTitle)
+            .foregroundStyle(ColorTokens.ik)
+            .padding(.horizontal, 4)
+
+          VStack(spacing: SpacingTokens.small) {
+            actionRow(icon: "hand.raised.fill", title: "Block this sender") {
+              toastMessage = "Sender blocked"
+              withAnimation { showToast = true }
+            }
+            actionRow(icon: "link.slash.fill", title: "Don't click any links") {
+              toastMessage = "Stay safe — avoid clicking any links in the message"
+              withAnimation { showToast = true }
+            }
+            actionRow(icon: "exclamationmark.bubble.fill", title: "Report to TRAI (India)") {
+              if let url = URL(string: "https://sancharsaathi.gov.in") {
+                UIApplication.shared.open(url)
+              }
+            }
+          }
+        }
+      }
     }
     .onAppear {
       AnalyticsManager.shared.capture(event: "report_viewed", properties: [
@@ -307,12 +358,52 @@ struct AnalysisResultView: View {
       withAnimation(.spring(response: 1.5, dampingFraction: 0.8, blendDuration: 0)) {
         animatedScore = Double(result.score)
       }
+
+      // Haptic feedback
+      switch result.effectiveVerdict {
+      case .scam:
+        UINotificationFeedbackGenerator().notificationOccurred(.warning)
+      case .suspicious:
+        UINotificationFeedbackGenerator().notificationOccurred(.error)
+      case .safe:
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+      }
+
+      // Feedback sheet after 3 seconds
+      if !feedbackSheetDismissed {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+          if !feedbackSheetDismissed {
+            showFeedbackSheet = true
+          }
+        }
+      }
     }
     .sheet(item: Binding(
       get: { selectedFinding.map { FindingIdentifiableWrapper(finding: $0) } },
       set: { selectedFinding = $0?.finding }
     )) { wrapper in
       FindingDetailSheet(finding: wrapper.finding)
+    }
+    .sheet(isPresented: $showFeedbackSheet) {
+      feedbackBottomSheet
+    }
+    .overlay(alignment: .bottom) {
+      if showToast {
+        Text(toastMessage)
+          .font(TypographyTokens.caption)
+          .foregroundStyle(.white)
+          .padding(.horizontal, SpacingTokens.large)
+          .padding(.vertical, SpacingTokens.small)
+          .background(Color.black.opacity(0.8))
+          .clipShape(Capsule())
+          .padding(.bottom, 100)
+          .transition(.move(edge: .bottom).combined(with: .opacity))
+          .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+              withAnimation { showToast = false }
+            }
+          }
+      }
     }
   }
 
@@ -332,6 +423,117 @@ struct AnalysisResultView: View {
     .clipShape(Capsule())
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(label)
+  }
+
+  private func actionRow(icon: String, title: String, action: @escaping () -> Void) -> some View {
+    Button(action: action) {
+      HStack(spacing: SpacingTokens.medium) {
+        Image(systemName: icon)
+          .font(.system(size: 16, weight: .semibold))
+          .foregroundStyle(result.effectiveVerdict.tintColor)
+          .frame(width: 24)
+        Text(title)
+          .font(.system(size: 15, weight: .semibold, design: .rounded))
+          .foregroundStyle(ColorTokens.ik)
+        Spacer()
+        Image(systemName: "chevron.right")
+          .font(.system(size: 13, weight: .semibold))
+          .foregroundStyle(ColorTokens.st.opacity(0.5))
+      }
+      .padding(SpacingTokens.medium)
+      .background(ColorTokens.sf)
+      .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+    .buttonStyle(.plain)
+    .accessibilityLabel(title + " action")
+}
+
+private var feedbackBottomSheet: some View {
+    VStack(spacing: SpacingTokens.medium) {
+      Text("Was this helpful?")
+        .font(TypographyTokens.sectionTitle)
+        .foregroundStyle(ColorTokens.ik)
+
+      HStack(spacing: SpacingTokens.medium) {
+        Button {
+          onFeedback?("scam") { _ in }
+          showFeedbackSheet = false
+          feedbackSheetDismissed = true
+        } label: {
+          Label("This was a scam", systemImage: "exclamationmark.octagon.fill")
+            .font(.system(size: 14, weight: .semibold, design: .rounded))
+            .foregroundStyle(ColorTokens.dng)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .background(ColorTokens.dng.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        }
+        .buttonStyle(.plain)
+
+        Button {
+          onFeedback?("legit") { _ in }
+          showFeedbackSheet = false
+          feedbackSheetDismissed = true
+        } label: {
+          Label("This was safe", systemImage: "checkmark.shield.fill")
+            .font(.system(size: 14, weight: .semibold, design: .rounded))
+            .foregroundStyle(ColorTokens.sfe)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .background(ColorTokens.sfe.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        }
+        .buttonStyle(.plain)
+      }
+    }
+    .padding(SpacingTokens.large)
+    .presentationDetents([.height(180)])
+  }
+}
+
+// MARK: - Share Card Generator
+
+func shareCardImage(result: AnalysisResult) -> UIImage? {
+  let cardColor: UIColor = result.effectiveVerdict == .scam ? UIColor(red: 0.9, green: 0.22, blue: 0.22, alpha: 1) : UIColor(ColorTokens.acc)
+  let cardSize = CGSize(width: 360, height: 480)
+
+  let renderer = UIGraphicsImageRenderer(size: cardSize)
+  return renderer.image { ctx in
+    let rect = CGRect(origin: .zero, size: cardSize)
+    ctx.cgContext.setFillColor(cardColor.cgColor)
+    ctx.cgContext.fill(rect)
+
+    let textColor: UIColor = .white
+
+    // Logo area
+    let logoAttributes: [NSAttributedString.Key: Any] = [
+      .font: UIFont.systemFont(ofSize: 20, weight: .bold),
+      .foregroundColor: textColor.withAlphaComponent(0.9)
+    ]
+    let logoString = "TrustScan"
+    logoString.draw(at: CGPoint(x: 24, y: 24), withAttributes: logoAttributes)
+
+    // Verdict label
+    let verdictAttributes: [NSAttributedString.Key: Any] = [
+      .font: UIFont.systemFont(ofSize: 32, weight: .heavy),
+      .foregroundColor: textColor
+    ]
+    let verdictString = result.effectiveVerdict.displayTitle
+    verdictString.draw(at: CGPoint(x: 24, y: 200), withAttributes: verdictAttributes)
+
+    // Score
+    let scoreAttributes: [NSAttributedString.Key: Any] = [
+      .font: UIFont.systemFont(ofSize: 64, weight: .bold),
+      .foregroundColor: textColor
+    ]
+    let scoreString = "\(result.score)%"
+    scoreString.draw(at: CGPoint(x: 24, y: 250), withAttributes: scoreAttributes)
+
+    // Tagline
+    let taglineAttributes: [NSAttributedString.Key: Any] = [
+      .font: UIFont.systemFont(ofSize: 14, weight: .medium),
+      .foregroundColor: textColor.withAlphaComponent(0.8)
+    ]
+    let taglineString = "Checked with TrustScan \u{00B7} trustscan.app"
+    taglineString.draw(at: CGPoint(x: 24, y: 420), withAttributes: taglineAttributes)
   }
 }
 

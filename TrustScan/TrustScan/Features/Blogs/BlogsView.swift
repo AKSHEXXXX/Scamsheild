@@ -22,8 +22,8 @@ struct BlogsView: View {
                 }
               } label: {
                 HStack(spacing: 4) {
-                  Text(categoryEmoji(category))
-                    .font(.system(size: 13))
+                  Image(systemName: category.sfSymbol)
+                    .font(.system(size: 12, weight: .semibold))
                   Text(category.rawValue)
                     .font(.system(size: 14, weight: .medium))
                 }
@@ -94,8 +94,9 @@ struct BlogsView: View {
 
         } else if filteredArticles.isEmpty {
           VStack(spacing: SpacingTokens.medium) {
-            Text("🔍")
+            Image(systemName: "exclamationmark.magnifyingglass")
               .font(.system(size: 40))
+              .foregroundStyle(ColorTokens.st.opacity(0.4))
             Text("No articles yet in this category.\nCheck back soon!")
               .font(.system(size: 15))
               .foregroundStyle(ColorTokens.st)
@@ -124,6 +125,7 @@ struct BlogsView: View {
             }
           }
         }
+        Color.clear.frame(height: 90)
       }
       .padding(.bottom, SpacingTokens.large)
     }
@@ -148,18 +150,7 @@ struct BlogsView: View {
     }
   }
 
-  func categoryEmoji(_ cat: ScamCategory) -> String {
-    switch cat {
-    case .all:        return "📰"
-    case .phishing:   return "🎣"
-    case .investment: return "💰"
-    case .romance:    return "💔"
-    case .techSupport: return "💻"
-    case .sms:        return "📱"
-    case .crypto:     return "₿"
-    case .malware:    return "🦠"
-    }
-  }
+
 }
 
 extension URL: @retroactive Identifiable {
@@ -242,7 +233,11 @@ struct FeaturedBlogCard: View {
         HStack {
           Text(article.category == .all ? "General" : article.category.rawValue)
             .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(Color(hex: article.sourceColor) ?? ColorTokens.acc)
+            .foregroundStyle(Color(hex: article.category.tagColor) ?? ColorTokens.st)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background((Color(hex: article.category.tagColor) ?? ColorTokens.st).opacity(0.12))
+            .clipShape(Capsule())
 
           Spacer()
 
@@ -327,8 +322,8 @@ struct BlogCard: View {
           .font(.system(size: 11, weight: .medium))
           .padding(.horizontal, 8)
           .padding(.vertical, 3)
-          .background(ColorTokens.st.opacity(0.1))
-          .foregroundStyle(ColorTokens.st)
+          .background((Color(hex: article.category.tagColor) ?? ColorTokens.st).opacity(0.12))
+          .foregroundStyle(Color(hex: article.category.tagColor) ?? ColorTokens.st)
           .clipShape(Capsule())
       }
     }
@@ -371,8 +366,8 @@ struct BlogCard: View {
           .font(.system(size: 11, weight: .medium))
           .padding(.horizontal, 8)
           .padding(.vertical, 4)
-          .background(ColorTokens.st.opacity(0.1))
-          .foregroundStyle(ColorTokens.st)
+          .background((Color(hex: article.category.tagColor) ?? ColorTokens.st).opacity(0.12))
+          .foregroundStyle(Color(hex: article.category.tagColor) ?? ColorTokens.st)
           .clipShape(Capsule())
         
         Spacer()

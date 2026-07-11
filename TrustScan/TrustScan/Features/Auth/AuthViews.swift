@@ -32,7 +32,7 @@ struct LoginView: View {
 
           // Sign In Form
           VStack(spacing: SpacingTokens.medium) {
-            TextField("Email", text: $viewModel.email)
+            TextField("you@example.com", text: $viewModel.email)
               .textContentType(.emailAddress)
               .keyboardType(.emailAddress)
               .autocapitalization(.none)
@@ -157,19 +157,21 @@ struct LoginView: View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.st.opacity(0.3), lineWidth: 1.5))
 
-            // Biometric Login Button
-            Button {
-              Task { await viewModel.authenticateWithBiometrics() }
-            } label: {
-              Label("Sign in with Face ID", systemImage: "faceid")
-                .font(.system(size: 16, weight: .semibold))
-                .frame(maxWidth: .infinity, minHeight: 48)
+            // Returning-user Face ID button — only shown if previously enabled
+            if viewModel.hasBiometricsEnabled {
+              Button {
+                Task { await viewModel.authenticateWithBiometrics() }
+              } label: {
+                Label("Sign in with Face ID", systemImage: "faceid")
+                  .font(.system(size: 16, weight: .semibold))
+                  .frame(maxWidth: .infinity, minHeight: 48)
+              }
+              .buttonStyle(.plain)
+              .foregroundStyle(ColorTokens.acc)
+              .background(ColorTokens.sf)
+              .clipShape(RoundedRectangle(cornerRadius: 16))
+              .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1.5))
             }
-            .buttonStyle(.plain)
-            .foregroundStyle(ColorTokens.acc)
-            .background(ColorTokens.sf)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1.5))
           }
 
           // Create Account Link
@@ -182,7 +184,7 @@ struct LoginView: View {
               .foregroundStyle(ColorTokens.acc)
           }
 
-          Spacer()
+          Color.clear.frame(height: 90)
         }
         .padding(.horizontal, SpacingTokens.large)
         .padding(.vertical, SpacingTokens.large)
@@ -242,7 +244,7 @@ struct SignUpView: View {
             .foregroundStyle(ColorTokens.ik)
 
           VStack(spacing: SpacingTokens.medium) {
-            TextField("Email", text: $viewModel.email)
+            TextField("you@example.com", text: $viewModel.email)
               .textContentType(.emailAddress)
               .keyboardType(.emailAddress)
               .autocapitalization(.none)

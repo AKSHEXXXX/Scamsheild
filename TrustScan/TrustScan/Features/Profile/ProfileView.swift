@@ -1,11 +1,17 @@
 import SwiftUI
 
+enum ProfileNavigation: Hashable {
+  case fullHistory
+  case threatsHistory
+}
+
 struct ProfileView: View {
   @EnvironmentObject private var environment: AppEnvironment
   @Environment(\.openURL) private var openURL
   @Binding var hasCompletedOnboarding: Bool
 
   @State private var isShowingDeleteConfirm = false
+  @State private var isShowingSignOutConfirm = false
   @State private var isDeletingAccount = false
   @State private var deleteError: String?
 
@@ -30,16 +36,26 @@ struct ProfileView: View {
             .font(TypographyTokens.sectionTitle)
             .foregroundStyle(ColorTokens.ik)
           
-          HStack(spacing: 6) {
-            Circle().fill(Color.green).frame(width: 8, height: 8)
-            Text("Free Plan")
-              .font(TypographyTokens.caption)
-              .foregroundStyle(ColorTokens.st)
+          Button {
+            if let url = URL(string: "https://trustscan.app/upgrade") {
+              openURL(url)
+            }
+          } label: {
+            HStack(spacing: 6) {
+              Circle().fill(Color.green).frame(width: 8, height: 8)
+              Text("Free Plan")
+                .font(TypographyTokens.caption)
+                .foregroundStyle(ColorTokens.st)
+              Image(systemName: "chevron.right")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(ColorTokens.st.opacity(0.5))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(ColorTokens.sf)
+            .clipShape(Capsule())
           }
-          .padding(.horizontal, 12)
-          .padding(.vertical, 6)
-          .background(ColorTokens.sf)
-          .clipShape(Capsule())
+          .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity)
         .padding(SpacingTokens.large)
@@ -53,10 +69,43 @@ struct ProfileView: View {
             .foregroundStyle(ColorTokens.ik)
           
           let allEntries = environment.historyViewModel.recentEntries(limit: .max)
+          let threatsCaught = allEntries.filter { $0.verdict == .scam }.count
+          let totalScans = allEntries.count
+          let scansLeft = max(environment.submissionViewModel.configuration.scanCreditCap - totalScans, 0)
           
-          HStack(spacing: SpacingTokens.medium) {
-            statCard(title: "Scans", value: "\(allEntries.count)")
-            statCard(title: "Threats caught", value: "\(allEntries.filter { $0.verdict == .scam }.count)")
+          HStack(spacing: SpacingTokens.small) {
+            NavigationLink(value: ProfileNavigation.fullHistory) {
+              statCard(title: "Scans", value: "\(totalScans)")
+            }
+            .buttonStyle(.plain)
+            NavigationLink(value: ProfileNavigation.threatsHistory) {
+              statCard(title: "Threats caught", value: "\(threatsCaught)")
+            }
+            .buttonStyle(.plain)
+            statCard(title: "Scans left", value: "\(scansLeft)")
+              .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                  .stroke(ColorTokens.acc.opacity(0.4), lineWidth: 1)
+              )
+          }
+
+          // Progress bar for free users
+          let cap = environment.submissionViewModel.configuration.scanCreditCap
+          if cap > 0 {
+            VStack(alignment: .leading, spacing: 6) {
+              ProgressView(value: Double(totalScans), total: Double(cap))
+                .tint(scansLeft < 3 ? ColorTokens.dng : ColorTokens.acc)
+              HStack {
+                Text("\(totalScans) used")
+                  .font(.system(size: 11, weight: .medium))
+                  .foregroundStyle(ColorTokens.st)
+                Spacer()
+                Text("\(cap) free daily")
+                  .font(.system(size: 11, weight: .medium))
+                  .foregroundStyle(ColorTokens.st)
+              }
+            }
+            .padding(.horizontal, 4)
           }
         }
         
@@ -113,17 +162,34 @@ struct ProfileView: View {
         }
         
         // Sign Out
-        Button(action: {
-          environment.authService.signOut()
-        }) {
-          Text("Sign Out")
-            .font(.system(size: 16, weight: .semibold))
-            .foregroundStyle(ColorTokens.dng)
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .background(ColorTokens.sf)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        VStack(alignment: .leading, spacing: SpacingTokens.small) {
+          Divider()
+            .padding(.bottom, SpacingTokens.small)
+
+          Text("Account")
+            .font(TypographyTokens.sectionTitle)
+            .foregroundStyle(ColorTokens.ik)
+
+          Button(action: {
+            isShowingSignOutConfirm = true
+          }) {
+            Text("Sign Out")
+              .font(.system(size: 16, weight: .semibold))
+              .foregroundStyle(ColorTokens.dng)
+              .frame(maxWidth: .infinity, minHeight: 52)
+              .background(ColorTokens.sf)
+              .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+          }
+          .accessibilityLabel("Sign out of your account")
         }
-        .accessibilityLabel("Sign out of your account")
+        .alert("Sign out of TrustScan?", isPresented: $isShowingSignOutConfirm) {
+          Button("Sign Out", role: .destructive) {
+            environment.authService.signOut()
+          }
+          Button("Cancel", role: .cancel) {}
+        } message: {
+          Text("You will need to sign in again to access your account.")
+        }
 
         // Delete Account
         if let err = deleteError {
@@ -149,11 +215,28 @@ struct ProfileView: View {
         .disabled(isDeletingAccount)
         .accessibilityLabel("Permanently delete your account and all data")
 
+        Color.clear.frame(height: 90)
       }
       .padding(SpacingTokens.large)
     }
     .background(ColorTokens.bg.ignoresSafeArea())
     .navigationTitle("Profile")
+    .navigationDestination(for: ProfileNavigation.self) { dest in
+      switch dest {
+      case .fullHistory:
+        HistoryListView(
+          viewModel: environment.historyViewModel,
+          onScanRequested: {},
+          preSelectedFilter: .all
+        )
+      case .threatsHistory:
+        HistoryListView(
+          viewModel: environment.historyViewModel,
+          onScanRequested: {},
+          preSelectedFilter: .highRisk
+        )
+      }
+    }
     .trackScreen(name: "Profile")
     .task {
       await environment.historyViewModel.loadHistory(forceLoading: false)

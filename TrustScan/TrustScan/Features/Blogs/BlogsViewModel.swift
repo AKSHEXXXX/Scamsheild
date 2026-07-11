@@ -27,6 +27,29 @@ enum ScamCategory: String, CaseIterable {
   case sms        = "SMS / OTP"
   case crypto     = "Crypto"
   case malware    = "Malware"
+
+  var sfSymbol: String {
+    switch self {
+    case .all:        return "newspaper"
+    case .phishing:   return "exclamationmark.bubble"
+    case .investment: return "banknote"
+    case .romance:    return "heart.slash"
+    case .techSupport: return "wrench.and.screwdriver"
+    case .sms:        return "message.badge.warning"
+    case .crypto:     return "bitcoinsign.square"
+    case .malware:    return "ladybug"
+    }
+  }
+
+  var tagColor: String {
+    switch self {
+    case .investment: return "#7C5CBF"
+    case .phishing:   return "#E07B2A"
+    case .romance:    return "#C2185B"
+    case .malware:    return "#1565C0"
+    default:          return "#546E7A"
+    }
+  }
 }
 
 // MARK: - RSS Feed Sources

@@ -11,24 +11,42 @@ final class AuthViewModel: NSObject, ObservableObject {
   @Published var errorMessage: String?
   @Published var isShowingSignUp = false
   @Published var signUpSuccessMessage: String?
+  @Published var showBiometricPrompt = false
+  @Published var hasBiometricsEnabled: Bool
+  @Published var didJustSignUp = false
 
   let authService: SupabaseAuthService
 
   init(authService: SupabaseAuthService) {
     self.authService = authService
+    self.hasBiometricsEnabled = UserDefaults.standard.bool(forKey: "biometricsEnabled")
     super.init()
+  }
+
+  private func promptBiometricsIfAvailable() {
+    let context = LAContext()
+    guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) else { return }
+    showBiometricPrompt = true
+  }
+
+  func enableBiometrics() {
+    hasBiometricsEnabled = true
+    UserDefaults.standard.set(true, forKey: "biometricsEnabled")
+    showBiometricPrompt = false
+  }
+
+  func skipBiometrics() {
+    showBiometricPrompt = false
   }
 
   func authenticateWithBiometrics() async {
     let context = LAContext()
     do {
       let success = try await context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Authenticate to access TrustScan")
-      if success {
-        // If they successfully authenticate biometrically, and we had a saved token,
-        // we'd log them in. Since our app auto-logs in if the token is valid,
-        // this is more of a placeholder for if we implement forced biometric unlock
-        // or keychain credential saving in the future.
-        print("Biometric auth succeeded")
+      if success, authService.isAuthenticated {
+        return
+      } else if success {
+        try? await authService.refreshAccessToken()
       }
     } catch {
       errorMessage = "Biometric authentication failed."
@@ -54,6 +72,10 @@ final class AuthViewModel: NSObject, ObservableObject {
       
       // Existing users can't redeem a referral — clear any stale pending code
       UserDefaults.standard.removeObject(forKey: "pendingReferralCode")
+
+      if !hasBiometricsEnabled {
+        promptBiometricsIfAvailable()
+      }
     } catch let error as AppError {
       errorMessage = error.errorDescription
     } catch {
@@ -83,6 +105,7 @@ final class AuthViewModel: NSObject, ObservableObject {
     do {
       try await authService.signUp(email: email, password: password)
       if authService.isAuthenticated {
+        didJustSignUp = true
         if let user = authService.currentUser {
             AnalyticsManager.shared.identify(userId: user.id)
             AnalyticsManager.shared.reloadFeatureFlags()
@@ -97,7 +120,12 @@ final class AuthViewModel: NSObject, ObservableObject {
             UserDefaults.standard.removeObject(forKey: "pendingReferralCode")
           }
         }
+
+        if !hasBiometricsEnabled {
+          promptBiometricsIfAvailable()
+        }
       } else {
+        didJustSignUp = true
         signUpSuccessMessage = "Check your email to confirm your account, then sign in."
         isShowingSignUp = false
       }
@@ -140,10 +168,22 @@ final class AuthViewModel: NSObject, ObservableObject {
       }
       Task {
         try? await self.authService.handleOAuthCallback(url: callbackURL)
-        if self.authService.isAuthenticated, let user = self.authService.currentUser {
-            AnalyticsManager.shared.identify(userId: user.id)
-            AnalyticsManager.shared.reloadFeatureFlags()
-            AnalyticsManager.shared.capture(event: "login", properties: ["method": provider])
+        if self.authService.isAuthenticated {
+            if let user = self.authService.currentUser {
+                AnalyticsManager.shared.identify(userId: user.id)
+                AnalyticsManager.shared.reloadFeatureFlags()
+                AnalyticsManager.shared.capture(event: "login", properties: ["method": provider])
+            }
+            let pending = UserDefaults.standard.string(forKey: "pendingReferralCode") ?? ""
+            if !pending.isEmpty {
+                Task {
+                    await self.authService.redeemReferral(code: pending)
+                    UserDefaults.standard.removeObject(forKey: "pendingReferralCode")
+                }
+            }
+            if !self.hasBiometricsEnabled {
+              self.promptBiometricsIfAvailable()
+            }
         }
       }
     }

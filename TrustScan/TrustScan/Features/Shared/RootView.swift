@@ -15,6 +15,19 @@ struct RootView: View {
       if !authService.isAuthenticated {
         LoginView(viewModel: environment.authViewModel)
           .trackScreen(name: "Login")
+      } else if environment.authViewModel.didJustSignUp && !hasCompletedOnboarding {
+        ReferralEntryView(
+          onContinue: {
+            environment.authViewModel.didJustSignUp = false
+          },
+          onSkip: {
+            environment.authViewModel.didJustSignUp = false
+          },
+          redeemReferral: { code in
+            await environment.authService.redeemReferral(code: code)
+          }
+        )
+        .trackScreen(name: "ReferralEntry")
       } else if !hasCompletedOnboarding {
         OnboardingView {
           hasCompletedOnboarding = true
@@ -29,6 +42,7 @@ struct RootView: View {
     }
     .animation(.easeInOut(duration: 0.3), value: environment.authService.isAuthenticated)
     .animation(.easeInOut(duration: 0.3), value: hasCompletedOnboarding)
+    .animation(.easeInOut(duration: 0.3), value: environment.authViewModel.didJustSignUp)
     .onChange(of: environment.authService.accessToken) { _ in
       environment.syncAuthToken()
     }
@@ -36,6 +50,12 @@ struct RootView: View {
       if !isAuthenticated {
         environment.submissionViewModel.resetFlow()
       }
+    }
+    .alert("Enable Face ID?", isPresented: self.$environment.authViewModel.showBiometricPrompt) {
+      Button("Enable", action: { environment.authViewModel.enableBiometrics() })
+      Button("Not Now", role: .cancel, action: { environment.authViewModel.skipBiometrics() })
+    } message: {
+      Text("Would you like to enable Face ID for faster future sign-ins?")
     }
   }
 }
@@ -59,12 +79,12 @@ struct MainTabView: View {
 
       NavigationStack {
         BlogsView()
-          .trackScreen(name: "Blogs")
+          .trackScreen(name: "Intel")
       }
       .tabItem {
-        Label("Blogs", systemImage: "newspaper")
+        Label("Intel", systemImage: "newspaper")
       }
-      .tag(AppTab.blogs)
+      .tag(AppTab.intel)
 
       NavigationStack {
         HistoryListView(
@@ -92,6 +112,6 @@ struct MainTabView: View {
 
 enum AppTab: Hashable {
   case scan
-  case blogs
+  case intel
   case history
 }

@@ -9,7 +9,7 @@ final class AppEnvironment: ObservableObject {
   let submissionViewModel: SubmissionViewModel
   let historyViewModel: HistoryViewModel
   let settingsViewModel: SettingsViewModel
-  let authViewModel: AuthViewModel
+  @Published var authViewModel: AuthViewModel
 
   @MainActor
   init() {

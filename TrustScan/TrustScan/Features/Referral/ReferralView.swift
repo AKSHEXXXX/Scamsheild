@@ -5,21 +5,57 @@ private struct ReferralStatusDTO: Decodable {
   let referral_link: String?
   let referrals_count: Int
   let scans_earned: Int
+  let redeemed: Bool?
+  let redeemed_code: String?
+}
+
+struct ScrollOffsetPreference: PreferenceKey {
+  static let defaultValue: CGFloat = 0
+  static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+    value = nextValue()
+  }
+}
+
+enum RedeemValidationState {
+  case idle
+  case validating
+  case valid(String)
+  case invalid(String)
+  case redeemed(String)
+
+  var isValid: Bool {
+    if case .valid = self { return true }
+    return false
+  }
+}
+
+private struct RedeemValidateResponse: Decodable {
+  let valid: Bool?
+}
+
+private struct RedeemRedeemResponse: Decodable {
+  let bonus_scans_credited: Int?
 }
 
 struct ReferralView: View {
   @EnvironmentObject private var environment: AppEnvironment
   @State private var isShowingShareSheet = false
   @State private var codeCopied = false
+  @State private var scrollOffset: CGFloat = 0
 
   // Backend state — populated once GET /api/v1/referral/status is deployed
   @State private var serverCode: String? = nil
   @State private var referralsCount: Int = 0
   @State private var scansEarned: Int = 0
   @State private var isLoadingStatus = false
+  @State private var hasRedeemedCode = false
+  @State private var redeemedCode: String = ""
+  @State private var isRedeemExpanded = false
+  @State private var redeemInput = ""
+  @State private var redeemState: RedeemValidationState = .idle
+  @State private var showConfetti = false
 
   private var referralCode: String {
-    // Prefer server-generated code; fall back to deterministic client-side placeholder
     if let serverCode { return serverCode }
     let id = environment.authService.currentUser?.id ?? "GUEST000"
     return "TS-" + String(id.prefix(8)).uppercased()
@@ -33,6 +69,14 @@ struct ReferralView: View {
     ScrollView {
       VStack(alignment: .leading, spacing: SpacingTokens.large) {
 
+        GeometryReader { geo in
+          Color.clear.preference(
+            key: ScrollOffsetPreference.self,
+            value: geo.frame(in: .named("scroll")).minY
+          )
+        }
+        .frame(height: 0)
+
         heroCard
 
         referralCodeCard
@@ -44,24 +88,39 @@ struct ReferralView: View {
 
         howItWorksSection
 
-        Spacer(minLength: SpacingTokens.large)
+        referralTrackingSection
+
+        redeemSection
+
+        Color.clear.frame(height: 90)
       }
       .padding(SpacingTokens.large)
     }
+    .coordinateSpace(name: "scroll")
+    .onPreferenceChange(ScrollOffsetPreference.self) { offset in
+      scrollOffset = offset
+    }
     .background(ColorTokens.bg.ignoresSafeArea())
     .navigationTitle("Invite Friends")
-    .navigationBarTitleDisplayMode(.inline)
+    .navigationBarTitleDisplayMode(.large)
+    .toolbarBackground(
+      scrollOffset < -100 ? .visible : .hidden,
+      for: .navigationBar
+    )
+    .animation(.easeInOut(duration: 0.2), value: scrollOffset < -100)
     .sheet(isPresented: $isShowingShareSheet) {
       ShareSheet(items: [shareMessage])
     }
     .task {
-      // Attempt to load real referral status from backend.
-      // Fails silently when endpoint is not yet deployed — client-side code shown instead.
       isLoadingStatus = true
       if let status: ReferralStatusDTO = try? await environment.apiClient.get(path: "/api/v1/referral/status") {
         serverCode = status.referral_code
         referralsCount = status.referrals_count
         scansEarned = status.scans_earned
+        if status.redeemed == true, let code = status.redeemed_code {
+          hasRedeemedCode = true
+          redeemedCode = code
+        }
       }
       isLoadingStatus = false
     }
@@ -224,34 +283,46 @@ struct ReferralView: View {
           number: 1,
           title: "Share your invite link.",
           description: "Send your unique link to friends who haven't used TrustScan yet.",
-          isLast: false
+          isLast: false,
+          isComplete: true
         )
         referralStep(
           number: 2,
           title: "Your friend signs up.",
           description: "They create a TrustScan account using your invite link.",
-          isLast: false
+          isLast: false,
+          isComplete: referralsCount > 0
         )
         referralStep(
           number: 3,
           title: "You both get 5 free scans.",
           description: "5 bonus scans are added to both accounts automatically once they join.",
-          isLast: true
+          isLast: true,
+          isComplete: scansEarned > 0
         )
       }
     }
   }
 
-  private func referralStep(number: Int, title: String, description: String, isLast: Bool) -> some View {
+  private func referralStep(number: Int, title: String, description: String, isLast: Bool, isComplete: Bool) -> some View {
     HStack(alignment: .top, spacing: SpacingTokens.medium) {
       VStack(spacing: 0) {
         ZStack {
-          Circle()
-            .fill(ColorTokens.acc.opacity(0.12))
-            .frame(width: 40, height: 40)
-          Image(systemName: "checkmark")
-            .font(.system(size: 15, weight: .bold))
-            .foregroundStyle(ColorTokens.acc)
+          if isComplete {
+            Circle()
+              .fill(ColorTokens.acc)
+              .frame(width: 40, height: 40)
+            Image(systemName: "checkmark")
+              .font(.system(size: 15, weight: .bold))
+              .foregroundStyle(.white)
+          } else {
+            Circle()
+              .stroke(ColorTokens.acc, lineWidth: 2)
+              .frame(width: 40, height: 40)
+            Text("\(number)")
+              .font(.system(size: 15, weight: .bold))
+              .foregroundStyle(ColorTokens.acc)
+          }
         }
 
         if !isLast {
@@ -284,6 +355,229 @@ struct ReferralView: View {
     }
   }
 
+  // MARK: - Referral Tracking
+
+  private var referralTrackingSection: some View {
+    VStack(alignment: .leading, spacing: SpacingTokens.medium) {
+      Text("Your referrals")
+        .font(.system(size: 22, weight: .heavy, design: .rounded))
+        .foregroundStyle(ColorTokens.ik)
+
+      HStack(spacing: SpacingTokens.medium) {
+        trackingStat(value: "\(referralsCount)", label: "Friends joined")
+        trackingStat(value: "\(scansEarned)", label: "Bonus scans earned")
+      }
+
+      if referralsCount == 0 {
+        Text("No referrals yet. Share your code to get started.")
+          .font(TypographyTokens.body)
+          .foregroundStyle(ColorTokens.st)
+      } else {
+        VStack(spacing: SpacingTokens.small) {
+          ForEach(0..<min(referralsCount, 5), id: \.self) { _ in
+            HStack(spacing: SpacingTokens.medium) {
+              Circle()
+                .fill(ColorTokens.acc.opacity(0.15))
+                .frame(width: 40, height: 40)
+                .overlay(
+                  Image(systemName: "person.fill")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(ColorTokens.acc)
+                )
+              VStack(alignment: .leading, spacing: 2) {
+                Text("A friend joined")
+                  .font(.system(size: 15, weight: .semibold, design: .rounded))
+                  .foregroundStyle(ColorTokens.ik)
+                Text(referralRelativeDate())
+                  .font(TypographyTokens.caption)
+                  .foregroundStyle(ColorTokens.st)
+              }
+              Spacer()
+              Text("+5 scans")
+                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .foregroundStyle(ColorTokens.acc)
+            }
+            .padding(SpacingTokens.medium)
+            .background(ColorTokens.sf)
+            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+          }
+        }
+      }
+    }
+  }
+
+  private func trackingStat(value: String, label: String) -> some View {
+    VStack(alignment: .leading, spacing: 4) {
+      Text(value)
+        .font(.system(size: 28, weight: .bold, design: .rounded))
+        .foregroundStyle(ColorTokens.acc)
+      Text(label)
+        .font(TypographyTokens.caption)
+        .foregroundStyle(ColorTokens.st)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(SpacingTokens.medium)
+    .background(ColorTokens.sf)
+    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+  }
+
+  private func referralRelativeDate() -> String {
+    "Just now"
+  }
+
+  // MARK: - Redeem Code
+
+  private var redeemSection: some View {
+    VStack(spacing: SpacingTokens.medium) {
+      if hasRedeemedCode {
+        HStack(spacing: SpacingTokens.small) {
+          Image(systemName: "checkmark.circle.fill")
+            .foregroundStyle(ColorTokens.sfe)
+            .font(.system(size: 18))
+          Text("You redeemed \(redeemedCode) · +5 scans added")
+            .font(.system(size: 14, weight: .semibold, design: .rounded))
+            .foregroundStyle(ColorTokens.ik)
+          Spacer()
+        }
+        .padding(SpacingTokens.medium)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(ColorTokens.sfe.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+      } else {
+        Button {
+          withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            isRedeemExpanded.toggle()
+          }
+        } label: {
+          HStack {
+            Image(systemName: "gift.fill")
+              .foregroundStyle(ColorTokens.acc)
+            Text("Redeem an invite code")
+              .font(.system(size: 15, weight: .semibold, design: .rounded))
+              .foregroundStyle(ColorTokens.ik)
+            Spacer()
+            Image(systemName: isRedeemExpanded ? "chevron.up" : "chevron.down")
+              .foregroundStyle(ColorTokens.st)
+          }
+          .padding(SpacingTokens.medium)
+        }
+        .buttonStyle(.plain)
+
+        if isRedeemExpanded {
+          VStack(spacing: SpacingTokens.small) {
+            HStack(spacing: 0) {
+              Text("TS-")
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                .foregroundStyle(ColorTokens.ik)
+                .padding(.leading, SpacingTokens.medium)
+              TextField("XXXXXXXX", text: $redeemInput)
+                .font(.system(size: 16, weight: .bold, design: .monospaced))
+                .textCase(.uppercase)
+                .disableAutocorrection(true)
+                .autocapitalization(.none)
+                .onChange(of: redeemInput) { newVal in
+                  let filtered = newVal.filter { $0.isLetter || $0.isNumber }.prefix(8)
+                  if filtered != newVal { redeemInput = String(filtered) }
+                  if redeemInput.count == 8 {
+                    validateRedeemCode()
+                  } else {
+                    redeemState = .idle
+                  }
+                }
+            }
+            .padding(.vertical, 4)
+            .background(ColorTokens.sfm)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+            // Validation status
+            HStack(spacing: 6) {
+              switch redeemState {
+              case .idle:
+                EmptyView()
+              case .validating:
+                ProgressView().tint(ColorTokens.acc)
+                Text("Checking code…")
+                  .font(TypographyTokens.caption)
+                  .foregroundStyle(ColorTokens.st)
+              case .valid:
+                Image(systemName: "checkmark.circle.fill")
+                  .foregroundStyle(ColorTokens.sfe)
+                Text("Code applied — 5 bonus scans will be added to both accounts.")
+                  .font(TypographyTokens.caption)
+                  .foregroundStyle(ColorTokens.sfe)
+              case .invalid(let msg):
+                Image(systemName: "xmark.circle.fill")
+                  .foregroundStyle(ColorTokens.dng)
+                Text(msg)
+                  .font(TypographyTokens.caption)
+                  .foregroundStyle(ColorTokens.dng)
+              case .redeemed:
+                EmptyView()
+              }
+            }
+
+            Button {
+              Task { await redeemCode() }
+            } label: {
+              Text("Redeem")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .frame(maxWidth: .infinity, minHeight: 48)
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.white)
+            .background(redeemState.isValid ? ColorTokens.acc : ColorTokens.st.opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .disabled(!redeemState.isValid)
+          }
+          .padding(.horizontal, SpacingTokens.medium)
+          .padding(.bottom, SpacingTokens.medium)
+        }
+      }
+    }
+    .background(ColorTokens.sf)
+    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+    .shadow(color: .black.opacity(0.04), radius: 8, y: 3)
+  }
+
+  private func validateRedeemCode() {
+    redeemState = .validating
+    Task {
+      do {
+        let response: RedeemValidateResponse = try await environment.apiClient.get(
+          path: "/api/v1/referral/validate/TS-\(redeemInput)"
+        )
+        if response.valid == true {
+          redeemState = .valid(redeemInput)
+        } else {
+          redeemState = .invalid("This code doesn't exist or has already been used.")
+        }
+      } catch {
+        redeemState = .invalid("Could not validate. Check your connection.")
+      }
+    }
+  }
+
+  private func redeemCode() async {
+    guard case .valid = redeemState else { return }
+    do {
+      let response: RedeemRedeemResponse = try await environment.apiClient.post(
+        path: "/api/v1/referral/redeem",
+        body: ["referral_code": "TS-\(redeemInput)"]
+      )
+      hasRedeemedCode = true
+      redeemedCode = "TS-\(redeemInput)"
+      redeemState = .redeemed(redeemInput)
+      scansEarned += 5
+      showConfetti = true
+      UINotificationFeedbackGenerator().notificationOccurred(.success)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        showConfetti = false
+      }
+    } catch {
+      redeemState = .invalid("Could not redeem. Try again later.")
+    }
+  }
+
   // MARK: - Share message
 
   private var shareMessage: String {
@@ -296,3 +590,101 @@ struct ReferralView: View {
     """
   }
 }
+
+// MARK: - Referral Entry (new signups)
+
+struct ReferralEntryView: View {
+  let onContinue: () -> Void
+  let onSkip: () -> Void
+  let redeemReferral: (String) async -> Void
+
+  @State private var code = ""
+  @State private var isRedeeming = false
+
+  var body: some View {
+    VStack(spacing: SpacingTokens.large) {
+      Spacer()
+
+      Image(systemName: "gift.fill")
+        .font(.system(size: 56))
+        .foregroundStyle(ColorTokens.acc)
+
+      Text("Have a referral code?")
+        .font(TypographyTokens.title)
+        .foregroundStyle(ColorTokens.ik)
+
+      Text("Enter a friend's referral code to get **5 free bonus scans**.")
+        .font(TypographyTokens.body)
+        .foregroundStyle(ColorTokens.st)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+
+      if isRedeeming {
+        ProgressView("Applying code…")
+          .tint(ColorTokens.acc)
+      }
+
+      TextField("Referral code (optional)", text: $code)
+        .textContentType(.oneTimeCode)
+        .autocapitalization(.allCharacters)
+        .disableAutocorrection(true)
+        .padding()
+        .background(ColorTokens.sf)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+          RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .stroke(ColorTokens.st.opacity(0.15), lineWidth: 1)
+        )
+        .padding(.horizontal, SpacingTokens.large)
+        .accessibilityLabel("Referral code")
+        .disabled(isRedeeming)
+
+      HStack(spacing: SpacingTokens.medium) {
+        Button(action: onSkip) {
+          Text("Skip")
+            .font(TypographyTokens.sectionTitle)
+            .frame(maxWidth: .infinity, minHeight: 48)
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(ColorTokens.st)
+        .background(ColorTokens.sf)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(ColorTokens.st.opacity(0.3), lineWidth: 1))
+        .disabled(isRedeeming)
+
+        Button {
+          let trimmed = code.trimmingCharacters(in: .whitespaces).uppercased()
+          if !trimmed.isEmpty {
+            isRedeeming = true
+            Task {
+              await redeemReferral(trimmed)
+              isRedeeming = false
+              onContinue()
+            }
+          } else {
+            onContinue()
+          }
+        } label: {
+          if isRedeeming {
+            ProgressView().tint(.white).frame(maxWidth: .infinity, minHeight: 48)
+          } else {
+            Text("Continue")
+              .font(TypographyTokens.sectionTitle)
+              .frame(maxWidth: .infinity, minHeight: 48)
+          }
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+        .background(ColorTokens.acc)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .disabled(isRedeeming)
+      }
+      .padding(.horizontal, SpacingTokens.large)
+
+      Spacer()
+    }
+    .padding(.vertical, SpacingTokens.xLarge)
+    .background(ColorTokens.bg.ignoresSafeArea())
+  }
+}
+

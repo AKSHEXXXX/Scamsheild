@@ -59,7 +59,6 @@ struct OnboardingView: View {
           Text("Skip")
             .font(TypographyTokens.body)
             .foregroundStyle(ColorTokens.st)
-            .frame(minWidth: 60, minHeight: 44)
         }
         .accessibilityLabel("Skip onboarding")
       }
