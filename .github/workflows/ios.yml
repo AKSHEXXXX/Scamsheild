@@ -100,7 +100,7 @@ jobs:
           xcrun xcresulttool get --format json \
             --path "${{ runner.temp }}/TestResults.xcresult" \
             > test-results.json
-          
+
           python3 - << 'PYEOF'
 import json, sys
 with open('test-results.json') as f:
@@ -156,7 +156,7 @@ PYEOF
         run: |
           cd TrustScan
           xcrun xccov view --report --json "${{ runner.temp }}/TestResults.xcresult" > coverage.json
-          
+
           python3 - << 'PYEOF'
 import json
 with open('coverage.json') as f:
