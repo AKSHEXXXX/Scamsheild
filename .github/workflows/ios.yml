@@ -1,0 +1,273 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [IOS]
+  pull_request:
+    branches: [IOS]
+
+env:
+  XCODE_VERSION: "16.0"
+  IOS_SIMULATOR: "iPhone 15 Pro"
+  SCHEME: "TrustScan"
+  PROJECT_PATH: "TrustScan/TrustScan.xcodeproj"
+  DERIVED_DATA_PATH: "${{ runner.temp }}/DerivedData"
+
+jobs:
+  lint-and-format:
+    name: Lint & Format
+    runs-on: macos-14
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SwiftLint & SwiftFormat
+        run: |
+          brew install swiftlint swiftformat
+
+      - name: SwiftLint
+        run: swiftlint lint --path TrustScan --strict --config TrustScan/.swiftlint.yml
+
+      - name: SwiftFormat (check)
+        run: swiftformat --lint --config TrustScan/.swiftformat TrustScan
+
+  test:
+    name: Unit Tests
+    runs-on: macos-14
+    timeout-minutes: 30
+    needs: lint-and-format
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+      - name: Show Xcode Version
+        run: xcodebuild -version
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/org.swift.swiftpm
+            ~/.swiftpm
+            TrustScan/.build
+          key: spm-${{ runner.os }}-${{ hashFiles('TrustScan/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+
+      - name: Resolve SPM Dependencies
+        run: |
+          cd TrustScan
+          xcodebuild -resolvePackageDependencies \
+            -project TrustScan.xcodeproj \
+            -scheme TrustScan \
+            -derivedDataPath "${{ env.DERIVED_DATA_PATH }}"
+
+      - name: Run Unit Tests
+        id: test
+        run: |
+          set +e
+          cd TrustScan
+          xcodebuild test \
+            -project TrustScan.xcodeproj \
+            -scheme TrustScan \
+            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" \
+            -derivedDataPath "${{ env.DERIVED_DATA_PATH }}" \
+            -enableCodeCoverage YES \
+            -resultBundlePath "${{ runner.temp }}/TestResults.xcresult" \
+            | tee xcodebuild-test.log
+          TEST_EXIT_CODE=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
+          exit $TEST_EXIT_CODE
+
+      - name: Parse Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-test-log
+          path: TrustScan/xcodebuild-test.log
+          retention-days: 7
+
+      - name: Generate JUnit Report
+        if: always()
+        run: |
+          cd TrustScan
+          xcrun xcresulttool get --format json \
+            --path "${{ runner.temp }}/TestResults.xcresult" \
+            > test-results.json
+          
+          python3 - << 'PYEOF'
+import json, sys
+with open('test-results.json') as f:
+    data = json.load(f)
+
+def extract_tests(obj, tests=[]):
+    if isinstance(obj, dict):
+        if obj.get('typeIdentifier') == 'com.apple.dt.xctest.testsummary':
+            tests.append({
+                'name': obj.get('name', ''),
+                'status': obj.get('testStatus', 'Unknown'),
+                'duration': obj.get('duration', 0),
+                'className': obj.get('testIdentifier', '').split('/')[0] if '/' in obj.get('testIdentifier', '') else 'TestSuite'
+            })
+        for v in obj.values():
+            extract_tests(v, tests)
+    elif isinstance(obj, list):
+        for item in obj:
+            extract_tests(item, tests)
+    return tests
+
+all_tests = extract_tests(data)
+with open('junit.xml', 'w') as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n<testsuites>\n')
+    suites = {}
+    for t in all_tests:
+        cn = t['className']
+        suites.setdefault(cn, []).append(t)
+    for suite, tests in suites.items():
+        f.write(f'  <testsuite name="{suite}" tests="{len(tests)}">\n')
+        for t in tests:
+            status = t['status']
+            failure = ''
+            if status == 'Failure':
+                failure = '<failure message="Test failed"/>'
+            elif status == 'Error':
+                failure = '<error message="Test error"/>'
+            f.write(f'    <testcase name="{t["name"]}" classname="{t["className"]}" time="{t["duration"]:.3f}">{failure}</testcase>\n')
+        f.write('  </testsuite>\n')
+    f.write('</testsuites>\n')
+PYEOF
+
+      - name: Upload JUnit Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-report
+          path: TrustScan/junit.xml
+          retention-days: 30
+
+      - name: Generate Coverage Report
+        if: always()
+        run: |
+          cd TrustScan
+          xcrun xccov view --report --json "${{ runner.temp }}/TestResults.xcresult" > coverage.json
+          
+          python3 - << 'PYEOF'
+import json
+with open('coverage.json') as f:
+    data = json.load(f)
+
+total_lines = 0
+covered_lines = 0
+for target in data.get('targets', []):
+    for file_cov in target.get('files', []):
+        for segment in file_cov.get('segments', []):
+            total_lines += segment.get('lineExecutionCount', 0) > 0
+            if segment.get('lineExecutionCount', 0) > 0:
+                covered_lines += 1
+
+pct = (covered_lines / total_lines * 100) if total_lines > 0 else 0
+print(f"Coverage: {pct:.1f}% ({covered_lines}/{total_lines} lines)")
+with open('coverage-summary.txt', 'w') as f:
+    f.write(f"{pct:.1f}%")
+print(f"::notice::Code Coverage: {pct:.1f}%")
+PYEOF
+
+      - name: Upload Coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            TrustScan/coverage.json
+            TrustScan/coverage-summary.txt
+          retention-days: 30
+
+      - name: Check Test Exit Code
+        if: always()
+        run: exit ${{ needs.test.outputs.exit_code }}
+
+  build:
+    name: Build Verification
+    runs-on: macos-14
+    timeout-minutes: 20
+    needs: lint-and-format
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/org.swift.swiftpm
+            ~/.swiftpm
+            TrustScan/.build
+          key: spm-${{ runner.os }}-${{ hashFiles('TrustScan/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+
+      - name: Build (Unsigned)
+        run: |
+          cd TrustScan
+          xcodebuild build \
+            -project TrustScan.xcodeproj \
+            -scheme TrustScan \
+            -destination "platform=iOS Simulator,name=${{ env.IOS_SIMULATOR }}" \
+            -derivedDataPath "${{ env.DERIVED_DATA_PATH }}" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            -quiet
+
+      - name: Verify Build Artifacts
+        run: |
+          ls -la "${{ env.DERIVED_DATA_PATH }}/Build/Products/Release-iphonesimulator/TrustScan.app"
+
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [test, build]
+    if: always()
+    steps:
+      - name: Determine Status
+        id: status
+        run: |
+          if [[ "${{ needs.test.result }}" == "success" && "${{ needs.build.result }}" == "success" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "emoji=✅" >> $GITHUB_OUTPUT
+            echo "color=good" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+            echo "color=danger" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Slack Notification
+        if: env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{
+              \"attachments\": [{
+                \"color\": \"${{ steps.status.outputs.color }}\",
+                \"title\": \"${{ steps.status.outputs.emoji }} iOS CI ${{ steps.status.outputs.status | upper }}\",
+                \"fields\": [
+                  {\"title\": \"Branch\", \"value\": \"${{ github.ref_name }}\", \"short\": true},
+                  {\"title\": \"Commit\", \"value\": \"${{ github.sha }}.\", \"short\": true},
+                  {\"title\": \"Workflow\", \"value\": \"${{ github.workflow }}\", \"short\": true},
+                  {\"title\": \"Run\", \"value\": \"<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>\", \"short\": true}
+                ],
+                \"footer\": \"${{ github.repository }}\",
+                \"ts\": $(date +%s)
+              }]
+            }" \
+            $SLACK_WEBHOOK_URL
