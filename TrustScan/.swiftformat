@@ -1,0 +1,9 @@
+--indent 2
+--allman false
+--header strip
+--stripunusedargs unnamed-only
+--self insert
+--indentcase true
+--trailingcommas true
+--ranges spaced
+--semicolons inline
