@@ -1,5 +1,6 @@
 import SwiftUI
 
+// CI trigger: verify iOS workflow execution
 @MainActor
 final class AppEnvironment: ObservableObject {
   let authService: SupabaseAuthService
