@@ -178,7 +178,7 @@ rules:
   - name: impersonation_vpa_local
     field: vpa
     pattern_type: regex
-    pattern: "(?i)(support|helpdesk|security|verify|kyc|customer|service|care|official|admin)(?:@|\\.|-|_)"
+    pattern: "(?i)(support|helpdesk|security|verify|kyc|customer|service|care|official|admin)(?:@|\\.|-|_|$)"
     severity: HIGH
     weight: 55
     explanation: VPA local part impersonates bank/customer support
